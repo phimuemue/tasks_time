@@ -3,7 +3,17 @@ from copy import deepcopy
 
 def randomTreeEdges(n):
     """Returns a random tree with n vertices"""
-    return [(i,randint(0,i-1)) for i in xrange(1,n)]
+    return [(Task(i),Task(randint(0,i-1))) for i in xrange(1,n)]
+
+class Task(object):
+    def __init__(self, id):
+        self.id = id
+    def __repr__(self):
+        return "{%s}"%str(self.id)
+    def __eq__(self, other):
+        return self.id == other.id
+    def __ne__(self, other):
+        return self.id != other.id
 
 class Intree(object):
     def __init__(self, edges):
@@ -17,7 +27,7 @@ class Intree(object):
                 result = result + 1
         return result
     def get_vertices(self):
-        result = [0]
+        result = [Task(0)]
         for (a,b) in self.edges:
             if a not in result:
                 result.append(a)
@@ -33,15 +43,15 @@ class Intree(object):
                 return (a,b)
         return None
     def get_chain(self, v):
-        if v==0:
-            return [0]
+        if v.id == 0:
+            return [Task(0)]
         result = []
         result.append(v)
         cur_edge = self.get_edge_from(v)
-        while cur_edge[1] != 0:
+        while cur_edge[1] != Task(0):
             result.append(cur_edge[1])
             cur_edge = self.get_edge_from(cur_edge[1])
-        return result + [0]
+        return result + [Task(0)]
     def get_longest_chain(self):
         longest = 0
         best = [0]
@@ -132,7 +142,7 @@ for v in tasks.get_vertices():
     print (v, tasks.get_in_degree(v))
 print "Done."
 
-print tasks
+print "Tasks: %s"%str(tasks)
 for t in tasks.get_vertices():
     print (t, tasks.get_chain(t))
 print tasks.get_longest_chain()
