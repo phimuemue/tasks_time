@@ -1,0 +1,126 @@
+%%% thesis.tex --- 
+
+%% Author: philipp@pmpc
+%% Version: $Id: thesis.tex,v 0.0 2013/04/08 12:19:13 philipp Exp$
+
+%%\revision$Header: /home/philipp/Documents/Uni/masterarbeit/thesis/thesis.tex,v 0.0 2013/04/08 12:19:13 philipp Exp$
+
+\documentclass[letter]{report}
+
+\usepackage[english]{babel}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{suffix}
+\usepackage[left=3.5cm,right=3.5cm]{geometry}
+
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{theorem}{Theorem}[chapter]
+
+\newcommand{\p}[1]{Pr\left[#1\right]}
+\newcommand{\alltasks}{{\mathbb T}}
+\newcommand{\neededfor}{\rightarrow}
+\WithSuffix\newcommand\neededfor*{\stackrel{*}{\rightarrow}}
+
+\begin{document}
+
+\chapter{Theoretical foundations}
+\label{chap:theoretical-foundations}
+
+\section{Some probability}
+\label{sec:some-probability}
+
+As we will see later, we will often be using probability distributions (in particular continuous probability distributions).
+
+\subsection{Exponential distribution}
+\label{sec:exponential-distribution}
+
+\begin{definition}
+  A continuous variable is \emph{exponentially distributed} with parameter $\lambda$ if it has density 
+  \begin{equation*}
+    f(x) =
+    \begin{cases}
+      \lambda \cdot e^{-\lambda x}, & \text{ if } x \geq 0 
+      \\ 0 & \text{ otherwise}
+    \end{cases}
+    .
+  \end{equation*}
+\end{definition}
+
+Note that the above definition also determines the distribution function $F$ of an exponentially distributed random variable as follows:
+
+\begin{equation*}
+  F(x) =
+  \begin{cases}
+    1-e^{\lambda x} & \text{ if } x \geq 0 \\
+    0 & \text{ otherwise}
+  \end{cases}
+\end{equation*}
+
+\begin{theorem}
+  Let $X_1,\dots,X_n$ be exponentially-distributed random variables with respective parameters $\lambda_1,\dots,\lambda_n$. Then, the ranvom variable $Z:=\min_{i\in\left\{ 1,\dots,n \right\}} \left\{ X_i \right\}$ is exponentially distributed with parameter $\lambda=\lambda_1+\dots+\lambda_n$.
+\end{theorem}
+
+\begin{proof}
+  We prove the claim by induction. 
+
+  Suppose, we have two exponentially distributed random variables $X_1$ resp. $X_2$ with parameters $\lambda_1$ resp. $\lambda_2$. We then can compute
+  \begin{align*}
+    \p{min\left\{ X_1,X_2 \right\} \geq x} & = \p{X_1 \geq x \wedge X_2 \geq x} = \\ 
+    & = \p{X_1 \geq x}\cdot\p{X_2 \geq x} = \\
+    & = e^{-\lambda_1 x} \cdot e^{-\lambda_2 x} = \\
+    & = e^{-\lambda_1 x - \lambda_2 x} = \\
+    & = e^{-\left( \lambda_1+\lambda_2 \right) \cdot x},
+  \end{align*}
+  from which we can conclude that $\min\left\{ X_1,X_2 \right\}$ is exponentially distributed with parameter $\lambda_1 + \lambda_2$. By induction, we obtain our claim.
+\end{proof}
+
+\begin{theorem}
+Let $X_1,\dots,X_n$ be independent, identically distributed, continuous random variables and let $i\in\left\{ 1,\dots,n \right\}$. Then 
+\begin{equation}
+\label{eq:probability-that-cont-random-variable-is-smallest-out-of-iid-is-one-over-n}
+\p{X_i = \min_{j\in\left\{ 1,\dots,n \right\}}\left\{ X_j \right\}} = \frac{1}{n}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+  It is clear that 
+  \begin{equation*}
+    \p{X_1 = \min_{j\in\left\{ 1,\dots,n \right\}}\left\{ X_j \right\}} = \p{X_2 = \min_{j\in\left\{ 1,\dots,n \right\}}\left\{ X_j \right\}} = \dots = \p{X_n = \min_{j\in\left\{ 1,\dots,n \right\}}\left\{ X_j \right\}},
+  \end{equation*}
+because all random variables $X_1$ through $X_n$ behave the same. Thus we can deduce equation (\ref{eq:probability-that-cont-random-variable-is-smallest-out-of-iid-is-one-over-n}).
+\end{proof}
+
+\chapter{First thoughts on implementation}
+\label{chap:first-thoughts-on-implementation}
+
+\section{Configuration DAG}
+\label{sec:configuration-dag}
+
+Initially we are dealing with an intree (i.e. each node has at most one successor) of tasks that have to be processed by a certain number of processors.
+
+We will call the set of \emph{all} tasks $\alltasks$. If task $t_2$ can only be executed if $t_1$ already has been processed, we write $t_1 \neededfor t_2$. Moreover, we introduce a shorthand notation that allows us to ``chain'' several of these symbols: If there exist tasks $s_1,\dots,s_m$ ($m\in\mathbb N$), we write $t_1 \neededfor* t_2$ if we have $t_1 \neededfor s_1$ and $s_1 \neededfor s_2, s_2 \neededfor s_3, \dots, s_{m-1} \neededfor s_m$ and $s_m \neededfor t_2$ or if $t_1\neededfor t_2$ or if $t_1=t_2$.
+
+\begin{definition}
+  Let $\alltasks$ be a set of tasks, and $T \subseteq \alltasks$. We call $T$ an intree (of tasks) if there is one designated task $t_0\in\alltasks$ such that the following two conditions hold:
+  \begin{eqnarray*}
+    \forall  t \in T. & \quad t \neededfor* t_0 \\
+    \forall  t \in T. & \quad t\neededfor s \Rightarrow s\in T
+  \end{eqnarray*}
+\end{definition}
+
+\begin{definition}
+  Let $T$ be an intree of tasks. Let $M\subseteq\alltasks$ be a set of tasks such that the following two conditions hold:
+  \begin{itemize}
+  \item $\forall t\in M.\, t \in T$
+  \item $\forall t\in M.\, \nexists u \in T.\, u\neededfor t $
+  \end{itemize}
+  We then call the tuple $\left( T, M \right)$ a \emph{configuration}.
+\end{definition}
+
+\end{document}
