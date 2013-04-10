@@ -1,6 +1,6 @@
 #include "task.h"
 
-Task::Task(int id, Distribution d, myfloat param1, myfloat param2){
+Task::Task(task_id id, Distribution d, myfloat param1, myfloat param2){
     this->id = id;
     distribution = d;
     switch(distribution){
@@ -12,6 +12,10 @@ Task::Task(int id, Distribution d, myfloat param1, myfloat param2){
             uniform_b = param2;
             break;
     }
+}
+
+task_id Task::get_id() const {
+    return id;
 }
 
 void Task::elapse(myfloat t){
@@ -45,8 +49,20 @@ myfloat Task::get_expected_total_time(){
     return get_expected_remaining_time() + elapsed;
 }
 
-bool Task::operator==(const Task& t){
+bool Task::operator==(const Task& t) const {
     return t.id == id;
+}
+
+bool operator==(const int& i, const Task& t){
+    return t.id == i;
+}
+
+bool Task::operator<(const Task& t) const {
+    return id < t.id;
+}
+
+bool Task::operator>(const Task& t) const {
+    return id > t.id;
 }
 
 ostream& operator<<(ostream& os, const Task& t){

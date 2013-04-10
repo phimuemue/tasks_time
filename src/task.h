@@ -13,7 +13,7 @@ using namespace std;
 */
 class Task {
 private:
-    int id;
+    task_id id;
     myfloat elapsed;
     Distribution distribution;
     union {
@@ -28,7 +28,8 @@ private:
         };
     };
 public:
-    Task(int id, Distribution d, myfloat param1 = 1, myfloat param2 = 2);
+    Task(task_id id, Distribution d, myfloat param1 = 1, myfloat param2 = 2);
+    task_id get_id() const;
 
     void elapse(myfloat t);
     void set_elapsed(myfloat t);
@@ -37,7 +38,10 @@ public:
     myfloat get_expected_remaining_time();
     myfloat get_expected_total_time();
 
-    bool operator==(const Task& t);
+    bool operator==(const Task& t) const;
+    bool operator>(const Task& t) const;
+    bool operator<(const Task& t) const;
+    friend bool operator==(const int& i, const Task& t);
 
     friend ostream& operator<<(ostream& os, const Task& t);
 };
