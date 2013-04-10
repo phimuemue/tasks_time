@@ -1,15 +1,27 @@
 #include<iostream>
+#include<random>
+#include<time.h>
 
 #include "intree.h"
 
 using namespace std;
 
+void randomEdges(int n, vector<pair<Task,Task>>& target){
+    mt19937 rng;
+    rng.seed(time(NULL));
+    for(int i=0; i<n; ++i){
+        int a = rng()%(i+1);
+        target.push_back(pair<Task,Task>(Task(i+1),Task(a)));
+    }   
+}
+
 int main(int argc, char** argv){
-    Task t(0, Uniform, 1, 4);
-    cout << t << t.get_expected_remaining_time() << 
-        " | " << t.get_expected_total_time() << endl;
-    t.elapse(1);
-    cout << t << t.get_expected_remaining_time() << 
-        " | " << t.get_expected_total_time() << endl;
+    vector<pair<Task,Task>> edges;
+    randomEdges(10, edges);
+    for(auto it = edges.begin(); it != edges.end(); ++it){
+        cout << it->first << " -> " << it->second << endl;
+    }
+    Intree t(edges);
+    cout << t << endl;
     return 0;
 }

@@ -1,8 +1,16 @@
 #include "task.h"
 
+Task::Task(){
+    id = 0;
+    elapsed = 0;
+    distribution = Exponential;
+    exponential_lambda = 1.f;
+}
+
 Task::Task(task_id id, Distribution d, myfloat param1, myfloat param2){
     this->id = id;
     distribution = d;
+    elapsed = 0;
     switch(distribution){
         case(Exponential):
             exponential_lambda = param1;

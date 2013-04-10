@@ -28,7 +28,8 @@ private:
         };
     };
 public:
-    Task(task_id id, Distribution d, myfloat param1 = 1, myfloat param2 = 2);
+    Task();
+    Task(task_id id, Distribution d = Exponential, myfloat param1 = 1, myfloat param2 = 2);
     task_id get_id() const;
 
     void elapse(myfloat t);

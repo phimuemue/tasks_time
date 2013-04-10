@@ -57,9 +57,9 @@ void Intree::get_chain(const int t, vector<int>& target) const {
     target.push_back(current);
     while(current > 0){
         auto edge = get_edge_from(current);
-        target.push_back(edge.second.get_id());
+        current = edge.second.get_id();
+        target.push_back(current);
     }
-    target.push_back(0);
 }
 
 void Intree::get_chains(vector<vector<int>>& target) const {
@@ -76,9 +76,15 @@ ostream& operator<<(ostream& os, const Intree& t){
     vector<vector<int>> chains;
     t.get_chains(chains);
     for(auto i1 = chains.begin(); i1 != chains.end(); ++i1){
+        os << "[";
         for(auto it = i1->begin(); it != i1->end(); ++it){
             os << *it;
+            if(it + 1 != i1->end())
+                os << ", ";
         }
+        os << "]";
+        if(i1 + 1 != chains.end())
+            os << " ";
     }
     return os;
 }
