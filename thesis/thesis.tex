@@ -41,11 +41,11 @@ As we will see later, we will often be using probability distributions (in parti
 \label{sec:exponential-distribution}
 
 \begin{definition}
-  A continuous variable is \emph{exponentially distributed} with parameter $\lambda$ if it has density 
+  A continuous random variable is \emph{exponentially distributed} with parameter $\lambda$ if it has density 
   \begin{equation*}
     f(x) =
     \begin{cases}
-      \lambda \cdot e^{-\lambda x}, & \text{ if } x \geq 0 
+      \lambda \cdot e^{-\lambda x} & \text{ if } x \geq 0 
       \\ 0 & \text{ otherwise}
     \end{cases}
     .
@@ -79,6 +79,33 @@ Note that the above definition also determines the distribution function $F$ of 
   \end{align*}
   from which we can conclude that $\min\left\{ X_1,X_2 \right\}$ is exponentially distributed with parameter $\lambda_1 + \lambda_2$. By induction, we obtain our claim.
 \end{proof}
+
+\subsection{Uniform distribution}
+\label{sec:uniform-distribution}
+
+\begin{definition}
+  A continuous random variable is \emph{uniformly distributed} over the interval $\left[ a,b \right]$ if it has density
+  \begin{equation*}
+    f(x) =
+    \begin{cases}
+      \frac{1}{b-a} & \text{ if } x\in\left[ a,b \right] \\
+      0 & \text{ otherwise}
+    \end{cases}.
+  \end{equation*}
+\end{definition}
+
+The density of a uniform random variable is thus given by
+\begin{equation*}
+  F(x) = \begin{cases}
+    0 & \text{ if } x<a \\
+    \frac{x-a}{b-a} & \text{ if } x\in\left[ a,b \right] \\
+    1 & \text{ if } x>b
+  \end{cases}.
+\end{equation*}
+
+
+\subsection{General stuff}
+\label{sec:probability-misc}
 
 \begin{theorem}
 Let $X_1,\dots,X_n$ be independent, identically distributed, continuous random variables and let $i\in\left\{ 1,\dots,n \right\}$. Then 
