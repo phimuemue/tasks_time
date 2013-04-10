@@ -20,13 +20,13 @@ private:
 public:
     Intree(vector<pair<Task, Task>>& edges);
 
-    // TODO: Make methods more efficient by working with references/pointers
     int get_in_degree(const Task& t) const ;
     int get_in_degree(const int t) const ;
-    set<Task> get_tasks();
+    void get_tasks(set<Task>& result);
     void remove_task(Task& t);
     void remove_task(int t);
 
+    // TODO: Make methods more efficient by working with references/pointers
     pair<Task, Task> get_edge_from(const Task& t) const;
     pair<Task, Task> get_edge_from(const int t) const;
 

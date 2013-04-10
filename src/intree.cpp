@@ -18,13 +18,11 @@ int Intree::get_in_degree(const int t) const {
     return result;
 }
 
-set<Task> Intree::get_tasks(){
-    set<Task> result;
+void Intree::get_tasks(set<Task>& result){
     for(auto it = edges.begin(); it != edges.end(); ++it){
         result.insert(it->first);
         result.insert(it->second);
     }
-    return result;
 }
 
 void Intree::remove_task(Task& t){
