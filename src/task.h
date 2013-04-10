@@ -1,7 +1,11 @@
 #ifndef TASK_H
 #define TASK_H
 
+#include<iostream>
+
 #include "config.h"
+
+using namespace std;
 
 /*  A task represents a task to be done, and holds additional information
     so that it can act as a random variable (thus also representing the
@@ -9,6 +13,7 @@
 */
 class Task {
 private:
+    int id;
     myfloat elapsed;
     Distribution distribution;
     union {
@@ -21,16 +26,19 @@ private:
             myfloat uniform_a;
             myfloat uniform_b;
         };
-        // stuff for poisson distribution
-        struct {
-            myfloat poisson_lambda;
-        };
     };
 public:
+    Task(int id, Distribution d);
+
     void elapse(myfloat t);
     void set_elapsed(myfloat t);
     myfloat get_elapsed();
+
     myfloat get_expected_remaining_time();
+
+    bool operator==(const Task& t);
+
+    friend ostream& operator<<(ostream& os, const Task& t);
 };
 
 #endif
