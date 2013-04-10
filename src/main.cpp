@@ -23,5 +23,7 @@ int main(int argc, char** argv){
     }
     Intree t(edges);
     cout << t << endl;
+    t.remove_task(8);
+    cout << t << endl;
     return 0;
 }
