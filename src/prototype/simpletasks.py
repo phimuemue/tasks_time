@@ -56,7 +56,7 @@ class Intree(object):
             if a not in result:
                 result.append(a)
         return result
-    def get_random_leave(self):
+    def get_random_leave(self): # this should be in the scheduler
         """Obtains a random leave, i.e. a randomly chosen task
         that is ready to be processed (i.e. that has no
         predecessors)."""
