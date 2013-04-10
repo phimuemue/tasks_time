@@ -1,8 +1,17 @@
 #include "task.h"
 
-Task::Task(int id, Distribution d){
+Task::Task(int id, Distribution d, myfloat param1, myfloat param2){
     this->id = id;
     distribution = d;
+    switch(distribution){
+        case(Exponential):
+            exponential_lambda = param1;
+            break;
+        case(Uniform):
+            uniform_a = param1;
+            uniform_b = param2;
+            break;
+    }
 }
 
 void Task::elapse(myfloat t){
@@ -30,6 +39,10 @@ myfloat Task::get_expected_remaining_time(){
             return (uniform_b - elapsed) / 2;
     }
     throw 0;
+}
+
+myfloat Task::get_expected_total_time(){
+    return get_expected_remaining_time() + elapsed;
 }
 
 bool Task::operator==(const Task& t){

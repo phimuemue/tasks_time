@@ -28,13 +28,14 @@ private:
         };
     };
 public:
-    Task(int id, Distribution d);
+    Task(int id, Distribution d, myfloat param1 = 1, myfloat param2 = 2);
 
     void elapse(myfloat t);
     void set_elapsed(myfloat t);
     myfloat get_elapsed();
 
     myfloat get_expected_remaining_time();
+    myfloat get_expected_total_time();
 
     bool operator==(const Task& t);
 
