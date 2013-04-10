@@ -1,0 +1,2 @@
+env = Environment()
+env.Program(target="tasks", source=Glob("*.cpp"))
