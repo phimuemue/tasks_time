@@ -22,7 +22,7 @@ def create_version_info(*a,**b):
     f.close()
 
 # we use C++11 (mainly to simplify some writing in C++)
-env = Environment(CXXFLAGS="-std=c++0x")
+env = Environment(CXXFLAGS="-std=c++0x -Wall")
 
 # main program
 mainprog = env.Program(target="tasks", source=Glob("*.cpp"))
