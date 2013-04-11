@@ -3,6 +3,7 @@
 #include<time.h>
 
 #include "intree.h"
+#include "info.h"
 
 using namespace std;
 
@@ -16,6 +17,7 @@ void randomEdges(int n, vector<pair<Task,Task>>& target){
 }
 
 int main(int argc, char** argv){
+    print_version();
     vector<pair<Task,Task>> edges;
     randomEdges(10, edges);
     for(auto it = edges.begin(); it != edges.end(); ++it){

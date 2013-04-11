@@ -1,3 +1,29 @@
+import datetime
+import re
+import getpass
+
+# version information
+def create_version_info(*a,**b):
+    f = open(r"info.cpp", "r")
+    lines = f.readlines()
+    f.close()
+    f = open(r"info.cpp", "w")
+    for i in xrange(len(lines)):
+        if lines[i].startswith("char date"):
+            dt = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+            lines[i] = "char date[] = \"%s\";\n"%(dt)
+        if lines[i].startswith("char build"):
+            buildno = int(re.search("\"([0-9]*)\"", lines[i]).group(1))
+            lines[i] = "char build[] = \"%s\";\n"%(str(buildno+1))
+        if lines[i].startswith("char builtby"):
+            builtby = getpass.getuser()
+            lines[i] = "char builtby[] = \"%s\";\n"%(builtby)
+    f.writelines(lines)
+    f.close()
+
 # we use C++11 (mainly to simplify some writing in C++)
 env = Environment(CXXFLAGS="-std=c++0x")
-env.Program(target="tasks", source=Glob("*.cpp"))
+
+# main program
+mainprog = env.Program(target="tasks", source=Glob("*.cpp"))
+env.AddPreAction(mainprog, create_version_info)
