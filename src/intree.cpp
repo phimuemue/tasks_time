@@ -1,12 +1,20 @@
 #include "intree.h"
 
+Intree::Intree(){
+}
+
+Intree::Intree(const Intree& t){
+    for(auto it = t.edges.begin(); it != t.edges.end(); ++it){
+        edges.push_back(*it);
+    }
+}
+
 Intree::Intree(vector<pair<Task, Task>>& edges){
     this->edges = edges;
 }
 
-
 int Intree::get_in_degree(const Task& t) const {
-    get_in_degree(t.get_id());
+    return get_in_degree(t.get_id());
 }
 
 int Intree::get_in_degree(const task_id t) const {
@@ -59,6 +67,8 @@ pair<Task, Task> Intree::get_edge_from(const task_id t) const {
             return *it;
         }
     }
+    // TODO: remove dummy
+    return pair<Task,Task>(Task(0),Task(0));
 }
 
 void Intree::get_chain(const Task& t, vector<int>& target) const {

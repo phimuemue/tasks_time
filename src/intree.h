@@ -19,6 +19,8 @@ class Intree {
 private:
     vector<pair<Task, Task>> edges;
 public:
+    Intree();
+    Intree(const Intree& t);
     Intree(vector<pair<Task, Task>>& edges);
 
     int get_in_degree(const Task& t) const ;
