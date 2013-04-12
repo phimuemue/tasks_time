@@ -28,18 +28,32 @@ void Snapshot::get_successors(const Scheduler& scheduler){
         tmp.remove_task(*it);
         vector<pair<task_id,myfloat>> raw_sucs;
         scheduler.get_next_tasks(tmp, marked, raw_sucs);
-        cout << "Elements of raw_sucs: " << endl;
-        for(auto rsit=raw_sucs.begin(); rsit!=raw_sucs.end(); ++rsit){
-            cout << (*rsit).first << ", " << (*rsit).second << endl;
+        // we have to check if the scheduler even found a new task to schedule
+        if(raw_sucs.size() > 0){
+            cout << "Found >= 1 task to schedule." << endl;
+            for(auto rsit=raw_sucs.begin(); rsit!=raw_sucs.end(); ++rsit){
+                cout << (*rsit).first << ", " << (*rsit).second << endl;
+            }
+            for(unsigned int i=0; i<raw_sucs.size(); ++i){
+                vector<task_id> newmarked(marked);
+                newmarked.erase(remove_if(newmarked.begin(), newmarked.end(),
+                            [it](const task_id& a){
+                            return a==*it;
+                            }), newmarked.end());
+                // TODO: Is this needed?
+                if(raw_sucs[i].first != NOTASK)
+                    newmarked.push_back(raw_sucs[i].first);
+                Snapshot news(tmp, newmarked);
+                successors.push_back(news);
+            }
         }
-        for(unsigned int i=0; i<raw_sucs.size(); ++i){
+        else {
+            cout << "No other task to schedule found." << endl;
             vector<task_id> newmarked(marked);
             newmarked.erase(remove_if(newmarked.begin(), newmarked.end(),
-                      [it](const task_id& a){
+                        [it](const task_id& a){
                         return a==*it;
-                      }), newmarked.end());
-            if(raw_sucs[i].first != NOTASK)
-                newmarked.push_back(raw_sucs[i].first);
+                        }), newmarked.end());
             Snapshot news(tmp, newmarked);
             successors.push_back(news);
         }

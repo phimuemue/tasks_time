@@ -3,6 +3,8 @@
 void Leafscheduler::get_next_tasks(const Intree& t, 
         const vector<task_id>& marked,
         vector<pair<task_id,myfloat>>& target) const {
+    cout << "Leafscheduler at work..." << endl;
+    cout << t << endl;
     set<task_id> tasks;
     t.get_tasks(tasks);
     for(auto it = tasks.begin(); it != tasks.end();){
