@@ -22,9 +22,9 @@ class Snapshot {
         Snapshot(Intree& t);
         Snapshot(Intree& t, vector<task_id> m);
         void get_successors(const Scheduler& scheduler);
-        void compile_snapshot_dag();
+        void compile_snapshot_dag(const Scheduler& scheduler);
         myfloat expected_runtime();
-
+        void print_snapshot_dag(int depth=0);
         friend ostream& operator<<(ostream& os, const Snapshot& s);
 };
 
