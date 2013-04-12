@@ -18,7 +18,6 @@ class Snapshot {
         vector<Snapshot> successors;
         vector<myfloat> successor_probs;
         vector<myfloat> probabilities;
-        unsigned int num_processors; // should this be in scheduler?
     public:
         Snapshot(Intree& t);
         Snapshot(Intree& t, vector<task_id> m);
