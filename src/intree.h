@@ -28,6 +28,7 @@ public:
     int count_tasks() const;
     int get_in_degree(const Task& t) const ;
     int get_in_degree(const task_id t) const ;
+    Task& get_task_by_id(task_id tid);
     void get_tasks(set<task_id>& result) const;
     int get_level(const Task& t) const;
     int get_level(const task_id t) const;
@@ -35,7 +36,6 @@ public:
     void remove_task(Task& t);
     void remove_task(task_id t);
 
-    // TODO: Make methods more efficient by working with references/pointers
     pair<Task, Task> get_edge_from(const Task& t) const;
     pair<Task, Task> get_edge_from(const task_id t) const;
 

@@ -20,12 +20,14 @@ void Snapshot::get_successors(const Scheduler& scheduler){
     if(intree.count_tasks()==1)
         return;
     // TODO: implement class for probability computations
+    vector<myfloat> finish_probs;
     for(auto it = marked.begin(); it!=marked.end(); ++it){
         finish_probs.push_back(((myfloat)1)/(myfloat)marked.size());
     }
     assert(finish_probs.size()==marked.size());
     // then, for each finished threads, compute all possible successors
-    for(auto it = marked.begin(); it!=marked.end(); ++it){
+    auto finish_prob_it = finish_probs.begin();
+    for(auto it = marked.begin(); it!=marked.end(); ++it, ++finish_prob_it){
         Intree tmp(intree);
         tmp.remove_task(*it);
         vector<pair<task_id,myfloat>> raw_sucs;
@@ -43,6 +45,7 @@ void Snapshot::get_successors(const Scheduler& scheduler){
                     newmarked.push_back(raw_sucs[i].first);
                 Snapshot news(tmp, newmarked);
                 successors.push_back(news);
+                successor_probs.push_back(*finish_prob_it * raw_sucs[i].second);
             }
         }
         else {
@@ -53,6 +56,7 @@ void Snapshot::get_successors(const Scheduler& scheduler){
                         }), newmarked.end());
             Snapshot news(tmp, newmarked);
             successors.push_back(news);
+            successor_probs.push_back(*finish_prob_it);
         }
     }
 }
@@ -64,9 +68,22 @@ void Snapshot::compile_snapshot_dag(const Scheduler& scheduler){
     }
 }
 
-myfloat Snapshot::expected_runtime(){
-    // TODO
-    throw 0;
+myfloat Snapshot::expected_runtime(int depth){
+    if (successors.size() == 0){
+        return intree.get_task_by_id(0).get_expected_remaining_time();
+    }
+    assert(successor_probs.size() == successors.size());
+    // TODO: compute expected minimum runtime of marked threads
+    myfloat expected_runtime_of_min_task = ((myfloat)1)/(myfloat)marked.size();
+    myfloat result = expected_runtime_of_min_task;
+    myfloat suc_expected_runtimes[successors.size()];
+    for(unsigned int i=0; i<successors.size(); ++i){
+        suc_expected_runtimes[i] = successors[i].expected_runtime(depth+1);
+    }
+    for(unsigned int i=0; i<successors.size(); ++i){
+        result += successor_probs[i] * suc_expected_runtimes[i];
+    }
+    return result;
 }
 
 void Snapshot::print_snapshot_dag(int depth){
@@ -74,7 +91,9 @@ void Snapshot::print_snapshot_dag(int depth){
         cout << "*";
     } 
     cout << " ";
-    cout << *this << endl;
+    cout << *this;
+    // cout << " (" << expected_runtime() << ") ";
+    cout << endl;
     for(auto it=successors.begin(); it!=successors.end(); ++it){
         it->print_snapshot_dag(depth+1);
     }

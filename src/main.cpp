@@ -18,23 +18,34 @@ void randomEdges(int n, vector<pair<Task,Task>>& target){
     }   
 }
 
-#define N 4
+#define NUM_THREADS 12
+#define NUM_PROCESSORS 2
+
 // TODO: rule-of-three everywhere!
 int main(int argc, char** argv){
     print_version();
+
+    // generate tree
     vector<pair<Task,Task>> edges;
-    randomEdges(N, edges);
+    randomEdges(NUM_THREADS, edges);
     for(auto it = edges.begin(); it != edges.end(); ++it){
         cout << it->first << " -> " << it->second << endl;
     }
     Intree t(edges);
-    vector<task_id> marked;
-    marked.push_back(N);
-    marked.push_back(N-1);
+
+    // generate all possible initial markings
     Scheduler* sched = new HLFscheduler();
+    vector<task_id> marked;
     Snapshot s(t, marked);
-    cout << s << endl;
+    vector<vector<task_id>> initial_settings;
+    sched->get_initial_schedule(t, NUM_PROCESSORS, initial_settings);
+    return 1;
     s.compile_snapshot_dag(*sched);
-    s.print_snapshot_dag();
+    marked.push_back(NUM_THREADS);
+    marked.push_back(NUM_THREADS-1);
+    cout << s << endl;
+    // s.print_snapshot_dag();
+    cout << "Expected runtime " << s.expected_runtime() << endl;
+    delete(sched);
     return 0;
 }
