@@ -18,8 +18,8 @@ void randomEdges(int n, vector<pair<Task,Task>>& target){
     }   
 }
 
-#define NUM_THREADS 7
-#define NUM_PROCESSORS 3
+#define NUM_THREADS 12
+#define NUM_PROCESSORS 2
 
 // TODO: rule-of-three everywhere!
 int main(int argc, char** argv){
@@ -36,16 +36,19 @@ int main(int argc, char** argv){
     // generate all possible initial markings
     Scheduler* sched = new HLFscheduler();
     vector<task_id> marked;
-    Snapshot s(t, marked);
     vector<vector<task_id>> initial_settings;
     sched->get_initial_schedule(t, NUM_PROCESSORS, initial_settings);
-    return 1;
-    s.compile_snapshot_dag(*sched);
-    marked.push_back(NUM_THREADS);
-    marked.push_back(NUM_THREADS-1);
-    cout << s << endl;
-    // s.print_snapshot_dag();
-    cout << "Expected runtime " << s.expected_runtime() << endl;
+
+#pragma omp parallel for
+    for(unsigned int i= 0; i<initial_settings.size(); ++i){
+        Snapshot s(t, initial_settings[i]);
+#pragma omp critical
+        {
+            cout << "Compiling snapshot DAG for " << s << endl;
+        };
+        s.compile_snapshot_dag(*sched);
+        cout << endl;
+    }
     delete(sched);
     return 0;
 }

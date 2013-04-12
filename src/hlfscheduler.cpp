@@ -11,6 +11,8 @@ void HLFscheduler::all_combinations(vector<task_id> nums,
         for(unsigned int i=0; i<current.size(); ++i){
             if(t.get_level(current[i]) != referencelevels[i])
                 return;
+            if(t.get_in_degree(current[i]) > 0)
+                return;
         }
         target.push_back(current);
         return;
