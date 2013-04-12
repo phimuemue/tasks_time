@@ -73,7 +73,7 @@ myfloat Snapshot::expected_runtime(int depth){
         return intree.get_task_by_id(0).get_expected_remaining_time();
     }
     assert(successor_probs.size() == successors.size());
-    // TODO: compute expected minimum runtime of marked threads
+    // TODO: compute expected minimum runtime of marked threads dynamically
     myfloat expected_runtime_of_min_task = ((myfloat)1)/(myfloat)marked.size();
     myfloat result = expected_runtime_of_min_task;
     myfloat suc_expected_runtimes[successors.size()];
