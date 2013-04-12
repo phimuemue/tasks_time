@@ -24,20 +24,31 @@ void Snapshot::get_successors(){
     assert(finish_probs.size()==marked.size());
     // then, for each finished threads, compute all possible successors
     for(auto it = marked.begin(); it!=marked.end(); ++it){
+        cout << "Computing successors if " << *it
+        << " is finished." << endl;
         Intree tmp(intree);
         tmp.remove_task(*it);
         vector<pair<task_id,myfloat>> raw_sucs;
-        Snapshot::scheduler.get_next_tasks(intree, marked, raw_sucs);
+        Snapshot::scheduler.get_next_tasks(tmp, marked, raw_sucs);
+        cout << "Elements of raw_sucs: " << endl;
+        for(auto rsit=raw_sucs.begin(); rsit!=raw_sucs.end(); ++rsit){
+            cout << (*rsit).first << ", " << (*rsit).second << endl;
+        }
         for(unsigned int i=0; i<raw_sucs.size(); ++i){
             vector<task_id> newmarked(marked);
-            for (unsigned int j=0; j<newmarked.size(); ++j){
-                if(newmarked[j] == *it){
-                    newmarked[j] = raw_sucs[i].first;
-                }
-            }
+            newmarked.erase(remove_if(newmarked.begin(), newmarked.end(),
+                      [it](const task_id& a){
+                        return a==*it;
+                      }), newmarked.end());
+            if(raw_sucs[i].first != NOTASK)
+                newmarked.push_back(raw_sucs[i].first);
             Snapshot news(tmp, newmarked);
             successors.push_back(news);
         }
+    }
+    cout << "Done computing successors" << endl;
+    for(auto it=successors.begin(); it!=successors.end(); ++it){
+        cout << *it << endl;
     }
 }
 
@@ -51,9 +62,14 @@ myfloat Snapshot::expected_runtime(){
 }
 
 ostream& operator<<(ostream& os, const Snapshot& s){
-    os << "Snapshot: " << s.intree << " | ";
+    os << "Snapshot: " << s.intree << " | [";
+    
     for(auto it = s.marked.begin(); it != s.marked.end(); ++it){
         os << *it;
+        if (it+1!=s.marked.end()){
+            os << ", ";
+        }
     }
+    os << "]";
     return os;
 }
