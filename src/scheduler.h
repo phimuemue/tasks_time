@@ -3,6 +3,7 @@
 
 #include<vector>
 #include<utility>
+#include<algorithm>
 
 #include "snapshot.h"
 
@@ -12,9 +13,9 @@ class Scheduler {
     // TODO: Better if the following was pure virtual
     // TODO: possibly better if only one Snapshot was the argument
     public:
-        virtual void get_next_tasks(Intree t, 
-                                    vector<task_id> marked,
-                                    vector<pair<task_id,myfloat>> target);
+        virtual void get_next_tasks(const Intree& t, 
+                                    const vector<task_id>& marked,
+                                    vector<pair<task_id,myfloat>>& target);
 };
 
 #endif
