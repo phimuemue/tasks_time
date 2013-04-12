@@ -12,8 +12,8 @@ using namespace std;
 
 class Snapshot {
     private:
-        // TODO: implement scheduler class
         vector<task_id> marked;
+        vector<myfloat> finish_probs;
         Intree intree;
         vector<Snapshot> successors;
         vector<myfloat> probabilities;

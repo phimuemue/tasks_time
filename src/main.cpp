@@ -18,7 +18,7 @@ void randomEdges(int n, vector<pair<Task,Task>>& target){
     }   
 }
 
-#define N 5
+#define N 4
 // TODO: rule-of-three everywhere!
 int main(int argc, char** argv){
     print_version();

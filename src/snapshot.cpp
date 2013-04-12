@@ -20,7 +20,6 @@ void Snapshot::get_successors(const Scheduler& scheduler){
     if(intree.count_tasks()==1)
         return;
     // TODO: implement class for probability computations
-    vector<myfloat> finish_probs;
     for(auto it = marked.begin(); it!=marked.end(); ++it){
         finish_probs.push_back(((myfloat)1)/(myfloat)marked.size());
     }
@@ -71,7 +70,7 @@ myfloat Snapshot::expected_runtime(){
 }
 
 void Snapshot::print_snapshot_dag(int depth){
-    for(int i=0; i<depth; ++i){
+    for(int i=-1; i<depth; ++i){
         cout << "*";
     } 
     cout << " ";
