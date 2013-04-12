@@ -68,7 +68,7 @@ void Snapshot::compile_snapshot_dag(const Scheduler& scheduler){
     }
 }
 
-myfloat Snapshot::expected_runtime(int depth){
+myfloat Snapshot::expected_runtime(){
     if (successors.size() == 0){
         return intree.get_task_by_id(0).get_expected_remaining_time();
     }
@@ -78,7 +78,7 @@ myfloat Snapshot::expected_runtime(int depth){
     myfloat result = expected_runtime_of_min_task;
     myfloat suc_expected_runtimes[successors.size()];
     for(unsigned int i=0; i<successors.size(); ++i){
-        suc_expected_runtimes[i] = successors[i].expected_runtime(depth+1);
+        suc_expected_runtimes[i] = successors[i].expected_runtime();
     }
     for(unsigned int i=0; i<successors.size(); ++i){
         result += successor_probs[i] * suc_expected_runtimes[i];

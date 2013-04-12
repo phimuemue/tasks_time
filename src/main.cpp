@@ -39,6 +39,7 @@ int main(int argc, char** argv){
     vector<vector<task_id>> initial_settings;
     sched->get_initial_schedule(t, NUM_PROCESSORS, initial_settings);
 
+    myfloat expected_runtimes[initial_settings.size()];
 #pragma omp parallel for
     for(unsigned int i= 0; i<initial_settings.size(); ++i){
         Snapshot s(t, initial_settings[i]);
@@ -47,7 +48,11 @@ int main(int argc, char** argv){
             cout << "Compiling snapshot DAG for " << s << endl;
         };
         s.compile_snapshot_dag(*sched);
+        expected_runtimes[i] = s.expected_runtime();
         cout << endl;
+    }
+    for(unsigned int i= 0; i<initial_settings.size(); ++i){
+        cout << expected_runtimes[i] << endl;
     }
     delete(sched);
     return 0;

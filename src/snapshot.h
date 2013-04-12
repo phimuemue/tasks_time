@@ -25,7 +25,7 @@ class Snapshot {
         void get_successors(const Scheduler& scheduler);
         void compile_snapshot_dag(const Scheduler& scheduler);
 
-        myfloat expected_runtime(int depth=0);
+        myfloat expected_runtime();
         void print_snapshot_dag(int depth=0);
         friend ostream& operator<<(ostream& os, const Snapshot& s);
 };
