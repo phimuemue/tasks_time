@@ -5,6 +5,7 @@
 #include "info.h"
 #include "intree.h"
 #include "snapshot.h"
+#include "hlfscheduler.h"
 
 using namespace std;
 
@@ -30,7 +31,7 @@ int main(int argc, char** argv){
     vector<task_id> marked;
     marked.push_back(N);
     marked.push_back(N-1);
-    Scheduler* sched = new Leafscheduler();
+    Scheduler* sched = new HLFscheduler();
     Snapshot s(t, marked);
     cout << s << endl;
     s.get_successors(*sched);

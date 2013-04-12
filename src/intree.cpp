@@ -57,6 +57,7 @@ void Intree::remove_task(task_id t){
     if(get_in_degree(t) != 0)
         return;
     // TODO: Why does the following apparently not work?
+    // Answer: needs edges.erase around it!
     // remove_if(edges.begin(), edges.end(),
     //             [t](pair<Task, Task> e){
     //                 return ((e.first == t) || (e.second == t));
