@@ -22,6 +22,7 @@ class Snapshot {
         unsigned int num_processors; // should this be in scheduler?
     public:
         Snapshot(Intree& t);
+        Snapshot(Intree& t, vector<task_id> m);
         void get_successors();
         void compile_snapshot_dag();
         myfloat expected_runtime();

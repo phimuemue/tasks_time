@@ -14,7 +14,7 @@ class Scheduler {
     public:
         virtual void get_next_tasks(Intree t, 
                                     vector<task_id> marked,
-                                    vector<pair<Intree,myfloat>> target);
+                                    vector<pair<task_id,myfloat>> target);
 };
 
 #endif

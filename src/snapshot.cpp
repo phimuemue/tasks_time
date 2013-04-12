@@ -2,8 +2,17 @@
 
 Scheduler Snapshot::scheduler;
 
-Snapshot::Snapshot(Intree& t){
-    intree = t;
+Snapshot::Snapshot(Intree& t) :
+    intree(t)
+{
+
+}
+
+Snapshot::Snapshot(Intree& t, vector<task_id> m) :
+    marked(m),
+    intree(t)
+{
+
 }
 
 void Snapshot::get_successors(){
@@ -14,15 +23,20 @@ void Snapshot::get_successors(){
     }
     assert(finish_probs.size()==marked.size());
     // then, for each finished threads, compute all possible successors
-    Intree tmp;
     for(auto it = marked.begin(); it!=marked.end(); ++it){
         Intree tmp(intree);
         tmp.remove_task(*it);
-        vector<pair<Intree,myfloat>> raw_sucs;
+        vector<pair<task_id,myfloat>> raw_sucs;
         Snapshot::scheduler.get_next_tasks(intree, marked, raw_sucs);
-        for(unsigned int i=0; i<finish_probs.size(); ++i){
-            Snapshot news(raw_sucs[i].first);
-            
+        for(unsigned int i=0; i<raw_sucs.size(); ++i){
+            vector<task_id> newmarked(marked);
+            for (unsigned int j=0; j<newmarked.size(); ++j){
+                if(newmarked[j] == *it){
+                    newmarked[j] = raw_sucs[i].first;
+                }
+            }
+            Snapshot news(tmp, newmarked);
+            successors.push_back(news);
         }
     }
 }
