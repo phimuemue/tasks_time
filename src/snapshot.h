@@ -6,15 +6,13 @@
 
 #include "intree.h"
 #include "scheduler.h"
+#include "leafscheduler.h"
 
 using namespace std;
-
-class Scheduler;
 
 class Snapshot {
     private:
         // TODO: implement scheduler class
-        static Scheduler scheduler;
         vector<task_id> marked;
         Intree intree;
         vector<Snapshot> successors;
@@ -23,7 +21,7 @@ class Snapshot {
     public:
         Snapshot(Intree& t);
         Snapshot(Intree& t, vector<task_id> m);
-        void get_successors();
+        void get_successors(const Scheduler& scheduler);
         void compile_snapshot_dag();
         myfloat expected_runtime();
 

@@ -1,7 +1,5 @@
 #include "snapshot.h"
 
-Scheduler Snapshot::scheduler;
-
 Snapshot::Snapshot(Intree& t) :
     intree(t)
 {
@@ -15,7 +13,7 @@ Snapshot::Snapshot(Intree& t, vector<task_id> m) :
 
 }
 
-void Snapshot::get_successors(){
+void Snapshot::get_successors(const Scheduler& scheduler){
     // TODO: implement class for probability computations
     vector<myfloat> finish_probs;
     for(auto it = marked.begin(); it!=marked.end(); ++it){
@@ -29,7 +27,7 @@ void Snapshot::get_successors(){
         Intree tmp(intree);
         tmp.remove_task(*it);
         vector<pair<task_id,myfloat>> raw_sucs;
-        Snapshot::scheduler.get_next_tasks(tmp, marked, raw_sucs);
+        scheduler.get_next_tasks(tmp, marked, raw_sucs);
         cout << "Elements of raw_sucs: " << endl;
         for(auto rsit=raw_sucs.begin(); rsit!=raw_sucs.end(); ++rsit){
             cout << (*rsit).first << ", " << (*rsit).second << endl;

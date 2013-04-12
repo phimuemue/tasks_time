@@ -30,8 +30,9 @@ int main(int argc, char** argv){
     vector<task_id> marked;
     marked.push_back(N);
     marked.push_back(N-1);
+    Scheduler* sched = new Leafscheduler();
     Snapshot s(t, marked);
     cout << s << endl;
-    s.get_successors();
+    s.get_successors(*sched);
     return 0;
 }
