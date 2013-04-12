@@ -1,24 +1,30 @@
 #include "hlfscheduler.h"
 
 void HLFscheduler::all_combinations(vector<task_id> nums, 
-        unsigned int size,
         unsigned int n, 
         unsigned int minindex,
+        const Intree& t,
+        const vector<int>& referencelevels,
         vector<task_id>& current,
         vector<vector<task_id>>& target) const {
     if(n==0){
+        for(unsigned int i=0; i<current.size(); ++i){
+            if(t.get_level(current[i]) != referencelevels[i])
+                return;
+        }
         target.push_back(current);
         return;
     }
-    if(size - minindex <= n)
+    if(nums.size() - minindex <= n)
         return;
-    for(unsigned int i=minindex+1; i<size; ++i){
+    for(unsigned int i=minindex+1; i<nums.size(); ++i){
         vector<task_id> newcombo(current);
         newcombo.push_back(nums[i]);
         all_combinations(nums,
-            size, 
             n-1,
             i,
+            t,
+            referencelevels,
             newcombo,
             target);
     }
@@ -38,24 +44,18 @@ void HLFscheduler::get_initial_schedule(const Intree& t,
             return t.get_level(a) > t.get_level(b);
         }
         ); 
-    int maxlevel = t.get_level(tmp[0]);
-    int minindex = procs-1;
-    while(t.get_level(tmp[minindex])==t.get_level(tmp[minindex+1]))
-        minindex++;
-    int minlevel = t.get_level(tmp[minindex]);
-    int maxindex=minindex;
 
     for(auto it=tmp.begin(); it!=tmp.end(); ++it){
         cout << "task no. " << *it << "(" << t.get_level(*it) << ")" << endl;
     }
-    cout << "maxlevel " << maxlevel << endl;
-    cout << "minlevel " << minlevel << endl;
-    cout << "maxindex " << maxindex << endl;
-    cout << "minindex " << minindex << endl;
+
     vector<vector<task_id>> combos;
     vector<task_id> dummy;
-
-    all_combinations(tmp, 5, procs, 1, dummy, combos);
+    vector<int> referencelevels;
+    for(unsigned int i=0; i<procs; ++i){
+        referencelevels.push_back(t.get_level(tmp[i]));
+    }
+    all_combinations(tmp, procs, -1, t, referencelevels, dummy, combos);
     for(auto cit=combos.begin(); cit!=combos.end(); cit++){
         cout << "New task combo" << endl;
         for(auto it=cit->begin(); it!=cit->end(); ++it){
@@ -63,24 +63,8 @@ void HLFscheduler::get_initial_schedule(const Intree& t,
         }
     }
 
-    if(minlevel == maxlevel){
-        all_combinations(tmp, minindex, procs, 0, dummy, combos);
-        for(auto it = combos.begin(); it!=combos.end(); ++it){
-            target.push_back(*it);
-        }
-    }
-    else{
-        maxindex = minindex-1;
-        while(t.get_level(tmp[maxindex]) == t.get_level(tmp[maxindex-1]))
-            maxindex--;
-        all_combinations(tmp, minindex, procs - maxindex - 1, maxindex, dummy, combos);
-    }
-    cout << "Combinations done." << endl;
-    for(auto cit=combos.begin(); cit!=combos.end(); cit++){
-        cout << "New task combo" << endl;
-        for(auto it=cit->begin(); it!=cit->end(); ++it){
-            cout << "task no. " << *it << "(" << t.get_level(*it) << ")" << endl;
-        }
+    for(auto it = combos.begin(); it!=combos.end(); ++it){
+        target.push_back(*it);
     }
 }
 

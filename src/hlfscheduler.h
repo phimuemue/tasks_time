@@ -6,9 +6,10 @@
 class HLFscheduler : public Leafscheduler {
     private:
         void all_combinations(vector<task_id> nums,
-                unsigned int size,
                 unsigned int n,
                 unsigned int minindex,
+                const Intree& t,
+                const vector<int>& referencelevels,
                 vector<task_id>& current,
                 vector<vector<task_id>>& target) const;
     public:
