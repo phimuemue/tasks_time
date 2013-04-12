@@ -26,6 +26,9 @@ public:
     int get_in_degree(const Task& t) const ;
     int get_in_degree(const task_id t) const ;
     void get_tasks(set<task_id>& result) const;
+    int get_level(const Task& t) const;
+    int get_level(const task_id t) const;
+    
     void remove_task(Task& t);
     void remove_task(task_id t);
 

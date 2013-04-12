@@ -33,6 +33,22 @@ void Intree::get_tasks(set<task_id>& result) const {
     }
 }
 
+int Intree::get_level(const Task& t) const{
+    return get_level(t.get_id());
+}
+
+int Intree::get_level(const task_id t) const{
+    int current = t;
+    int result = 0;
+    while(current > 0){
+        auto edge = get_edge_from(current);
+        current = edge.second.get_id();
+        result++;
+    }
+    return result;
+}
+
+
 void Intree::remove_task(Task& t){
     remove_task(t.get_id());
 }
