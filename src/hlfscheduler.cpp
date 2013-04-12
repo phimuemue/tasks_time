@@ -5,10 +5,6 @@ void HLFscheduler::get_next_tasks(const Intree& t,
         vector<pair<task_id,myfloat>>& target) const {
     vector<pair<task_id, myfloat>> tmp;
     Leafscheduler::get_next_tasks(t, marked, tmp);
-    cout << "ADLFK" << endl;
-    for(auto it=tmp.begin(); it!=tmp.end(); ++it){
-        cout << it->first << endl;
-    }
     int maxlevel = 0; 
     for(auto it=tmp.begin(); it!=tmp.end(); ++it){
         maxlevel = t.get_level(it->first) > maxlevel ? t.get_level(it->first) : maxlevel;
