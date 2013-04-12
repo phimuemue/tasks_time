@@ -23,6 +23,7 @@ public:
     Intree(const Intree& t);
     Intree(vector<pair<Task, Task>>& edges);
 
+    int count_tasks() const;
     int get_in_degree(const Task& t) const ;
     int get_in_degree(const task_id t) const ;
     void get_tasks(set<task_id>& result) const;

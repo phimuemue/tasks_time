@@ -13,6 +13,10 @@ Intree::Intree(vector<pair<Task, Task>>& edges){
     this->edges = edges;
 }
 
+int Intree::count_tasks() const{
+    return edges.size() + 1;
+}
+
 int Intree::get_in_degree(const Task& t) const {
     return get_in_degree(t.get_id());
 }
@@ -113,6 +117,10 @@ void Intree::get_chains(vector<vector<int>>& target) const {
 }
     
 ostream& operator<<(ostream& os, const Intree& t){
+    if(t.count_tasks()==1){
+        os << "[0]";
+        return os;
+    }
     vector<vector<int>> chains;
     t.get_chains(chains);
     for(auto i1 = chains.begin(); i1 != chains.end(); ++i1){
