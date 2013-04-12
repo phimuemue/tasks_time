@@ -19,11 +19,14 @@ void randomEdges(int n, vector<pair<Task,Task>>& target){
 }
 
 #define NUM_THREADS 12
-#define NUM_PROCESSORS 2
+#define NUM_PROCESSORS 3
 
 // TODO: rule-of-three everywhere!
 int main(int argc, char** argv){
     print_version();
+
+    // openmp settings - useful?
+    omp_set_nested(1);
 
     // generate tree
     vector<pair<Task,Task>> edges;
@@ -40,7 +43,7 @@ int main(int argc, char** argv){
     sched->get_initial_schedule(t, NUM_PROCESSORS, initial_settings);
 
     myfloat expected_runtimes[initial_settings.size()];
-#pragma omp parallel for
+#pragma omp parallel for num_threads(initial_settings.size())
     for(unsigned int i= 0; i<initial_settings.size(); ++i){
         Snapshot s(t, initial_settings[i]);
 #pragma omp critical

@@ -63,8 +63,8 @@ void Snapshot::get_successors(const Scheduler& scheduler){
 
 void Snapshot::compile_snapshot_dag(const Scheduler& scheduler){
     get_successors(scheduler);
-    for(auto it=successors.begin(); it!=successors.end(); ++it){
-        it->compile_snapshot_dag(scheduler);
+    for(unsigned int i=0; i<successors.size(); ++i){
+        successors[i].compile_snapshot_dag(scheduler);
     }
 }
 
