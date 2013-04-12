@@ -4,13 +4,20 @@ Intree::Intree(){
 }
 
 Intree::Intree(const Intree& t){
+    for(auto it = t.taskmap.begin(); it!=t.taskmap.end(); ++it){
+        taskmap[it->first] = it->second;
+    }
     for(auto it = t.edges.begin(); it != t.edges.end(); ++it){
         edges.push_back(*it);
     }
 }
 
 Intree::Intree(vector<pair<Task, Task>>& edges){
-    this->edges = edges;
+    for(auto it=edges.begin(); it!=edges.end(); ++it){
+        this->edges.push_back(pair<task_id,task_id>(it->first.get_id(), it->second.get_id()));
+        taskmap[it->first.get_id()] = it->first;
+        taskmap[it->second.get_id()] = it->second;
+    }
 }
 
 int Intree::count_tasks() const{
@@ -31,9 +38,8 @@ int Intree::get_in_degree(const task_id t) const {
 }
 
 void Intree::get_tasks(set<task_id>& result) const {
-    for(auto it = edges.begin(); it != edges.end(); ++it){
-        result.insert(it->first.get_id());
-        result.insert(it->second.get_id());
+    for(auto it=taskmap.begin(); it!=taskmap.end(); ++it){
+        result.insert(it->first);
     }
 }
 
@@ -58,15 +64,20 @@ void Intree::remove_task(Task& t){
 }
 
 void Intree::remove_task(task_id t){
+    // only tasks with no predecessor can be removed
     if(get_in_degree(t) != 0)
-        return;
+        throw 1;
+    // remove from taskmap
+    auto todel = taskmap.find(t);
+    taskmap.erase(todel);
+    // and from edge model
     // TODO: Why does the following apparently not work?
     // Answer: needs edges.erase around it!
     // remove_if(edges.begin(), edges.end(),
     //             [t](pair<Task, Task> e){
     //                 return ((e.first == t) || (e.second == t));
     //             });
-    vector<pair<Task, Task>> tmp;
+    vector<pair<task_id, task_id>> tmp;
     for(auto it = edges.begin(); it != edges.end(); ++it){
         if(!((it->first == t) || (it->second == t))){
             tmp.push_back(*it);

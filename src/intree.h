@@ -5,6 +5,7 @@
 #include<vector>
 #include<iostream>
 #include<set>
+#include<map>
 #include<functional>
 #include<algorithm>
 #include<assert.h>
@@ -17,7 +18,8 @@ using namespace std;
 */
 class Intree {
 private:
-    vector<pair<Task, Task>> edges;
+    vector<pair<task_id, task_id>> edges;
+    map<task_id, Task> taskmap;
 public:
     Intree();
     Intree(const Intree& t);
