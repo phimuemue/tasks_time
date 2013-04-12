@@ -18,7 +18,7 @@ void randomEdges(int n, vector<pair<Task,Task>>& target){
     }   
 }
 
-#define N 2
+#define N 5
 // TODO: rule-of-three everywhere!
 int main(int argc, char** argv){
     print_version();
@@ -34,6 +34,7 @@ int main(int argc, char** argv){
     Scheduler* sched = new HLFscheduler();
     Snapshot s(t, marked);
     cout << s << endl;
-    s.get_successors(*sched);
+    s.compile_snapshot_dag(*sched);
+    s.print_snapshot_dag();
     return 0;
 }
