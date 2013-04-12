@@ -39,7 +39,8 @@ void HLFscheduler::get_initial_schedule(const Intree& t,
     t.get_tasks(tasks);
     vector<task_id> tmp;
     for(auto it=tasks.begin(); it!=tasks.end(); ++it){
-        tmp.push_back(*it);
+        if(t.get_in_degree(*it) == 0)
+            tmp.push_back(*it);
     }
     sort(tmp.begin(), tmp.end(),
         [&t](const task_id& a, const task_id& b) -> bool {
