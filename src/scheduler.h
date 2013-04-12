@@ -5,7 +5,8 @@
 #include<utility>
 #include<algorithm>
 
-#include "snapshot.h"
+#include "config.h"
+#include "intree.h"
 
 using namespace std;
 
@@ -15,7 +16,7 @@ class Scheduler {
     public:
         virtual void get_next_tasks(const Intree& t, 
                                     const vector<task_id>& marked,
-                                    vector<pair<task_id,myfloat>>& target);
+                                    vector<pair<task_id,myfloat>>& target) const = 0;
 };
 
 #endif
