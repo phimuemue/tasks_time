@@ -21,8 +21,21 @@ def create_version_info(*a,**b):
     f.writelines(lines)
     f.close()
 
+
+# variables
+vars = Variables()
+vars.Add(EnumVariable("OPT", "Optimization level can be set to 0, 1, 2 or 3", "0", 
+            allowed_values=("0", "1", "2", "3")))
+
 # we use C++11 (mainly to simplify some writing in C++)
-env = Environment(CXXFLAGS="-std=c++0x -Wall -fopenmp", LINKFLAGS="-fopenmp")
+env = Environment(variables = vars,
+                  CXXFLAGS=["-std=c++0x", "-Wall", "-fopenmp", "-O${OPT}"], 
+                  LINKFLAGS="-fopenmp")
+
+env.Append(NEW_VARIABLE = vars);
+
+# help
+Help(vars.GenerateHelpText(env))
 
 # main program
 mainprog = env.Program(target="tasks", source=Glob("*.cpp"))
