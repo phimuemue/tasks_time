@@ -26,10 +26,10 @@ int Intree::get_in_degree(const task_id t) const {
     return result;
 }
 
-void Intree::get_tasks(set<Task>& result){
+void Intree::get_tasks(set<task_id>& result) const {
     for(auto it = edges.begin(); it != edges.end(); ++it){
-        result.insert(it->first);
-        result.insert(it->second);
+        result.insert(it->first.get_id());
+        result.insert(it->second.get_id());
     }
 }
 
