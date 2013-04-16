@@ -32,6 +32,10 @@ void HLFscheduler::all_combinations(vector<task_id> nums,
     }
 }
 
+// TODO: Apparently here is something not working properly if we 
+//       can not allocate a task to *every* processor
+//       i.e. if we have too few initial tasks to make every processor
+//       busy
 void HLFscheduler::get_initial_schedule(const Intree& t,
         const unsigned int procs,
         vector<vector<task_id>>& target) const {
