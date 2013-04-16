@@ -34,12 +34,12 @@ public:
 
     void elapse(myfloat t);
     void set_elapsed(myfloat t);
-    myfloat get_elapsed();
+    myfloat get_elapsed() const; 
 
     Distribution get_distribution() const;
 
-    myfloat get_expected_remaining_time();
-    myfloat get_expected_total_time();
+    myfloat get_expected_remaining_time() const;
+    myfloat get_expected_total_time() const;
 
     bool operator==(const Task& t) const;
     bool operator>(const Task& t) const;

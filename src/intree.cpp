@@ -37,8 +37,8 @@ int Intree::get_in_degree(const task_id t) const {
     return result;
 }
 
-Task& Intree::get_task_by_id(task_id tid){
-    return taskmap[tid];
+const Task& Intree::get_task_by_id(const task_id tid) const {
+    return taskmap.find(tid)->second;
 }
 
 void Intree::get_tasks(set<task_id>& result) const {

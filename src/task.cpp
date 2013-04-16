@@ -34,7 +34,7 @@ void Task::set_elapsed(myfloat t){
     elapsed = t;
 }
 
-myfloat Task::get_elapsed(){
+myfloat Task::get_elapsed() const {
     return elapsed;
 }
 
@@ -42,7 +42,7 @@ Distribution Task::get_distribution() const{
     return distribution;
 }
 
-myfloat Task::get_expected_remaining_time(){
+myfloat Task::get_expected_remaining_time() const {
     switch(distribution){
         case(Exponential):
             // Exponential distribution is memoryless
@@ -57,7 +57,7 @@ myfloat Task::get_expected_remaining_time(){
     throw 0;
 }
 
-myfloat Task::get_expected_total_time(){
+myfloat Task::get_expected_total_time() const {
     return get_expected_remaining_time() + elapsed;
 }
 
