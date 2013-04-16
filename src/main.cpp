@@ -19,7 +19,7 @@ void randomEdges(int n, vector<pair<Task,Task>>& target){
 }
 
 #define NUM_THREADS 12
-#define NUM_PROCESSORS 3
+#define NUM_PROCESSORS 2
 
 // TODO: rule-of-three everywhere!
 int main(int argc, char** argv){

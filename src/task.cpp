@@ -38,6 +38,10 @@ myfloat Task::get_elapsed(){
     return elapsed;
 }
 
+Distribution Task::get_distribution() const{
+    return distribution;
+}
+
 myfloat Task::get_expected_remaining_time(){
     switch(distribution){
         case(Exponential):

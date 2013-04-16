@@ -47,6 +47,10 @@ void Intree::get_tasks(set<task_id>& result) const {
     }
 }
 
+Distribution Intree::get_task_distribution(const task_id t) const {
+    return taskmap.find(t)->second.get_distribution();
+}
+
 int Intree::get_level(const Task& t) const{
     return get_level(t.get_id());
 }

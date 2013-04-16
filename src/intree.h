@@ -33,6 +33,7 @@ public:
     int get_level(const Task& t) const;
     int get_level(const task_id t) const;
     
+    Distribution get_task_distribution(const task_id t) const;
     void remove_task(Task& t);
     void remove_task(task_id t);
 

@@ -8,10 +8,12 @@
 #include "intree.h"
 #include "scheduler.h"
 #include "leafscheduler.h"
+#include "probability.h"
 
 using namespace std;
 
 class Snapshot {
+    friend class Probability_Computer;
     private:
         vector<task_id> marked;
         Intree intree;
