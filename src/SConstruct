@@ -26,10 +26,11 @@ def create_version_info(*a,**b):
 vars = Variables()
 vars.Add(EnumVariable("OPT", "Optimization level can be set to 0, 1, 2 or 3", "0", 
             allowed_values=("0", "1", "2", "3")))
+vars.Add("NUM_THREADS", "Number of threads. Possibly something between 1 and 20", "5")
 
 # we use C++11 (mainly to simplify some writing in C++)
 env = Environment(variables = vars,
-                  CXXFLAGS=["-std=c++0x", "-Wall", "-fopenmp", "-O${OPT}"], 
+                  CXXFLAGS=["-std=c++0x", "-Wall", "-fopenmp", "-O${OPT}", "-DNUM_THREADS=${NUM_THREADS}"], 
                   LINKFLAGS="-fopenmp")
 
 env.Append(NEW_VARIABLE = vars);
