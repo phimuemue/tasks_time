@@ -11,10 +11,13 @@ void Probability_Computer::compute_finish_probs(const Snapshot& s,
         }
     }
     if (all_distros_same){
-        // variables if all variables are exponentially distributed
+        // random variables are exponentially distributed
         myfloat prod_of_lambdas = 1;
         myfloat denom = 0;
         myfloat numer = 1;
+        // all variables are uniformly distributed
+        myfloat u_a = s.intree.get_task_by_id(s.marked[0]).uniform_a;
+        myfloat u_b = s.intree.get_task_by_id(s.marked[0]).uniform_b;
         switch(first){
         case(Exponential):
             for(auto it = s.marked.begin(); it!=s.marked.end(); ++it){
@@ -33,7 +36,16 @@ void Probability_Computer::compute_finish_probs(const Snapshot& s,
             }
             return;
         case(Uniform):
-            throw "To be implemented";
+            for(auto it = s.marked.begin(); it!=s.marked.end(); ++it){
+                if(s.intree.get_task_by_id(*it).uniform_a != u_a ||
+                        s.intree.get_task_by_id(*it).uniform_b != u_b){
+                    throw "Cannot compute finish probabilities if not all "
+                          "rv's are uniformly distributed with same parameters";
+                }
+            for(auto it = s.marked.begin(); it!=s.marked.end(); ++it){
+                target.push_back(((myfloat)1)/(myfloat)s.marked.size());
+            }
+            }
         }
     }
     throw 1;
