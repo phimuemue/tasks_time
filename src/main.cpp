@@ -59,9 +59,13 @@ int main(int argc, char** argv){
         expected_runtimes[i] = s.expected_runtime();
         cout << endl;
     }
+    myfloat expected_runtime = 0;
     for(unsigned int i= 0; i<initial_settings.size(); ++i){
         cout << expected_runtimes[i] << endl;
+        expected_runtime += expected_runtimes[i];
     }
+    expected_runtime /= (myfloat)initial_settings.size();
+    cout << "Total expected run time: " << expected_runtime << endl;
     delete(sched);
     return 0;
 }
