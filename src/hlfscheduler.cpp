@@ -32,13 +32,10 @@ void HLFscheduler::all_combinations(vector<task_id> nums,
     }
 }
 
-// TODO: Apparently here is something not working properly if we 
-//       can not allocate a task to *every* processor
-//       i.e. if we have too few initial tasks to make every processor
-//       busy
 void HLFscheduler::get_initial_schedule(const Intree& t,
         const unsigned int procs,
         vector<vector<task_id>>& target) const {
+    // fetch all tasks, and sort them according to their level
     set<task_id> tasks;
     t.get_tasks(tasks);
     vector<task_id> tmp;
@@ -51,25 +48,22 @@ void HLFscheduler::get_initial_schedule(const Intree& t,
             return t.get_level(a) > t.get_level(b);
         }
         ); 
-
-    for(auto it=tmp.begin(); it!=tmp.end(); ++it){
-        cout << "task no. " << *it << "(" << t.get_level(*it) << ")" << endl;
-    }
-
+    // compute possible combinations
     vector<vector<task_id>> combos;
     vector<task_id> dummy;
     vector<int> referencelevels;
-    for(unsigned int i=0; i<procs; ++i){
+    unsigned int numtasks = tmp.size();
+    unsigned int actualprocs = min(procs, numtasks);
+    for(unsigned int i=0; i<actualprocs; ++i){
         referencelevels.push_back(t.get_level(tmp[i]));
     }
-    all_combinations(tmp, procs, -1, t, referencelevels, dummy, combos);
+    all_combinations(tmp, actualprocs, -1, t, referencelevels, dummy, combos);
     for(auto cit=combos.begin(); cit!=combos.end(); cit++){
         cout << "New task combo" << endl;
         for(auto it=cit->begin(); it!=cit->end(); ++it){
             cout << "task no. " << *it << "(" << t.get_level(*it) << ")" << endl;
         }
     }
-
     for(auto it = combos.begin(); it!=combos.end(); ++it){
         target.push_back(*it);
     }

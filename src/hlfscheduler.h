@@ -1,6 +1,8 @@
 #ifndef HLFSCHEDULER_H
 #define HLFSCHEDULER_H
 
+#include <algorithm>
+
 #include "leafscheduler.h"
 
 class HLFscheduler : public Leafscheduler {
