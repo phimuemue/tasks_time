@@ -37,7 +37,7 @@ int main(int argc, char** argv){
     vector<pair<Task,Task>> edges;
     randomEdges(NUM_THREADS, edges);
     Intree t(edges);
-    cout << t << endl;
+    cout << "Intree: " << t << endl;
 
     // generate all possible initial markings
     Scheduler* sched = new HLFscheduler();
