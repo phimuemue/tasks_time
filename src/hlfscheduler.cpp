@@ -58,12 +58,6 @@ void HLFscheduler::get_initial_schedule(const Intree& t,
         referencelevels.push_back(t.get_level(tmp[i]));
     }
     all_combinations(tmp, actualprocs, -1, t, referencelevels, dummy, combos);
-    for(auto cit=combos.begin(); cit!=combos.end(); cit++){
-        cout << "New task combo" << endl;
-        for(auto it=cit->begin(); it!=cit->end(); ++it){
-            cout << "task no. " << *it << "(" << t.get_level(*it) << ")" << endl;
-        }
-    }
     for(auto it = combos.begin(); it!=combos.end(); ++it){
         target.push_back(*it);
     }
