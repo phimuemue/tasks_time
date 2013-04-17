@@ -36,10 +36,8 @@ int main(int argc, char** argv){
     // generate tree
     vector<pair<Task,Task>> edges;
     randomEdges(NUM_THREADS, edges);
-    for(auto it = edges.begin(); it != edges.end(); ++it){
-        cout << it->first << " -> " << it->second << endl;
-    }
     Intree t(edges);
+    cout << t << endl;
 
     // generate all possible initial markings
     Scheduler* sched = new HLFscheduler();
