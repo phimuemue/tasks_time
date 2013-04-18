@@ -8,13 +8,13 @@ Intree::Intree(const Intree& t){
         taskmap[it->first] = it->second;
     }
     for(auto it = t.edges.begin(); it != t.edges.end(); ++it){
-        edges.push_back(*it);
+        edges[it->first] = it->second;
     }
 }
 
 Intree::Intree(vector<pair<Task, Task>>& edges){
     for(auto it=edges.begin(); it!=edges.end(); ++it){
-        this->edges.push_back(pair<task_id,task_id>(it->first.get_id(), it->second.get_id()));
+        this->edges[it->first.get_id()] = it->second.get_id();
         taskmap[it->first.get_id()] = it->first;
         taskmap[it->second.get_id()] = it->second;
     }
@@ -93,7 +93,7 @@ void Intree::remove_task(task_id t){
     }
     edges.clear();
     for(auto it = tmp.begin(); it != tmp.end(); ++it){
-        edges.push_back(*it);        
+        edges[it->first] = it->second;
     }
 }
 

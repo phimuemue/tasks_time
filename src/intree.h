@@ -20,7 +20,7 @@ class Intree {
     friend class Probability_Computer;
     friend class Snapshot;
     private:
-        vector<pair<task_id, task_id>> edges;
+        map<task_id, task_id> edges;
         map<task_id, Task> taskmap;
     public:
         Intree();
