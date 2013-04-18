@@ -78,13 +78,6 @@ void Intree::remove_task(task_id t){
     // remove from taskmap
     auto todel = taskmap.find(t);
     taskmap.erase(todel);
-    // and from edge model
-    // TODO: Why does the following apparently not work?
-    // Answer: needs edges.erase around it!
-    // remove_if(edges.begin(), edges.end(),
-    //             [t](pair<Task, Task> e){
-    //                 return ((e.first == t) || (e.second == t));
-    //             });
     vector<pair<task_id, task_id>> tmp;
     for(auto it = edges.begin(); it != edges.end(); ++it){
         if(!((it->first == t) || (it->second == t))){
@@ -107,8 +100,7 @@ pair<Task, Task> Intree::get_edge_from(const task_id t) const {
             return *it;
         }
     }
-    // TODO: remove dummy
-    return pair<Task,Task>(Task(0),Task(0));
+    throw 0;
 }
 
 void Intree::get_chain(const Task& t, vector<int>& target) const {
