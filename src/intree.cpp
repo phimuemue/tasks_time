@@ -104,7 +104,10 @@ pair<Task, Task> Intree::get_edge_from(const task_id t) const {
 }
 
 bool Intree::is_chain(){
-    return false;
+    vector<vector<task_id>> chains;
+    // TODO: this can be made more efficient
+    get_chains(chains);
+    return chains.size() == 1;
 }
 
 void Intree::get_chain(const Task& t, vector<int>& target) const {

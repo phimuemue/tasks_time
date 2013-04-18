@@ -155,9 +155,11 @@ string Snapshot::tikz_string_dag(bool first){
     output << "}" << endl;
     output << "\\usebox\\nodebox" << endl;
     output << "}" << endl;
-    for(auto it=successors.begin(); it!=successors.end(); ++it){
-        output << "child";
-        output << "{" << it->tikz_string_dag(false) << "}";
+    if(!intree.is_chain()){
+        for(auto it=successors.begin(); it!=successors.end(); ++it){
+            output << "child";
+            output << "{" << it->tikz_string_dag(false) << "}";
+        }
     }
     if(first){
         output << ";" << endl;
