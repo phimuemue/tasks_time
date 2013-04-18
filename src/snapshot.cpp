@@ -90,9 +90,9 @@ myfloat Snapshot::expected_runtime(){
 }
 
 string Snapshot::tikz_string_internal(const task_id t, 
-        map<task_id,vector<task_id>>& rt) const {
+        map<task_id,vector<task_id>>& rt, bool first) const {
     stringstream output;
-    output << "node[fill";
+    output << "node[circle,scale=0.75,fill";
     if(find(marked.begin(), marked.end(), t) != marked.end()){
         output << ",red";
     }
@@ -104,7 +104,7 @@ string Snapshot::tikz_string_internal(const task_id t,
     output << "}[grow=up]\n";
     for(auto it = rt[t].begin(); it!=rt[t].end(); ++it){
         output << "child";
-        output << "{" << tikz_string_internal(*it, rt) << "}" << endl;
+        output << "{" << tikz_string_internal(*it, rt, false) << "}" << endl;
     }
     return output.str();
 }
@@ -130,7 +130,7 @@ string Snapshot::tikz_string(){
     return "\\" + tikz_string_internal(0, reverse_tree) + ";";
 }
 
-string Snapshot::tikz_string_dag(bool first){
+string Snapshot::tikz_string_dag(bool first, unsigned int depth){
     stringstream output;
     if(first){
         output << "\\begin{tikzpicture}" << endl;
@@ -145,10 +145,10 @@ string Snapshot::tikz_string_dag(bool first){
     // output << "\\newsavebox{\\nodebox}" << endl;
     output << "\\sbox{\\nodebox}{" << endl;
     output << "\\begin{tikzpicture}[scale=.2]" << endl;
-    for(unsigned int i=0; i < intree.edges.size(); ++i){
+    for(unsigned int i=0; i < intree.edges.size()+depth; ++i){
         output << "\\tikzstyle{level " << i+1 << "} = " <<
-            "[sibling distance = " << 8./(i+1) << "cm, " <<
-            "level distance = " << 2. - i/5. << "cm" << "]" << endl;
+            "[sibling distance = " << 2 << "cm, " <<
+            "level distance = " << 2 << "cm" << "]" << endl;
     }   
     output << tikz_string() << endl;
     output << "\\end{tikzpicture}" << endl;
@@ -158,7 +158,7 @@ string Snapshot::tikz_string_dag(bool first){
     if(!intree.is_chain()){
         for(auto it=successors.begin(); it!=successors.end(); ++it){
             output << "child";
-            output << "{" << it->tikz_string_dag(false) << "}";
+            output << "{" << it->tikz_string_dag(false, depth+1) << "}";
         }
     }
     if(first){

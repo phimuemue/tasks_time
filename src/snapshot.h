@@ -26,7 +26,7 @@ class Snapshot {
         vector<myfloat> successor_probs;
         vector<myfloat> probabilities;
         string tikz_string_internal(const task_id,
-                map<task_id,vector<task_id>>&) const;
+                map<task_id,vector<task_id>>&, bool = true) const;
     public:
         Snapshot(Intree& t);
         Snapshot(Intree& t, vector<task_id> m);
@@ -34,7 +34,7 @@ class Snapshot {
         void compile_snapshot_dag(const Scheduler& scheduler);
 
         string tikz_string();
-        string tikz_string_dag(bool first=true);
+        string tikz_string_dag(bool first=true, unsigned int = 1);
         myfloat expected_runtime();
         void print_snapshot_dag(int depth=0);
         friend ostream& operator<<(ostream& os, const Snapshot& s);
