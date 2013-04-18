@@ -84,6 +84,83 @@ myfloat Snapshot::expected_runtime(){
     return result;
 }
 
+string Snapshot::tikz_string_internal(const task_id t, 
+        map<task_id,vector<task_id>>& rt) const {
+    stringstream output;
+    output << "node[fill";
+    if(find(marked.begin(), marked.end(), t) != marked.end()){
+        output << ",red";
+    }
+    output << "]";
+    output << "{"; 
+#if 0
+    output << t;
+#endif
+    output << "}[grow=up]\n";
+    for(auto it = rt[t].begin(); it!=rt[t].end(); ++it){
+        output << "child";
+        output << "{" << tikz_string_internal(*it, rt) << "}" << endl;
+    }
+    return output.str();
+}
+
+string Snapshot::tikz_string(){
+    queue<task_id> q;
+    q.push(0);
+    map<task_id,vector<task_id>> reverse_tree;
+    reverse_tree[0] = {};
+    while (q.size() > 0){
+        task_id current = q.front();
+        q.pop();
+        for(auto it = intree.edges.begin(); it!=intree.edges.end(); ++it){
+            if(it->second == current){
+                q.push(it->first);
+                reverse_tree[it->second].push_back(it->first);
+                if(reverse_tree.find(it->first) == reverse_tree.end()){
+                    reverse_tree[it->first] = {};
+                }
+            }
+        }
+    }
+    return "\\" + tikz_string_internal(0, reverse_tree) + ";";
+}
+
+string Snapshot::tikz_string_dag(bool first){
+    stringstream output;
+    if(first){
+        output << "\\begin{tikzpicture}" << endl;
+        for(int i=0; i < intree.edges.size(); ++i){
+            output << "\\tikzstyle{level " << i+1 << "} = " <<
+                "[sibling distance = " << 8./(i+1) << "cm, " <<
+                "level distance = " << 2. - i/5. << "cm" << "]" << endl;
+        }
+        output << "\\";
+    }
+    output << "node[draw=black]{" << endl;
+    // output << "\\newsavebox{\\nodebox}" << endl;
+    output << "\\sbox{\\nodebox}{" << endl;
+    output << "\\begin{tikzpicture}[scale=.2]" << endl;
+    for(int i=0; i < intree.edges.size(); ++i){
+        output << "\\tikzstyle{level " << i+1 << "} = " <<
+            "[sibling distance = " << 8./(i+1) << "cm, " <<
+            "level distance = " << 2. - i/5. << "cm" << "]" << endl;
+    }   
+    output << tikz_string() << endl;
+    output << "\\end{tikzpicture}" << endl;
+    output << "}" << endl;
+    output << "\\usebox\\nodebox" << endl;
+    output << "}" << endl;
+    for(auto it=successors.begin(); it!=successors.end(); ++it){
+        output << "child";
+        output << "{" << it->tikz_string_dag(false) << "}";
+    }
+    if(first){
+        output << ";" << endl;
+        output << "\\end{tikzpicture}" << endl;
+    }
+    return output.str();
+}
+
 void Snapshot::print_snapshot_dag(int depth){
     for(int i=-1; i<depth; ++i){
         cout << "*";
