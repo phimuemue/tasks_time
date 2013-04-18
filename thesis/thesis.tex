@@ -158,11 +158,64 @@ This is just a test chapter to see how we can draw the intrees and the snapshot 
 
 
 \begin{tikzpicture}
+\tikzstyle{level 1} = [sibling distance = 12cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 6cm, level distance = 1.8cm]
+\tikzstyle{level 3} = [sibling distance = 3cm, level distance = 1.6cm]
+\tikzstyle{level 4} = [sibling distance = 1.5cm, level distance = 1.4cm]
+\tikzstyle{level 5} = [sibling distance = 1.cm, level distance = 1.2cm]
+\tikzstyle{level 6} = [sibling distance = .5cm, level distance = 1cm]
+\node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
 \tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
 \tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
 \tikzstyle{level 3} = [sibling distance = 2.66667cm, level distance = 1.6cm]
 \tikzstyle{level 4} = [sibling distance = 2cm, level distance = 1.4cm]
-\node[draw=black]{
+\tikzstyle{level 5} = [sibling distance = 1.6cm, level distance = 1.2cm]
+\tikzstyle{level 6} = [sibling distance = 1.33333cm, level distance = 1cm]
+\node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+child{node[fill,red]{}[grow=up]
+}
+}
+child{node[fill]{}[grow=up]
+}
+}
+child{node[fill]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\tikzstyle{level 3} = [sibling distance = 2.66667cm, level distance = 1.6cm]
+\tikzstyle{level 4} = [sibling distance = 2cm, level distance = 1.4cm]
+\tikzstyle{level 5} = [sibling distance = 1.6cm, level distance = 1.2cm]
+\node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+}
+child{node[fill,red]{}[grow=up]
+}
+}
+child{node[fill]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
 \sbox{\nodebox}{
 \begin{tikzpicture}[scale=.2]
 \tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
@@ -405,11 +458,650 @@ child{node[draw=black]{
 }
 \usebox\nodebox
 }
-}}}};
+}}}}}child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\tikzstyle{level 3} = [sibling distance = 2.66667cm, level distance = 1.6cm]
+\tikzstyle{level 4} = [sibling distance = 2cm, level distance = 1.4cm]
+\node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+}
+}
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\tikzstyle{level 3} = [sibling distance = 2.66667cm, level distance = 1.6cm]
+\node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+}
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\node[fill,red]{}[grow=up]
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+}}}child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\node[fill,red]{}[grow=up]
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+}}child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\node[fill,red]{}[grow=up]
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+}}}}child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\tikzstyle{level 3} = [sibling distance = 2.66667cm, level distance = 1.6cm]
+\node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+}
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\node[fill,red]{}[grow=up]
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+}}}}}}child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\tikzstyle{level 3} = [sibling distance = 2.66667cm, level distance = 1.6cm]
+\tikzstyle{level 4} = [sibling distance = 2cm, level distance = 1.4cm]
+\tikzstyle{level 5} = [sibling distance = 1.6cm, level distance = 1.2cm]
+\node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+}
+child{node[fill,red]{}[grow=up]
+}
+}
+child{node[fill]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\tikzstyle{level 3} = [sibling distance = 2.66667cm, level distance = 1.6cm]
+\tikzstyle{level 4} = [sibling distance = 2cm, level distance = 1.4cm]
+\node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+child{node[fill,red]{}[grow=up]
+}
+}
+child{node[fill]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\tikzstyle{level 3} = [sibling distance = 2.66667cm, level distance = 1.6cm]
+\node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+}
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\node[fill,red]{}[grow=up]
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+}}child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\node[fill,red]{}[grow=up]
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+}}}child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\node[fill,red]{}[grow=up]
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+}}}}child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\tikzstyle{level 3} = [sibling distance = 2.66667cm, level distance = 1.6cm]
+\node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+}
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\node[fill,red]{}[grow=up]
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+}}child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\node[fill,red]{}[grow=up]
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+}}}child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\node[fill,red]{}[grow=up]
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+}}}}}child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\tikzstyle{level 3} = [sibling distance = 2.66667cm, level distance = 1.6cm]
+\tikzstyle{level 4} = [sibling distance = 2cm, level distance = 1.4cm]
+\node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+}
+}
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\tikzstyle{level 3} = [sibling distance = 2.66667cm, level distance = 1.6cm]
+\node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+}
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\node[fill,red]{}[grow=up]
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+}}}child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\node[fill,red]{}[grow=up]
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+}}child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\node[fill,red]{}[grow=up]
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+}}}}child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\tikzstyle{level 3} = [sibling distance = 2.66667cm, level distance = 1.6cm]
+\node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+}
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\tikzstyle{level 2} = [sibling distance = 4cm, level distance = 1.8cm]
+\node[fill]{}[grow=up]
+child{node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\tikzstyle{level 1} = [sibling distance = 8cm, level distance = 2cm]
+\node[fill]{}[grow=up]
+child{node[fill,red]{}[grow=up]
+}
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+child{node[draw=black]{
+\sbox{\nodebox}{
+\begin{tikzpicture}[scale=.2]
+\node[fill,red]{}[grow=up]
+;
+\end{tikzpicture}
+}
+\usebox\nodebox
+}
+}}}}}};
 \end{tikzpicture}
 
-3.75
-Total expected run time: 3.75
+4.9375
+Total expected run time: 4.9375
 
 
 
