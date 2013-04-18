@@ -129,7 +129,7 @@ string Snapshot::tikz_string_dag(bool first){
     stringstream output;
     if(first){
         output << "\\begin{tikzpicture}" << endl;
-        for(int i=0; i < intree.edges.size(); ++i){
+        for(unsigned int i=0; i < intree.edges.size(); ++i){
             output << "\\tikzstyle{level " << i+1 << "} = " <<
                 "[sibling distance = " << 8./(i+1) << "cm, " <<
                 "level distance = " << 2. - i/5. << "cm" << "]" << endl;
@@ -140,7 +140,7 @@ string Snapshot::tikz_string_dag(bool first){
     // output << "\\newsavebox{\\nodebox}" << endl;
     output << "\\sbox{\\nodebox}{" << endl;
     output << "\\begin{tikzpicture}[scale=.2]" << endl;
-    for(int i=0; i < intree.edges.size(); ++i){
+    for(unsigned int i=0; i < intree.edges.size(); ++i){
         output << "\\tikzstyle{level " << i+1 << "} = " <<
             "[sibling distance = " << 8./(i+1) << "cm, " <<
             "level distance = " << 2. - i/5. << "cm" << "]" << endl;
