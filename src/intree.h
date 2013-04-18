@@ -42,6 +42,7 @@ class Intree {
         pair<Task, Task> get_edge_from(const Task& t) const;
         pair<Task, Task> get_edge_from(const task_id t) const;
 
+        bool is_chain();
         void get_chain(const Task& t, vector<int>& target) const;
         void get_chain(const task_id t, vector<int>& target) const;
         void get_chains(vector<vector<int>>& target) const;

@@ -17,6 +17,7 @@ void Snapshot::get_successors(const Scheduler& scheduler){
     // we only want to compute the successors once
     if(successors.size()>0)
         return;
+    // or maybe there aren't even successors
     if(intree.count_tasks()==1)
         return;
     vector<myfloat> finish_probs;
@@ -26,6 +27,10 @@ void Snapshot::get_successors(const Scheduler& scheduler){
     // then, for each finished threads, compute all possible successors
     auto finish_prob_it = finish_probs.begin();
     for(auto it = marked.begin(); it!=marked.end(); ++it, ++finish_prob_it){
+#if SIMPLE_ISOMORPHISM_CHECK
+        if(*finish_prob_it == 0)
+            continue;
+#endif
         Intree tmp(intree);
         tmp.remove_task(*it);
         vector<pair<task_id,myfloat>> raw_sucs;

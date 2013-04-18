@@ -60,6 +60,8 @@ vars.Add(EnumVariable("OPT",
 vars.Add("NUM_THREADS", 
         "Number of threads. Possibly something between 1 and 20", "5")
 vars.Add("NUM_PROCESSORS", "Number of processors.", "2")
+vars.Add(EnumVariable("SIMPLE_ISOMORPHISM_CHECK", "Simple isomorphism check when computing successors.", 1,
+            allowed_values=("0", "1")))
 
 # we use C++11 (mainly to simplify some writing in C++)
 env = Environment(variables = vars,
@@ -67,6 +69,7 @@ env = Environment(variables = vars,
                             "-O${OPT}", 
                             "-DNUM_THREADS=${NUM_THREADS}",
                             "-DNUM_PROCESSORS=${NUM_PROCESSORS}",
+                            "-DSIMPLE_ISOMORPHISM_CHECK=${SIMPLE_ISOMORPHISM_CHECK}",
                             ], 
                   LINKFLAGS="-fopenmp",
                   build_dir = "build"

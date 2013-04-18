@@ -34,7 +34,7 @@ void Probability_Computer::compute_finish_probs(const Snapshot& s,
                 );
                 //target.push_back(((myfloat)1)/(myfloat)s.marked.size());
             }
-            return;
+            break;
         case(Uniform):
             for(auto it = s.marked.begin(); it!=s.marked.end(); ++it){
                 if(s.intree.get_task_by_id(*it).uniform_a != u_a ||
@@ -42,11 +42,52 @@ void Probability_Computer::compute_finish_probs(const Snapshot& s,
                     throw "Cannot compute finish probabilities if not all "
                           "rv's are uniformly distributed with same parameters";
                 }
-            for(auto it = s.marked.begin(); it!=s.marked.end(); ++it){
-                target.push_back(((myfloat)1)/(myfloat)s.marked.size());
+                for(auto it = s.marked.begin(); it!=s.marked.end(); ++it){
+                    target.push_back(((myfloat)1)/(myfloat)s.marked.size());
+                }
             }
+            break;
+        }
+        // if all variables are equally distributed, 
+        // we can do some simplification
+#if SIMPLE_ISOMORPHISM_CHECK==1
+        // for safety, we check whether we can even simplify
+        switch(first){
+            case(Exponential):
+                for(auto it = s.marked.begin(); it!=s.marked.end(); ++it){
+                    if(s.intree.get_task_by_id(*it).exponential_lambda !=
+                            s.intree.get_task_by_id(s.marked[0]).exponential_lambda){
+                        throw "Cannot simplify if not all rv's are"
+                            "exponentially distributed with same parameters";
+                    }
+                }
+                break;
+            case(Uniform):
+                for(auto it = s.marked.begin(); it!=s.marked.end(); ++it){
+                    if(s.intree.get_task_by_id(*it).uniform_a != u_a ||
+                            s.intree.get_task_by_id(*it).uniform_b != u_b){
+                        throw "Cannot simplify if not all rv's are"
+                            "uniformly distributed with same parameters";
+                    }
+                }
+                break;
+        }
+        // if we are here, we can simplify!
+        for (unsigned i1 = 0; i1 < s.marked.size(); ++i1){
+            for (unsigned i2 = i1 + 1; i2 < s.marked.size(); ++i2){
+                if(s.intree.edges.find(s.marked[i1])->second == 
+                        s.intree.edges.find(s.marked[i2])->second){
+#pragma omp critical
+                    {
+                        target[i1] += target[i2];
+                        target[i2] = 0;
+                    }
+                }
             }
         }
+#endif
     }
-    throw 1;
+    else {
+        throw 1;
+    }
 }

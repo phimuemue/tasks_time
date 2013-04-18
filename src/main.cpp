@@ -59,7 +59,9 @@ int main(int argc, char** argv){
         expected_runtimes[i] = s.expected_runtime();
         cout << endl;
 #pragma omp critical
-        cout << s.tikz_string_dag() << endl;
+        {
+            cout << s.tikz_string_dag() << endl;
+        }
     }
     myfloat expected_runtime = 0;
     for(unsigned int i= 0; i<initial_settings.size(); ++i){
