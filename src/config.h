@@ -1,7 +1,23 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include<boost/rational.hpp>
+
+#define FLOAT 0
+#define DOUBLE 1
+#define RATIONAL_INT 2
+#define RATIONAL_LONG 3
+
+#if MYFLOAT==FLOAT
 typedef float myfloat;
+#elif MYFLOAT==DOUBLE
+typedef double myfloat;
+#elif MYFLOAT==RATIONAL_INT
+typedef boost::rational<int> myfloat;
+#elif MYFLOAT==RATIONAL_LONG
+typedef boost::rational<long> myfloat;
+#endif 
+
 typedef int task_id;
 
 #define NOTASK (-1)

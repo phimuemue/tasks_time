@@ -62,6 +62,13 @@ vars.Add("NUM_THREADS",
 vars.Add("NUM_PROCESSORS", "Number of processors.", "2")
 vars.Add(EnumVariable("SIMPLE_ISOMORPHISM_CHECK", "Simple isomorphism check when computing successors.", 1,
             allowed_values=("0", "1")))
+number_types = [(0, "float"), 
+                (1, "double"), 
+                (2, "rational<int>"), 
+                (3, "rational<long>")]
+vars.Add(EnumVariable("MYFLOAT", "Datatype for rational numbers:\n" 
+            + "\n".join(["     %d %s"%(x) for x in number_types]), "1",
+            allowed_values=("0", "1", "2", "3")))
 
 # we use C++11 (mainly to simplify some writing in C++)
 env = Environment(variables = vars,
@@ -70,6 +77,7 @@ env = Environment(variables = vars,
                             "-DNUM_THREADS=${NUM_THREADS}",
                             "-DNUM_PROCESSORS=${NUM_PROCESSORS}",
                             "-DSIMPLE_ISOMORPHISM_CHECK=${SIMPLE_ISOMORPHISM_CHECK}",
+                            "-DMYFLOAT=${MYFLOAT}",
                             ], 
                   LINKFLAGS="-fopenmp",
                   build_dir = "build"

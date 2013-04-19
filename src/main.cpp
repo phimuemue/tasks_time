@@ -60,7 +60,7 @@ int main(int argc, char** argv){
         cout << endl;
 #pragma omp critical
         {
-            cout << s.tikz_string_dag() << endl;
+            //cout << s.tikz_string_dag() << endl;
         }
     }
     myfloat expected_runtime = 0;

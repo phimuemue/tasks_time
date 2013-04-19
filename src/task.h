@@ -12,21 +12,28 @@ using namespace std;
     random variable describing the time until the task is finished).
 */
 class Task {
+friend class Probability_Computer;
 private:
     task_id id;
     myfloat elapsed;
     Distribution distribution;
+    // stuff for the distributions
+#if MYFLOAT==FLOAT || MYFLOAT==DOUBLE
     union {
-        // stuff for exponential distribution
         struct {
             myfloat exponential_lambda;
         };
-        // stuff for uniform distribution
         struct {
             myfloat uniform_a;
             myfloat uniform_b;
         };
     };
+#else
+    // seems C++ doesn't allow anonymous union/struct nesting for non-POD types
+    myfloat exponential_lambda;
+    myfloat uniform_a;
+    myfloat uniform_b;
+#endif
 public:
     Task();
     Task(task_id id, Distribution d = Exponential, myfloat param1 = 1, myfloat param2 = 2);
