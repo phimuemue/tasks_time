@@ -14,6 +14,8 @@ class Probability_Computer{
             Different_Distributions
         };
         Distribution_Setting distros_same(const Snapshot& s) const;
+        void simplify_isomorphisms_simple(const Snapshot& s, 
+                                          vector<myfloat>& target) const;
     public:
         void compute_finish_probs(const Snapshot& s,
                                   vector<myfloat>& target) const;

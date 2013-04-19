@@ -33,6 +33,23 @@ Probability_Computer::Distribution_Setting Probability_Computer::distros_same(co
     return Same_Distributions;
 }
 
+void Probability_Computer::simplify_isomorphisms_simple(const Snapshot& s, 
+        vector<myfloat>& target) const{
+    // if we are here, we can simplify!
+    for (unsigned i1 = 0; i1 < s.marked.size(); ++i1){
+        for (unsigned i2 = i1 + 1; i2 < s.marked.size(); ++i2){
+            if(s.intree.edges.find(s.marked[i1])->second == 
+                    s.intree.edges.find(s.marked[i2])->second){
+#pragma omp critical
+                {
+                    target[i1] += target[i2];
+                    target[i2] = 0;
+                }
+            }
+        }
+    }
+}
+
 void Probability_Computer::compute_finish_probs(const Snapshot& s,
         vector<myfloat>& target) const {
     // TODO: Implement this for all kinds of random variables
@@ -82,19 +99,7 @@ void Probability_Computer::compute_finish_probs(const Snapshot& s,
         if(distros_same(s) != Same_Distributions){
             throw "No simplify if rv's are not iid with same parameters";
         }
-        // if we are here, we can simplify!
-        for (unsigned i1 = 0; i1 < s.marked.size(); ++i1){
-            for (unsigned i2 = i1 + 1; i2 < s.marked.size(); ++i2){
-                if(s.intree.edges.find(s.marked[i1])->second == 
-                        s.intree.edges.find(s.marked[i2])->second){
-#pragma omp critical
-                    {
-                        target[i1] += target[i2];
-                        target[i2] = 0;
-                    }
-                }
-            }
-        }
+        simplify_isomorphisms_simple(s, target);
 #endif
     }
     else {
