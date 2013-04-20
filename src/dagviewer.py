@@ -1,5 +1,6 @@
 import pygtk
 import gtk
+import sys
 
 class Snapshot_Dag_Viewer(object):
     def __init__(self, path):
@@ -47,5 +48,5 @@ def main():
     gtk.main()
 
 if __name__ == "__main__":
-    dv = Snapshot_Dag_Viewer("test.txt")
+    dv = Snapshot_Dag_Viewer(sys.argv[1])
     main()
