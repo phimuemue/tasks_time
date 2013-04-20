@@ -28,15 +28,12 @@ class Snapshot_Dag_Viewer(object):
                 cur = self.ts.append(None, [l.strip()])
                 lastdepth = 0
             else:
-                print l
                 i = 0
                 while(l[i]==" "):
                     i = i + 1
-                print "%d spaces"%i
                 if (lastdepth > i):
                     for _ in xrange(lastdepth - i):
                         cur = self.ts.iter_parent(cur)
-                        print "parenting from " + str(cur)
                 cur = self.ts.append(cur, [l.strip()])
                 lastdepth = i+1
         f.close()

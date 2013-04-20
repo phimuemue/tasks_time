@@ -78,6 +78,15 @@ int main(int argc, char** argv){
         sched->get_initial_schedule(t, NUM_PROCESSORS, initial_settings);
 
         myfloat expected_runtimes[initial_settings.size()];
+
+        ofstream tikz_output;
+        ofstream dagview_output;
+        if(vm.count("tikz")){
+            tikz_output.open(vm["tikz"].as<string>());
+        }
+        if(vm.count("dagview")){
+            dagview_output.open(vm["dagview"].as<string>());
+        }
 #pragma omp parallel for num_threads(initial_settings.size())
         for(unsigned int i= 0; i<initial_settings.size(); ++i){
             Snapshot s(t, initial_settings[i]);
@@ -91,18 +100,18 @@ int main(int argc, char** argv){
 #pragma omp critical
             {
                 if(vm.count("tikz")){
-                    ofstream output;
-                    output.open(vm["tikz"].as<string>());
-                    output << s.tikz_string_dag() << endl;
-                    output.close();
+                    tikz_output << s.tikz_string_dag() << endl;
                 }
                 if(vm.count("dagview")){
-                    ofstream output;
-                    output.open(vm["dagview"].as<string>());
-                    output << s.dag_view_string() << endl;
-                    output.close();
+                    dagview_output << s.dag_view_string() << endl;
                 }
             }
+        }
+        if(vm.count("tikz")){
+            tikz_output.close();
+        }
+        if(vm.count("dagview")){
+            dagview_output.close();
         }
         myfloat expected_runtime = 0;
         for(unsigned int i= 0; i<initial_settings.size(); ++i){
