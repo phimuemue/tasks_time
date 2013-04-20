@@ -69,6 +69,8 @@ number_types = [(0, "float"),
 vars.Add(EnumVariable("MYFLOAT", "Datatype for rational numbers:\n" 
             + "\n".join(["     %d %s"%(x) for x in number_types]), "0",
             allowed_values=("0", "1", "2", "3")))
+vars.Add(EnumVariable("USE_SIMPLE_OPENMP", "Simple multithreading for computing topmost successors.", 1,
+            allowed_values=("0", "1")))
 
 # we use C++11 (mainly to simplify some writing in C++)
 env = Environment(variables = vars,
@@ -78,6 +80,7 @@ env = Environment(variables = vars,
                             "-DNUM_PROCESSORS=${NUM_PROCESSORS}",
                             "-DSIMPLE_ISOMORPHISM_CHECK=${SIMPLE_ISOMORPHISM_CHECK}",
                             "-DMYFLOAT=${MYFLOAT}",
+                            "-DUSE_SIMPLE_OPENMP=${USE_SIMPLE_OPENMP}",
                             ], 
                   LIBS = ["boost_program_options",
                   ],

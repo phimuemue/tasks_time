@@ -87,17 +87,23 @@ int main(int argc, char** argv){
         if(vm.count("dagview")){
             dagview_output.open(vm["dagview"].as<string>());
         }
+#if USE_SIMPLE_OPENMP
 #pragma omp parallel for num_threads(initial_settings.size())
+#endif
         for(unsigned int i= 0; i<initial_settings.size(); ++i){
             Snapshot s(t, initial_settings[i]);
+#if USE_SIMPLE_OPENMP
 #pragma omp critical
+#endif
             {
                 cout << "Compiling snapshot DAG for " << s << endl;
             };
             s.compile_snapshot_dag(*sched);
             expected_runtimes[i] = s.expected_runtime();
             cout << endl;
+#if USE_SIMPLE_OPENMP
 #pragma omp critical
+#endif
             {
                 if(vm.count("tikz")){
                     tikz_output << s.tikz_string_dag() << endl;
