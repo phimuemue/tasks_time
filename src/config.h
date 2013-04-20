@@ -1,12 +1,16 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include<boost/rational.hpp>
-
 #define FLOAT 0
 #define DOUBLE 1
 #define RATIONAL_INT 2
 #define RATIONAL_LONG 3
+
+#if MYFLOAT==RATIONAL_LONG
+#include<boost/rational.hpp>
+#elif MYFLOAT==RATIONAL_INT
+#include<boost/rational.hpp>
+#endif
 
 #if MYFLOAT==FLOAT
 typedef float myfloat;
