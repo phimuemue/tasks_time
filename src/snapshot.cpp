@@ -89,6 +89,18 @@ myfloat Snapshot::expected_runtime(){
     return result;
 }
 
+string Snapshot::dag_view_string(unsigned int depth){
+    stringstream output;
+    for(unsigned int i=0; i<depth; ++i){
+        output << " ";
+    }
+    output << *this << endl;
+    for(auto it = successors.begin(); it!=successors.end(); ++it){
+        output << it->dag_view_string(depth+1);
+    }
+    return output.str();
+}
+
 string Snapshot::tikz_string_internal(const task_id t, 
         map<task_id,vector<task_id>>& rt, bool first) const {
     stringstream output;

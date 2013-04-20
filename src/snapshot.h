@@ -33,6 +33,7 @@ class Snapshot {
         void get_successors(const Scheduler& scheduler);
         void compile_snapshot_dag(const Scheduler& scheduler);
 
+        string dag_view_string(unsigned int depth=0);
         string tikz_string();
         string tikz_string_dag(bool first=true, unsigned int = 1);
         myfloat expected_runtime();

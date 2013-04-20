@@ -61,6 +61,7 @@ int main(int argc, char** argv){
 #pragma omp critical
         {
             //cout << s.tikz_string_dag() << endl;
+            cout << s.dag_view_string() << endl;
         }
     }
     myfloat expected_runtime = 0;
@@ -70,6 +71,7 @@ int main(int argc, char** argv){
     }
     expected_runtime /= (myfloat)initial_settings.size();
     cout << "Total expected run time: " << expected_runtime << endl;
-    delete(sched);
+    // TODO: The following results in undefined behaviour. Why?
+    // delete(sched);
     return 0;
 }
