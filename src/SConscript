@@ -79,6 +79,8 @@ env = Environment(variables = vars,
                             "-DSIMPLE_ISOMORPHISM_CHECK=${SIMPLE_ISOMORPHISM_CHECK}",
                             "-DMYFLOAT=${MYFLOAT}",
                             ], 
+                  LIBS = ["boost_program_options",
+                  ],
                   LINKFLAGS="-fopenmp",
                   build_dir = "build"
                  )
