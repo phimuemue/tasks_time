@@ -67,7 +67,7 @@ number_types = [(0, "float"),
                 (2, "rational<int>"), 
                 (3, "rational<long>")]
 vars.Add(EnumVariable("MYFLOAT", "Datatype for rational numbers:\n" 
-            + "\n".join(["     %d %s"%(x) for x in number_types]), "1",
+            + "\n".join(["     %d %s"%(x) for x in number_types]), "0",
             allowed_values=("0", "1", "2", "3")))
 
 # we use C++11 (mainly to simplify some writing in C++)
