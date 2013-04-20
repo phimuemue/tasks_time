@@ -20,6 +20,8 @@ class Snapshot_Dag_Viewer(object):
         cur = None
         lastdepth = 0
         for _l in f:
+            if _l.strip() == "":
+                continue
             l = _l.strip("\n")
             if not l.startswith(" "):
                 cur = self.ts.append(None, [l.strip()])
