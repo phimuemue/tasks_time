@@ -4,7 +4,7 @@ import getpass
 
 # Code generation if we want to get all trees (and some even more than once)
 def write_all_trees_to_file(source, target, env):
-    n = int(env["NUM_THREADS"])
+    n = int(env["NUM_THREADS_DEFAULT"])
     path = target
     print "Generating all trees with %d nodes, writing to %s"%(n,path);
     def generate_all_trees(n):
@@ -57,7 +57,7 @@ vars = Variables()
 vars.Add(EnumVariable("OPT", 
             "Optimization level can be set to 0, 1, 2 or 3", "0", 
             allowed_values=("0", "1", "2", "3")))
-vars.Add("NUM_THREADS", 
+vars.Add("NUM_THREADS_DEFAULT", 
         "Number of threads. Possibly something between 1 and 20", "5")
 vars.Add("NUM_PROCESSORS", "Number of processors.", "2")
 vars.Add(EnumVariable("SIMPLE_ISOMORPHISM_CHECK", "Simple isomorphism check when computing successors.", 1,
@@ -76,7 +76,7 @@ vars.Add(EnumVariable("USE_SIMPLE_OPENMP", "Simple multithreading for computing 
 env = Environment(variables = vars,
                   CXXFLAGS=["-std=c++0x", "-Wall", "-fopenmp", 
                             "-O${OPT}", 
-                            "-DNUM_THREADS=${NUM_THREADS}",
+                            "-DNUM_THREADS_DEFAULT=${NUM_THREADS_DEFAULT}",
                             "-DNUM_PROCESSORS=${NUM_PROCESSORS}",
                             "-DSIMPLE_ISOMORPHISM_CHECK=${SIMPLE_ISOMORPHISM_CHECK}",
                             "-DMYFLOAT=${MYFLOAT}",

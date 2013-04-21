@@ -52,8 +52,8 @@ void read_raw_tree_from_file(string path, vector<pair<Task,Task>>& target){
     }
 }
 
-#ifndef NUM_THREADS
-#define NUM_THREADS 4
+#ifndef NUM_THREADS_DEFAULT
+#define NUM_THREADS_DEFAULT 5
 #endif
 
 #ifndef NUM_PROCESSORS
@@ -73,6 +73,7 @@ int main(int argc, char** argv){
             ("tikz", po::value<string>(), "Generate TikZ-Output of snapshot(s) in file.")
             ("dagview", po::value<string>(), "Generate output for DAG viewer in file.")
             ("input", po::value<string>(), "Name of input file.")
+            ("random", po::value<int>(), "Number of tasks in a random graph. Only used if no input file is given.")
             ;
         po::variables_map vm;
         try{
@@ -100,7 +101,8 @@ int main(int argc, char** argv){
             read_raw_tree_from_file(vm["input"].as<string>(), edges);
         }
         else{
-            randomEdges(NUM_THREADS, edges);
+            int num_threads = (vm.count("random") ? vm["random"].as<int>() : NUM_THREADS_DEFAULT);
+            randomEdges(num_threads, edges);
         }
         Intree t(edges);
         cout << "Intree: " << t << endl;
