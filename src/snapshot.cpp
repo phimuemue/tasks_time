@@ -21,7 +21,7 @@ void Snapshot::get_successors(const Scheduler& scheduler){
     if(intree.count_tasks()==1)
         return;
     vector<myfloat> finish_probs;
-    Probability_Computer().compute_finish_probs(*this,
+    Probability_Computer().compute_finish_probs(intree, marked,
         finish_probs);
     assert(finish_probs.size()==marked.size());
     // then, for each finished threads, compute all possible successors

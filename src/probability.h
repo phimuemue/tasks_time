@@ -4,8 +4,6 @@
 #include "config.h"
 #include "snapshot.h"
 
-class Snapshot;
-
 class Probability_Computer{
     private:
         enum Distribution_Setting{
@@ -13,13 +11,11 @@ class Probability_Computer{
             Same_Distributions_Different_Parameters,
             Different_Distributions
         };
-        Distribution_Setting distros_same(const Snapshot& s) const;
-        void simplify_isomorphisms_simple(const Snapshot& s, 
-                                          vector<myfloat>& target) const;
+        Distribution_Setting distros_same(const Intree& intree, const vector<task_id>& marked) const;
+        void simplify_isomorphisms_simple(const Intree& intree, const vector<task_id>& marked, vector<myfloat>& target) const;
     public:
-        void compute_finish_probs(const Snapshot& s,
-                                  vector<myfloat>& target) const;
-        void expected_runtime_of_min_task(const Snapshot& s) const;
+        void compute_finish_probs(const Intree& intree, const vector<task_id>& marked, vector<myfloat>& target) const;
+        void expected_runtime_of_min_task(const Intree& intree, const vector<task_id>& marked) const;
 };
 
 #endif
