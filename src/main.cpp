@@ -24,6 +24,34 @@ void randomEdges(int n, vector<pair<Task,Task>>& target){
     }   
 }
 
+void read_raw_tree_from_file(string path, vector<pair<Task,Task>>& target){
+    // TODO: I assume (=am sure) that this can be done better.
+    // For now, we assume all tasks exponendially iid
+    ifstream a(path);
+    // read description from file
+    string raw((istreambuf_iterator<char>(a)),
+            istreambuf_iterator<char>());
+    cout << "Raw: " << raw << endl;
+
+    a.close();
+    istringstream iss(raw);
+    vector<string> raw_tokens;
+    copy(istream_iterator<string>(iss),
+            istream_iterator<string>(),
+            back_inserter<vector<string>>(raw_tokens));
+    for(unsigned int i=0; i<raw_tokens.size(); ++i){
+        cout << "Token: " << raw_tokens[i] << endl;
+        task_id tmp;
+        stringstream tmps(raw_tokens[i]);
+        tmps >> tmp;
+        cout << tmp << endl;
+        target.push_back(pair<Task,Task>(Task((task_id)i+1), tmp));
+    }
+    for(auto it=target.begin(); it!=target.end(); ++it){
+        cout << it->first << ", " << it->second << endl;
+    }
+}
+
 #ifndef NUM_THREADS
 #define NUM_THREADS 4
 #endif
@@ -44,6 +72,7 @@ int main(int argc, char** argv){
             ("help", "Print help message")
             ("tikz", po::value<string>(), "Generate TikZ-Output of snapshot(s) in file.")
             ("dagview", po::value<string>(), "Generate output for DAG viewer in file.")
+            ("input", po::value<string>(), "Name of input file.")
             ;
         po::variables_map vm;
         try{
@@ -67,7 +96,12 @@ int main(int argc, char** argv){
 
         // generate tree
         vector<pair<Task,Task>> edges;
-        randomEdges(NUM_THREADS, edges);
+        if(vm.count("input")){
+            read_raw_tree_from_file(vm["input"].as<string>(), edges);
+        }
+        else{
+            randomEdges(NUM_THREADS, edges);
+        }
         Intree t(edges);
         cout << "Intree: " << t << endl;
 
