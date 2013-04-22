@@ -27,9 +27,12 @@ class Snapshot {
         vector<myfloat> probabilities;
         string tikz_string_internal(const task_id,
                 map<task_id,vector<task_id>>&, bool = true) const;
+        static map<boost::dynamic_bitset, Snapshot> pool;
     public:
         Snapshot(Intree& t);
         Snapshot(Intree& t, vector<task_id> m);
+        static Snapshot canonical_snapshot(Intree& t vector<task_id> m);
+
         void get_successors(const Scheduler& scheduler);
         void compile_snapshot_dag(const Scheduler& scheduler);
 

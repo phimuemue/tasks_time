@@ -13,6 +13,10 @@ Snapshot::Snapshot(Intree& t, vector<task_id> m) :
 
 }
 
+Snapshot Snapshot::canonical_snapshot(Intree& t vector<task_id> m){
+
+}
+
 void Snapshot::get_successors(const Scheduler& scheduler){
     // we only want to compute the successors once
     if(successors.size()>0)
