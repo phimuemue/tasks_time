@@ -9,6 +9,7 @@
 #include<functional>
 #include<algorithm>
 #include<assert.h>
+#include<boost/dynamic_bitset.hpp>
 
 #include "task.h"
 
@@ -26,6 +27,7 @@ class Intree {
         Intree();
         Intree(const Intree& t);
         Intree(vector<pair<Task, Task>>& edges);
+        static Intree canonical_intree(const Intree& t);
 
         int count_tasks() const;
         int get_in_degree(const Task& t) const ;
@@ -34,6 +36,8 @@ class Intree {
         void get_tasks(set<task_id>& result) const;
         int get_level(const Task& t) const;
         int get_level(const task_id t) const;
+        void get_predecessors(const Task& t, vector<task_id>& target) const;
+        void get_predecessors(const task_id t, vector<task_id>& target) const;
 
         Distribution get_task_distribution(const task_id t) const;
         void remove_task(Task& t);

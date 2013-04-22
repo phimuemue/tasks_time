@@ -20,6 +20,117 @@ Intree::Intree(vector<pair<Task, Task>>& edges){
     }
 }
 
+Intree Intree::canonical_intree(const Intree& t){
+    cout << "Computing canonical tree of " << t << "" << endl;
+    vector<vector<task_id>> tasks_by_level(t.taskmap.size());
+    // store tasks grouped by level
+    for(auto it=t.taskmap.begin(); it!=t.taskmap.end(); ++it){
+        tasks_by_level[t.get_level(it->first)].push_back(it->first);
+    }
+    cout << "Traversing tasks levelwise and computing canonical names." << endl;
+    // traverse tasks levelwise (high to low) and comput canonical names
+    map<task_id, boost::dynamic_bitset<unsigned short>> canonical_names;
+    for(auto rit = tasks_by_level.rbegin(); rit!=tasks_by_level.rend(); ++rit){
+        for(auto it=rit->begin(); it!=rit->end(); ++it){
+            boost::dynamic_bitset<unsigned short> canonical_name;
+            vector<task_id> predecessors;
+            t.get_predecessors(*it, predecessors);
+            sort(predecessors.begin(), predecessors.end(),
+                    [&](const task_id& a, const task_id& b) -> bool {
+                    if(canonical_names[a].size() < canonical_names[b].size()) {
+                        return false;
+                    }
+                    else if (canonical_names[a].size() > canonical_names[b].size()) {
+                        return true;
+                    }
+                    return canonical_names[a] > canonical_names[b];
+                    }
+                );
+            vector<boost::dynamic_bitset<unsigned short>> canonical_names_predecessors;
+            bool tmp = true;
+            canonical_name.push_back(tmp);
+            for (auto pit=predecessors.begin(); pit!=predecessors.end(); ++pit){
+                for(unsigned int i = 0; i<canonical_names[*pit].size(); ++i){
+                    boost::dynamic_bitset<unsigned short>& tmp_bs = canonical_names[*pit];
+                    bool tmp = tmp_bs.test(i);
+                    canonical_name.push_back(tmp);
+                }
+            }
+            tmp = false;
+            canonical_name.push_back(tmp);
+            cout << "Setting canonical names for " << *it << " to " << canonical_name << endl;
+            canonical_names[*it] = canonical_name;
+            cout << "Canonical names complete: " << endl;
+            for(auto it=canonical_names.begin(); it!=canonical_names.end(); ++it){
+                cout << it->first << ": " << it->second << endl;
+            }
+        }
+        // sort tasks according to their canonical name
+        sort(rit->begin(), rit->end(),
+                [&](const task_id& a, const task_id& b) -> bool {
+                if(canonical_names[a].size() < canonical_names[b].size()) {
+                    return false;
+                }
+                else if (canonical_names[a].size() > canonical_names[b].size()) {
+                    return true;
+                }
+                return canonical_names[a] > canonical_names[b];
+                }
+            );
+        cout << "Level: " << endl;
+        for(auto it=rit->begin(); it!=rit->end(); ++it){
+            cout << " " << *it << ": " << canonical_names[*it] << endl;
+        }
+    }
+    cout << "Sorting tasks." << endl;
+    //cout << "Bitsets per level" << endl;
+    for(auto rit = tasks_by_level.rbegin(); rit!=tasks_by_level.rend(); ++rit){
+        sort(rit->begin(), rit->end(),
+            [&](const task_id& a, const task_id& b) -> bool {
+            if(canonical_names[a].size() < canonical_names[b].size()) {
+                return false;
+            }
+            else if (canonical_names[a].size() > canonical_names[b].size()) {
+                return true;
+            }
+            else if (canonical_names[a] == canonical_names[b]){
+                auto ca = canonical_names[t.get_edge_from(a).second.get_id()];
+                auto cb = canonical_names[t.get_edge_from(b).second.get_id()];
+                if (ca.size() < cb.size())
+                    return false;
+                else if(ca.size() > cb.size())
+                    return true;
+                return ca > cb;
+            }
+            return canonical_names[a] > canonical_names[b];
+            }
+        );
+    }
+    //cout << "End of bitsets" << endl;
+    cout << "Assigning consecutive numbers." << endl;
+    // assign consecutive numbers to tasks
+    task_id consecutive_num = 0;
+    map<task_id,task_id> isomorphism;
+    for(auto it = tasks_by_level.begin(); it!=tasks_by_level.end(); ++it){
+        for(auto tit = it->begin(); tit!=it->end(); ++tit){
+            cout << "Assigning for " << *tit << " (namely " << consecutive_num << ")" << endl;
+            isomorphism[*tit] = consecutive_num;
+            consecutive_num++;
+        }
+    }
+    // cout << "DEBUG OUTPUT:" << endl;
+    // // debug output
+    // for(auto it=isomorphism.begin(); it!=isomorphism.end(); ++it){
+    //     cout << it->first << ", " << it->second << endl;
+    // }
+    // cout << "End of DEBUT OUTPUT" << endl;
+    vector<pair<Task, Task>> edges;
+    for(auto it=t.edges.begin(); it!=t.edges.end(); ++it){
+        edges.push_back(pair<Task,Task>(Task(isomorphism[it->first]),Task(isomorphism[it->second])));
+    }
+    return Intree(edges);
+}
+
 int Intree::count_tasks() const{
     return edges.size() + 1;
 }
@@ -53,6 +164,18 @@ Distribution Intree::get_task_distribution(const task_id t) const {
 
 int Intree::get_level(const Task& t) const{
     return get_level(t.get_id());
+}
+
+void Intree::get_predecessors(const Task& t, vector<task_id>& target) const{
+    get_predecessors(t.get_id(), target);
+}
+
+void Intree::get_predecessors(const task_id t, vector<task_id>& target) const{
+    for(auto it=edges.begin(); it!=edges.end(); ++it){
+        if(it->second==t){
+            target.push_back(it->first);
+        }
+    }
 }
 
 int Intree::get_level(const task_id t) const{

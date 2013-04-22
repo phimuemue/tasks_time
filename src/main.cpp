@@ -40,11 +40,9 @@ void read_raw_tree_from_file(string path, vector<pair<Task,Task>>& target){
             istream_iterator<string>(),
             back_inserter<vector<string>>(raw_tokens));
     for(unsigned int i=0; i<raw_tokens.size(); ++i){
-        cout << "Token: " << raw_tokens[i] << endl;
         task_id tmp;
         stringstream tmps(raw_tokens[i]);
         tmps >> tmp;
-        cout << tmp << endl;
         target.push_back(pair<Task,Task>(Task((task_id)i+1), tmp));
     }
     for(auto it=target.begin(); it!=target.end(); ++it){
@@ -106,6 +104,9 @@ int main(int argc, char** argv){
         }
         Intree t(edges);
         cout << "Intree: " << t << endl;
+        cout << Intree::canonical_intree(t) << endl;
+        cout << "I'm done here. Please remove this junk of code!" << endl;
+        return 11;
 
         // generate all possible initial markings
         Scheduler* sched = new HLFscheduler();
