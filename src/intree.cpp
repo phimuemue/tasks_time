@@ -20,7 +20,7 @@ Intree::Intree(vector<pair<Task, Task>>& edges){
     }
 }
 
-Intree Intree::canonical_intree(const Intree& t){
+Intree Intree::canonical_intree(const Intree& t, map<task_id, task_id>& isomorphism, tree_id& out){
     cout << "Computing canonical tree of " << t << "" << endl;
     vector<vector<task_id>> tasks_by_level(t.taskmap.size());
     // store tasks grouped by level
@@ -47,7 +47,7 @@ Intree Intree::canonical_intree(const Intree& t){
                     }
                 );
             vector<boost::dynamic_bitset<unsigned short>> canonical_names_predecessors;
-            bool tmp = true;
+            bool tmp = false;
             canonical_name.push_back(tmp);
             for (auto pit=predecessors.begin(); pit!=predecessors.end(); ++pit){
                 for(unsigned int i = 0; i<canonical_names[*pit].size(); ++i){
@@ -56,7 +56,7 @@ Intree Intree::canonical_intree(const Intree& t){
                     canonical_name.push_back(tmp);
                 }
             }
-            tmp = false;
+            tmp = true;
             canonical_name.push_back(tmp);
             cout << "Setting canonical names for " << *it << " to " << canonical_name << endl;
             canonical_names[*it] = canonical_name;
@@ -110,7 +110,6 @@ Intree Intree::canonical_intree(const Intree& t){
     cout << "Assigning consecutive numbers." << endl;
     // assign consecutive numbers to tasks
     task_id consecutive_num = 0;
-    map<task_id,task_id> isomorphism;
     for(auto it = tasks_by_level.begin(); it!=tasks_by_level.end(); ++it){
         for(auto tit = it->begin(); tit!=it->end(); ++tit){
             cout << "Assigning for " << *tit << " (namely " << consecutive_num << ")" << endl;
@@ -128,6 +127,8 @@ Intree Intree::canonical_intree(const Intree& t){
     for(auto it=t.edges.begin(); it!=t.edges.end(); ++it){
         edges.push_back(pair<Task,Task>(Task(isomorphism[it->first]),Task(isomorphism[it->second])));
     }
+    // TODO: Expand to more than 64 bits!
+    out = canonical_names[0].to_ulong();
     return Intree(edges);
 }
 

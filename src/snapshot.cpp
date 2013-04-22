@@ -13,8 +13,15 @@ Snapshot::Snapshot(Intree& t, vector<task_id> m) :
 
 }
 
-Snapshot Snapshot::canonical_snapshot(Intree& t vector<task_id> m){
-
+Snapshot& Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
+    map<task_id, task_id> isomorphism;
+    tree_id tid;
+    Intree tmp = Intree::canonical_intree(t, isomorphism, tid);
+    vector<task_id> newmarked;
+    for(auto it=m.begin(); it!=m.end(); ++it){
+        newmarked.push_back(isomorphism[*it]);
+    }
+    
 }
 
 void Snapshot::get_successors(const Scheduler& scheduler){

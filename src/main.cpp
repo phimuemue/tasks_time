@@ -104,7 +104,10 @@ int main(int argc, char** argv){
         }
         Intree t(edges);
         cout << "Intree: " << t << endl;
-        cout << Intree::canonical_intree(t) << endl;
+        map<task_id, task_id> isomorphism;
+        tree_id tid = 0;
+        cout << Intree::canonical_intree(t, isomorphism, tid) << endl;
+        cout << tid << endl;
         cout << "I'm done here. Please remove this junk of code!" << endl;
         return 11;
 

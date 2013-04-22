@@ -27,7 +27,7 @@ class Intree {
         Intree();
         Intree(const Intree& t);
         Intree(vector<pair<Task, Task>>& edges);
-        static Intree canonical_intree(const Intree& t);
+        static Intree canonical_intree(const Intree& t, map<task_id, task_id>& isomorphism, tree_id& out);
 
         int count_tasks() const;
         int get_in_degree(const Task& t) const ;

@@ -23,6 +23,7 @@ typedef boost::rational<long> myfloat;
 #endif 
 
 typedef int task_id;
+typedef unsigned long long tree_id;
 
 #define NOTASK (-1)
 
