@@ -1,5 +1,11 @@
 #include "snapshot.h"
 
+map<tree_id, map<vector<task_id>,Snapshot>> Snapshot::pool;
+
+Snapshot::Snapshot(){
+
+}
+
 Snapshot::Snapshot(Intree& t) :
     intree(t)
 {
@@ -14,14 +20,30 @@ Snapshot::Snapshot(Intree& t, vector<task_id> m) :
 }
 
 Snapshot& Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
+    cout << "Canonical snapshot" << endl;
+    Snapshot result;
     map<task_id, task_id> isomorphism;
     tree_id tid;
     Intree tmp = Intree::canonical_intree(t, isomorphism, tid);
     vector<task_id> newmarked;
-    for(auto it=m.begin(); it!=m.end(); ++it){
-        newmarked.push_back(isomorphism[*it]);
+#pragma omp critical
+    {
+        auto correct_pool = Snapshot::pool.find(tid);
+        for(auto it=m.begin(); it!=m.end(); ++it){
+            newmarked.push_back(isomorphism[*it]);
+        }
+        if(correct_pool == Snapshot::pool.end()){
+            Snapshot::pool[tid] = map<vector<task_id>,Snapshot>();
+        }
+        if(correct_pool->second.find(newmarked) != correct_pool->second.end()){
+            result = correct_pool->second.find(newmarked)->second;
+        }
+        else {
+            result = Snapshot::pool[tid][newmarked] = Snapshot(tmp, newmarked);
+        }
     }
-    
+    cout << "Canonical snapshot done" << endl;
+    return Snapshot::pool.find(tid)->second.find(newmarked)->second;
 }
 
 void Snapshot::get_successors(const Scheduler& scheduler){
@@ -57,7 +79,8 @@ void Snapshot::get_successors(const Scheduler& scheduler){
                 // TODO: Is this needed?
                 if(raw_sucs[i].first != NOTASK)
                     newmarked.push_back(raw_sucs[i].first);
-                Snapshot news(tmp, newmarked);
+                Snapshot* news = new Snapshot(tmp, newmarked);
+                //Snapshot news = Snapshot::canonical_snapshot(tmp, newmarked);
                 successors.push_back(news);
                 successor_probs.push_back(*finish_prob_it * raw_sucs[i].second);
             }
@@ -68,7 +91,8 @@ void Snapshot::get_successors(const Scheduler& scheduler){
                         [it](const task_id& a){
                         return a==*it;
                         }), newmarked.end());
-            Snapshot news(tmp, newmarked);
+            Snapshot* news = new Snapshot(tmp, newmarked);
+            //Snapshot news = Snapshot::canonical_snapshot(tmp, newmarked);
             successors.push_back(news);
             successor_probs.push_back(*finish_prob_it);
         }
@@ -78,7 +102,7 @@ void Snapshot::get_successors(const Scheduler& scheduler){
 void Snapshot::compile_snapshot_dag(const Scheduler& scheduler){
     get_successors(scheduler);
     for(unsigned int i=0; i<successors.size(); ++i){
-        successors[i].compile_snapshot_dag(scheduler);
+        successors[i]->compile_snapshot_dag(scheduler);
     }
 }
 
@@ -92,7 +116,7 @@ myfloat Snapshot::expected_runtime(){
     myfloat result = expected_runtime_of_min_task;
     myfloat suc_expected_runtimes[successors.size()];
     for(unsigned int i=0; i<successors.size(); ++i){
-        suc_expected_runtimes[i] = successors[i].expected_runtime();
+        suc_expected_runtimes[i] = successors[i]->expected_runtime();
     }
     for(unsigned int i=0; i<successors.size(); ++i){
         result += successor_probs[i] * suc_expected_runtimes[i];
@@ -107,7 +131,7 @@ string Snapshot::dag_view_string(unsigned int depth){
     }
     output << *this << endl;
     for(auto it = successors.begin(); it!=successors.end(); ++it){
-        output << it->dag_view_string(depth+1);
+        output << (*it)->dag_view_string(depth+1);
     }
     return output.str();
 }
@@ -181,7 +205,7 @@ string Snapshot::tikz_string_dag(bool first, unsigned int depth){
     if(!intree.is_chain()){
         for(auto it=successors.begin(); it!=successors.end(); ++it){
             output << "child";
-            output << "{" << it->tikz_string_dag(false, depth+1) << "}";
+            output << "{" << (*it)->tikz_string_dag(false, depth+1) << "}";
         }
     }
     if(first){
@@ -200,7 +224,7 @@ void Snapshot::print_snapshot_dag(int depth){
     // cout << " (" << expected_runtime() << ") ";
     cout << endl;
     for(auto it=successors.begin(); it!=successors.end(); ++it){
-        it->print_snapshot_dag(depth+1);
+        (*it)->print_snapshot_dag(depth+1);
     }
 }
 

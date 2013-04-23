@@ -108,8 +108,8 @@ int main(int argc, char** argv){
         tree_id tid = 0;
         cout << Intree::canonical_intree(t, isomorphism, tid) << endl;
         cout << tid << endl;
-        cout << "I'm done here. Please remove this junk of code!" << endl;
-        return 11;
+        //cout << "I'm done here. Please remove this junk of code!" << endl;
+        //return 11;
 
         // generate all possible initial markings
         Scheduler* sched = new HLFscheduler();

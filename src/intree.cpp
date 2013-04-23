@@ -21,13 +21,11 @@ Intree::Intree(vector<pair<Task, Task>>& edges){
 }
 
 Intree Intree::canonical_intree(const Intree& t, map<task_id, task_id>& isomorphism, tree_id& out){
-    cout << "Computing canonical tree of " << t << "" << endl;
     vector<vector<task_id>> tasks_by_level(t.taskmap.size());
     // store tasks grouped by level
     for(auto it=t.taskmap.begin(); it!=t.taskmap.end(); ++it){
         tasks_by_level[t.get_level(it->first)].push_back(it->first);
     }
-    cout << "Traversing tasks levelwise and computing canonical names." << endl;
     // traverse tasks levelwise (high to low) and comput canonical names
     map<task_id, boost::dynamic_bitset<unsigned short>> canonical_names;
     for(auto rit = tasks_by_level.rbegin(); rit!=tasks_by_level.rend(); ++rit){
@@ -58,12 +56,7 @@ Intree Intree::canonical_intree(const Intree& t, map<task_id, task_id>& isomorph
             }
             tmp = true;
             canonical_name.push_back(tmp);
-            cout << "Setting canonical names for " << *it << " to " << canonical_name << endl;
             canonical_names[*it] = canonical_name;
-            cout << "Canonical names complete: " << endl;
-            for(auto it=canonical_names.begin(); it!=canonical_names.end(); ++it){
-                cout << it->first << ": " << it->second << endl;
-            }
         }
         // sort tasks according to their canonical name
         sort(rit->begin(), rit->end(),
@@ -77,13 +70,7 @@ Intree Intree::canonical_intree(const Intree& t, map<task_id, task_id>& isomorph
                 return canonical_names[a] > canonical_names[b];
                 }
             );
-        cout << "Level: " << endl;
-        for(auto it=rit->begin(); it!=rit->end(); ++it){
-            cout << " " << *it << ": " << canonical_names[*it] << endl;
-        }
     }
-    cout << "Sorting tasks." << endl;
-    //cout << "Bitsets per level" << endl;
     for(auto rit = tasks_by_level.rbegin(); rit!=tasks_by_level.rend(); ++rit){
         sort(rit->begin(), rit->end(),
             [&](const task_id& a, const task_id& b) -> bool {
@@ -106,29 +93,28 @@ Intree Intree::canonical_intree(const Intree& t, map<task_id, task_id>& isomorph
             }
         );
     }
-    //cout << "End of bitsets" << endl;
-    cout << "Assigning consecutive numbers." << endl;
     // assign consecutive numbers to tasks
     task_id consecutive_num = 0;
     for(auto it = tasks_by_level.begin(); it!=tasks_by_level.end(); ++it){
         for(auto tit = it->begin(); tit!=it->end(); ++tit){
-            cout << "Assigning for " << *tit << " (namely " << consecutive_num << ")" << endl;
             isomorphism[*tit] = consecutive_num;
             consecutive_num++;
         }
     }
-    // cout << "DEBUG OUTPUT:" << endl;
-    // // debug output
-    // for(auto it=isomorphism.begin(); it!=isomorphism.end(); ++it){
-    //     cout << it->first << ", " << it->second << endl;
-    // }
-    // cout << "End of DEBUT OUTPUT" << endl;
     vector<pair<Task, Task>> edges;
     for(auto it=t.edges.begin(); it!=t.edges.end(); ++it){
         edges.push_back(pair<Task,Task>(Task(isomorphism[it->first]),Task(isomorphism[it->second])));
     }
     // TODO: Expand to more than 64 bits!
-    out = canonical_names[0].to_ulong();
+    out = 0;
+    for(unsigned int i=0; i<canonical_names[0].size(); ++i){
+        //out = canonical_names[0].to_ulong();
+        if(i>8*sizeof(tree_id)){
+            throw "More bits than can be stored in tree_id.";
+        }
+        out <<= 1;
+        out = out | (canonical_names[0].test(i) ? 1ul : 0ul);
+    }
     return Intree(edges);
 }
 

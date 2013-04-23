@@ -22,13 +22,14 @@ class Snapshot {
     private:
         vector<task_id> marked;
         Intree intree;
-        vector<Snapshot> successors;
+        vector<Snapshot*> successors;
         vector<myfloat> successor_probs;
         vector<myfloat> probabilities;
         string tikz_string_internal(const task_id,
                 map<task_id,vector<task_id>>&, bool = true) const;
-        static map<tree_id, Snapshot> pool;
+        static map<tree_id, map<vector<task_id>,Snapshot>> pool;
     public:
+        Snapshot();
         Snapshot(Intree& t);
         Snapshot(Intree& t, vector<task_id> m);
         static Snapshot& canonical_snapshot(Intree& t, vector<task_id> m);
