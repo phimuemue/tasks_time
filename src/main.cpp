@@ -154,7 +154,9 @@ int main(int argc, char** argv){
                 }
             }
         }
+#if USE_CANONICAL_SNAPSHOT
         Snapshot::clear_pool();
+#endif
         if(vm.count("tikz")){
             tikz_output.close();
         }

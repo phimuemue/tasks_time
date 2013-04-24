@@ -18,6 +18,7 @@ Intree::Intree(vector<pair<Task, Task>>& edges){
         taskmap[it->first.get_id()] = it->first;
         taskmap[it->second.get_id()] = it->second;
     }
+    taskmap[0] = Task(0);
 }
 
 Intree Intree::canonical_intree(const Intree& t, map<task_id, task_id>& isomorphism, tree_id& out){
@@ -136,6 +137,9 @@ int Intree::get_in_degree(const task_id t) const {
 }
 
 const Task& Intree::get_task_by_id(const task_id tid) const {
+    if(taskmap.find(tid) == taskmap.end()){
+        throw 1;
+    }
     return taskmap.find(tid)->second;
 }
 

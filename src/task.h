@@ -36,6 +36,7 @@ private:
 #endif
 public:
     Task();
+    Task(const Task& t);
     Task(task_id id, Distribution d = Exponential, myfloat param1 = 1, myfloat param2 = 2);
     task_id get_id() const;
 

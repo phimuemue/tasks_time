@@ -30,6 +30,7 @@ class Snapshot {
         static map<tree_id, map<vector<task_id>,Snapshot*>> pool;
     public:
         Snapshot();
+        Snapshot(const Snapshot& s);
         Snapshot(Intree& t);
         Snapshot(Intree& t, vector<task_id> m);
         ~Snapshot();

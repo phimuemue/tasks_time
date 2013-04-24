@@ -4,7 +4,7 @@ Task::Task(){
     id = 0;
     elapsed = 0;
     distribution = Exponential;
-    exponential_lambda = 1.f;
+    exponential_lambda = 1;
 }
 
 Task::Task(task_id id, Distribution d, myfloat param1, myfloat param2){
@@ -20,6 +20,15 @@ Task::Task(task_id id, Distribution d, myfloat param1, myfloat param2){
             uniform_b = param2;
             break;
     }
+}
+
+Task::Task(const Task& t){
+    id = t.id;
+    elapsed = t.elapsed;
+    distribution = t.distribution;
+    exponential_lambda = t.exponential_lambda;
+    uniform_a = t.uniform_a;
+    uniform_b = t.uniform_b;
 }
 
 task_id Task::get_id() const {
@@ -46,7 +55,7 @@ myfloat Task::get_expected_remaining_time() const {
     switch(distribution){
         case(Exponential):
             // Exponential distribution is memoryless
-            return exponential_lambda;
+            return 1/exponential_lambda;
         case(Uniform):
             // Uniform distribution not memoryless
             if(elapsed > uniform_b){        

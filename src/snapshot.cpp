@@ -14,6 +14,10 @@ Snapshot::Snapshot(){
 
 }
 
+Snapshot::Snapshot(const Snapshot& s){
+    throw "Copy constructor for snapshot to be implemented";
+}
+
 Snapshot::Snapshot(Intree& t) :
     intree(t)
 {
@@ -24,7 +28,7 @@ Snapshot::Snapshot(Intree& t, vector<task_id> m) :
     marked(m),
     intree(t)
 {
-
+    assert(m.size()>0);
 }
 
 Snapshot::~Snapshot(){
@@ -230,9 +234,13 @@ string Snapshot::tikz_string_dag(bool first, unsigned int depth){
     output << "\\usebox\\nodebox" << endl;
     output << "}" << endl;
     if(!intree.is_chain()){
-        for(auto it=successors.begin(); it!=successors.end(); ++it){
+        auto pit = successor_probs.begin();
+        for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
             output << "child";
-            output << "{" << (*it)->tikz_string_dag(false, depth+1) << "}";
+            output << "{"; 
+            output << (*it)->tikz_string_dag(false, depth+1); 
+            output << "edge from parent node [left] { " << *pit << "}" << endl;
+            output << "}";
         }
     }
     if(first){
