@@ -69,7 +69,9 @@ number_types = [(0, "float"),
 vars.Add(EnumVariable("MYFLOAT", "Datatype for rational numbers:\n" 
             + "\n".join(["     %d %s"%(x) for x in number_types]), "0",
             allowed_values=("0", "1", "2", "3")))
-vars.Add(EnumVariable("USE_SIMPLE_OPENMP", "Simple multithreading for computing topmost successors.", 1,
+vars.Add(EnumVariable("USE_SIMPLE_OPENMP", "Simple multithreading for computing topmost successors. Currently only working for value 0.", 0,
+            allowed_values=("0", "1")))
+vars.Add(EnumVariable("USE_CANONICAL_SNAPSHOT", "Use flyweight pattern to reduce amout of memory used at the price of (possibly only slightly) higher computation time.", 1,
             allowed_values=("0", "1")))
 
 # we use C++11 (mainly to simplify some writing in C++)
@@ -81,6 +83,7 @@ env = Environment(variables = vars,
                             "-DSIMPLE_ISOMORPHISM_CHECK=${SIMPLE_ISOMORPHISM_CHECK}",
                             "-DMYFLOAT=${MYFLOAT}",
                             "-DUSE_SIMPLE_OPENMP=${USE_SIMPLE_OPENMP}",
+                            "-DUSE_CANONICAL_SNAPSHOT=${USE_CANONICAL_SNAPSHOT}",
                             ], 
                   LIBS = ["boost_program_options",
                   ],

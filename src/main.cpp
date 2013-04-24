@@ -90,8 +90,10 @@ int main(int argc, char** argv){
             return 1;
         }
 
+#if USE_SIMPLE_OPENMP
         // openmp settings - useful?
         omp_set_nested(1);
+#endif
 
         // generate tree
         vector<pair<Task,Task>> edges;
@@ -108,8 +110,6 @@ int main(int argc, char** argv){
         tree_id tid = 0;
         cout << Intree::canonical_intree(t, isomorphism, tid) << endl;
         cout << tid << endl;
-        //cout << "I'm done here. Please remove this junk of code!" << endl;
-        //return 11;
 
         // generate all possible initial markings
         Scheduler* sched = new HLFscheduler();
@@ -127,32 +127,34 @@ int main(int argc, char** argv){
         if(vm.count("dagview")){
             dagview_output.open(vm["dagview"].as<string>());
         }
+        Snapshot s[initial_settings.size()];
 #if USE_SIMPLE_OPENMP
 #pragma omp parallel for num_threads(initial_settings.size())
 #endif
         for(unsigned int i= 0; i<initial_settings.size(); ++i){
-            Snapshot s(t, initial_settings[i]);
+            s[i] = Snapshot(t, initial_settings[i]);
 #if USE_SIMPLE_OPENMP
 #pragma omp critical
 #endif
             {
-                cout << "Compiling snapshot DAG for " << s << endl;
+                cout << "Compiling snapshot DAG for " << s[i] << endl;
             };
-            s.compile_snapshot_dag(*sched);
-            expected_runtimes[i] = s.expected_runtime();
+            s[i].compile_snapshot_dag(*sched);
+            expected_runtimes[i] = s[i].expected_runtime();
             cout << endl;
 #if USE_SIMPLE_OPENMP
 #pragma omp critical
 #endif
             {
                 if(vm.count("tikz")){
-                    tikz_output << s.tikz_string_dag() << endl;
+                    tikz_output << s[i].tikz_string_dag() << endl;
                 }
                 if(vm.count("dagview")){
-                    dagview_output << s.dag_view_string() << endl;
+                    dagview_output << s[i].dag_view_string() << endl;
                 }
             }
         }
+        Snapshot::clear_pool();
         if(vm.count("tikz")){
             tikz_output.close();
         }
@@ -166,8 +168,7 @@ int main(int argc, char** argv){
         }
         expected_runtime /= (myfloat)initial_settings.size();
         cout << "Total expected run time: " << expected_runtime << endl;
-        // TODO: The following results in undefined behaviour. Why?
-        // delete(sched);
+        delete(sched);
     }
     catch(exception& e){
         cout << "Something went wrong:" << endl

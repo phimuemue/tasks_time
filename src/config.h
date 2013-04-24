@@ -1,6 +1,10 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#if USE_SIMPLE_OPENMP
+#include<omp.h>
+#endif
+
 #define FLOAT 0
 #define DOUBLE 1
 #define RATIONAL_INT 2

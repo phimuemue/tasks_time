@@ -1,6 +1,14 @@
 #include "snapshot.h"
 
-map<tree_id, map<vector<task_id>,Snapshot>> Snapshot::pool;
+map<tree_id, map<vector<task_id>,Snapshot*>> Snapshot::pool;
+
+void Snapshot::clear_pool(){
+    for(auto it=Snapshot::pool.begin(); it!=Snapshot::pool.end(); ++it){
+        for(auto it2=it->second.begin(); it2!=it->second.end(); ++it2){
+            delete(it2->second);
+        }
+    }
+}
 
 Snapshot::Snapshot(){
 
@@ -19,9 +27,17 @@ Snapshot::Snapshot(Intree& t, vector<task_id> m) :
 
 }
 
-Snapshot& Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
-    cout << "Canonical snapshot" << endl;
-    Snapshot result;
+Snapshot::~Snapshot(){
+#if USE_CANONICAL_SNAPSHOT
+    Snapshot::pool.clear();
+#else
+    for(auto it=successors.begin(); it!=successors.end(); ++it){
+        delete(*it);
+    }
+#endif
+}
+
+Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
     map<task_id, task_id> isomorphism;
     tree_id tid;
     Intree tmp = Intree::canonical_intree(t, isomorphism, tid);
@@ -33,16 +49,15 @@ Snapshot& Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
             newmarked.push_back(isomorphism[*it]);
         }
         if(correct_pool == Snapshot::pool.end()){
-            Snapshot::pool[tid] = map<vector<task_id>,Snapshot>();
+            Snapshot::pool[tid] = map<vector<task_id>,Snapshot*>();
         }
         if(correct_pool->second.find(newmarked) != correct_pool->second.end()){
-            result = correct_pool->second.find(newmarked)->second;
+            correct_pool->second.find(newmarked)->second;
         }
         else {
-            result = Snapshot::pool[tid][newmarked] = Snapshot(tmp, newmarked);
+            Snapshot::pool[tid][newmarked] = new Snapshot(tmp, newmarked);
         }
     }
-    cout << "Canonical snapshot done" << endl;
     return Snapshot::pool.find(tid)->second.find(newmarked)->second;
 }
 
@@ -79,8 +94,12 @@ void Snapshot::get_successors(const Scheduler& scheduler){
                 // TODO: Is this needed?
                 if(raw_sucs[i].first != NOTASK)
                     newmarked.push_back(raw_sucs[i].first);
+                // TODO: every "new" needs a "delete"
+#if USE_CANONICAL_SNAPSHOT
+                Snapshot* news = Snapshot::canonical_snapshot(tmp, newmarked);
+#else
                 Snapshot* news = new Snapshot(tmp, newmarked);
-                //Snapshot news = Snapshot::canonical_snapshot(tmp, newmarked);
+#endif
                 successors.push_back(news);
                 successor_probs.push_back(*finish_prob_it * raw_sucs[i].second);
             }
@@ -91,8 +110,12 @@ void Snapshot::get_successors(const Scheduler& scheduler){
                         [it](const task_id& a){
                         return a==*it;
                         }), newmarked.end());
+            // TODO: every "new" needs a "delete"
+#if USE_CANONICAL_SNAPSHOT
+            Snapshot* news = Snapshot::canonical_snapshot(tmp, newmarked);
+#else
             Snapshot* news = new Snapshot(tmp, newmarked);
-            //Snapshot news = Snapshot::canonical_snapshot(tmp, newmarked);
+#endif
             successors.push_back(news);
             successor_probs.push_back(*finish_prob_it);
         }
@@ -104,6 +127,10 @@ void Snapshot::compile_snapshot_dag(const Scheduler& scheduler){
     for(unsigned int i=0; i<successors.size(); ++i){
         successors[i]->compile_snapshot_dag(scheduler);
     }
+}
+
+size_t Snapshot::get_successor_count(){
+    return successors.size();
 }
 
 myfloat Snapshot::expected_runtime(){
