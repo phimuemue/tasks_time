@@ -44,7 +44,7 @@ Snapshot::~Snapshot(){
 Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
     map<task_id, task_id> isomorphism;
     tree_id tid;
-    Intree tmp = Intree::canonical_intree(t, isomorphism, tid);
+    Intree tmp = Intree::canonical_intree(t, m, isomorphism, tid);
     vector<task_id> newmarked;
 #pragma omp critical
     {

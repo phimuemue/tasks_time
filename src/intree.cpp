@@ -21,7 +21,10 @@ Intree::Intree(vector<pair<Task, Task>>& edges){
     taskmap[0] = Task(0);
 }
 
-Intree Intree::canonical_intree(const Intree& t, map<task_id, task_id>& isomorphism, tree_id& out){
+Intree Intree::canonical_intree(const Intree& t, 
+        const vector<task_id>& preferred,
+        map<task_id, task_id>& isomorphism,
+        tree_id& out){
     vector<vector<task_id>> tasks_by_level(t.taskmap.size());
     // store tasks grouped by level
     for(auto it=t.taskmap.begin(); it!=t.taskmap.end(); ++it){
@@ -41,6 +44,11 @@ Intree Intree::canonical_intree(const Intree& t, map<task_id, task_id>& isomorph
                     }
                     else if (canonical_names[a].size() > canonical_names[b].size()) {
                         return true;
+                    }
+                    if(canonical_names[a] == canonical_names[b]){
+                        auto dist_a = distance(preferred.begin(), find(preferred.begin(), preferred.end(), a));
+                        auto dist_b = distance(preferred.begin(), find(preferred.begin(), preferred.end(), b));
+                        return dist_a < dist_b;
                     }
                     return canonical_names[a] > canonical_names[b];
                     }
@@ -68,6 +76,11 @@ Intree Intree::canonical_intree(const Intree& t, map<task_id, task_id>& isomorph
                 else if (canonical_names[a].size() > canonical_names[b].size()) {
                     return true;
                 }
+                if(canonical_names[a] == canonical_names[b]){
+                    auto dist_a = distance(preferred.begin(), find(preferred.begin(), preferred.end(), a));
+                    auto dist_b = distance(preferred.begin(), find(preferred.begin(), preferred.end(), b));
+                    return dist_a < dist_b;
+                }
                 return canonical_names[a] > canonical_names[b];
                 }
             );
@@ -88,6 +101,11 @@ Intree Intree::canonical_intree(const Intree& t, map<task_id, task_id>& isomorph
                     return false;
                 else if(ca.size() > cb.size())
                     return true;
+                if(ca==cb){
+                    auto dist_a = distance(preferred.begin(), find(preferred.begin(), preferred.end(), a));
+                    auto dist_b = distance(preferred.begin(), find(preferred.begin(), preferred.end(), b));
+                    return dist_a < dist_b;
+                }
                 return ca > cb;
             }
             return canonical_names[a] > canonical_names[b];

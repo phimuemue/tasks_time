@@ -117,7 +117,7 @@ int main(int argc, char** argv){
         cout << "Intree: " << t << endl;
         map<task_id, task_id> isomorphism;
         tree_id tid = 0;
-        cout << Intree::canonical_intree(t, isomorphism, tid) << endl;
+        cout << Intree::canonical_intree(t, vector<task_id>(), isomorphism, tid) << endl;
         cout << tid << endl;
 
         // generate all possible initial markings
