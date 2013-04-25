@@ -56,9 +56,7 @@ void read_raw_tree_from_file(string path, vector<pair<Task,Task>>& target){
 #define NUM_THREADS_DEFAULT 5
 #endif
 
-#ifndef NUM_PROCESSORS
-#define NUM_PROCESSORS 2
-#endif
+int NUM_PROCESSORS = 2;
 
 // TODO: rule-of-three everywhere!
 int main(int argc, char** argv){
@@ -69,9 +67,14 @@ int main(int argc, char** argv){
         namespace po = boost::program_options;
         po::options_description desc("Options");
         desc.add_options()
+            // help message
             ("help", "Print help message")
+            // configurational things
+            ("processors,p", po::value<int>(), "Number of processors to use.")
+            // output stuff
             ("tikz", po::value<string>(), "Generate TikZ-Output of snapshot(s) in file.")
             ("dagview", po::value<string>(), "Generate output for DAG viewer in file.")
+            // input stuff
             ("direct", po::value<string>(), "Direct input of tree (sequence of edge targets from sequentially numbered tasks).")
             ("input", po::value<string>(), "Name of input file.")
             ("random", po::value<int>(), "Number of tasks in a random graph. Only used if no input file is given.")
@@ -118,6 +121,9 @@ int main(int argc, char** argv){
         cout << tid << endl;
 
         // generate all possible initial markings
+        if(vm.count("processors")){
+            NUM_PROCESSORS = vm["processors"].as<int>();
+        }
         Scheduler* sched = new HLFscheduler();
         vector<task_id> marked;
         vector<vector<task_id>> initial_settings;
