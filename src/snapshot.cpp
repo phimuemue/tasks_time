@@ -180,14 +180,17 @@ myfloat Snapshot::expected_runtime(){
     return result;
 }
 
-string Snapshot::dag_view_string(unsigned int depth){
+string Snapshot::dag_view_string(unsigned int depth, myfloat probability){
     stringstream output;
     for(unsigned int i=0; i<depth; ++i){
         output << " ";
     }
-    output << *this << " " << expected_runtime() << endl;
-    for(auto it = successors.begin(); it!=successors.end(); ++it){
-        output << (*it)->dag_view_string(depth+1);
+    output << *this << " " << expected_runtime() << " " << probability << endl;
+    if(!intree.is_chain()){
+        auto pit = successor_probs.begin();
+        for(auto it = successors.begin(); it!=successors.end(); ++it, ++pit){
+            output << (*it)->dag_view_string(depth+1, *pit);
+        }
     }
     return output.str();
 }

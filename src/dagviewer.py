@@ -11,7 +11,7 @@ class Snapshot_Dag_Viewer(object):
         self.window.connect("delete_event", self.delete_event)
         self.layout = gtk.VBox()
         self.window.add(self.layout)
-        self.ts = gtk.TreeStore(str, str, str)
+        self.ts = gtk.TreeStore(str, str, str, str)
         self.tv = gtk.TreeView(self.ts)
         # "intree column"
         self.tvcol = gtk.TreeViewColumn("Snapshot")
@@ -31,6 +31,12 @@ class Snapshot_Dag_Viewer(object):
         self.tvcol.pack_start(self.cell)
         self.tvcol.add_attribute(self.cell, "text", 2)
         self.tv.append_column(self.tvcol)
+        # "probability column"
+        self.tvcol = gtk.TreeViewColumn("Probability")
+        self.cell = gtk.CellRendererText()
+        self.tvcol.pack_start(self.cell)
+        self.tvcol.add_attribute(self.cell, "text", 3)
+        self.tv.append_column(self.tvcol)
         # done columns
         self.scrw = gtk.ScrolledWindow()
         self.layout.add(self.scrw)
@@ -46,8 +52,8 @@ class Snapshot_Dag_Viewer(object):
         count = 0
         f = open(path, "r")
         def create_append_list(l):
-            a = re.match("<(.+)\|(.+)>(.*)", l)
-            return [a.group(1), a.group(2), a.group(3).strip()]
+            a = re.match("<(.+)\|(.+)> (.*?) (.*?)$", l)
+            return [a.group(1), a.group(2), a.group(3), a.group(4)]
         cur = None
         lastdepth = 0
         for _l in f:
