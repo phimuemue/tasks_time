@@ -24,16 +24,7 @@ void randomEdges(int n, vector<pair<Task,Task>>& target){
     }   
 }
 
-void read_raw_tree_from_file(string path, vector<pair<Task,Task>>& target){
-    // TODO: I assume (=am sure) that this can be done better.
-    // For now, we assume all tasks exponendially iid
-    ifstream a(path);
-    // read description from file
-    string raw((istreambuf_iterator<char>(a)),
-            istreambuf_iterator<char>());
-    cout << "Raw: " << raw << endl;
-
-    a.close();
+void tree_from_string(string raw, vector<pair<Task,Task>>& target){
     istringstream iss(raw);
     vector<string> raw_tokens;
     copy(istream_iterator<string>(iss),
@@ -48,6 +39,17 @@ void read_raw_tree_from_file(string path, vector<pair<Task,Task>>& target){
     for(auto it=target.begin(); it!=target.end(); ++it){
         cout << it->first << ", " << it->second << endl;
     }
+}
+
+void read_raw_tree_from_file(string path, vector<pair<Task,Task>>& target){
+    // TODO: I assume (=am sure) that this can be done better.
+    // For now, we assume all tasks exponendially iid
+    ifstream a(path);
+    // read description from file
+    string raw((istreambuf_iterator<char>(a)),
+            istreambuf_iterator<char>());
+    cout << "Raw: " << raw << endl;
+    tree_from_string(raw, target);
 }
 
 #ifndef NUM_THREADS_DEFAULT
@@ -70,6 +72,7 @@ int main(int argc, char** argv){
             ("help", "Print help message")
             ("tikz", po::value<string>(), "Generate TikZ-Output of snapshot(s) in file.")
             ("dagview", po::value<string>(), "Generate output for DAG viewer in file.")
+            ("direct", po::value<string>(), "Direct input of tree (sequence of edge targets from sequentially numbered tasks).")
             ("input", po::value<string>(), "Name of input file.")
             ("random", po::value<int>(), "Number of tasks in a random graph. Only used if no input file is given.")
             ;
@@ -97,7 +100,10 @@ int main(int argc, char** argv){
 
         // generate tree
         vector<pair<Task,Task>> edges;
-        if(vm.count("input")){
+        if (vm.count("direct")){
+            tree_from_string(vm["direct"].as<string>(), edges);
+        }
+        else if(vm.count("input")){
             read_raw_tree_from_file(vm["input"].as<string>(), edges);
         }
         else{
