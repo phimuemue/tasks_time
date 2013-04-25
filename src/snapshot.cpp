@@ -25,9 +25,10 @@ Snapshot::Snapshot(Intree& t) :
 }
 
 Snapshot::Snapshot(Intree& t, vector<task_id> m) :
-    marked(m),
     intree(t)
 {
+    sort(m.begin(), m.end());
+    marked = m;
     assert(m.size()>0);
 }
 
@@ -52,6 +53,7 @@ Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
         for(auto it=m.begin(); it!=m.end(); ++it){
             newmarked.push_back(isomorphism[*it]);
         }
+        sort(newmarked.begin(), newmarked.end());
         if(correct_pool == Snapshot::pool.end()){
             Snapshot::pool[tid] = map<vector<task_id>,Snapshot*>();
         }
@@ -98,6 +100,7 @@ void Snapshot::get_successors(const Scheduler& scheduler){
                 // TODO: Is this needed?
                 if(raw_sucs[i].first != NOTASK)
                     newmarked.push_back(raw_sucs[i].first);
+                sort(newmarked.begin(), newmarked.end());
                 // TODO: every "new" needs a "delete"
 #if USE_CANONICAL_SNAPSHOT
                 Snapshot* news = Snapshot::canonical_snapshot(tmp, newmarked);
@@ -110,6 +113,7 @@ void Snapshot::get_successors(const Scheduler& scheduler){
         }
         else {
             vector<task_id> newmarked(marked);
+            sort(newmarked.begin(), newmarked.end());
             newmarked.erase(remove_if(newmarked.begin(), newmarked.end(),
                         [it](const task_id& a){
                         return a==*it;
@@ -124,6 +128,33 @@ void Snapshot::get_successors(const Scheduler& scheduler){
             successor_probs.push_back(*finish_prob_it);
         }
     }
+    // remove duplicate successors
+    assert(successors.size() == successor_probs.size());
+    for(unsigned int i=0; i<successors.size(); ++i){
+        for(unsigned int j=i+1; j<successors.size(); ++j){
+            if(successors[i] == successors[j]){
+                successors[j] = NULL;
+                successor_probs[i] += successor_probs[j];
+                successor_probs[j] = (myfloat)0;
+            }
+        }
+    }
+    successors.erase(remove_if(successors.begin(), successors.end(),
+        [](const Snapshot* a) -> bool {
+            return a == NULL;
+        }
+    ), successors.end());
+    successor_probs.erase(remove_if(successor_probs.begin(), successor_probs.end(),
+        [](const myfloat& a) -> bool {
+            return a == (myfloat)0;
+        }
+    ), successor_probs.end());
+    cout << "Got successors: " << endl;
+    auto pit=successor_probs.begin();
+    for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
+        cout << *it << " " << *pit << **it << endl;
+    }
+    cout << "These were they" << endl;
 }
 
 void Snapshot::compile_snapshot_dag(const Scheduler& scheduler){
@@ -158,8 +189,10 @@ myfloat Snapshot::expected_runtime(){
 string Snapshot::dag_view_string(unsigned int depth){
     stringstream output;
     for(unsigned int i=0; i<depth; ++i){
+        cout << " ";
         output << " ";
     }
+    cout << "DAG_VIEW for " << this << ":" << endl;
     output << *this << " " << expected_runtime() << endl;
     for(auto it = successors.begin(); it!=successors.end(); ++it){
         output << (*it)->dag_view_string(depth+1);
