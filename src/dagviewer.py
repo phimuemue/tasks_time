@@ -18,7 +18,6 @@ class Snapshot_Dag_Viewer(object):
                 if current[0]:
                     newprobs.append(float(current[4]))
                 first_sibling = model.iter_next(first_sibling)
-            print newprobs
             sss = sum(newprobs)
             newprobs = [x/sss for x in newprobs]
             # compute adjusted probabilities
@@ -32,13 +31,23 @@ class Snapshot_Dag_Viewer(object):
                 else:
                     current[5] = 0
                 first_sibling = model.iter_next(first_sibling)
+            while(parent!=None):
+                # TODO: adjust number of tasks automatically (thus adjusting the value 1/3.)
+                adj_rt = 1/3.
+                first_sibling = model.iter_children(parent)
+                while(first_sibling!=None):
+                    current = model[first_sibling]
+                    adj_rt = adj_rt + float(current[5]) * float(current[6])
+                    first_sibling = model.iter_next(first_sibling)
+                model[parent][6] = adj_rt
+                parent = model.iter_parent(parent)
     def __init__(self, path):
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        self.window.set_size_request(600,400)
+        self.window.set_size_request(700,400)
         self.window.connect("delete_event", self.delete_event)
         self.layout = gtk.VBox()
         self.window.add(self.layout)
-        self.ts = gtk.TreeStore(bool, str, str, str, str, str)
+        self.ts = gtk.TreeStore(bool, str, str, str, str, str, str)
         self.tv = gtk.TreeView(self.ts)
         # "valid column"
         self.cell = gtk.CellRendererToggle()
@@ -76,6 +85,12 @@ class Snapshot_Dag_Viewer(object):
         self.tvcol.pack_start(self.cell)
         self.tvcol.add_attribute(self.cell, "text", 5)
         self.tv.append_column(self.tvcol)
+        # "adjusted runtime column"
+        self.tvcol = gtk.TreeViewColumn("Adj. RT")
+        self.cell = gtk.CellRendererText()
+        self.tvcol.pack_start(self.cell)
+        self.tvcol.add_attribute(self.cell, "text", 6)
+        self.tv.append_column(self.tvcol)
         # done columns
         self.scrw = gtk.ScrolledWindow()
         self.layout.add(self.scrw)
@@ -92,7 +107,7 @@ class Snapshot_Dag_Viewer(object):
         f = open(path, "r")
         def create_append_list(l):
             a = re.match("<(.+)\|(.+)> (.*?) (.*?)$", l)
-            return [True, a.group(1), a.group(2), a.group(3), a.group(4), a.group(4)]
+            return [True, a.group(1), a.group(2), a.group(3), a.group(4), a.group(4), a.group(3)]
         cur = None
         lastdepth = 0
         for _l in f:
