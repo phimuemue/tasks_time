@@ -304,3 +304,17 @@ ostream& operator<<(ostream& os, const Snapshot& s){
     os << "]>";
     return os;
 }
+
+string Snapshot::markedstring(){
+    stringstream os;
+    os << "[";
+    
+    for(auto it = marked.begin(); it != marked.end(); ++it){
+        os << *it;
+        if (it+1!=marked.end()){
+            os << ", ";
+        }
+    }
+    os << "]";
+    return os.str();
+}

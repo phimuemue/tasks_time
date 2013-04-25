@@ -110,11 +110,10 @@ int main(int argc, char** argv){
             randomEdges(num_threads, edges);
         }
         Intree t(edges);
-        cout << "Intree: " << t << endl;
+        cout << "Raw form:\t" << t << endl;
         map<task_id, task_id> isomorphism;
         tree_id tid = 0;
-        cout << Intree::canonical_intree(t, vector<task_id>(), isomorphism, tid) << endl;
-        cout << tid << endl;
+        cout << "Normalized:  \t" << Intree::canonical_intree(t, vector<task_id>(), isomorphism, tid) << endl;
 
         // generate all possible initial markings
         if(vm.count("processors")){
@@ -136,28 +135,18 @@ int main(int argc, char** argv){
             dagview_output.open(vm["dagview"].as<string>());
         }
         Snapshot s[initial_settings.size()];
+        cout << "Compiling snapshot DAGs." << endl;
+        for(unsigned int i= 0; i<initial_settings.size(); ++i){
+            s[i] = Snapshot(t, initial_settings[i]);
+        }
 #if USE_SIMPLE_OPENMP
 #pragma omp parallel for num_threads(initial_settings.size())
 #endif
         for(unsigned int i= 0; i<initial_settings.size(); ++i){
-            s[i] = Snapshot(t, initial_settings[i]);
-#if USE_SIMPLE_OPENMP
-#pragma omp critical
-#endif
-            {
-                cout << "Compiling snapshot DAG for " << s[i] << endl;
-            };
             s[i].compile_snapshot_dag(*sched);
-#if USE_SIMPLE_OPENMP
-#pragma omp critical
-#endif
-            /*{
-                cout << "Compiled snapshot dag." << endl << "Computing expected runtime for " << s[i] << endl;
-            }*/ 
+        }
+        for(unsigned int i= 0; i<initial_settings.size(); ++i){
             expected_runtimes[i] = s[i].expected_runtime();
-#if USE_SIMPLE_OPENMP
-#pragma omp critical
-#endif
             {
                 if(vm.count("tikz")){
                     tikz_output << s[i].tikz_string_dag() << endl;
@@ -167,6 +156,7 @@ int main(int argc, char** argv){
                 }
             }
         }
+        cout << endl;
 #if USE_CANONICAL_SNAPSHOT
         Snapshot::clear_pool();
 #endif
@@ -178,6 +168,7 @@ int main(int argc, char** argv){
         }
         myfloat expected_runtime = 0;
         for(unsigned int i= 0; i<initial_settings.size(); ++i){
+            cout << s[i].markedstring() << ":\t";
             cout << expected_runtimes[i] << endl;
             expected_runtime += expected_runtimes[i];
         }

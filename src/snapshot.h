@@ -47,6 +47,8 @@ class Snapshot {
         void print_snapshot_dag(int depth=0);
         friend ostream& operator<<(ostream& os, const Snapshot& s);
 
+        string markedstring();
+
         static void clear_pool();
 };
 
