@@ -5,37 +5,54 @@ import sys
 import re
 
 class Snapshot_Dag_Viewer(object):
+    def on_toggle(self, cell, path, model, *ignore):
+        if path is not None:
+            it = model.get_iter(path)
+            model[it][0] = not model[it][0]
+            print model.iter_parent(it)
     def __init__(self, path):
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.set_size_request(600,400)
         self.window.connect("delete_event", self.delete_event)
         self.layout = gtk.VBox()
         self.window.add(self.layout)
-        self.ts = gtk.TreeStore(str, str, str, str)
+        self.ts = gtk.TreeStore(bool, str, str, str, str, str)
         self.tv = gtk.TreeView(self.ts)
+        # "valid column"
+        self.cell = gtk.CellRendererToggle()
+        self.tvcol = gtk.TreeViewColumn("U", self.cell, active=0)
+        self.cell.connect("toggled", self.on_toggle, self.ts)
+        self.tvcol.pack_start(self.cell)
+        self.tv.append_column(self.tvcol)
         # "intree column"
         self.tvcol = gtk.TreeViewColumn("Snapshot")
         self.cell = gtk.CellRendererText()
         self.tvcol.pack_start(self.cell)
-        self.tvcol.add_attribute(self.cell, "text", 0)
+        self.tvcol.add_attribute(self.cell, "text", 1)
         self.tv.append_column(self.tvcol)
         # "marked column"
         self.tvcol = gtk.TreeViewColumn("Marked")
         self.cell = gtk.CellRendererText()
         self.tvcol.pack_start(self.cell)
-        self.tvcol.add_attribute(self.cell, "text", 1)
+        self.tvcol.add_attribute(self.cell, "text", 2)
         self.tv.append_column(self.tvcol)
         # "runtime column"
         self.tvcol = gtk.TreeViewColumn("Runtime")
         self.cell = gtk.CellRendererText()
         self.tvcol.pack_start(self.cell)
-        self.tvcol.add_attribute(self.cell, "text", 2)
+        self.tvcol.add_attribute(self.cell, "text", 3)
         self.tv.append_column(self.tvcol)
         # "probability column"
         self.tvcol = gtk.TreeViewColumn("Probability")
         self.cell = gtk.CellRendererText()
         self.tvcol.pack_start(self.cell)
-        self.tvcol.add_attribute(self.cell, "text", 3)
+        self.tvcol.add_attribute(self.cell, "text", 4)
+        self.tv.append_column(self.tvcol)
+        # "adjusted Probability column"
+        self.tvcol = gtk.TreeViewColumn("Adj. Prob.")
+        self.cell = gtk.CellRendererText()
+        self.tvcol.pack_start(self.cell)
+        self.tvcol.add_attribute(self.cell, "text", 5)
         self.tv.append_column(self.tvcol)
         # done columns
         self.scrw = gtk.ScrolledWindow()
@@ -53,7 +70,7 @@ class Snapshot_Dag_Viewer(object):
         f = open(path, "r")
         def create_append_list(l):
             a = re.match("<(.+)\|(.+)> (.*?) (.*?)$", l)
-            return [a.group(1), a.group(2), a.group(3), a.group(4)]
+            return [True, a.group(1), a.group(2), a.group(3), a.group(4), a.group(4)]
         cur = None
         lastdepth = 0
         for _l in f:
