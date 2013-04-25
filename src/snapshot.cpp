@@ -160,7 +160,7 @@ string Snapshot::dag_view_string(unsigned int depth){
     for(unsigned int i=0; i<depth; ++i){
         output << " ";
     }
-    output << *this << endl;
+    output << *this << " " << expected_runtime() << endl;
     for(auto it = successors.begin(); it!=successors.end(); ++it){
         output << (*it)->dag_view_string(depth+1);
     }
@@ -211,6 +211,7 @@ string Snapshot::tikz_string(){
 string Snapshot::tikz_string_dag(bool first, unsigned int depth){
     stringstream output;
     if(first){
+        output << "% this tree has expected runtime of " << expected_runtime() << endl;
         output << "\\begin{tikzpicture}" << endl;
         for(unsigned int i=0; i < intree.edges.size(); ++i){
             output << "\\tikzstyle{level " << i+1 << "} = " <<
