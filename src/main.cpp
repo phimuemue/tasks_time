@@ -155,11 +155,10 @@ int main(int argc, char** argv){
 #if USE_SIMPLE_OPENMP
 #pragma omp critical
 #endif
-            {
+            /*{
                 cout << "Compiled snapshot dag." << endl << "Computing expected runtime for " << s[i] << endl;
-            }
+            }*/ 
             expected_runtimes[i] = s[i].expected_runtime();
-            cout << endl;
 #if USE_SIMPLE_OPENMP
 #pragma omp critical
 #endif

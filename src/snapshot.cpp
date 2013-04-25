@@ -149,12 +149,6 @@ void Snapshot::get_successors(const Scheduler& scheduler){
             return a == (myfloat)0;
         }
     ), successor_probs.end());
-    cout << "Got successors: " << endl;
-    auto pit=successor_probs.begin();
-    for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
-        cout << *it << " " << *pit << **it << endl;
-    }
-    cout << "These were they" << endl;
 }
 
 void Snapshot::compile_snapshot_dag(const Scheduler& scheduler){
@@ -189,10 +183,8 @@ myfloat Snapshot::expected_runtime(){
 string Snapshot::dag_view_string(unsigned int depth){
     stringstream output;
     for(unsigned int i=0; i<depth; ++i){
-        cout << " ";
         output << " ";
     }
-    cout << "DAG_VIEW for " << this << ":" << endl;
     output << *this << " " << expected_runtime() << endl;
     for(auto it = successors.begin(); it!=successors.end(); ++it){
         output << (*it)->dag_view_string(depth+1);

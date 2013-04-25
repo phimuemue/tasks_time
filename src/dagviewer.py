@@ -7,6 +7,7 @@ import re
 class Snapshot_Dag_Viewer(object):
     def __init__(self, path):
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        self.window.set_size_request(600,400)
         self.window.connect("delete_event", self.delete_event)
         self.layout = gtk.VBox()
         self.window.add(self.layout)
