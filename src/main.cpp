@@ -36,9 +36,6 @@ void tree_from_string(string raw, vector<pair<Task,Task>>& target){
         tmps >> tmp;
         target.push_back(pair<Task,Task>(Task((task_id)i+1), tmp));
     }
-    for(auto it=target.begin(); it!=target.end(); ++it){
-        cout << it->first << ", " << it->second << endl;
-    }
 }
 
 void read_raw_tree_from_file(string path, vector<pair<Task,Task>>& target){
@@ -48,7 +45,6 @@ void read_raw_tree_from_file(string path, vector<pair<Task,Task>>& target){
     // read description from file
     string raw((istreambuf_iterator<char>(a)),
             istreambuf_iterator<char>());
-    cout << "Raw: " << raw << endl;
     tree_from_string(raw, target);
 }
 
