@@ -9,7 +9,29 @@ class Snapshot_Dag_Viewer(object):
         if path is not None:
             it = model.get_iter(path)
             model[it][0] = not model[it][0]
-            print model.iter_parent(it)
+            parent = model.iter_parent(it)
+            # collect raw probabilities
+            first_sibling = model.iter_children(parent)
+            newprobs = []
+            while(first_sibling!=None):
+                current = model[first_sibling]
+                if current[0]:
+                    newprobs.append(float(current[4]))
+                first_sibling = model.iter_next(first_sibling)
+            print newprobs
+            sss = sum(newprobs)
+            newprobs = [x/sss for x in newprobs]
+            # compute adjusted probabilities
+            first_sibling = model.iter_children(parent)
+            i = 0
+            while(first_sibling!=None):
+                current = model[first_sibling]
+                if current[0]:
+                    current[5] = newprobs[i]
+                    i = i + 1
+                else:
+                    current[5] = 0
+                first_sibling = model.iter_next(first_sibling)
     def __init__(self, path):
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.set_size_request(600,400)
