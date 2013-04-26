@@ -242,11 +242,19 @@ bool Intree::is_chain(){
     return chains.size() == 1;
 }
 
-void Intree::get_chain(const Task& t, vector<int>& target) const {
+bool Intree::same_chain(const task_id t1, const task_id t2) const {
+    vector<task_id> ch1;
+    vector<task_id> ch2;
+    get_chain(t1, ch1);
+    get_chain(t2, ch2);
+    return ch1 == ch2;
+}
+
+void Intree::get_chain(const Task& t, vector<task_id>& target) const {
     get_chain(t.get_id(), target);
 }
 
-void Intree::get_chain(const task_id t, vector<int>& target) const {
+void Intree::get_chain(const task_id t, vector<task_id>& target) const {
     int current = t;
     target.push_back(current);
     while(current > 0){
@@ -256,7 +264,7 @@ void Intree::get_chain(const task_id t, vector<int>& target) const {
     }
 }
 
-void Intree::get_chains(vector<vector<int>>& target) const {
+void Intree::get_chains(vector<vector<task_id>>& target) const {
     for(auto it = edges.begin(); it != edges.end(); ++it){
         if(get_in_degree(it->first) == 0){
             vector<int> nv;

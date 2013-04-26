@@ -50,9 +50,10 @@ class Intree {
         pair<Task, Task> get_edge_from(const task_id t) const;
 
         bool is_chain();
-        void get_chain(const Task& t, vector<int>& target) const;
-        void get_chain(const task_id t, vector<int>& target) const;
-        void get_chains(vector<vector<int>>& target) const;
+        bool same_chain(const task_id t1, const task_id t2) const;
+        void get_chain(const Task& t, vector<task_id>& target) const;
+        void get_chain(const task_id t, vector<task_id>& target) const;
+        void get_chains(vector<vector<task_id>>& target) const;
 
         friend ostream& operator<<(ostream& os, const Intree& t);
 };
