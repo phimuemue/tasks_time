@@ -19,10 +19,6 @@ class Plot (gtk.DrawingArea):
     def set_options (self, options):
         """Set plot's options"""
         self._options = options
-    def set_data (self, data):
-        pass
-    def plot (self):
-        pass
     def expose (self, widget, event):
         context = widget.window.cairo_create ()
         context.clip ()
@@ -37,7 +33,7 @@ class Plot (gtk.DrawingArea):
     def size_allocate (self, widget, requisition):
         self.queue_draw ()
     def set_data (self, data):
-        self._data = data
+        self.data = data
         self.queue_draw ()
     def plot (self, context):
         """Initializes chart (if needed), set data and plots."""
@@ -49,8 +45,6 @@ class Plot (gtk.DrawingArea):
         successor = {}
         for chain in chains:
             for i in xrange(len(chain)-1, -1, -1):
-                print chain
-                print i
                 levels[chain[i]] = len(chain)-i
                 if i!=len(chain)-1:
                     successor[chain[i]] = chain[i + 1]
@@ -88,8 +82,10 @@ class Plot (gtk.DrawingArea):
                     gc.set_foreground(color)
 
 class Snapshot_Dag_Viewer(object):
-    def on_row_activated(self, cell, path, model, *ignore):
-        print model.get_iter(path)[1]
+    def on_row_activated(self, tv, model, *ignore):
+        sel = tv.get_selection()
+        mod, it = sel.get_selected()
+        self.plot.set_data((mod[it][1], mod[it][2]))
     def on_toggle(self, cell, path, model, *ignore):
         if path is not None:
             it = model.get_iter(path)
@@ -179,7 +175,7 @@ class Snapshot_Dag_Viewer(object):
         self.scrw = gtk.ScrolledWindow()
         self.layout.add(self.scrw)
         self.scrw.add(self.tv)
-        self.tv.connect("row-activated", self.on_row_activated, self.ts)
+        self.tv.connect("cursor-changed", self.on_row_activated, self.ts, self.tv)
         # drawing area
         self.plot = Plot()
         self.plot.set_size_request(200,200)
