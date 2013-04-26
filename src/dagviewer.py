@@ -50,36 +50,39 @@ class Plot (gtk.DrawingArea):
                     successor[chain[i]] = chain[i + 1]
         gc = self.style.fg_gc[gtk.STATE_NORMAL]
         context.set_source_rgb(0.5, .7, .3)
-        self.window.draw_arc(gc,True,+5,+5,10,10,0,100000)
         positions = {"0": (10, 10)}
-        queue = deque(["0"])
         # collect nodes by levels
         leveltasks = {}
         for k, l in levels.items():
             if l not in leveltasks:
                 leveltasks[l] = []
             leveltasks[l].append(k)
-        print leveltasks
-        while len(queue) > 0:
-            current = queue.popleft()
+        for l, _lt in sorted(leveltasks.items(), reverse=True):
             xx = 10
-            for k, l in levels.items():
-                if l == levels[current] + 1:
-                    if(k in self.data[1]):
-                        color = self.get_colormap().alloc(0xFFFF, 0x0000, 0x0000)
-                        gc.set_foreground(color)
-                    else:
-                        color = self.get_colormap().alloc(0x0000, 0x0000, 0x0000)
-                        gc.set_foreground(color)
-                    self.window.draw_arc(gc,True,xx-5,(l)*20-5,10,10,0,100000)
-                    if k in successor:
-                        self.window.draw_line(gc, xx, l*20, 
-                            positions[successor[k]][0], positions[successor[k]][1])
-                    positions[k] = (xx, l*20)
-                    xx = xx + 30
-                    queue.append(k)
+            def my_key(x):
+                if x in successor:
+                    return my_key(successor[x]) + (x, )
+                return (x, )
+            lt = sorted(_lt, key=my_key)
+            for k in lt:
+                if(k in self.data[1]):
+                    color = self.get_colormap().alloc(0xFFFF, 0x0000, 0x0000)
+                    gc.set_foreground(color)
+                else:
                     color = self.get_colormap().alloc(0x0000, 0x0000, 0x0000)
                     gc.set_foreground(color)
+                self.window.draw_arc(gc,True,xx-5,(l)*20-5,10,10,0,100000)
+                positions[k] = (xx, l*20)
+                xx = xx + 30
+                color = self.get_colormap().alloc(0x0000, 0x0000, 0x0000)
+                gc.set_foreground(color)
+            print l, lt
+        for ss,tt in successor.items():
+            x1, y1 = positions[ss]
+            x2, y2 = positions[tt]
+            self.window.draw_line(gc, x1, y1, x2, y2)
+        queue = deque(["0"])
+        self.set_size_request(200, len(leveltasks)*30)
 
 class Snapshot_Dag_Viewer(object):
     def on_row_activated(self, tv, model, *ignore):
@@ -178,7 +181,7 @@ class Snapshot_Dag_Viewer(object):
         self.tv.connect("cursor-changed", self.on_row_activated, self.ts, self.tv)
         # drawing area
         self.plot = Plot()
-        self.plot.set_size_request(200,200)
+        self.plot.set_size_request(200,100)
         self.layout.pack_start(self.plot, False, False, 0)
         # status bar
         self.sb = gtk.Statusbar()
