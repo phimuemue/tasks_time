@@ -1,10 +1,95 @@
 import pygtk
 import gtk
 import sys
+import math
+import cairo
+
+from collections import deque
 
 import re
 
+class Plot (gtk.DrawingArea):
+    def __init__ (self):
+        gtk.DrawingArea.__init__(self)
+        self.connect ("expose_event", self.expose)
+        self.connect ("size-allocate", self.size_allocate)
+        self._surface = None
+        self._options = None
+        self.data = ("[3, 2, 1, 0] [4, 1, 0] [5,  0]", "[4,3]")
+    def set_options (self, options):
+        """Set plot's options"""
+        self._options = options
+    def set_data (self, data):
+        pass
+    def plot (self):
+        pass
+    def expose (self, widget, event):
+        context = widget.window.cairo_create ()
+        context.clip ()
+        self.draw (context)
+        return False
+    def draw (self, context):
+        rect = self.get_allocation()
+        self._surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, \
+                rect.width, rect.height)
+        self.plot (context)
+        context.paint ()
+    def size_allocate (self, widget, requisition):
+        self.queue_draw ()
+    def set_data (self, data):
+        self._data = data
+        self.queue_draw ()
+    def plot (self, context):
+        """Initializes chart (if needed), set data and plots."""
+        chains = re.findall("\[(.*?)\]", self.data[0])
+        chains = [[y.strip() for y in x.split(",")] for x in chains] 
+        maxdepth = max([len(c) for c in chains])
+        maxwidth = len(chains)
+        levels = {}
+        successor = {}
+        for chain in chains:
+            for i in xrange(len(chain)-1, -1, -1):
+                print chain
+                print i
+                levels[chain[i]] = len(chain)-i
+                if i!=len(chain)-1:
+                    successor[chain[i]] = chain[i + 1]
+        gc = self.style.fg_gc[gtk.STATE_NORMAL]
+        context.set_source_rgb(0.5, .7, .3)
+        self.window.draw_arc(gc,True,+5,+5,10,10,0,100000)
+        positions = {"0": (10, 10)}
+        queue = deque(["0"])
+        # collect nodes by levels
+        leveltasks = {}
+        for k, l in levels.items():
+            if l not in leveltasks:
+                leveltasks[l] = []
+            leveltasks[l].append(k)
+        print leveltasks
+        while len(queue) > 0:
+            current = queue.popleft()
+            xx = 10
+            for k, l in levels.items():
+                if l == levels[current] + 1:
+                    if(k in self.data[1]):
+                        color = self.get_colormap().alloc(0xFFFF, 0x0000, 0x0000)
+                        gc.set_foreground(color)
+                    else:
+                        color = self.get_colormap().alloc(0x0000, 0x0000, 0x0000)
+                        gc.set_foreground(color)
+                    self.window.draw_arc(gc,True,xx-5,(l)*20-5,10,10,0,100000)
+                    if k in successor:
+                        self.window.draw_line(gc, xx, l*20, 
+                            positions[successor[k]][0], positions[successor[k]][1])
+                    positions[k] = (xx, l*20)
+                    xx = xx + 30
+                    queue.append(k)
+                    color = self.get_colormap().alloc(0x0000, 0x0000, 0x0000)
+                    gc.set_foreground(color)
+
 class Snapshot_Dag_Viewer(object):
+    def on_row_activated(self, cell, path, model, *ignore):
+        print model.get_iter(path)[1]
     def on_toggle(self, cell, path, model, *ignore):
         if path is not None:
             it = model.get_iter(path)
@@ -94,6 +179,11 @@ class Snapshot_Dag_Viewer(object):
         self.scrw = gtk.ScrolledWindow()
         self.layout.add(self.scrw)
         self.scrw.add(self.tv)
+        self.tv.connect("row-activated", self.on_row_activated, self.ts)
+        # drawing area
+        self.plot = Plot()
+        self.plot.set_size_request(200,200)
+        self.layout.pack_start(self.plot, False, False, 0)
         # status bar
         self.sb = gtk.Statusbar()
         self.layout.pack_end(self.sb, False, True, 0)
