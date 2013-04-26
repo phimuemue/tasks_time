@@ -65,7 +65,7 @@ class Plot (gtk.DrawingArea):
                 return (x, )
             lt = sorted(_lt, key=my_key)
             for k in lt:
-                if(k in self.data[1]):
+                if(k.strip() in [x.strip() for x in self.data[1][1:-1].split(",")]):
                     color = self.get_colormap().alloc(0xFFFF, 0x0000, 0x0000)
                     gc.set_foreground(color)
                 else:
@@ -198,7 +198,14 @@ class Snapshot_Dag_Viewer(object):
             return [True, a.group(1), a.group(2), a.group(3), a.group(4), a.group(4), a.group(3)]
         cur = None
         lastdepth = 0
-        for _l in f:
+        all_lines = f.readlines()
+        lcount = 0
+        perc = 0.
+        for _l in all_lines:
+            lcount = lcount + 1
+            if (float(lcount)/len(all_lines)) > perc + 0.005:
+                print perc
+                perc = perc + 0.005
             count = count + 1
             if _l.strip() == "":
                 continue
