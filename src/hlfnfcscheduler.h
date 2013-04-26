@@ -1,12 +1,13 @@
-#ifndef HLFSCHEDULER_H
-#define HLFSCHEDULER_H
+#ifndef HLFNFCSCHEDULER_H
+#define HLFNFCSCHEDULER_H
 
 #include <algorithm>
 
 #include "leafscheduler.h"
+#include "hlfscheduler.h"
 
-class HLFscheduler : public Leafscheduler {
-    protected:
+class HLFNFCscheduler : public HLFscheduler {
+    private:
         void all_combinations(vector<task_id> nums,
                 unsigned int n,
                 unsigned int minindex,
