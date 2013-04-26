@@ -32,8 +32,7 @@ class Snapshot_Dag_Viewer(object):
                     current[5] = 0
                 first_sibling = model.iter_next(first_sibling)
             while(parent!=None):
-                # TODO: adjust number of tasks automatically (thus adjusting the value 1/3.)
-                adj_rt = 1/3.
+                adj_rt = 1./(1+model[parent][2].count(","))
                 first_sibling = model.iter_children(parent)
                 while(first_sibling!=None):
                     current = model[first_sibling]
