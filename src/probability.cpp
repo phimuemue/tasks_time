@@ -101,6 +101,7 @@ void Probability_Computer::compute_finish_probs(const Intree& intree, const vect
 #endif
     }
     else {
+        cout << "Not possible to compute finish_probs." << endl;
         throw 1;
     }
 }

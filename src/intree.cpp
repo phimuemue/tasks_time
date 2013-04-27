@@ -129,7 +129,8 @@ Intree Intree::canonical_intree(const Intree& t,
     for(unsigned int i=0; i<canonical_names[0].size(); ++i){
         //out = canonical_names[0].to_ulong();
         if(i>8*sizeof(tree_id)){
-            throw "More bits than can be stored in tree_id.";
+            cout << "More bits than can be stored in tree_id." << endl;
+            throw 1;
         }
         out <<= 1;
         out = out | (canonical_names[0].test(i) ? 1ul : 0ul);
@@ -154,8 +155,13 @@ int Intree::get_in_degree(const task_id t) const {
     return result;
 }
 
+bool Intree::contains_task(task_id tid) const{
+    return taskmap.find(tid) != taskmap.end();
+}
+
 const Task& Intree::get_task_by_id(const task_id tid) const {
     if(taskmap.find(tid) == taskmap.end()){
+        cout << "Attempted to get_task_by_id of non-existent task." << endl;
         throw 1;
     }
     return taskmap.find(tid)->second;
@@ -205,8 +211,10 @@ void Intree::remove_task(Task& t){
 
 void Intree::remove_task(task_id t){
     // only tasks with no predecessor can be removed
-    if(get_in_degree(t) != 0)
+    if(get_in_degree(t) != 0){
+        cout << "Attempted to remove task with predecessor." << endl;
         throw 1;
+    }
     // remove from taskmap
     auto todel = taskmap.find(t);
     taskmap.erase(todel);
@@ -232,6 +240,7 @@ pair<Task, Task> Intree::get_edge_from(const task_id t) const {
             return *it;
         }
     }
+    cout << "Attempted to get edge from non-existent task (" << t << " from " << *this << ")." << endl;
     throw 0;
 }
 

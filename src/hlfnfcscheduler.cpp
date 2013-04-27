@@ -26,7 +26,9 @@ void HLFNFCscheduler::get_next_tasks(const Intree& t,
                 [&](const pair<task_id, myfloat>& a) -> bool {
                     bool found = false;
                     for (auto it = marked.begin(); it!=marked.end(); ++it){
-                        if (t.same_chain(a.first, *it)){
+                        cout << t.contains_task(*it) << endl;
+                        if (t.contains_task(*it) && t.same_chain(a.first, *it)){
+                            cout << "Das kommt raus!!!" << endl;
                             found = true;
                             break;
                         }

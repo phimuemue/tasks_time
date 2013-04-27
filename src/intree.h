@@ -35,6 +35,7 @@ class Intree {
         int count_tasks() const;
         int get_in_degree(const Task& t) const ;
         int get_in_degree(const task_id t) const ;
+        bool contains_task(task_id tid) const;
         const Task& get_task_by_id(task_id tid) const;
         void get_tasks(set<task_id>& result) const;
         int get_level(const Task& t) const;

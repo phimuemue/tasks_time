@@ -10,6 +10,7 @@
 #include "intree.h"
 #include "snapshot.h"
 #include "hlfscheduler.h"
+#include "hlfnfcscheduler.h"
 
 #include "alltrees.h"
 
@@ -119,7 +120,8 @@ int main(int argc, char** argv){
         if(vm.count("processors")){
             NUM_PROCESSORS = vm["processors"].as<int>();
         }
-        Scheduler* sched = new HLFscheduler();
+        //Scheduler* sched = new HLFscheduler();
+        Scheduler* sched = new HLFNFCscheduler();
         vector<task_id> marked;
         vector<vector<task_id>> initial_settings;
         sched->get_initial_schedule(t, NUM_PROCESSORS, initial_settings);
