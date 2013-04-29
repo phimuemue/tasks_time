@@ -193,6 +193,14 @@ void Intree::get_predecessors(const task_id t, vector<task_id>& target) const{
     }
 }
 
+void Intree::get_leaves(vector<task_id>& target) const{
+    for(auto it=edges.begin(); it!=edges.end(); ++it){
+        if (get_in_degree(it->first) == 0){
+            target.push_back(it->first);
+        }
+    }
+}
+
 int Intree::get_level(const task_id t) const{
     int current = t;
     int result = 0;
@@ -257,6 +265,19 @@ bool Intree::same_chain(const task_id t1, const task_id t2) const {
     get_chain(t1, ch1);
     get_chain(t2, ch2);
     return ch1 == ch2;
+}
+
+unsigned int Intree::count_free_chains(vector<task_id>& target) const{
+    unsigned int result = 0;
+    vector<task_id> leaves;
+    get_leaves(leaves);
+    for(auto it=leaves.begin(); it!=leaves.end(); ++it){
+        if(get_in_degree(*it)==0){
+            target.push_back(*it);
+            result++;
+        }
+    }
+    return result;
 }
 
 void Intree::get_chain(const Task& t, vector<task_id>& target) const {

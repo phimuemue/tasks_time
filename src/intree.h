@@ -33,15 +33,20 @@ class Intree {
                                        tree_id& out);
 
         int count_tasks() const;
+
         int get_in_degree(const Task& t) const ;
         int get_in_degree(const task_id t) const ;
+
         bool contains_task(task_id tid) const;
         const Task& get_task_by_id(task_id tid) const;
         void get_tasks(set<task_id>& result) const;
+
         int get_level(const Task& t) const;
         int get_level(const task_id t) const;
+
         void get_predecessors(const Task& t, vector<task_id>& target) const;
         void get_predecessors(const task_id t, vector<task_id>& target) const;
+        void get_leaves(vector<task_id>& target) const;
 
         Distribution get_task_distribution(const task_id t) const;
         void remove_task(Task& t);
@@ -52,6 +57,7 @@ class Intree {
 
         bool is_chain();
         bool same_chain(const task_id t1, const task_id t2) const;
+        unsigned int count_free_chains(vector<task_id>& marked) const;
         void get_chain(const Task& t, vector<task_id>& target) const;
         void get_chain(const task_id t, vector<task_id>& target) const;
         void get_chains(vector<vector<task_id>>& target) const;
