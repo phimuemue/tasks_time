@@ -65,7 +65,8 @@ class Plot (gtk.DrawingArea):
                 return (x, )
             lt = sorted(_lt, key=my_key)
             for k in lt:
-                if(k.strip() in [x.strip() for x in self.data[1][1:-1].split(",")]):
+                print "marked: " + str([x.strip() for x in self.data[1].strip()[1:-1].split(",")])
+                if(k.strip() in [x.strip() for x in self.data[1].strip()[1:-1].split(",")]):
                     color = self.get_colormap().alloc(0xFFFF, 0x0000, 0x0000)
                     gc.set_foreground(color)
                 else:
