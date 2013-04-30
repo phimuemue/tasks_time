@@ -19,42 +19,40 @@ void HLFNFCscheduler::get_initial_schedule(const Intree& t,
 void HLFNFCscheduler::get_next_tasks(const Intree& t, 
         const vector<task_id>& marked,
         vector<pair<task_id,myfloat>>& target) const {
-    HLFscheduler::get_next_tasks(t, marked, target);
+    vector<task_id> newmarked(marked);
+    newmarked.erase(
+        remove_if(newmarked.begin(), newmarked.end(),
+            [&](const task_id& task) -> bool {
+                return !t.contains_task(task);
+            }
+        )
+        , newmarked.end()
+    );
+    HLFscheduler::get_next_tasks(t, newmarked, target);
     // we grab all chains ...
-    vector<vector<task_id>> chains;
-    t.get_chains(chains);
-    // ... and remove the ones that are "occupied" by marked
-    for(auto it=marked.begin(); it!=marked.end(); ++it){
-        vector<task_id> cur_chain;
-        if(t.contains_task(*it)){
-            t.get_chain(*it, cur_chain);
-            chains.erase(
-                    remove_if(chains.begin(), chains.end(),
-                        [&it](const vector<task_id>& chain) -> bool {
-                            return find(chain.begin(), chain.end(), *it) != chain.end();
-                        }),
-                    chains.end()
-                    );
-        }
+    vector<vector<task_id>> allchains;
+    t.get_chains(allchains);
+    vector<vector<task_id>> marked_chains(newmarked.size());
+    for(unsigned int i = 0; i<newmarked.size(); ++i){
+        t.get_chain(newmarked[i], marked_chains[i]);
     }
-    unsigned int num_chains = chains.size();
-    return;
-
-    if(target.size() > 1){
-        target.erase(
-            remove_if(target.begin(), target.end(),
-                [&](const pair<task_id, myfloat>& a) -> bool {
-                    bool found = false;
-                    for (auto it = marked.begin(); it!=marked.end(); ++it){
-                        if (t.contains_task(*it) && t.same_chain(a.first, *it)){
-                            cout << "Das kommt raus!!!" << endl;
-                            found = true;
-                            break;
+    allchains.erase(
+        remove_if(
+            allchains.begin(), allchains.end(),
+            [&](const vector<task_id>& c) -> bool {
+                for(auto task = c.begin(); task!=c.end(); ++task){
+                    for(auto mc = marked_chains.begin(); mc!=marked_chains.end(); ++mc){
+                        if(find(mc->begin(), mc->end(), *task) != mc->end()){
+                            return true;
                         }
                     }
-                    return found;
-                }),
-                target.end()
-            );
-    }
+                }
+                return false;
+            }
+        ), 
+        allchains.end()
+    );
+    // ... and remove the ones that are "occupied" by marked
+    return;
+
 }
