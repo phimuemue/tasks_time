@@ -43,6 +43,7 @@ void HLFNFCscheduler::get_next_tasks(const Intree& t,
                 for(auto task = c.begin(); task!=c.end(); ++task){
                     for(auto mc = marked_chains.begin(); mc!=marked_chains.end(); ++mc){
                         if(find(mc->begin(), mc->end(), *task) != mc->end()){
+                            cout << "Raus" << endl;
                             return true;
                         }
                     }
