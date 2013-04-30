@@ -7,7 +7,7 @@
 #include "hlfscheduler.h"
 
 class HLFNFCscheduler : public HLFscheduler {
-    private:
+    protected:
         void all_combinations(vector<task_id> nums,
                 unsigned int n,
                 unsigned int minindex,
@@ -15,6 +15,9 @@ class HLFNFCscheduler : public HLFscheduler {
                 const vector<int>& referencelevels,
                 vector<task_id>& current,
                 vector<vector<task_id>>& target) const;
+        unsigned int count_free_chains(const Intree& t,
+                const vector<task_id>& newmarked,
+                const task_id& target_task) const;
     public:
         void get_initial_schedule(const Intree& t, 
                 const unsigned int, 
