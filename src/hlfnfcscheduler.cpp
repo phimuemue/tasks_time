@@ -30,30 +30,52 @@ void HLFNFCscheduler::get_next_tasks(const Intree& t,
     );
     HLFscheduler::get_next_tasks(t, newmarked, target);
     // we grab all chains ...
-    vector<vector<task_id>> allchains;
-    t.get_chains(allchains);
-    vector<vector<task_id>> marked_chains(newmarked.size());
-    for(unsigned int i = 0; i<newmarked.size(); ++i){
-        t.get_chain(newmarked[i], marked_chains[i]);
-    }
-    allchains.erase(
-        remove_if(
-            allchains.begin(), allchains.end(),
-            [&](const vector<task_id>& c) -> bool {
-                for(auto task = c.begin(); task!=c.end(); ++task){
-                    for(auto mc = marked_chains.begin(); mc!=marked_chains.end(); ++mc){
-                        if(find(mc->begin(), mc->end(), *task) != mc->end()){
-                            cout << "Raus" << endl;
-                            return true;
+    for(auto target_task=target.begin(); target_task!=target.end(); ++target_task){
+        cout << t << endl;
+        cout << "Marked: ";
+        for(auto tmp=newmarked.begin(); tmp!=newmarked.end(); ++tmp){
+            cout << *tmp << ", ";
+        }
+        cout << endl;
+        cout << "Doing next task " << target_task->first << endl;
+        vector<vector<task_id>> allchains;
+        t.get_chains(allchains);
+        vector<vector<task_id>> marked_chains(newmarked.size());
+        for(unsigned int i = 0; i<newmarked.size(); ++i){
+            t.get_chain(newmarked[i], marked_chains[i]);
+        }
+        marked_chains.push_back(vector<task_id>());
+        t.get_chain(target_task->first, marked_chains.back());
+        cout << "Chains before" << endl;
+        for(auto it=allchains.begin(); it!=allchains.end(); ++it){
+            for(auto tit=it->begin(); tit!=it->end(); ++tit){
+                cout << *tit << ", ";
+            }
+            cout << endl;
+        }
+        allchains.erase(
+            remove_if(
+                allchains.begin(), allchains.end(),
+                [&](const vector<task_id>& c) -> bool {
+                    for(auto task = c.begin(); task!=c.end(); ++task){
+                        for(auto mc = marked_chains.begin(); mc!=marked_chains.end(); ++mc){
+                            if(find(mc->begin(), mc->end(), *task) != mc->end() && *task!=0){
+                                return true;
+                            }
                         }
                     }
+                    return false;
                 }
-                return false;
+            ), 
+            allchains.end()
+        );
+        cout << "Chains after" << endl;
+        for(auto it=allchains.begin(); it!=allchains.end(); ++it){
+            for(auto tit=it->begin(); tit!=it->end(); ++tit){
+                cout << *tit << ", ";
             }
-        ), 
-        allchains.end()
-    );
-    // ... and remove the ones that are "occupied" by marked
-    return;
-
+            cout << endl;
+        }
+        cout << "Done." << endl;
+    }
 }
