@@ -79,14 +79,24 @@ void HLFNFCscheduler::get_next_tasks(const Intree& t,
         )
         , newmarked.end()
     );
+    cout << "Computing next tasks via HLFscheduler..." << endl;
     HLFscheduler::get_next_tasks(t, newmarked, target);
     vector<unsigned int> num_free_chains;
     // we grab all chains ...
-    cout << "Computing free chains..." << endl;
+    cout << "Computing free chains on: " << endl << t << endl;
+    cout << "Marked:" << endl;
+    for(auto it=newmarked.begin(); it!=newmarked.end(); ++it){
+        cout << (*it) << ", ";
+    }
+    cout << endl;
+    cout << "New candidates:" << endl;
+    for(auto it=target.begin(); it!=target.end(); ++it){
+        cout << (*it).first << ", ";
+    }
+    cout << endl;
     for(auto target_task=target.begin(); target_task!=target.end(); ++target_task){
         num_free_chains.push_back(count_free_chains(t, newmarked, target_task->first));
     }
-    cout << t << endl;
     cout << "Number of free chains: " << endl;
     for(auto tmp = num_free_chains.begin(); tmp!=num_free_chains.end(); ++tmp){
         cout << *tmp << ", ";
@@ -107,10 +117,18 @@ void HLFNFCscheduler::get_next_tasks(const Intree& t,
             }
         }
     }
+    // normalize probabilities
+    myfloat sum = 0;
+    for(auto it=target.begin(); it!=target.end(); ++it){
+        sum += it->second;
+    }
+    for(unsigned int i=0; i<target.size(); ++i){
+        target[i].second = target[i].second / sum;
+    }
     cout << "Next tasks: ";
     for(auto it = target.begin(); it!=target.end(); ++it){
         cout << it->first << ", ";
     }
     cout << endl;
-    cout << "Done." << endl;
+    cout << "Computing next tasks done." << endl;
 }
