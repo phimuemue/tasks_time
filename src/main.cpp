@@ -106,6 +106,37 @@ Intree generate_tree(po::variables_map vm){
     return Intree(edges);
 }
 
+void create_snapshot_dags(const po::variables_map vm,
+        Intree& t,
+        const Scheduler* sched,
+        vector<vector<task_id>>& initial_settings,
+        vector<Snapshot>& s,
+        vector<myfloat>& expected_runtimes){
+    // generate all possible initial markings
+    if(vm.count("processors")){
+        NUM_PROCESSORS = vm["processors"].as<int>();
+    }
+    //Scheduler* sched = new HLFscheduler();
+    //Scheduler* sched = new HLFNFCscheduler();
+    vector<task_id> marked;
+    sched->get_initial_schedule(t, NUM_PROCESSORS, initial_settings);
+
+    expected_runtimes = vector<myfloat>(initial_settings.size());
+
+    //Snapshot s[initial_settings.size()];
+    s = vector<Snapshot>(initial_settings.size());
+    cout << "Compiling snapshot DAGs." << endl;
+    for(unsigned int i= 0; i<initial_settings.size(); ++i){
+        s[i] = Snapshot(t, initial_settings[i]);
+    }
+#if USE_SIMPLE_OPENMP
+#pragma omp parallel for num_threads(initial_settings.size())
+#endif
+    for(unsigned int i= 0; i<initial_settings.size(); ++i){
+        s[i].compile_snapshot_dag(*sched);
+    }
+}
+
 // TODO: rule-of-three everywhere!
 int main(int argc, char** argv){
 #if USE_SIMPLE_OPENMP // openmp settings - useful?
@@ -132,19 +163,27 @@ int main(int argc, char** argv){
                      vector<task_id>(),
                      isomorphism, tid) 
              << endl;
-
-        // generate all possible initial markings
-        if(vm.count("processors")){
-            NUM_PROCESSORS = vm["processors"].as<int>();
-        }
-        //Scheduler* sched = new HLFscheduler();
-        Scheduler* sched = new HLFNFCscheduler();
-        vector<task_id> marked;
+        
+        // compute snapshot dags
         vector<vector<task_id>> initial_settings;
-        sched->get_initial_schedule(t, NUM_PROCESSORS, initial_settings);
+        vector<Snapshot> s;
+        vector<myfloat> expected_runtimes;
 
-        myfloat expected_runtimes[initial_settings.size()];
+        vector<Scheduler*> scheds = 
+        {
+            new HLFscheduler(),
+            new HLFNFCscheduler(),
+        };
 
+
+        create_snapshot_dags(vm,
+                t,
+                scheds[0],
+                initial_settings,
+                s,
+                expected_runtimes);
+
+        // output stuff
         ofstream tikz_output;
         ofstream dagview_output;
         if(vm.count("tikz")){
@@ -152,17 +191,6 @@ int main(int argc, char** argv){
         }
         if(vm.count("dagview")){
             dagview_output.open(vm["dagview"].as<string>());
-        }
-        Snapshot s[initial_settings.size()];
-        cout << "Compiling snapshot DAGs." << endl;
-        for(unsigned int i= 0; i<initial_settings.size(); ++i){
-            s[i] = Snapshot(t, initial_settings[i]);
-        }
-#if USE_SIMPLE_OPENMP
-#pragma omp parallel for num_threads(initial_settings.size())
-#endif
-        for(unsigned int i= 0; i<initial_settings.size(); ++i){
-            s[i].compile_snapshot_dag(*sched);
         }
         for(unsigned int i= 0; i<initial_settings.size(); ++i){
             expected_runtimes[i] = s[i].expected_runtime();
@@ -176,6 +204,7 @@ int main(int argc, char** argv){
             }
         }
         cout << endl;
+        // clean up
 #if USE_CANONICAL_SNAPSHOT
         Snapshot::clear_pool();
 #endif
@@ -193,7 +222,6 @@ int main(int argc, char** argv){
         }
         expected_runtime /= (myfloat)initial_settings.size();
         cout << "Total expected run time: " << expected_runtime << endl;
-        delete(sched);
     }
     catch(exception& e){
         cout << "Something went wrong:" << endl
