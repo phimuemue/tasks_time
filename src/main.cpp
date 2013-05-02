@@ -15,6 +15,7 @@
 #include "alltrees.h"
 
 using namespace std;
+namespace po = boost::program_options;
 
 void randomEdges(int n, vector<pair<Task,Task>>& target){
     mt19937 rng;
@@ -55,66 +56,82 @@ void read_raw_tree_from_file(string path, vector<pair<Task,Task>>& target){
 
 int NUM_PROCESSORS = 2;
 
+int read_variables_map_from_args(int argc, 
+        char** argv, 
+        po::variables_map& vm){
+    po::options_description desc("Options");
+    desc.add_options()
+        // help message
+        ("help", "Print help message")
+        // configurational things
+        ("processors,p", po::value<int>(), "Number of processors to use.")
+        // output stuff
+        ("tikz", po::value<string>(), "Generate TikZ-Output of snapshot(s) in file.")
+        ("dagview", po::value<string>(), "Generate output for DAG viewer in file.")
+        // input stuff
+        ("direct", po::value<string>(), "Direct input of tree (sequence of edge targets from sequentially numbered tasks).")
+        ("input", po::value<string>(), "Name of input file.")
+        ("random", po::value<int>(), "Number of tasks in a random graph. Only used if no input file is given.")
+        ;
+    try{
+        po::store(po::parse_command_line(argc, argv, desc), vm);
+
+        if(vm.count("help")){
+            cout << "Help." << endl
+                << desc << endl;
+            return 0;
+        }
+    }
+    catch(po::error& e){
+        cout << "Command line options not recognized." << endl
+            << e.what() << endl
+            << desc << endl;
+        return 1;
+    }
+    return 0;
+}
+
+Intree generate_tree(po::variables_map vm){
+    vector<pair<Task,Task>> edges;
+    if (vm.count("direct")){
+        tree_from_string(vm["direct"].as<string>(), edges);
+    }
+    else if(vm.count("input")){
+        read_raw_tree_from_file(vm["input"].as<string>(), edges);
+    }
+    else{
+        int num_threads = (vm.count("random") ? vm["random"].as<int>() : NUM_THREADS_DEFAULT);
+        randomEdges(num_threads, edges);
+    }
+    return Intree(edges);
+}
+
 // TODO: rule-of-three everywhere!
 int main(int argc, char** argv){
+#if USE_SIMPLE_OPENMP // openmp settings - useful?
+    omp_set_nested(1);
+#endif
+
     print_version();
 
-    // command line parsing stuff
     try{
-        namespace po = boost::program_options;
-        po::options_description desc("Options");
-        desc.add_options()
-            // help message
-            ("help", "Print help message")
-            // configurational things
-            ("processors,p", po::value<int>(), "Number of processors to use.")
-            // output stuff
-            ("tikz", po::value<string>(), "Generate TikZ-Output of snapshot(s) in file.")
-            ("dagview", po::value<string>(), "Generate output for DAG viewer in file.")
-            // input stuff
-            ("direct", po::value<string>(), "Direct input of tree (sequence of edge targets from sequentially numbered tasks).")
-            ("input", po::value<string>(), "Name of input file.")
-            ("random", po::value<int>(), "Number of tasks in a random graph. Only used if no input file is given.")
-            ;
+        // command line parsing stuff
         po::variables_map vm;
-        try{
-            po::store(po::parse_command_line(argc, argv, desc), vm);
-
-            if(vm.count("help")){
-                cout << "Help." << endl
-                     << desc << endl;
-                return 0;
-            }
-        }
-        catch(po::error& e){
-            cout << "Command line options not recognized." << endl
-                 << e.what() << endl
-                 << desc << endl;
+        if(read_variables_map_from_args(argc, argv, vm)!=0){
+            cout << "Error reading args" << endl;
             return 1;
         }
 
-#if USE_SIMPLE_OPENMP
-        // openmp settings - useful?
-        omp_set_nested(1);
-#endif
-
-        // generate tree
-        vector<pair<Task,Task>> edges;
-        if (vm.count("direct")){
-            tree_from_string(vm["direct"].as<string>(), edges);
-        }
-        else if(vm.count("input")){
-            read_raw_tree_from_file(vm["input"].as<string>(), edges);
-        }
-        else{
-            int num_threads = (vm.count("random") ? vm["random"].as<int>() : NUM_THREADS_DEFAULT);
-            randomEdges(num_threads, edges);
-        }
-        Intree t(edges);
+        // read tree and print it for user
+        Intree t = generate_tree(vm);
         cout << "Raw form:\t" << t << endl;
         map<task_id, task_id> isomorphism;
         tree_id tid = 0;
-        cout << "Normalized:  \t" << Intree::canonical_intree(t, vector<task_id>(), isomorphism, tid) << endl;
+        cout << "Normalized:  \t" 
+             << Intree::canonical_intree(t, 
+                     vector<task_id>(),
+                     isomorphism, tid) 
+             << endl;
 
         // generate all possible initial markings
         if(vm.count("processors")){
