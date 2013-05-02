@@ -3,9 +3,15 @@
 map<tree_id, map<vector<task_id>,Snapshot*>> Snapshot::pool;
 
 void Snapshot::clear_pool(){
+    // We have to ensure that we don't double-delete some pointers
+    // TODO: Why does it not work this way?
+    map<Snapshot*, bool> done;
     for(auto it=Snapshot::pool.begin(); it!=Snapshot::pool.end(); ++it){
         for(auto it2=it->second.begin(); it2!=it->second.end(); ++it2){
-            delete(it2->second);
+            if(done.find(it2->second)!=done.end()){
+                delete(it2->second);
+                done[it2->second] = true;
+            }
         }
     }
 }
