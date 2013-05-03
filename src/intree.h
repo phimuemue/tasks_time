@@ -40,6 +40,7 @@ class Intree {
         bool contains_task(task_id tid) const;
         const Task& get_task_by_id(task_id tid) const;
         void get_tasks(set<task_id>& result) const;
+        void rename_leaf(task_id original, task_id now);
 
         int get_level(const Task& t) const;
         int get_level(const task_id t) const;

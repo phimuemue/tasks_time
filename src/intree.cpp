@@ -21,10 +21,44 @@ Intree::Intree(vector<pair<Task, Task>>& edges){
     taskmap[0] = Task(0);
 }
 
-Intree Intree::canonical_intree(const Intree& t, 
+Intree Intree::canonical_intree(const Intree& _t, 
         const vector<task_id>& preferred,
         map<task_id, task_id>& isomorphism,
         tree_id& out){
+    Intree t(_t);
+    map<task_id, task_id> inner_iso_rev;
+    inner_iso_rev[0] = 0;
+    for(auto it=t.edges.begin(); it!=t.edges.end(); ++it){
+        inner_iso_rev[it->first] = it->first;
+    }
+    // make leafs minimal
+    vector<task_id> leaves;
+    t.get_leaves(leaves);
+    cout << "Tree: " << t << endl;
+    sort(leaves.begin(), leaves.end(),
+        [&](const task_id a, const task_id b) -> bool {
+            if(t.get_edge_from(a).second == t.get_edge_from(b).second)
+                return a < b;
+            return t.get_edge_from(a).second < t.get_edge_from(b).second;
+        }
+    );
+    task_id max_tid = 0;
+    for(auto it=t.edges.begin(); it!=t.edges.end(); ++it){
+        max_tid = max(max_tid, it->first);
+    }
+    max_tid++;
+    for(auto it=leaves.begin(); it!=leaves.end(); ++it){
+        cout << "Leaf: " << *it << ", ";
+        ++max_tid;
+        t.rename_leaf(*it, max_tid);
+        inner_iso_rev[max_tid] = *it;
+    }
+    cout << "MAX: " << max_tid;
+    cout << endl;
+    cout << "Inner iso: " << endl;
+    for(auto it=inner_iso_rev.begin(); it!=inner_iso_rev.end(); ++it){
+        cout << it->first << " -> " << it->second << endl;
+    }
     vector<vector<task_id>> tasks_by_level(t.taskmap.size());
     // store tasks grouped by level
     for(auto it=t.taskmap.begin(); it!=t.taskmap.end(); ++it){
@@ -46,8 +80,12 @@ Intree Intree::canonical_intree(const Intree& t,
                         return true;
                     }
                     if(canonical_names[a] == canonical_names[b]){
-                        auto dist_a = distance(preferred.begin(), find(preferred.begin(), preferred.end(), a));
-                        auto dist_b = distance(preferred.begin(), find(preferred.begin(), preferred.end(), b));
+                        auto dist_a = distance(preferred.begin(), 
+                            find(preferred.begin(), preferred.end(), a));
+                        auto dist_b = distance(preferred.begin(),
+                            find(preferred.begin(), preferred.end(), b));
+                        if (dist_a == dist_b)
+                            return a < b;
                         return dist_a < dist_b;
                     }
                     return canonical_names[a] > canonical_names[b];
@@ -77,8 +115,12 @@ Intree Intree::canonical_intree(const Intree& t,
                     return true;
                 }
                 if(canonical_names[a] == canonical_names[b]){
-                    auto dist_a = distance(preferred.begin(), find(preferred.begin(), preferred.end(), a));
-                    auto dist_b = distance(preferred.begin(), find(preferred.begin(), preferred.end(), b));
+                    auto dist_a = distance(preferred.begin(), 
+                        find(preferred.begin(), preferred.end(), a));
+                    auto dist_b = distance(preferred.begin(),
+                        find(preferred.begin(), preferred.end(), b));
+                    if (dist_a == dist_b)
+                        return a < b;
                     return dist_a < dist_b;
                 }
                 return canonical_names[a] > canonical_names[b];
@@ -102,8 +144,12 @@ Intree Intree::canonical_intree(const Intree& t,
                 else if(ca.size() > cb.size())
                     return true;
                 if(ca==cb){
-                    auto dist_a = distance(preferred.begin(), find(preferred.begin(), preferred.end(), a));
-                    auto dist_b = distance(preferred.begin(), find(preferred.begin(), preferred.end(), b));
+                    auto dist_a = distance(preferred.begin(),
+                        find(preferred.begin(), preferred.end(), a));
+                    auto dist_b = distance(preferred.begin(),
+                        find(preferred.begin(), preferred.end(), b));
+                    if (dist_a == dist_b)
+                        return a < b;
                     return dist_a < dist_b;
                 }
                 return ca > cb;
@@ -116,12 +162,17 @@ Intree Intree::canonical_intree(const Intree& t,
     task_id consecutive_num = 0;
     for(auto it = tasks_by_level.begin(); it!=tasks_by_level.end(); ++it){
         for(auto tit = it->begin(); tit!=it->end(); ++tit){
-            isomorphism[*tit] = consecutive_num;
+            //isomorphism[*tit] = consecutive_num;
+            isomorphism[inner_iso_rev[*tit]] = consecutive_num;
             consecutive_num++;
         }
     }
+    // cout << "Isomorphism in canonical_intree:" << endl;
+    // for(auto it=isomorphism.begin(); it!=isomorphism.end(); ++it){
+    //     cout << it->first << " -> " << it->second << endl;
+    // }
     vector<pair<Task, Task>> edges;
-    for(auto it=t.edges.begin(); it!=t.edges.end(); ++it){
+    for(auto it=_t.edges.begin(); it!=_t.edges.end(); ++it){
         edges.push_back(pair<Task,Task>(Task(isomorphism[it->first]),Task(isomorphism[it->second])));
     }
     // TODO: Expand to more than 64 bits!
@@ -135,6 +186,12 @@ Intree Intree::canonical_intree(const Intree& t,
         out <<= 1;
         out = out | (canonical_names[0].test(i) ? 1ul : 0ul);
     }
+    cout << "Original: " << _t << endl;
+    cout << "iso: " << endl;
+    for(auto it=isomorphism.begin(); it!=isomorphism.end(); ++it){
+        cout << it->first << " -> " << it->second << endl;
+    }
+    cout << "Result:   " << Intree(edges) << endl;
     return Intree(edges);
 }
 
@@ -171,6 +228,19 @@ void Intree::get_tasks(set<task_id>& result) const {
     for(auto it=taskmap.begin(); it!=taskmap.end(); ++it){
         result.insert(it->first);
     }
+}
+
+void Intree::rename_leaf(task_id original, task_id now){
+    assert(!contains_task(now));
+    assert(taskmap.find(original)!=taskmap.end());
+    // stuff in taskmap
+    auto tmp = taskmap[original];
+    taskmap.erase(taskmap.find(original));
+    taskmap[now] = tmp;
+    // stuff in edges
+    auto tmp2 = edges[original];
+    edges.erase(edges.find(original));
+    edges[now] = tmp2;
 }
 
 Distribution Intree::get_task_distribution(const task_id t) const {
