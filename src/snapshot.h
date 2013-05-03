@@ -27,7 +27,7 @@ class Snapshot {
         vector<myfloat> probabilities;
         string tikz_string_internal(const task_id,
                 map<task_id,vector<task_id>>&, bool = true) const;
-        static map<tree_id, map<vector<task_id>,Snapshot*>> pool;
+        static map<pair<tree_id,vector<task_id>>, Snapshot*> pool;
     public:
         Snapshot();
         Snapshot(const Snapshot& s);

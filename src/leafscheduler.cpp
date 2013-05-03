@@ -1,8 +1,15 @@
 #include "leafscheduler.h"
 
 void Leafscheduler::get_next_tasks(const Intree& t, 
-        const vector<task_id>& marked,
+        const vector<task_id>& _marked,
         vector<pair<task_id,myfloat>>& target) const {
+    vector<task_id> marked(_marked);
+    marked.erase(remove_if(marked.begin(), marked.end(),
+        [&t](const task_id a) -> bool {
+            return !t.contains_task(a);
+        }), 
+        marked.end()
+    );
     set<task_id> tasks;
     t.get_tasks(tasks);
     for(auto it = tasks.begin(); it != tasks.end();){

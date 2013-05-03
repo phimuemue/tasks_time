@@ -291,6 +291,7 @@ void Intree::remove_task(task_id t){
     // only tasks with no predecessor can be removed
     if(get_in_degree(t) != 0){
         cout << "Attempted to remove task with predecessor." << endl;
+        cout << *this << " - " << t << endl;
         throw 1;
     }
     // remove from taskmap

@@ -106,7 +106,7 @@ Intree generate_tree(po::variables_map vm){
     return Intree(edges);
 }
 
-void create_snapshot_dags(const po::variables_map vm,
+void create_snapshot_dags(const po::variables_map& vm,
         Intree& t,
         const Scheduler* sched,
         vector<vector<task_id>>& initial_settings,
@@ -116,8 +116,6 @@ void create_snapshot_dags(const po::variables_map vm,
     if(vm.count("processors")){
         NUM_PROCESSORS = vm["processors"].as<int>();
     }
-    //Scheduler* sched = new HLFscheduler();
-    //Scheduler* sched = new HLFNFCscheduler();
     vector<task_id> marked;
     sched->get_initial_schedule(t, NUM_PROCESSORS, initial_settings);
 
@@ -137,6 +135,38 @@ void create_snapshot_dags(const po::variables_map vm,
     }
 }
 
+void generate_output(const po::variables_map& vm,
+        vector<Snapshot>& s,
+        const vector<vector<task_id>>& initial_settings
+        ){ // output stuff
+    ofstream tikz_output;
+    ofstream dagview_output;
+    if(vm.count("tikz")){
+        tikz_output.open(vm["tikz"].as<string>());
+    }
+    if(vm.count("dagview")){
+        dagview_output.open(vm["dagview"].as<string>());
+    }
+    for(unsigned int i= 0; i<initial_settings.size(); ++i){
+        {
+            if(vm.count("tikz")){
+                tikz_output << s[i].tikz_string_dag() << endl;
+            }
+            if(vm.count("dagview")){
+                dagview_output << s[i].dag_view_string() << endl;
+            }
+        }
+    }
+    cout << endl;
+    // clean up
+    if(vm.count("tikz")){
+        tikz_output.close();
+    }
+    if(vm.count("dagview")){
+        dagview_output.close();
+    }
+}
+
 // TODO: rule-of-three everywhere!
 int main(int argc, char** argv){
 #if USE_SIMPLE_OPENMP // openmp settings - useful?
@@ -144,6 +174,25 @@ int main(int argc, char** argv){
 #endif
 
     print_version();
+
+    // vector<pair<Task, Task>> e1;
+    // vector<pair<Task, Task>> e2;
+    // 
+    // tree_from_string("0 0 0 1 2 1 2 3", e1);
+    // tree_from_string("0 0 0 1 1 2 2 3", e2);
+    // Intree t1(e1);
+    // Intree t2(e2);
+    // cout << t1 << endl;
+    // cout << t2 << endl;
+    // tree_id out;
+    // vector<task_id> pref;
+    // map<task_id,task_id> isom;
+    // Intree t1n = Intree::canonical_intree(t1, pref, isom, out);
+    // Intree t2n = Intree::canonical_intree(t2, pref, isom, out);
+    // cout << t1n << endl;
+    // cout << t2n << endl;
+    // 
+    // return 1;
 
     try{
         // command line parsing stuff
@@ -175,7 +224,6 @@ int main(int argc, char** argv){
             new HLFNFCscheduler(),
         };
 
-
         create_snapshot_dags(vm,
                 t,
                 scheds[0],
@@ -183,37 +231,10 @@ int main(int argc, char** argv){
                 s,
                 expected_runtimes);
 
-        // output stuff
-        ofstream tikz_output;
-        ofstream dagview_output;
-        if(vm.count("tikz")){
-            tikz_output.open(vm["tikz"].as<string>());
-        }
-        if(vm.count("dagview")){
-            dagview_output.open(vm["dagview"].as<string>());
-        }
         for(unsigned int i= 0; i<initial_settings.size(); ++i){
             expected_runtimes[i] = s[i].expected_runtime();
-            {
-                if(vm.count("tikz")){
-                    tikz_output << s[i].tikz_string_dag() << endl;
-                }
-                if(vm.count("dagview")){
-                    dagview_output << s[i].dag_view_string() << endl;
-                }
-            }
         }
-        cout << endl;
-        // clean up
-#if USE_CANONICAL_SNAPSHOT
-        Snapshot::clear_pool();
-#endif
-        if(vm.count("tikz")){
-            tikz_output.close();
-        }
-        if(vm.count("dagview")){
-            dagview_output.close();
-        }
+
         myfloat expected_runtime = 0;
         for(unsigned int i= 0; i<initial_settings.size(); ++i){
             cout << s[i].markedstring() << ":\t";
@@ -222,6 +243,12 @@ int main(int argc, char** argv){
         }
         expected_runtime /= (myfloat)initial_settings.size();
         cout << "Total expected run time: " << expected_runtime << endl;
+
+        // output stuff
+        generate_output(vm, s, initial_settings);
+#if USE_CANONICAL_SNAPSHOT
+        Snapshot::clear_pool();
+#endif
     }
     catch(exception& e){
         cout << "Something went wrong:" << endl
