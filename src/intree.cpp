@@ -34,7 +34,7 @@ Intree Intree::canonical_intree(const Intree& _t,
     // make leafs minimal
     vector<task_id> leaves;
     t.get_leaves(leaves);
-    cout << "Tree: " << t << endl;
+    // cout << "Tree: " << t << endl;
     sort(leaves.begin(), leaves.end(),
         [&](const task_id a, const task_id b) -> bool {
             if(t.get_edge_from(a).second == t.get_edge_from(b).second)
@@ -48,17 +48,17 @@ Intree Intree::canonical_intree(const Intree& _t,
     }
     max_tid++;
     for(auto it=leaves.begin(); it!=leaves.end(); ++it){
-        cout << "Leaf: " << *it << ", ";
+        // cout << "Leaf: " << *it << ", ";
         ++max_tid;
         t.rename_leaf(*it, max_tid);
         inner_iso_rev[max_tid] = *it;
     }
-    cout << "MAX: " << max_tid;
-    cout << endl;
-    cout << "Inner iso: " << endl;
-    for(auto it=inner_iso_rev.begin(); it!=inner_iso_rev.end(); ++it){
-        cout << it->first << " -> " << it->second << endl;
-    }
+    // cout << "MAX: " << max_tid;
+    // cout << endl;
+    // cout << "Inner iso: " << endl;
+    // for(auto it=inner_iso_rev.begin(); it!=inner_iso_rev.end(); ++it){
+    //     cout << it->first << " -> " << it->second << endl;
+    // }
     vector<vector<task_id>> tasks_by_level(t.taskmap.size());
     // store tasks grouped by level
     for(auto it=t.taskmap.begin(); it!=t.taskmap.end(); ++it){
@@ -186,12 +186,12 @@ Intree Intree::canonical_intree(const Intree& _t,
         out <<= 1;
         out = out | (canonical_names[0].test(i) ? 1ul : 0ul);
     }
-    cout << "Original: " << _t << endl;
-    cout << "iso: " << endl;
-    for(auto it=isomorphism.begin(); it!=isomorphism.end(); ++it){
-        cout << it->first << " -> " << it->second << endl;
-    }
-    cout << "Result:   " << Intree(edges) << endl;
+    // cout << "Original: " << _t << endl;
+    // cout << "iso: " << endl;
+    // for(auto it=isomorphism.begin(); it!=isomorphism.end(); ++it){
+    //     cout << it->first << " -> " << it->second << endl;
+    // }
+    // cout << "Result:   " << Intree(edges) << endl;
     return Intree(edges);
 }
 
