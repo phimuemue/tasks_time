@@ -60,11 +60,13 @@ int read_variables_map_from_args(int argc,
         char** argv, 
         po::variables_map& vm){
     po::options_description desc("Options");
+    string scheduler_default = "hlf";
     desc.add_options()
         // help message
         ("help", "Print help message")
         // configurational things
         ("processors,p", po::value<int>(), "Number of processors to use.")
+        ("scheduler,s", po::value<string>()->default_value(scheduler_default), "Scheduler type to use.")
         // output stuff
         ("tikz", po::value<string>(), "Generate TikZ-Output of snapshot(s) in file.")
         ("dagview", po::value<string>(), "Generate output for DAG viewer in file.")
@@ -226,15 +228,16 @@ int main(int argc, char** argv){
         vector<Snapshot> s;
         vector<myfloat> expected_runtimes;
 
-        vector<Scheduler*> scheds = 
+        map<string, Scheduler*> scheds = 
         {
-            new HLFscheduler(),
-            new HLFNFCscheduler(),
+            // {"leaf", new Leafscheduler()}, 
+            {"hlf", new HLFscheduler()},
+            {"hlfnfc", new HLFNFCscheduler()},
         };
 
         create_snapshot_dags(vm,
                 t,
-                scheds[0],
+                scheds[vm["scheduler"].as<string>()],
                 initial_settings,
                 s,
                 expected_runtimes);
