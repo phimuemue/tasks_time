@@ -38,6 +38,10 @@ Snapshot::Snapshot(Intree& t, vector<task_id> m) :
         t.get_predecessors(*it, tmp);
         if(tmp.size()!=0){
             cout << "Trying to construct snapshot with non-leaf marked tasks." << endl;
+            cout << t << endl;
+            for(auto it=m.begin(); it!=m.end(); ++it){
+                cout << *it << endl;
+            }
             throw 1;
         }
     }
@@ -55,6 +59,7 @@ Snapshot::~Snapshot(){
 
 Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
     //vector<task_id> m(_m);
+    vector<task_id> original_m(m);
 #if USE_SIMPLE_OPENMP
     cout << "Warning! Using openmp with canonical snapshots!" << endl;
 #endif
@@ -109,9 +114,14 @@ Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
         cout << *it << ", ";
     }
     cout << endl;
+    cout << "original_m: " << endl;
+    for(auto it=original_m.begin(); it!=original_m.end(); ++it){
+        cout << *it << " -> " << isomorphism[*it] << ", ";
+    }
+    cout << endl;
     // construct newmarked
     vector<task_id> newmarked;
-    for(auto it=m.begin(); it!=m.end(); ++it){
+    for(auto it=original_m.begin(); it!=original_m.end(); ++it){
         cout << "pushing " << isomorphism[*it] << "(from " << *it << ")" << endl;
         newmarked.push_back(isomorphism[*it]);
     }
