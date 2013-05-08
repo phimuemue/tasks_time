@@ -99,7 +99,7 @@ int read_variables_map_from_args(int argc,
         if(vm.count("help")){
             cout << "Help." << endl
                 << desc << endl;
-            return 0;
+            return 1;
         }
     }
     catch(po::error& e){
@@ -143,13 +143,13 @@ void create_snapshot_dags(const po::variables_map& vm,
 
     //Snapshot s[initial_settings.size()];
     s = vector<Snapshot>(initial_settings.size());
-    cout << "Compiling snapshot DAGs." << endl;
     for(unsigned int i= 0; i<initial_settings.size(); ++i){
         s[i] = Snapshot(t, initial_settings[i]);
     }
 #if USE_SIMPLE_OPENMP
 #pragma omp parallel for num_threads(initial_settings.size())
 #endif
+    cout << "Compiling snapshot DAGs." << endl;
     for(unsigned int i= 0; i<initial_settings.size(); ++i){
         s[i].compile_snapshot_dag(*sched);
     }
@@ -226,7 +226,6 @@ int main(int argc, char** argv){
         // command line parsing stuff
         po::variables_map vm;
         if(read_variables_map_from_args(argc, argv, vm)!=0){
-            cout << "Error reading args" << endl;
             return 1;
         }
 
