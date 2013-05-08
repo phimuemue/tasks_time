@@ -73,11 +73,6 @@ void HLFscheduler::get_next_tasks(const Intree& t,
         }), 
         marked.end()
     );
-    cout << "Next tasks for " << t << endl;
-    for(auto it=marked.begin(); it!=marked.end(); ++it){
-        cout << *it << ", ";
-    }
-    cout << endl;
     vector<pair<task_id, myfloat>> tmp;
     Leafscheduler::get_next_tasks(t, marked, tmp);
     int maxlevel = 0; 
@@ -101,8 +96,4 @@ void HLFscheduler::get_next_tasks(const Intree& t,
     for(auto it=tmp.begin(); it!=tmp.end(); ++it){
         target.push_back(*it);
     }
-    for(auto it=target.begin(); it!=target.end(); ++it){
-        cout << it->first << "(" << it->second << ")" << ", ";
-    }
-    cout << endl;
 }

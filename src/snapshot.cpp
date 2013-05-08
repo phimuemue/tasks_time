@@ -58,23 +58,14 @@ Snapshot::~Snapshot(){
 }
 
 Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
-    //vector<task_id> m(_m);
     vector<task_id> original_m(m);
 #if USE_SIMPLE_OPENMP
     cout << "Warning! Using openmp with canonical snapshots!" << endl;
 #endif
-    cout << "Canonical snapshot for " << t << " | ";
-    for(auto it=m.begin(); it!=m.end(); ++it){
-        cout << *it << ", ";
-    }
-    cout << endl;
 
     map<task_id, task_id> isomorphism;
     tree_id tid;
     Intree tmp = Intree::canonical_intree(t, m, isomorphism, tid);
-    for(auto it=isomorphism.begin(); it!=isomorphism.end(); ++it){
-        cout << it->first << " -> " << it->second << endl;
-    }
 
     // adjust m properly (i.e. always "lowest possible task" for 'iso-snap')
     transform(m.begin(), m.end(), m.begin(),
@@ -90,7 +81,6 @@ Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
     );
     map<task_id, unsigned int> counts;
     for(auto it=m.begin(); it!=m.end(); ++it){
-        cout << "Test: " << *it << endl;
         if(*it!=0){
             counts[tmp.get_edge_from(*it).second.get_id()]++;
         }
@@ -112,13 +102,10 @@ Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
              predecessor_collection[it->first].end());
     }
     m.clear();
-    cout << "Working on 'counts'" << endl;
     for(auto it=counts.begin(); it!=counts.end(); ++it){
-        cout << it->first << ", " << it->second << endl;
         for(auto ii=predecessor_collection[it->first].begin();
             ii != predecessor_collection[it->first].end();
             ++ii){
-            cout << *ii << endl;
         }
         assert(predecessor_collection[it->first].size() >= it->second);
         for(unsigned int i=0; i<it->second; ++i){
@@ -126,40 +113,21 @@ Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
         }
     }
 
-    cout << "New m: " << endl;
-    for(auto it=m.begin(); it!=m.end(); ++it){
-        cout << *it << ", ";
-    }
-    cout << endl;
-    cout << "original_m: " << endl;
-    for(auto it=original_m.begin(); it!=original_m.end(); ++it){
-        cout << *it << " -> " << isomorphism[*it] << ", ";
-    }
-    cout << endl;
-
     // construct newmarked
     vector<task_id> newmarked;
     for(auto it=m.begin(); it!=m.end(); ++it){
-        cout << "pushing " << isomorphism[*it] << "(from " << *it << ")" << endl;
         newmarked.push_back(*it);
     }
     sort(newmarked.begin(), newmarked.end());
-    cout << "looking for " << tmp << "(" << tid << ") | ";
-    for(auto it=newmarked.begin(); it!=newmarked.end(); ++it){
-        cout << *it << ", ";
-    }
-    cout << endl;
     auto find_key = pair<tree_id,vector<task_id>>(tid, newmarked);
     auto correct_pool = 
         Snapshot::pool.find(find_key);
     if(correct_pool == Snapshot::pool.end()){
         Snapshot::pool[find_key] = new Snapshot(tmp, newmarked);
     }
-    cout << *(Snapshot::pool.find(find_key)->second) << endl;
     isomorphism.clear();
     tid = 0;
     Intree::canonical_intree(Snapshot::pool.find(find_key)->second->intree, newmarked, isomorphism, tid);
-    cout << tid << endl;
     return Snapshot::pool.find(find_key)->second;
 }
 
@@ -176,7 +144,6 @@ void Snapshot::get_successors(const Scheduler& scheduler){
     assert(finish_probs.size()==marked.size());
     // then, for each finished threads, compute all possible successors
     auto finish_prob_it = finish_probs.begin();
-    cout << "Successors of " << *this << endl;
     for(auto it = marked.begin(); it!=marked.end(); ++it, ++finish_prob_it){
 #if SIMPLE_ISOMORPHISM_CHECK
         if(*finish_prob_it == 0)
@@ -225,10 +192,6 @@ void Snapshot::get_successors(const Scheduler& scheduler){
             successor_probs.push_back(*finish_prob_it);
         }
     }
-    cout << "RAW_SUCCESSORS:" << endl;
-    for(auto it=successors.begin(); it!=successors.end(); ++it){
-        cout << **it << endl;
-    }
     // remove duplicate successors
     assert(successors.size() == successor_probs.size());
     for(unsigned int i=0; i<successors.size(); ++i){
@@ -250,10 +213,6 @@ void Snapshot::get_successors(const Scheduler& scheduler){
             return a == (myfloat)0;
         }
     ), successor_probs.end());
-    cout << "Normalized successors:" << endl;
-    for(auto it=successors.begin(); it!=successors.end(); ++it){
-        cout << **it << endl;
-    }
 }
 
 void Snapshot::compile_snapshot_dag(const Scheduler& scheduler){
