@@ -75,15 +75,16 @@ Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
     for(auto it=isomorphism.begin(); it!=isomorphism.end(); ++it){
         cout << it->first << " -> " << it->second << endl;
     }
-    // adjust m properly
+
+    // adjust m properly (i.e. always "lowest possible task" for 'iso-snap')
     transform(m.begin(), m.end(), m.begin(),
         [&](const task_id a) -> task_id {
             return isomorphism[a];
         }
     );
     m.erase(remove_if(m.begin(), m.end(),
-        [&t](const task_id a) -> bool {
-            return !t.contains_task(a);
+        [&tmp](const task_id a) -> bool {
+            return !tmp.contains_task(a);
         }), 
         m.end()
     );
@@ -91,24 +92,40 @@ Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
     for(auto it=m.begin(); it!=m.end(); ++it){
         cout << "Test: " << *it << endl;
         if(*it!=0){
-            if(counts.find(t.get_edge_from(*it).second.get_id())==counts.end()){
-                counts[t.get_edge_from(*it).second.get_id()] = 0;
-            }
-            counts[t.get_edge_from(*it).second.get_id()]++;
+            counts[tmp.get_edge_from(*it).second.get_id()]++;
         }
     }
     map<task_id, vector<task_id>> predecessor_collection;
     for(auto it=counts.begin(); it!=counts.end(); ++it){
-        t.get_predecessors(it->first, predecessor_collection[it->first]);
+        tmp.get_predecessors(it->first, predecessor_collection[it->first]);
+        // remove non-leaf tasks from predecessors
+        predecessor_collection[it->first].erase(
+            remove_if(predecessor_collection[it->first].begin(),
+                predecessor_collection[it->first].end(),
+                [&tmp](const task_id a) -> bool {
+                    return !tmp.is_leaf(a);
+                }
+            )
+            , predecessor_collection[it->first].end()
+        );
         sort(predecessor_collection[it->first].begin(),
              predecessor_collection[it->first].end());
     }
     m.clear();
+    cout << "Working on 'counts'" << endl;
     for(auto it=counts.begin(); it!=counts.end(); ++it){
+        cout << it->first << ", " << it->second << endl;
+        for(auto ii=predecessor_collection[it->first].begin();
+            ii != predecessor_collection[it->first].end();
+            ++ii){
+            cout << *ii << endl;
+        }
+        assert(predecessor_collection[it->first].size() >= it->second);
         for(unsigned int i=0; i<it->second; ++i){
             m.push_back(predecessor_collection[it->first][i]);
         }
     }
+
     cout << "New m: " << endl;
     for(auto it=m.begin(); it!=m.end(); ++it){
         cout << *it << ", ";
@@ -119,11 +136,12 @@ Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
         cout << *it << " -> " << isomorphism[*it] << ", ";
     }
     cout << endl;
+
     // construct newmarked
     vector<task_id> newmarked;
-    for(auto it=original_m.begin(); it!=original_m.end(); ++it){
+    for(auto it=m.begin(); it!=m.end(); ++it){
         cout << "pushing " << isomorphism[*it] << "(from " << *it << ")" << endl;
-        newmarked.push_back(isomorphism[*it]);
+        newmarked.push_back(*it);
     }
     sort(newmarked.begin(), newmarked.end());
     cout << "looking for " << tmp << "(" << tid << ") | ";

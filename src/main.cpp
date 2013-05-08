@@ -182,8 +182,6 @@ int main(int argc, char** argv){
     // tree_from_string("0 0 0 1 1 2 2 3", e2);
     // Intree t1(e1);
     // Intree t2(e2);
-    // cout << t1 << endl;
-    // cout << t2 << endl;
     // tree_id out;
     // vector<task_id> pref;
     // map<task_id,task_id> isom;
@@ -191,6 +189,16 @@ int main(int argc, char** argv){
     // Intree t2n = Intree::canonical_intree(t2, pref, isom, out);
     // cout << t1n << endl;
     // cout << t2n << endl;
+    // 
+    // vector<task_id> preds;
+    // vector<pair<Task, Task>> edg;
+    // randomEdges(5, edg);
+    // t1n = Intree(edg);
+    // cout << t1n << endl;
+    // t1n.get_predecessors(1, preds);
+    // for(auto it=preds.begin(); it!=preds.end(); ++it){
+    //     cout << *it << endl;
+    // }
     // 
     // return 1;
 

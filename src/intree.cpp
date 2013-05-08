@@ -271,6 +271,10 @@ void Intree::get_leaves(vector<task_id>& target) const{
     }
 }
 
+bool Intree::is_leaf(const task_id t) const{
+    return get_in_degree(t)==0;
+}
+
 int Intree::get_level(const task_id t) const{
     int current = t;
     int result = 0;

@@ -48,6 +48,7 @@ class Intree {
         void get_predecessors(const Task& t, vector<task_id>& target) const;
         void get_predecessors(const task_id t, vector<task_id>& target) const;
         void get_leaves(vector<task_id>& target) const;
+        bool is_leaf(const task_id t) const;
 
         Distribution get_task_distribution(const task_id t) const;
         void remove_task(Task& t);
