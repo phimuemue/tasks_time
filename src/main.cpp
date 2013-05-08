@@ -17,6 +17,12 @@
 using namespace std;
 namespace po = boost::program_options;
 
+#ifndef NUM_THREADS_DEFAULT
+#define NUM_THREADS_DEFAULT 5
+#endif
+
+int NUM_PROCESSORS = 2;
+
 void randomEdges(int n, vector<pair<Task,Task>>& target){
     mt19937 rng;
     rng.seed(time(NULL));
@@ -50,12 +56,6 @@ void read_raw_tree_from_file(string path, vector<pair<Task,Task>>& target){
     tree_from_string(raw, target);
 }
 
-#ifndef NUM_THREADS_DEFAULT
-#define NUM_THREADS_DEFAULT 5
-#endif
-
-int NUM_PROCESSORS = 2;
-
 int read_variables_map_from_args(int argc, 
         char** argv, 
         po::variables_map& vm){
@@ -66,19 +66,28 @@ int read_variables_map_from_args(int argc,
     // output options
     po::options_description output_options("Output");
     output_options.add_options()
-        ("tikz", po::value<string>(), "Generate TikZ-Output of snapshot(s) in file.")
-        ("dagview", po::value<string>(), "Generate output for DAG viewer in file.");
+        ("dagview", po::value<string>()->implicit_value(""), 
+         "Generate output for DAG viewer in file.")
+        ("tikz", po::value<string>()->implicit_value(""), 
+         "Generate TikZ-Output of snapshot(s) in file.");
     // input options
     po::options_description input_options("Input");
     input_options.add_options()
-        ("direct", po::value<string>(), "Direct input of tree (sequence of edge targets from sequentially numbered tasks).")
-        ("input", po::value<string>(), "Name of input file.")
-        ("random", po::value<int>(), "Number of tasks in a random graph. Only used if no input file is given.");
+        ("direct", po::value<string>(), 
+         "Direct input of tree (sequence of edge "
+         "targets from sequentially numbered tasks).")
+        ("input", po::value<string>(), 
+         "Name of input file.")
+        ("random", po::value<int>(), 
+         "Number of tasks in a random graph. Only used "
+         "if no input file is given.");
     // configurational things
     po::options_description config_options("Config");
     config_options.add_options()
-        ("processors,p", po::value<int>(), "Number of processors to use.")
-        ("scheduler,s", po::value<string>()->default_value("hlf"), "Scheduler type to use.");
+        ("processors,p", po::value<int>(), 
+         "Number of processors to use.")
+        ("scheduler,s", po::value<string>()->default_value("hlf"), 
+         "Scheduler type to use.");
     po::options_description desc("Options");
     desc.add(generic_options)
         .add(input_options)
@@ -87,7 +96,6 @@ int read_variables_map_from_args(int argc,
         ;
     try{
         po::store(po::parse_command_line(argc, argv, desc), vm);
-
         if(vm.count("help")){
             cout << "Help." << endl
                 << desc << endl;
@@ -150,31 +158,31 @@ void create_snapshot_dags(const po::variables_map& vm,
 void generate_output(const po::variables_map& vm,
         vector<Snapshot>& s,
         const vector<vector<task_id>>& initial_settings
-        ){ // output stuff
-    ofstream tikz_output;
-    ofstream dagview_output;
+        ){ 
     if(vm.count("tikz")){
-        tikz_output.open(vm["tikz"].as<string>());
-    }
-    if(vm.count("dagview")){
-        dagview_output.open(vm["dagview"].as<string>());
-    }
-    for(unsigned int i= 0; i<initial_settings.size(); ++i){
-        {
-            if(vm.count("tikz")){
-                tikz_output << s[i].tikz_string_dag() << endl;
-            }
-            if(vm.count("dagview")){
-                dagview_output << s[i].dag_view_string() << endl;
-            }
+        ofstream tikz_output;
+        string filename = vm["tikz"].as<string>();
+        if(filename==""){
+            filename = "default.tex";
         }
-    }
-    cout << endl;
-    // clean up
-    if(vm.count("tikz")){
+        cout << "Writing tikz to " << filename << endl;
+        tikz_output.open(filename);
+        for(unsigned int i= 0; i<initial_settings.size(); ++i){
+            tikz_output << s[i].tikz_string_dag() << endl;
+        }
         tikz_output.close();
     }
     if(vm.count("dagview")){
+        ofstream dagview_output;
+        string filename = vm["dagview"].as<string>();
+        if(filename==""){
+            filename = "dag.dagview";
+        }
+        cout << "Writing dagview to " << filename << endl;
+        dagview_output.open(filename);
+        for(unsigned int i= 0; i<initial_settings.size(); ++i){
+            dagview_output << s[i].dag_view_string() << endl;
+        }
         dagview_output.close();
     }
 }
