@@ -21,8 +21,6 @@ namespace po = boost::program_options;
 #define NUM_THREADS_DEFAULT 5
 #endif
 
-int NUM_PROCESSORS = 2;
-
 map<string, Scheduler*> scheds = 
 {
     // {"leaf", new Leafscheduler()}, 
@@ -91,7 +89,7 @@ int read_variables_map_from_args(int argc,
     // configurational things
     po::options_description config_options("Config");
     config_options.add_options()
-        ("processors,p", po::value<int>(), 
+        ("processors,p", po::value<int>()->default_value(2), 
          "Number of processors to use.")
         ("scheduler,s", po::value<string>()->default_value("hlf"), 
          "Scheduler type to use.");
@@ -140,11 +138,8 @@ void create_snapshot_dags(const po::variables_map& vm,
         vector<Snapshot>& s,
         vector<myfloat>& expected_runtimes){
     // generate all possible initial markings
-    if(vm.count("processors")){
-        NUM_PROCESSORS = vm["processors"].as<int>();
-    }
     vector<task_id> marked;
-    sched->get_initial_schedule(t, NUM_PROCESSORS, initial_settings);
+    sched->get_initial_schedule(t, vm["processors"].as<int>(), initial_settings);
 
     //Snapshot s[initial_settings.size()];
     s = vector<Snapshot>(initial_settings.size());
