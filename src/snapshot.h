@@ -34,6 +34,7 @@ class Snapshot {
         Snapshot(Intree& t);
         Snapshot(Intree& t, vector<task_id> m);
         ~Snapshot();
+        static Snapshot* canonical_snapshot(const Snapshot& s);
         static Snapshot* canonical_snapshot(Intree& t, vector<task_id> m);
 
         void get_successors(const Scheduler& scheduler);

@@ -26,7 +26,7 @@ class Intree {
     public:
         Intree();
         Intree(const Intree& t);
-        Intree(vector<pair<Task, Task>>& edges);
+        Intree(const vector<pair<Task, Task>>& edges);
         static Intree canonical_intree(const Intree& t, 
                                        const vector<task_id>& preferred,
                                        map<task_id, task_id>& isomorphism, 

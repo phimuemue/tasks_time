@@ -139,20 +139,33 @@ void create_snapshot_dags(const po::variables_map& vm,
     vector<task_id> marked;
     sched->get_initial_schedule(t, NUM_PROCESSORS, initial_settings);
 
-    expected_runtimes = vector<myfloat>(initial_settings.size());
-
     //Snapshot s[initial_settings.size()];
     s = vector<Snapshot>(initial_settings.size());
     for(unsigned int i= 0; i<initial_settings.size(); ++i){
         s[i] = Snapshot(t, initial_settings[i]);
     }
+#if USE_CANONICAL_SNAPSHOT
+    cout << "Warning: We are currently not considering "
+            "probabilities for initial settings!" << endl;
+    vector<Snapshot*> p_s;
+    for(auto it=s.begin(); it!=s.end(); ++it){
+        p_s.push_back(Snapshot::canonical_snapshot(*it));
+    }
+    sort(p_s.begin(), p_s.end());
+    p_s.erase(unique(p_s.begin(), p_s.end()), p_s.end());
+    s.clear();
+    for(auto it=p_s.begin(); it!=p_s.end(); ++it){
+        s.push_back(**it);
+    }
+#endif
 #if USE_SIMPLE_OPENMP
 #pragma omp parallel for num_threads(initial_settings.size())
 #endif
     cout << "Compiling snapshot DAGs." << endl;
-    for(unsigned int i= 0; i<initial_settings.size(); ++i){
+    for(unsigned int i= 0; i<s.size(); ++i){
         s[i].compile_snapshot_dag(*sched);
     }
+    expected_runtimes = vector<myfloat>(s.size());
 }
 
 void generate_output(const po::variables_map& vm,
@@ -167,7 +180,7 @@ void generate_output(const po::variables_map& vm,
         }
         cout << "Writing tikz to " << filename << endl;
         tikz_output.open(filename);
-        for(unsigned int i= 0; i<initial_settings.size(); ++i){
+        for(unsigned int i= 0; i<s.size(); ++i){
             tikz_output << s[i].tikz_string_dag() << endl;
         }
         tikz_output.close();
@@ -180,7 +193,7 @@ void generate_output(const po::variables_map& vm,
         }
         cout << "Writing dagview to " << filename << endl;
         dagview_output.open(filename);
-        for(unsigned int i= 0; i<initial_settings.size(); ++i){
+        for(unsigned int i= 0; i<s.size(); ++i){
             dagview_output << s[i].dag_view_string() << endl;
         }
         dagview_output.close();
@@ -259,18 +272,21 @@ int main(int argc, char** argv){
                 s,
                 expected_runtimes);
 
-        for(unsigned int i= 0; i<initial_settings.size(); ++i){
+        assert(expected_runtimes.size() == s.size());
+        for(unsigned int i= 0; i<s.size(); ++i){
             expected_runtimes[i] = s[i].expected_runtime();
         }
 
         myfloat expected_runtime = 0;
-        for(unsigned int i= 0; i<initial_settings.size(); ++i){
+        for(unsigned int i= 0; i<s.size(); ++i){
             cout << s[i].markedstring() << ":\t";
             cout << expected_runtimes[i] << endl;
             expected_runtime += expected_runtimes[i];
         }
-        expected_runtime /= (myfloat)initial_settings.size();
-        cout << "Total expected run time: " << expected_runtime << endl;
+        expected_runtime /= (myfloat)s.size();
+        cout << "Total expected run time: " << expected_runtime 
+            << " (Warning: This number does not consider probabilities"
+            << " of initial settings (this is wrong)!)" << endl;
 
         // output stuff
         generate_output(vm, s, initial_settings);

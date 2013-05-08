@@ -12,7 +12,7 @@ Intree::Intree(const Intree& t){
     }
 }
 
-Intree::Intree(vector<pair<Task, Task>>& edges){
+Intree::Intree(const vector<pair<Task, Task>>& edges){
     for(auto it=edges.begin(); it!=edges.end(); ++it){
         this->edges[it->first.get_id()] = it->second.get_id();
         taskmap[it->first.get_id()] = it->first;

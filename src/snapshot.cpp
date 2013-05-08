@@ -18,8 +18,10 @@ Snapshot::Snapshot(){
 
 }
 
-Snapshot::Snapshot(const Snapshot& s){
-    throw "Copy constructor for snapshot to be implemented";
+Snapshot::Snapshot(const Snapshot& s) :
+    marked(s.marked),
+    intree(s.intree)
+    {
 }
 
 Snapshot::Snapshot(Intree& t) :
@@ -55,6 +57,12 @@ Snapshot::~Snapshot(){
         delete(*it);
     }
 #endif
+}
+
+Snapshot* Snapshot::canonical_snapshot(const Snapshot& s){
+    Intree intreecopy(s.intree);
+    vector<task_id> mcopy(s.marked);
+    return canonical_snapshot(intreecopy, mcopy);
 }
 
 Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
