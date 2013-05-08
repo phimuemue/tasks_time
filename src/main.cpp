@@ -260,13 +260,6 @@ int main(int argc, char** argv){
         vector<Snapshot> s;
         vector<myfloat> expected_runtimes;
 
-        map<string, Scheduler*> scheds = 
-        {
-            // {"leaf", new Leafscheduler()}, 
-            {"hlf", new HLFscheduler()},
-            {"hlfnfc", new HLFNFCscheduler()},
-        };
-
         create_snapshot_dags(vm,
                 t,
                 scheds[vm["scheduler"].as<string>()],
@@ -274,11 +267,11 @@ int main(int argc, char** argv){
                 s,
                 expected_runtimes);
 
+        // computed expected runtimes
         assert(expected_runtimes.size() == s.size());
         for(unsigned int i= 0; i<s.size(); ++i){
             expected_runtimes[i] = s[i].expected_runtime();
         }
-
         myfloat expected_runtime = 0;
         for(unsigned int i= 0; i<s.size(); ++i){
             cout << s[i].markedstring() << ":\t";
