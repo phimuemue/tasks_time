@@ -59,21 +59,31 @@ int NUM_PROCESSORS = 2;
 int read_variables_map_from_args(int argc, 
         char** argv, 
         po::variables_map& vm){
-    po::options_description desc("Options");
-    string scheduler_default = "hlf";
-    desc.add_options()
-        // help message
-        ("help", "Print help message")
-        // configurational things
-        ("processors,p", po::value<int>(), "Number of processors to use.")
-        ("scheduler,s", po::value<string>()->default_value(scheduler_default), "Scheduler type to use.")
-        // output stuff
+    // generic options
+    po::options_description generic_options("Generic");
+    generic_options.add_options()
+        ("help", "Print help message");
+    // output options
+    po::options_description output_options("Output");
+    output_options.add_options()
         ("tikz", po::value<string>(), "Generate TikZ-Output of snapshot(s) in file.")
-        ("dagview", po::value<string>(), "Generate output for DAG viewer in file.")
-        // input stuff
+        ("dagview", po::value<string>(), "Generate output for DAG viewer in file.");
+    // input options
+    po::options_description input_options("Input");
+    input_options.add_options()
         ("direct", po::value<string>(), "Direct input of tree (sequence of edge targets from sequentially numbered tasks).")
         ("input", po::value<string>(), "Name of input file.")
-        ("random", po::value<int>(), "Number of tasks in a random graph. Only used if no input file is given.")
+        ("random", po::value<int>(), "Number of tasks in a random graph. Only used if no input file is given.");
+    // configurational things
+    po::options_description config_options("Config");
+    config_options.add_options()
+        ("processors,p", po::value<int>(), "Number of processors to use.")
+        ("scheduler,s", po::value<string>()->default_value("hlf"), "Scheduler type to use.");
+    po::options_description desc("Options");
+    desc.add(generic_options)
+        .add(input_options)
+        .add(output_options)
+        .add(config_options)
         ;
     try{
         po::store(po::parse_command_line(argc, argv, desc), vm);
