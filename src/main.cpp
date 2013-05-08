@@ -23,6 +23,13 @@ namespace po = boost::program_options;
 
 int NUM_PROCESSORS = 2;
 
+map<string, Scheduler*> scheds = 
+{
+    // {"leaf", new Leafscheduler()}, 
+    {"hlf", new HLFscheduler()},
+    {"hlfnfc", new HLFNFCscheduler()},
+};
+
 void randomEdges(int n, vector<pair<Task,Task>>& target){
     mt19937 rng;
     rng.seed(time(NULL));
@@ -286,7 +293,7 @@ int main(int argc, char** argv){
         expected_runtime /= (myfloat)s.size();
         cout << "Total expected run time: " << expected_runtime 
             << " (Warning: This number does not consider probabilities"
-            << " of initial settings (this is wrong)!)" << endl;
+            << " of initial settings (thus is wrong)!)" << endl;
 
         // output stuff
         generate_output(vm, s, initial_settings);
