@@ -384,7 +384,7 @@ string Snapshot::tikz_string_dag_compact(unsigned int task_count_limit,
     ostringstream output;
     map<Snapshot*, string> positions;
     map<unsigned int, float> level_count;
-    output << "\\begin{tikzpicture}" << endl;
+    output << "\\begin{tikzpicture}[scale=.2]" << endl;
     tikz_string_dag_compact_internal(output, positions, level_count, task_count_limit);
     output << "\\end{tikzpicture}" << endl;
     return output.str();
@@ -398,17 +398,17 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         unsigned int depth){
     if(names.find(this) == names.end()){
         // draw current snapshot at proper position
-        float width = 2;
-        float height = 4.;
+        float width = 9;
+        float height = 10.;
         names[this] = level_count[depth] + width;
         level_count[depth] += width;
         ostringstream tikz_nn;
-        tikz_nn << "(sn" << this << "W" << level_count[depth] << ")";
+        tikz_nn << "sn" << this << "W" << level_count[depth] << "";
         string tikz_node_name = tikz_nn.str();
         names[this] = tikz_node_name;
-        output << "\\node[draw=black] " << tikz_node_name
+        output << "\\node[draw=black] (" << tikz_node_name << ")"
                << " at (" << level_count[depth] << ", -" << depth*height << ") {";
-        output << "\\begin{tikzpicture}" << endl;
+        output << "\\begin{tikzpicture}[scale=.2]" << endl;
         output << tikz_string() << endl;
         output << "\\end{tikzpicture}" << endl;
         output << "};" << endl;
@@ -424,7 +424,8 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         // connect!
         auto pit = successor_probs.begin();
         for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
-            output << "\\draw " << tikz_node_name << "--" << names[*it] << ";" << endl;
+            output << "\\draw (" << tikz_node_name << ".south) -- (" 
+                << names[*it] << ".north);" << endl;
         }
     }
 }
