@@ -382,17 +382,51 @@ string Snapshot::tikz_string_dag_compact(unsigned int task_count_limit,
         bool first,
         unsigned int depth){
     ostringstream output;
-    map<tree_id, float> position;
-    tikz_string_dag_compact_internal(output, position, task_count_limit);
+    map<Snapshot*, string> positions;
+    map<unsigned int, float> level_count;
+    output << "\\begin{tikzpicture}" << endl;
+    tikz_string_dag_compact_internal(output, positions, level_count, task_count_limit);
+    output << "\\end{tikzpicture}" << endl;
     return output.str();
 }
 
 void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
-        map<tree_id, float>& position,
+        map<Snapshot*, string>& names,
+        map<unsigned int, float>& level_count,
         unsigned int task_count_limit,
         bool first,
         unsigned int depth){
-    
+    if(names.find(this) == names.end()){
+        // draw current snapshot at proper position
+        float width = 2;
+        float height = 4.;
+        names[this] = level_count[depth] + width;
+        level_count[depth] += width;
+        ostringstream tikz_nn;
+        tikz_nn << "(sn" << this << "W" << level_count[depth] << ")";
+        string tikz_node_name = tikz_nn.str();
+        names[this] = tikz_node_name;
+        output << "\\node[draw=black] " << tikz_node_name
+               << " at (" << level_count[depth] << ", -" << depth*height << ") {";
+        output << "\\begin{tikzpicture}" << endl;
+        output << tikz_string() << endl;
+        output << "\\end{tikzpicture}" << endl;
+        output << "};" << endl;
+        // draw successors
+        for(auto it=successors.begin(); it!=successors.end(); ++it){
+            (*it)->tikz_string_dag_compact_internal(output,
+                names,
+                level_count,
+                task_count_limit,
+                false,
+                depth+1);
+        }
+        // connect!
+        auto pit = successor_probs.begin();
+        for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
+            output << "\\draw " << tikz_node_name << "--" << names[*it] << ";" << endl;
+        }
+    }
 }
 
 ostream& operator<<(ostream& os, const Snapshot& s){

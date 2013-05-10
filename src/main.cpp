@@ -187,7 +187,9 @@ void generate_output(const po::variables_map& vm,
         cout << "Writing tikz to " << filename << endl;
         tikz_output.open(filename);
         for(unsigned int i= 0; i<s.size(); ++i){
-            tikz_output << s[i].tikz_string_dag(vm["tikzlimit"].as<unsigned int>()) << endl;
+            tikz_output 
+                << s[i].tikz_string_dag_compact(vm["tikzlimit"].as<unsigned int>()) 
+                << endl;
         }
         tikz_output.close();
     }

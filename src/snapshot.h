@@ -56,7 +56,8 @@ class Snapshot {
                 bool first=true,
                 unsigned int depth=1);
         void tikz_string_dag_compact_internal(ostringstream& output,
-                map<tree_id, float>& position,
+                map<Snapshot*, string>& names,
+                map<unsigned int, float>& levelcount,
                 unsigned int task_count_limit=0,
                 bool first=true,
                 unsigned int depth=1);
