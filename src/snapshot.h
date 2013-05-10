@@ -28,6 +28,9 @@ class Snapshot {
         string tikz_string_internal(const task_id,
                 map<task_id,vector<task_id>>&, bool = true) const;
         static map<pair<tree_id,vector<task_id>>, Snapshot*> pool;
+        void dag_view_string_internal(ostringstream& oss,
+                unsigned int depth=0,
+                myfloat probability=(myfloat)1);
     public:
         Snapshot();
         Snapshot(const Snapshot& s);

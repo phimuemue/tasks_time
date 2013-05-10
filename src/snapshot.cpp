@@ -252,8 +252,9 @@ myfloat Snapshot::expected_runtime(){
     return result;
 }
 
-string Snapshot::dag_view_string(unsigned int depth, myfloat probability){
-    stringstream output;
+void Snapshot::dag_view_string_internal(ostringstream& output,
+        unsigned int depth,
+        myfloat probability){
     for(unsigned int i=0; i<depth; ++i){
         output << " ";
     }
@@ -261,9 +262,14 @@ string Snapshot::dag_view_string(unsigned int depth, myfloat probability){
     if(!intree.is_chain()){
         auto pit = successor_probs.begin();
         for(auto it = successors.begin(); it!=successors.end(); ++it, ++pit){
-            output << (*it)->dag_view_string(depth+1, *pit);
+            (*it)->dag_view_string_internal(output, depth+1, *pit);
         }
     }
+}
+
+string Snapshot::dag_view_string(unsigned int depth, myfloat probability){
+    ostringstream output;
+    dag_view_string_internal(output);
     return output.str();
 }
 
