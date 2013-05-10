@@ -29,8 +29,9 @@ class Snapshot {
                 map<task_id,vector<task_id>>&, bool = true) const;
         static map<pair<tree_id,vector<task_id>>, Snapshot*> pool;
         void dag_view_string_internal(ostringstream& oss,
-                unsigned int depth=0,
-                myfloat probability=(myfloat)1);
+                unsigned int task_count_limit=0,
+                myfloat probability=(myfloat)1,
+                unsigned int depth=0);
     public:
         Snapshot();
         Snapshot(const Snapshot& s);
@@ -44,9 +45,13 @@ class Snapshot {
         void compile_snapshot_dag(const Scheduler& scheduler);
         size_t get_successor_count();
 
-        string dag_view_string(unsigned int depth=0, myfloat probability=(myfloat)1);
+        string dag_view_string(unsigned int task_count_limit=0,
+                unsigned int depth=0,
+                myfloat probability=(myfloat)1);
         string tikz_string();
-        string tikz_string_dag(bool first=true, unsigned int = 1);
+        string tikz_string_dag(unsigned int task_count_limit=0,
+                bool first=true,
+                unsigned int = 1);
         myfloat expected_runtime();
         void print_snapshot_dag(int depth=0);
         friend ostream& operator<<(ostream& os, const Snapshot& s);

@@ -32,7 +32,7 @@ class Intree {
                                        map<task_id, task_id>& isomorphism, 
                                        tree_id& out);
 
-        int count_tasks() const;
+        unsigned int count_tasks() const;
 
         int get_in_degree(const Task& t) const ;
         int get_in_degree(const task_id t) const ;

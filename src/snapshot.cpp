@@ -253,23 +253,26 @@ myfloat Snapshot::expected_runtime(){
 }
 
 void Snapshot::dag_view_string_internal(ostringstream& output,
-        unsigned int depth,
-        myfloat probability){
+        unsigned int task_count_limit,
+        myfloat probability,
+        unsigned int depth){
     for(unsigned int i=0; i<depth; ++i){
         output << " ";
     }
     output << *this << " " << expected_runtime() << " " << probability << endl;
-    if(!intree.is_chain()){
-        auto pit = successor_probs.begin();
-        for(auto it = successors.begin(); it!=successors.end(); ++it, ++pit){
-            (*it)->dag_view_string_internal(output, depth+1, *pit);
+    if(intree.count_tasks() > task_count_limit){
+        if(!intree.is_chain()){
+            auto pit = successor_probs.begin();
+            for(auto it = successors.begin(); it!=successors.end(); ++it, ++pit){
+                (*it)->dag_view_string_internal(output, task_count_limit, *pit, depth+1);
+            }
         }
     }
 }
 
-string Snapshot::dag_view_string(unsigned int depth, myfloat probability){
+string Snapshot::dag_view_string(unsigned int task_count_limit, unsigned int depth, myfloat probability){
     ostringstream output;
-    dag_view_string_internal(output);
+    dag_view_string_internal(output, task_count_limit);
     return output.str();
 }
 
@@ -314,7 +317,9 @@ string Snapshot::tikz_string(){
     return "\\" + tikz_string_internal(0, reverse_tree) + ";";
 }
 
-string Snapshot::tikz_string_dag(bool first, unsigned int depth){
+string Snapshot::tikz_string_dag(unsigned int task_count_limit,
+        bool first,
+        unsigned int depth){
     stringstream output;
     if(first){
         output << "% this tree has expected runtime of " << expected_runtime() << endl;
@@ -340,14 +345,16 @@ string Snapshot::tikz_string_dag(bool first, unsigned int depth){
     output << "}" << endl;
     output << "\\usebox\\nodebox" << endl;
     output << "}" << endl;
-    if(!intree.is_chain()){
-        auto pit = successor_probs.begin();
-        for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
-            output << "child";
-            output << "{"; 
-            output << (*it)->tikz_string_dag(false, depth+1); 
-            output << "edge from parent node [left] { " << *pit << "}" << endl;
-            output << "}";
+    if(intree.count_tasks() > task_count_limit){
+        if(!intree.is_chain()){
+            auto pit = successor_probs.begin();
+            for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
+                output << "child";
+                output << "{"; 
+                output << (*it)->tikz_string_dag(task_count_limit, false, depth+1); 
+                output << "edge from parent node [left] { " << *pit << "}" << endl;
+                output << "}";
+            }
         }
     }
     if(first){

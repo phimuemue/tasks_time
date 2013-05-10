@@ -73,8 +73,12 @@ int read_variables_map_from_args(int argc,
     output_options.add_options()
         ("dagview", po::value<string>()->implicit_value(""), 
          "Generate output for DAG viewer in file.")
+        ("dagviewlimit", po::value<unsigned int>()->default_value(0), 
+         "Only show snapshots with a certain amount of tasks in dagview.")
         ("tikz", po::value<string>()->implicit_value(""), 
-         "Generate TikZ-Output of snapshot(s) in file.");
+         "Generate TikZ-Output of snapshot(s) in file.")
+        ("tikzlimit", po::value<unsigned int>()->default_value(0), 
+         "Only show snapshots with a certain amount of tasks in TikZ.");
     // input options
     po::options_description input_options("Input");
     input_options.add_options()
@@ -183,7 +187,7 @@ void generate_output(const po::variables_map& vm,
         cout << "Writing tikz to " << filename << endl;
         tikz_output.open(filename);
         for(unsigned int i= 0; i<s.size(); ++i){
-            tikz_output << s[i].tikz_string_dag() << endl;
+            tikz_output << s[i].tikz_string_dag(vm["tikzlimit"].as<unsigned int>()) << endl;
         }
         tikz_output.close();
     }
@@ -196,7 +200,7 @@ void generate_output(const po::variables_map& vm,
         cout << "Writing dagview to " << filename << endl;
         dagview_output.open(filename);
         for(unsigned int i= 0; i<s.size(); ++i){
-            dagview_output << s[i].dag_view_string() << endl;
+            dagview_output << s[i].dag_view_string(vm["dagviewlimit"].as<unsigned int>()) << endl;
         }
         dagview_output.close();
     }

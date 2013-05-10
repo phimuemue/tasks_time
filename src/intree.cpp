@@ -195,7 +195,7 @@ Intree Intree::canonical_intree(const Intree& _t,
     return Intree(edges);
 }
 
-int Intree::count_tasks() const{
+unsigned int Intree::count_tasks() const{
     return edges.size() + 1;
 }
 
