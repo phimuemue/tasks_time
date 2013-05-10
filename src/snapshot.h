@@ -27,7 +27,7 @@ class Snapshot {
         vector<myfloat> probabilities;
         string tikz_string_internal(const task_id,
                 map<task_id,vector<task_id>>&, bool = true) const;
-        static map<pair<tree_id,vector<task_id>>, Snapshot*> pool;
+        static map<snapshot_id, Snapshot*> pool;
         void dag_view_string_internal(ostringstream& oss,
                 unsigned int task_count_limit=0,
                 myfloat probability=(myfloat)1,
@@ -52,6 +52,16 @@ class Snapshot {
         string tikz_string_dag(unsigned int task_count_limit=0,
                 bool first=true,
                 unsigned int = 1);
+        string tikz_string_dag_compact(unsigned int task_count_limit=0,
+                bool first=true,
+                unsigned int depth=1);
+        void tikz_string_dag_compact_internal(ostringstream& output,
+                map<tree_id, float>& position,
+                unsigned int task_count_limit=0,
+                bool first=true,
+                unsigned int depth=1);
+
+
         myfloat expected_runtime();
         void print_snapshot_dag(int depth=0);
         friend ostream& operator<<(ostream& os, const Snapshot& s);

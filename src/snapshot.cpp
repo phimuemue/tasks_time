@@ -1,6 +1,6 @@
 #include "snapshot.h"
 
-map<pair<tree_id,vector<task_id>>, Snapshot*> Snapshot::pool;
+map<snapshot_id, Snapshot*> Snapshot::pool;
 
 void Snapshot::clear_pool(){
     // We have to ensure that we don't double-delete some pointers
@@ -127,7 +127,7 @@ Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
         newmarked.push_back(*it);
     }
     sort(newmarked.begin(), newmarked.end());
-    auto find_key = pair<tree_id,vector<task_id>>(tid, newmarked);
+    auto find_key = snapshot_id(tid, newmarked);
     auto correct_pool = 
         Snapshot::pool.find(find_key);
     if(correct_pool == Snapshot::pool.end()){
@@ -375,6 +375,24 @@ void Snapshot::print_snapshot_dag(int depth){
     for(auto it=successors.begin(); it!=successors.end(); ++it){
         (*it)->print_snapshot_dag(depth+1);
     }
+}
+
+
+string Snapshot::tikz_string_dag_compact(unsigned int task_count_limit,
+        bool first,
+        unsigned int depth){
+    ostringstream output;
+    map<tree_id, float> position;
+    tikz_string_dag_compact_internal(output, position, task_count_limit);
+    return output.str();
+}
+
+void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
+        map<tree_id, float>& position,
+        unsigned int task_count_limit,
+        bool first,
+        unsigned int depth){
+    
 }
 
 ostream& operator<<(ostream& os, const Snapshot& s){

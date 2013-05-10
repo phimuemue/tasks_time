@@ -1,6 +1,9 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include<utility>
+#include<vector>
+
 #if USE_SIMPLE_OPENMP
 #include<omp.h>
 #endif
@@ -28,6 +31,7 @@ typedef boost::rational<long> myfloat;
 
 typedef int task_id;
 typedef unsigned long long tree_id;
+typedef std::pair<tree_id, std::vector<task_id>> snapshot_id;
 
 #define NOTASK (-1)
 
