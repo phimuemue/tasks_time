@@ -326,7 +326,7 @@ string Snapshot::tikz_string_dag(unsigned int task_count_limit,
         output << "\\begin{tikzpicture}" << endl;
         for(unsigned int i=0; i < intree.edges.size(); ++i){
             output << "\\tikzstyle{level " << i+1 << "} = " <<
-                "[sibling distance = " << 8./(i+1) << "cm, " <<
+                "[sibling distance = " << 32./(i+1) << "cm, " <<
                 "level distance = " << 2. - i/5. << "cm" << "]" << endl;
         }
         output << "\\";
