@@ -276,6 +276,19 @@ string Snapshot::dag_view_string(unsigned int task_count_limit, unsigned int dep
     return output.str();
 }
 
+unsigned int Snapshot::width_of_task(const task_id t, 
+        map<task_id,vector<task_id>>& rt) const {
+    // TODO: make it useful!
+    unsigned int res = 0;
+    res = rt[t].size();
+    unsigned int max_sub=0;
+    for(auto it=rt[t].begin(); it!=rt[t].end(); ++it){
+        auto tmp = width_of_task(*it, rt);
+        max_sub = max(tmp, max_sub);
+    }
+    return res + max_sub;
+}
+
 string Snapshot::tikz_string_internal(const task_id t, 
         map<task_id,vector<task_id>>& rt, bool first) const {
     stringstream output;
@@ -288,12 +301,19 @@ string Snapshot::tikz_string_internal(const task_id t,
 #if 0
     output << t;
 #endif
-    output << "}[grow=up]\n";
+    float sibling_distance = width_of_task(t, rt) / 2.;
+    output << "}[grow=up, sibling distance=" << sibling_distance << "cm]\n";
     for(auto it = rt[t].begin(); it!=rt[t].end(); ++it){
         output << "child";
         output << "{" << tikz_string_internal(*it, rt, false) << "}" << endl;
     }
     return output.str();
+}
+
+string Snapshot::tikz_string_internal_qtree(const task_id t, 
+        map<task_id,vector<task_id>>& rt, bool first) const {
+    cout << "Output via qtree for tikz currently not implemented" << endl;
+    throw 1;
 }
 
 string Snapshot::tikz_string(){

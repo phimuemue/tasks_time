@@ -90,7 +90,7 @@ class Snapshot_Dag_Viewer(object):
         sel = tv.get_selection()
         mod, it = sel.get_selected()
         self.plot.set_data((mod[it][1], mod[it][2]))
-    def on_toggle(self, cell, path, model, *ignore):
+    def on_toggle(self, cell, path, model, only_isos, *ignore):
         if path is not None:
             it = model.get_iter(path)
             model[it][0] = not model[it][0]
@@ -100,19 +100,40 @@ class Snapshot_Dag_Viewer(object):
             newprobs = []
             while(first_sibling!=None):
                 current = model[first_sibling]
-                if current[0]:
+                if only_isos.get_active()==True: 
+                    if current[1]==model[it][1]:
+                        newprobs.append(float(current[4]))
+                elif current[0]:
                     newprobs.append(float(current[4]))
                 first_sibling = model.iter_next(first_sibling)
             sss = sum(newprobs)
-            newprobs = [x/sss for x in newprobs]
+            if only_isos.get_active():
+                sss = 0
+                first_sibling = model.iter_children(parent)
+                while(first_sibling!=None):
+                    current = model[first_sibling]
+                    if current[1]==model[it][1]:
+                        sss = sss + float(current[4])
+                    first_sibling = model.iter_next(first_sibling)
+            if not only_isos.get_active():
+                newprobs = [x/sss for x in newprobs]
+            print newprobs, sss
             # compute adjusted probabilities
             first_sibling = model.iter_children(parent)
             i = 0
+            print "sss %f"%(sss)
             while(first_sibling!=None):
                 current = model[first_sibling]
-                if current[0]:
+                if only_isos.get_active()==True:
+                    if current[1]==model[it][1]:
+                        print "setting"
+                        current[5] = newprobs[i] 
+                        i = i + 1
+                    else:
+                        current[5] = current[4]
+                elif current[0]:
                     current[5] = newprobs[i]
-                    i = i + 1
+                    i=i+1
                 else:
                     current[5] = 0
                 first_sibling = model.iter_next(first_sibling)
@@ -133,12 +154,16 @@ class Snapshot_Dag_Viewer(object):
         self.window.add(self.layout)
         self.ts = gtk.TreeStore(bool, str, str, str, str, str, str)
         self.tv = gtk.TreeView(self.ts)
+        # options
+        self.compute_on_iso_trees = gtk.CheckButton("Only isomorphic trees for prob adjustment")
+        self.compute_on_iso_trees.set_active(True)
+        self.layout.pack_start(self.compute_on_iso_trees, False, True, 1)
         # "valid column"
         self.cell = gtk.CellRendererToggle()
         self.tvcol = gtk.TreeViewColumn("U", self.cell, active=0)
-        self.cell.connect("toggled", self.on_toggle, self.ts)
         self.tvcol.pack_start(self.cell)
         self.tv.append_column(self.tvcol)
+        self.cell.connect("toggled", self.on_toggle, self.ts, self.compute_on_iso_trees)
         # "intree column"
         self.tvcol = gtk.TreeViewColumn("Snapshot")
         self.cell = gtk.CellRendererText()
@@ -179,11 +204,12 @@ class Snapshot_Dag_Viewer(object):
         self.scrw = gtk.ScrolledWindow()
         self.layout.add(self.scrw)
         self.scrw.add(self.tv)
-        self.tv.connect("cursor-changed", self.on_row_activated, self.ts, self.tv)
         # drawing area
         self.plot = Plot()
         self.plot.set_size_request(200,100)
         self.layout.pack_start(self.plot, False, False, 0)
+        # connect treeview
+        self.tv.connect("cursor-changed", self.on_row_activated, self.ts, self.tv)
         # status bar
         self.sb = gtk.Statusbar()
         self.layout.pack_end(self.sb, False, True, 0)

@@ -25,6 +25,8 @@ class Snapshot {
         vector<Snapshot*> successors;
         vector<myfloat> successor_probs;
         vector<myfloat> probabilities;
+        string tikz_string_internal_qtree(const task_id,
+                map<task_id,vector<task_id>>&, bool = true) const;
         string tikz_string_internal(const task_id,
                 map<task_id,vector<task_id>>&, bool = true) const;
         static map<snapshot_id, Snapshot*> pool;
@@ -32,6 +34,8 @@ class Snapshot {
                 unsigned int task_count_limit=0,
                 myfloat probability=(myfloat)1,
                 unsigned int depth=0);
+        unsigned int width_of_task(const task_id t, 
+                map<task_id,vector<task_id>>& rt) const;
     public:
         Snapshot();
         Snapshot(const Snapshot& s);
