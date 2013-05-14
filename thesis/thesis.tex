@@ -3951,34 +3951,12 @@ If we use HLF on the following tree, we obtian a runtime of 1079/216 ($<5$).
 %   };
 % \end{tikzpicture}
 
+\section{P2: A whole intree-DAG and its condensed counterpart}
+
+\input{examples/p2/001112566_with_condensed.tex}
+
 \section{The current TikZ-file}
 
-\begin{tikzpicture}
-  \node[draw=black] (asdf) at (1, 2) {
-    \begin{tikzpicture}[scale=.2]
-      \tikzstyle{level 1} = [sibling distance = 2cm, level distance = 2cm]
-      \tikzstyle{level 2} = [sibling distance = 2cm, level distance = 2cm]
-      \tikzstyle{level 3} = [sibling distance = 2cm, level distance = 2cm]
-      \tikzstyle{level 4} = [sibling distance = 2cm, level distance = 2cm]
-      \tikzstyle{level 5} = [sibling distance = 2cm, level distance = 2cm]
-      \tikzstyle{level 6} = [sibling distance = 2cm, level distance = 2cm]
-      \tikzstyle{level 7} = [sibling distance = 2cm, level distance = 2cm]
-      \tikzstyle{level 8} = [sibling distance = 2cm, level distance = 2cm]
-      \node[circle,scale=0.75,fill]{}[grow=up]
-      child{node[circle,scale=0.75,fill]{}[grow=up]
-        child{node[circle,scale=0.75,fill]{}[grow=up]
-          child{node[circle,scale=0.75,fill,red]{}[grow=up]
-          }
-        }
-      }
-      ;
-    \end{tikzpicture}
-  };
-  \node[draw=black] (asdf2) at (5, 2) {halo};
-  \draw[->>] (asdf) -- (asdf2);
-\end{tikzpicture}
-
 \input{../default.tex}
-
 
 \end{document}
