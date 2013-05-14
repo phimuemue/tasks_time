@@ -23,7 +23,7 @@ namespace po = boost::program_options;
 
 map<string, Scheduler*> scheds = 
 {
-    // {"leaf", new Leafscheduler()}, 
+    {"leaf", new Leafscheduler()}, 
     {"hlf", new HLFscheduler()},
     {"hlfnfc", new HLFNFCscheduler()},
 };
@@ -144,7 +144,6 @@ void create_snapshot_dags(const po::variables_map& vm,
     // generate all possible initial markings
     vector<task_id> marked;
     sched->get_initial_schedule(t, vm["processors"].as<int>(), initial_settings);
-
     //Snapshot s[initial_settings.size()];
     s = vector<Snapshot>(initial_settings.size());
     for(unsigned int i= 0; i<initial_settings.size(); ++i){

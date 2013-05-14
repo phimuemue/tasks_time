@@ -1,5 +1,54 @@
 #include "leafscheduler.h"
 
+void Leafscheduler::all_possible_combinations(
+        const vector<task_id>& t,
+        const unsigned int n,
+        const unsigned int minindex,
+        vector<vector<task_id>>& target
+        ) const {
+    if(n==0){
+        target.push_back(vector<task_id>());
+        return;
+    }
+    if(n==t.size()){
+        target.push_back(t);
+        return;
+    }
+    if(n>t.size()-minindex){
+        return;
+    }
+    for(unsigned int i=minindex; i<t.size(); ++i){
+        vector<vector<task_id>> sub_combis_with;
+        vector<vector<task_id>> sub_combis_without;
+        all_possible_combinations(
+            t, n-1, i+1, sub_combis_with
+        );
+        all_possible_combinations(
+            t, n, i+1, sub_combis_without
+        );
+        for(auto it = sub_combis_with.begin(); it!=sub_combis_with.end(); ++it){
+            vector<task_id> newcombo;
+            newcombo.push_back(t[minindex]);
+            newcombo.insert(newcombo.end(), it->begin(), it->end());
+            assert(newcombo.size()==n);
+            target.push_back(newcombo);
+        }
+        for(auto it = sub_combis_without.begin(); it!=sub_combis_without.end(); ++it){
+            assert(it->size()==n);
+            target.push_back(*it);
+        }
+    }
+}
+
+void Leafscheduler::get_initial_schedule(const Intree& t, 
+        const unsigned int procs, 
+        vector<vector<task_id>>& target) const {
+    vector<task_id> leaves;
+    t.get_leaves(leaves);
+    vector<vector<task_id>> combis;
+    all_possible_combinations(leaves, procs, 0, target);
+}
+
 void Leafscheduler::get_next_tasks(const Intree& t, 
         const vector<task_id>& _marked,
         vector<pair<task_id,myfloat>>& target) const {
@@ -34,3 +83,5 @@ void Leafscheduler::get_next_tasks(const Intree& t,
         target.push_back(pair<task_id,myfloat>(tasks_probs[i]));
     }
 }
+
+
