@@ -387,6 +387,10 @@ string Snapshot::tikz_string_dag_compact(unsigned int task_count_limit,
     output << "\\begin{tikzpicture}[scale=.2]" << endl;
     tikz_string_dag_compact_internal(output, positions, level_count, task_count_limit);
     output << "\\end{tikzpicture}" << endl;
+    output << endl;
+    output << "%%% Local Variables:" << endl;
+    output << "%%% TeX-master: \"thesis/thesis.tex\"" << endl;
+    output << "%%% End: " << endl;
     return output.str();
 }
 
