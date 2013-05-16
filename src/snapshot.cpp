@@ -404,7 +404,7 @@ string Snapshot::tikz_string_dag_compact(unsigned int task_count_limit,
     ostringstream output;
     map<Snapshot*, string> positions;
     map<unsigned int, float> level_count;
-    output << "\\begin{tikzpicture}[scale=.2]" << endl;
+    output << "\\begin{tikzpicture}[scale=.2, anchor=base]" << endl;
     tikz_string_dag_compact_internal(output, positions, level_count, task_count_limit);
     output << "\\end{tikzpicture}" << endl;
     output << endl;
