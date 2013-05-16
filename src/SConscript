@@ -6,7 +6,7 @@ import getpass
 def write_all_trees_to_file(source, target, env):
     n = int(env["NUM_THREADS_DEFAULT"])
     path = target
-    print "Generating all trees with %d nodes, writing to %s"%(n,path);
+    print ("Generating all trees with %d nodes, writing to %s"%(n,path))
     def generate_all_trees(n):
         """Generates all trees with n+1 (unlabelled) nodes"""
         if n==1:
@@ -34,6 +34,7 @@ def write_all_trees_to_file(source, target, env):
 
 # version information
 def create_version_info(*a,**b):
+    print("Writing version information.")
     f = open(r"info.cpp", "r")
     lines = f.readlines()
     f.close()
@@ -101,5 +102,5 @@ env.Append(NEW_VARIABLE = vars);
 Help(vars.GenerateHelpText(env))
 
 # main program
+env.Command("info.cpp", "", create_version_info)
 mainprog = env.Program(target="tasks", source=Glob("*.cpp"))
-env.AddPreAction(mainprog, create_version_info)
