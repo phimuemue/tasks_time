@@ -27,8 +27,10 @@ class Snapshot {
         vector<myfloat> probabilities;
         string tikz_string_internal_qtree(const task_id,
                 map<task_id,vector<task_id>>&, bool = true) const;
+        unsigned int get_subtree_width(const task_id,
+                map<task_id,vector<task_id>>&) const;
         string tikz_string_internal(const task_id,
-                map<task_id,vector<task_id>>&, bool = true) const;
+                map<task_id,vector<task_id>>&, unsigned int depth=0, float leftoffset=0) const;
         static map<snapshot_id, Snapshot*> pool;
         void dag_view_string_internal(ostringstream& oss,
                 unsigned int task_count_limit=0,

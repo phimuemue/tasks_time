@@ -289,9 +289,20 @@ unsigned int Snapshot::width_of_task(const task_id t,
     return res + max_sub;
 }
 
+unsigned int Snapshot::get_subtree_width(const task_id tid,
+        map<task_id,vector<task_id>>& rt) const {
+    unsigned int result = 0;
+    for(auto it=rt[tid].begin(); it!=rt[tid].end(); ++it){
+        result = result + get_subtree_width(*it, rt);
+    }
+    result = max(result, 1u);
+    return result;
+}
+
 string Snapshot::tikz_string_internal(const task_id t, 
-        map<task_id,vector<task_id>>& rt, bool first) const {
+        map<task_id,vector<task_id>>& rt, unsigned int depth, float leftoffset) const {
     stringstream output;
+#if 0
     output << "node[circle,scale=0.75,fill";
     if(find(marked.begin(), marked.end(), t) != marked.end()){
         output << ",red";
@@ -301,12 +312,30 @@ string Snapshot::tikz_string_internal(const task_id t,
 #if 0
     output << t;
 #endif
-    float sibling_distance = width_of_task(t, rt) / 2.;
+    float sibling_distance = get_subtree_width(t, rt) * 1.;
     output << "}[grow=up, sibling distance=" << sibling_distance << "cm]\n";
     for(auto it = rt[t].begin(); it!=rt[t].end(); ++it){
         output << "child";
         output << "{" << tikz_string_internal(*it, rt, false) << "}" << endl;
     }
+#else
+    output << "\\node[";
+    output << "circle, scale=0.75, fill";
+    if(find(marked.begin(), marked.end(), t) != marked.end()){
+        output << ", red";
+    }
+    output << "] (tid" << t << ") at (" << leftoffset << "," << 1.5f * depth << "){};" << endl;
+    float cur_leftoffset = leftoffset;
+    // draw "children"
+    for(auto it = rt[t].begin(); it!=rt[t].end(); ++it){
+        output << tikz_string_internal(*it, rt, depth + 1, cur_leftoffset) << endl;
+        cur_leftoffset += 1.5f * get_subtree_width(*it, rt);
+    }
+    // draw arrows from children
+    for(auto it = rt[t].begin(); it!=rt[t].end(); ++it){
+        output << "\\draw[](tid" << t << ") -- (tid" << *it << ");" << endl;
+    }
+#endif
     return output.str();
 }
 
@@ -334,7 +363,7 @@ string Snapshot::tikz_string(){
             }
         }
     }
-    return "\\" + tikz_string_internal(0, reverse_tree) + ";";
+    return tikz_string_internal(0, reverse_tree);
 }
 
 string Snapshot::tikz_string_dag(unsigned int task_count_limit,
