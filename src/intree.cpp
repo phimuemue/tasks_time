@@ -379,6 +379,25 @@ void Intree::get_chains(vector<vector<task_id>>& target) const {
     }
 }
     
+void Intree::get_reverse_tree(map<task_id, vector<task_id>>& rt) const{
+    queue<task_id> q;
+    q.push(0);
+    rt[0] = {};
+    while (q.size() > 0){
+        task_id current = q.front();
+        q.pop();
+        for(auto it = edges.begin(); it!=edges.end(); ++it){
+            if(it->second == current){
+                q.push(it->first);
+                rt[it->second].push_back(it->first);
+                if(rt.find(it->first) == rt.end()){
+                    rt[it->first] = {};
+                }
+            }
+        }
+    }
+}
+
 ostream& operator<<(ostream& os, const Intree& t){
     if(t.count_tasks()==1){
         os << "[0]";

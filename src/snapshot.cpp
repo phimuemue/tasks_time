@@ -333,23 +333,8 @@ string Snapshot::tikz_string_internal_qtree(const task_id t,
 }
 
 string Snapshot::tikz_string(){
-    queue<task_id> q;
-    q.push(0);
     map<task_id,vector<task_id>> reverse_tree;
-    reverse_tree[0] = {};
-    while (q.size() > 0){
-        task_id current = q.front();
-        q.pop();
-        for(auto it = intree.edges.begin(); it!=intree.edges.end(); ++it){
-            if(it->second == current){
-                q.push(it->first);
-                reverse_tree[it->second].push_back(it->first);
-                if(reverse_tree.find(it->first) == reverse_tree.end()){
-                    reverse_tree[it->first] = {};
-                }
-            }
-        }
-    }
+    intree.get_reverse_tree(reverse_tree);
     return tikz_string_internal(0, reverse_tree);
 }
 

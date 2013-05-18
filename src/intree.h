@@ -6,6 +6,7 @@
 #include<iostream>
 #include<set>
 #include<map>
+#include<queue>
 #include<functional>
 #include<algorithm>
 #include<assert.h>
@@ -63,6 +64,8 @@ class Intree {
         void get_chain(const Task& t, vector<task_id>& target) const;
         void get_chain(const task_id t, vector<task_id>& target) const;
         void get_chains(vector<vector<task_id>>& target) const;
+
+        void get_reverse_tree(map<task_id, vector<task_id>>& rt) const;
 
         friend ostream& operator<<(ostream& os, const Intree& t);
 };
