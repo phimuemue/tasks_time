@@ -302,43 +302,27 @@ unsigned int Snapshot::get_subtree_width(const task_id tid,
 string Snapshot::tikz_string_internal(const task_id t, 
         map<task_id,vector<task_id>>& rt, unsigned int depth, float leftoffset) const {
     stringstream output;
-#if 0
-    output << "node[circle,scale=0.75,fill";
-    if(find(marked.begin(), marked.end(), t) != marked.end()){
-        output << ",red";
-    }
-    output << "]";
-    output << "{"; 
-#if 0
-    output << t;
-#endif
-    float sibling_distance = get_subtree_width(t, rt) * 1.;
-    output << "}[grow=up, sibling distance=" << sibling_distance << "cm]\n";
-    for(auto it = rt[t].begin(); it!=rt[t].end(); ++it){
-        output << "child";
-        output << "{" << tikz_string_internal(*it, rt, false) << "}" << endl;
-    }
-#else
     const float mywidth = 1.5f;
     const float myheight = 1.5f;
     output << "\\node[";
     output << "circle, scale=0.75, fill";
-    if(find(marked.begin(), marked.end(), t) != marked.end()){
+    if(marked.size() == 0 || find(marked.begin(), marked.end(), t) != marked.end()){
         output << ", red";
     }
     float complete_width=get_subtree_width(t, rt);
-    output << "] (tid" << t << ") at (" << mywidth * (leftoffset + 0.5f * complete_width) << "," << myheight * depth << "){};" << endl;
+    output << "] (tid" << t << ") at (" 
+        << mywidth * (leftoffset + 0.5f * complete_width) 
+        << "," << myheight * depth << "){};" << endl;
     float cur_leftoffset = leftoffset;
     // draw "children"
     for(auto it = rt[t].begin(); it!=rt[t].end(); ++it){
-        output << tikz_string_internal(*it, rt, depth + 1, cur_leftoffset) << endl;
+        output << tikz_string_internal(*it, rt, depth + 1, cur_leftoffset);
         cur_leftoffset += get_subtree_width(*it, rt);
     }
     // draw arrows from children
     for(auto it = rt[t].begin(); it!=rt[t].end(); ++it){
         output << "\\draw[](tid" << t << ") -- (tid" << *it << ");" << endl;
     }
-#endif
     return output.str();
 }
 
