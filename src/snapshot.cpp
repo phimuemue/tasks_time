@@ -352,7 +352,6 @@ string Snapshot::tikz_string_dag(unsigned int task_count_limit,
         output << "\\";
     }
     output << "node[draw=black]{" << endl;
-    // output << "\\newsavebox{\\nodebox}" << endl;
     output << "\\sbox{\\nodebox}{" << endl;
     output << "\\begin{tikzpicture}[scale=.2]" << endl;
     for(unsigned int i=0; i < intree.edges.size()+depth; ++i){
