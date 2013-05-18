@@ -8,6 +8,7 @@
 #include<map>
 #include<algorithm>
 #include<sstream>
+#include<iomanip>
 
 #include "config.h"
 #include "intree.h"
@@ -67,6 +68,7 @@ class Snapshot {
         void tikz_string_dag_compact_internal(ostringstream& output,
                 map<Snapshot*, string>& names,
                 map<unsigned int, float>& levelcount,
+                myfloat probability=1,
                 unsigned int task_count_limit=0,
                 bool first=true,
                 unsigned int depth=1);

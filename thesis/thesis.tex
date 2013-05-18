@@ -16,9 +16,10 @@
 \usepackage{amsthm}
 \usepackage{graphicx}
 \usepackage{tikz}
-\usepackage{tikz-qtree}
 \usepackage{suffix}
 \usepackage[left=3.5cm,right=3.5cm]{geometry}
+
+\usetikzlibrary{shapes.multipart,chains}
 
 \newtheorem{definition}{Definition}[chapter]
 \newtheorem{theorem}{Theorem}[chapter]
@@ -3967,9 +3968,4 @@ If we use HLF on the following tree, we obtian a runtime of 1079/216 ($<5$).
 
 \input{../default.tex}
 
-\begin{tikzpicture}[grow=up,anchor=base]
-  \Tree [. \node[fill=red,circle]{}; [.NP \node[fill=black,circle](a1){}; ] [.A a a [.b c d e ] ]]
-\end{tikzpicture}
-
-bottom
 \end{document}

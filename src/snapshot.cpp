@@ -412,7 +412,7 @@ string Snapshot::tikz_string_dag_compact(unsigned int task_count_limit,
             }
             );
     output << "\\begin{tikzpicture}[scale=.2, anchor=south west]" << endl;
-    tikz_string_dag_compact_internal(output, positions, level_count, task_count_limit);
+    tikz_string_dag_compact_internal(output, positions, level_count, 1, task_count_limit);
     output << "\\end{tikzpicture}" << endl;
     output << endl;
     output << "%%% Local Variables:" << endl;
@@ -436,6 +436,7 @@ void Snapshot::compute_level_widths(map<unsigned int, float>& level_count,
 void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         map<Snapshot*, string>& names,
         map<unsigned int, float>& level_count,
+        myfloat probability,
         unsigned int task_count_limit,
         bool first,
         unsigned int depth){
@@ -443,41 +444,48 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         // draw current snapshot at proper position
         float width = intree.get_max_width() * 1.5f + 2;
         //width = 9;
-        float height = 10.;
+        float height = 12.;
         ostringstream tikz_nn;
         tikz_nn << "sn" << this << "W" << int(level_count[depth]) << "";
         string tikz_node_name = tikz_nn.str();
         names[this] = tikz_node_name;
-        output << "\\node[draw=black] (" << tikz_node_name << ")"
-               << " at (" << level_count[depth] << ", -" << depth*height << ") {";
+        output << "\\node[draw=black, rectangle split, rectangle split parts=2] (" << tikz_node_name << ")"
+               << " at (" << level_count[depth] << ", -" << depth*height << ") {" << endl;
         output << "\\begin{tikzpicture}[scale=.2]" << endl;
         output << tikz_string() << endl;
         output << "\\end{tikzpicture}" << endl;
+        output << "\\nodepart{two}" << endl
+               << "\\footnotesize{"
+               << expected_runtime() << "}" << endl;
         output << "};" << endl;
         // draw successors
-        // if(level_count.find(depth+1) == level_count.end()){
-        //     float totalwidth = 0;
-        //     for(auto it=successors.begin(); it!=successors.end(); ++it){
-        //         cout << "#nodes: " << (*it)->intree.get_max_width() << endl;
-        //         totalwidth += (*it)->intree.get_max_width() * 1.5f + 2;
-        //     }
-        //     level_count[depth+1] = totalwidth * -0.5f;
-        //     cout << "Total of level " << depth + 1 << ": " << totalwidth << endl;
-        // }
-        for(auto it=successors.begin(); it!=successors.end(); ++it){
+        auto pit = successor_probs.begin();
+        for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
             (*it)->tikz_string_dag_compact_internal(output,
                 names,
                 level_count,
+                *pit,
                 task_count_limit,
                 false,
                 depth+1);
         }
         level_count[depth] += width;
-        // connect!
-        auto pit = successor_probs.begin();
+        // connect (we have to draw probabilities seperately!)
+        pit = successor_probs.begin();
         for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
-            output << "\\draw (" << tikz_node_name << ".south) -- (" 
+            output << "\\draw (" << tikz_node_name << ".south) -- "
+                << "(" 
                 << names[*it] << ".north);" << endl;
+        }
+        pit = successor_probs.begin();
+        for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
+            if (*pit != 1.f / successors.size()){
+                output << "\\draw[draw opacity=0] (" << tikz_node_name << ".south) -- "
+                    << "node[draw opacity=1, anchor=base, draw=black, fill=white]{\\footnotesize{" 
+                    << setprecision(2) << *pit 
+                    << "}}(" 
+                    << names[*it] << ".north);" << endl;
+            }
         }
     }
 }
