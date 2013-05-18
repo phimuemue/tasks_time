@@ -480,11 +480,14 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         pit = successor_probs.begin();
         for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
             if (*pit != 1.f / successors.size()){
+                auto old_precision = output.precision();
                 output << "\\draw[draw opacity=0] (" << tikz_node_name << ".south) -- "
                     << "node[draw opacity=1, anchor=base, draw=black, fill=white]{\\footnotesize{" 
-                    << setprecision(2) << *pit 
+                    << setprecision(2) 
+                    << *pit 
                     << "}}(" 
                     << names[*it] << ".north);" << endl;
+                output << setprecision(old_precision);
             }
         }
     }
