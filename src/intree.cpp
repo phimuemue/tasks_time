@@ -398,6 +398,17 @@ void Intree::get_reverse_tree(map<task_id, vector<task_id>>& rt) const{
     }
 }
 
+unsigned int Intree::get_max_width(task_id tid) const{
+    // TODO: This method is very inefficient
+    unsigned result = 0;
+    map<task_id, vector<task_id>> rt;
+    get_reverse_tree(rt);
+    for(auto it=rt[tid].begin(); it!=rt[tid].end(); it++){
+        result += get_max_width(*it);
+    }
+    return max(result, 1u);
+}
+
 ostream& operator<<(ostream& os, const Intree& t){
     if(t.count_tasks()==1){
         os << "[0]";

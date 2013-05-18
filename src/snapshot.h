@@ -32,6 +32,9 @@ class Snapshot {
         string tikz_string_internal(const task_id,
                 map<task_id,vector<task_id>>&, unsigned int depth=0, float leftoffset=0) const;
         static map<snapshot_id, Snapshot*> pool;
+        void compute_level_widths(map<unsigned int, float>& level_count,
+                map<Snapshot*, bool>& done,
+                unsigned int depth = 1);
         void dag_view_string_internal(ostringstream& oss,
                 unsigned int task_count_limit=0,
                 myfloat probability=(myfloat)1,

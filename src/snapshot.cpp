@@ -404,7 +404,14 @@ string Snapshot::tikz_string_dag_compact(unsigned int task_count_limit,
     ostringstream output;
     map<Snapshot*, string> positions;
     map<unsigned int, float> level_count;
-    output << "\\begin{tikzpicture}[scale=.2, anchor=base]" << endl;
+    map<Snapshot*, bool> lv_done;
+    compute_level_widths(level_count, lv_done, 1);
+    for_each(level_count.begin(), level_count.end(),
+            [](pair<const unsigned int, float>& a) {
+                a.second = a.second * -0.5f;
+            }
+            );
+    output << "\\begin{tikzpicture}[scale=.2, anchor=south west]" << endl;
     tikz_string_dag_compact_internal(output, positions, level_count, task_count_limit);
     output << "\\end{tikzpicture}" << endl;
     output << endl;
@@ -412,6 +419,18 @@ string Snapshot::tikz_string_dag_compact(unsigned int task_count_limit,
     output << "%%% TeX-master: \"thesis/thesis.tex\"" << endl;
     output << "%%% End: " << endl;
     return output.str();
+}
+
+void Snapshot::compute_level_widths(map<unsigned int, float>& level_count,
+        map<Snapshot*, bool>& done,
+        unsigned int depth) {
+    if(done.find(this) == done.end()){
+        done[this] = true;
+        level_count[depth] = level_count[depth] + intree.get_max_width() * 1.5f + 2;
+    }
+    for(auto it=successors.begin(); it!=successors.end(); ++it){
+        (*it)->compute_level_widths(level_count, done, depth+1);
+    }
 }
 
 void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
@@ -422,12 +441,11 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         unsigned int depth){
     if(names.find(this) == names.end()){
         // draw current snapshot at proper position
-        float width = 9;
+        float width = intree.get_max_width() * 1.5f + 2;
+        //width = 9;
         float height = 10.;
-        names[this] = level_count[depth] + width;
-        level_count[depth] += width;
         ostringstream tikz_nn;
-        tikz_nn << "sn" << this << "W" << level_count[depth] << "";
+        tikz_nn << "sn" << this << "W" << int(level_count[depth]) << "";
         string tikz_node_name = tikz_nn.str();
         names[this] = tikz_node_name;
         output << "\\node[draw=black] (" << tikz_node_name << ")"
@@ -437,6 +455,15 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         output << "\\end{tikzpicture}" << endl;
         output << "};" << endl;
         // draw successors
+        // if(level_count.find(depth+1) == level_count.end()){
+        //     float totalwidth = 0;
+        //     for(auto it=successors.begin(); it!=successors.end(); ++it){
+        //         cout << "#nodes: " << (*it)->intree.get_max_width() << endl;
+        //         totalwidth += (*it)->intree.get_max_width() * 1.5f + 2;
+        //     }
+        //     level_count[depth+1] = totalwidth * -0.5f;
+        //     cout << "Total of level " << depth + 1 << ": " << totalwidth << endl;
+        // }
         for(auto it=successors.begin(); it!=successors.end(); ++it){
             (*it)->tikz_string_dag_compact_internal(output,
                 names,
@@ -445,6 +472,7 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
                 false,
                 depth+1);
         }
+        level_count[depth] += width;
         // connect!
         auto pit = successor_probs.begin();
         for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
