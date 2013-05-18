@@ -449,7 +449,7 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         tikz_nn << "sn" << this << "W" << int(level_count[depth]) << "";
         string tikz_node_name = tikz_nn.str();
         names[this] = tikz_node_name;
-        output << "\\node[draw=black, rectangle split, rectangle split parts=2] (" << tikz_node_name << ")"
+        output << "\\node[draw=black, rectangle split, rectangle split parts=3] (" << tikz_node_name << ")"
                << " at (" << level_count[depth] << ", -" << depth*height << ") {" << endl;
         output << "\\begin{tikzpicture}[scale=.2]" << endl;
         output << tikz_string() << endl;
@@ -457,6 +457,18 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         output << "\\nodepart{two}" << endl
                << "\\footnotesize{"
                << expected_runtime() << "}" << endl;
+        output << "\\nodepart{three}" << endl
+               << "\\footnotesize{";
+        auto old_precision = output.precision();
+        output << setprecision(2);
+        for(auto pit=successor_probs.begin(); pit!=successor_probs.end(); ++pit){
+            output << *pit;
+            if(next(pit) != successor_probs.end()){
+                output << " ";
+            }
+        }
+        output << setprecision(old_precision);
+        output << "}" << endl;
         output << "};" << endl;
         // draw successors
         auto pit = successor_probs.begin();
@@ -478,6 +490,7 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
                 << names[*it] << ".north);" << endl;
         }
         pit = successor_probs.begin();
+#if 0
         for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
             if (*pit != 1.f / successors.size()){
                 auto old_precision = output.precision();
@@ -490,6 +503,7 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
                 output << setprecision(old_precision);
             }
         }
+#endif
     }
 }
 
