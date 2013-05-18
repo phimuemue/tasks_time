@@ -319,17 +319,20 @@ string Snapshot::tikz_string_internal(const task_id t,
         output << "{" << tikz_string_internal(*it, rt, false) << "}" << endl;
     }
 #else
+    const float mywidth = 1.5f;
+    const float myheight = 1.5f;
     output << "\\node[";
     output << "circle, scale=0.75, fill";
     if(find(marked.begin(), marked.end(), t) != marked.end()){
         output << ", red";
     }
-    output << "] (tid" << t << ") at (" << leftoffset << "," << 1.5f * depth << "){};" << endl;
+    float complete_width=get_subtree_width(t, rt);
+    output << "] (tid" << t << ") at (" << mywidth * (leftoffset + 0.5f * complete_width) << "," << myheight * depth << "){};" << endl;
     float cur_leftoffset = leftoffset;
     // draw "children"
     for(auto it = rt[t].begin(); it!=rt[t].end(); ++it){
         output << tikz_string_internal(*it, rt, depth + 1, cur_leftoffset) << endl;
-        cur_leftoffset += 1.5f * get_subtree_width(*it, rt);
+        cur_leftoffset += get_subtree_width(*it, rt);
     }
     // draw arrows from children
     for(auto it = rt[t].begin(); it!=rt[t].end(); ++it){
