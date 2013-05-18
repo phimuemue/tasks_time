@@ -19,6 +19,7 @@
 #include<boost/rational.hpp>
 #endif
 
+// TODO: Add support for rational<gmplib-bigint>
 #if MYFLOAT==FLOAT
 typedef float myfloat;
 #elif MYFLOAT==DOUBLE
