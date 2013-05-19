@@ -152,7 +152,7 @@ void create_snapshot_dags(const po::variables_map& vm,
     //Snapshot s[initial_settings.size()];
     s = vector<Snapshot>(initial_settings.size());
     for(unsigned int i= 0; i<initial_settings.size(); ++i){
-        s[i] = Snapshot(t, initial_settings[i]);
+        s[i] = *Snapshot::canonical_snapshot(Snapshot(t, initial_settings[i]));
     }
 #if USE_CANONICAL_SNAPSHOT
     cout << "Warning: We are currently not considering "
