@@ -63,15 +63,20 @@ class Snapshot {
                 bool first=true,
                 unsigned int = 1);
         string tikz_string_dag_compact(unsigned int task_count_limit=0,
+                bool show_expectancy=true,
+                bool show_probabilities=true,
                 bool first=true,
-                unsigned int depth=1);
+                unsigned int depth=1
+                );
         void tikz_string_dag_compact_internal(ostringstream& output,
                 map<Snapshot*, string>& names,
                 map<unsigned int, float>& levelcount,
-                myfloat probability=1,
-                unsigned int task_count_limit=0,
-                bool first=true,
-                unsigned int depth=1);
+                myfloat probability,
+                unsigned int task_count_limit,
+                bool first,
+                unsigned int depth,
+                bool show_expectancy,
+                bool show_probabilities);
 
 
         myfloat expected_runtime();

@@ -398,9 +398,13 @@ void Snapshot::print_snapshot_dag(int depth){
 }
 
 
-string Snapshot::tikz_string_dag_compact(unsigned int task_count_limit,
+string Snapshot::tikz_string_dag_compact(
+        unsigned int task_count_limit,
+        bool show_expectancy,
+        bool show_probabilities,
         bool first,
-        unsigned int depth){
+        unsigned int depth
+        ){
     ostringstream output;
     map<Snapshot*, string> positions;
     map<unsigned int, float> level_count;
@@ -412,7 +416,15 @@ string Snapshot::tikz_string_dag_compact(unsigned int task_count_limit,
             }
             );
     output << "\\begin{tikzpicture}[scale=.2, anchor=south west]" << endl;
-    tikz_string_dag_compact_internal(output, positions, level_count, 1, task_count_limit);
+    tikz_string_dag_compact_internal(output, 
+            positions,
+            level_count,
+            1,
+            task_count_limit,
+            first,
+            depth,
+            show_expectancy,
+            show_probabilities);
     output << "\\end{tikzpicture}" << endl;
     output << endl;
     output << "%%% Local Variables:" << endl;
@@ -439,7 +451,13 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         myfloat probability,
         unsigned int task_count_limit,
         bool first,
-        unsigned int depth){
+        unsigned int depth,
+        bool show_expectancy,
+        bool show_probabilities){
+    vector<string> tikz_partnames = {
+        "two", "three", "four", "five"
+    };
+    char partindex = 0;
     if(names.find(this) == names.end()){
         // draw current snapshot at proper position
         float width = intree.get_max_width() * 1.5f + 2;
@@ -449,26 +467,32 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         tikz_nn << "sn" << this << "W" << int(level_count[depth]) << "";
         string tikz_node_name = tikz_nn.str();
         names[this] = tikz_node_name;
-        output << "\\node[draw=black, rectangle split, rectangle split parts=3] (" << tikz_node_name << ")"
+        output << "\\node[draw=black, rectangle split, rectangle split parts=" 
+               << (int)show_expectancy+(int)show_probabilities+1
+               << "] (" << tikz_node_name << ")"
                << " at (" << level_count[depth] << ", -" << depth*height << ") {" << endl;
         output << "\\begin{tikzpicture}[scale=.2]" << endl;
         output << tikz_string() << endl;
         output << "\\end{tikzpicture}" << endl;
-        output << "\\nodepart{two}" << endl
-               << "\\footnotesize{"
-               << expected_runtime() << "}" << endl;
-        output << "\\nodepart{three}" << endl
-               << "\\footnotesize{";
-        auto old_precision = output.precision();
-        output << setprecision(2);
-        for(auto pit=successor_probs.begin(); pit!=successor_probs.end(); ++pit){
-            output << *pit;
-            if(next(pit) != successor_probs.end()){
-                output << " ";
-            }
+        if(show_expectancy){
+            output << "\\nodepart{" << tikz_partnames[partindex++] << "}" << endl
+                << "\\footnotesize{"
+                << expected_runtime() << "}" << endl;
         }
-        output << setprecision(old_precision);
-        output << "}" << endl;
+        if(show_probabilities){
+            output << "\\nodepart{" << tikz_partnames[partindex++] << "}" << endl
+                << "\\footnotesize{";
+            auto old_precision = output.precision();
+            output << setprecision(2);
+            for(auto pit=successor_probs.begin(); pit!=successor_probs.end(); ++pit){
+                output << *pit;
+                if(next(pit) != successor_probs.end()){
+                    output << " ";
+                }
+            }
+            output << setprecision(old_precision);
+            output << "}" << endl;
+        }
         output << "};" << endl;
         // draw successors
         auto pit = successor_probs.begin();
@@ -479,7 +503,9 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
                 *pit,
                 task_count_limit,
                 false,
-                depth+1);
+                depth+1,
+                show_expectancy,
+                show_probabilities);
         }
         level_count[depth] += width;
         // connect (we have to draw probabilities seperately!)

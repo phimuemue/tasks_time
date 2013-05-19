@@ -78,7 +78,12 @@ int read_variables_map_from_args(int argc,
         ("tikz", po::value<string>()->implicit_value(""), 
          "Generate TikZ-Output of snapshot(s) in file.")
         ("tikzlimit", po::value<unsigned int>()->default_value(0), 
-         "Only show snapshots with a certain amount of tasks in TikZ.");
+         "Only show snapshots with a certain amount of tasks in TikZ.")
+        ("tikzexp", po::value<bool>()->default_value(true), 
+         "Draw expected values in TikZ.")
+        ("tikzprobs", po::value<bool>()->default_value(true), 
+         "Draw transition probabilities in TikZ.")
+        ;
     // input options
     po::options_description input_options("Input");
     input_options.add_options()
@@ -187,7 +192,11 @@ void generate_output(const po::variables_map& vm,
         tikz_output.open(filename);
         for(unsigned int i= 0; i<s.size(); ++i){
             tikz_output 
-                << s[i].tikz_string_dag_compact(vm["tikzlimit"].as<unsigned int>()) 
+                << s[i].tikz_string_dag_compact(
+                        vm["tikzlimit"].as<unsigned int>(),
+                        vm["tikzexp"].as<bool>(),
+                        vm["tikzprobs"].as<bool>()
+                        ) 
                 << endl;
         }
         tikz_output.close();
