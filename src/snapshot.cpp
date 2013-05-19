@@ -454,6 +454,9 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         unsigned int depth,
         bool show_expectancy,
         bool show_probabilities){
+    if(intree.count_tasks() < task_count_limit){
+        return;
+    }
     vector<string> tikz_partnames = {
         "two", "three", "four", "five"
     };
@@ -509,14 +512,16 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         }
         level_count[depth] += width;
         // connect (we have to draw probabilities seperately!)
-        pit = successor_probs.begin();
-        for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
-            output << "\\draw (" << tikz_node_name << ".south) -- "
-                << "(" 
-                << names[*it] << ".north);" << endl;
+        if(intree.count_tasks() > task_count_limit){
+            pit = successor_probs.begin();
+            for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
+                output << "\\draw (" << tikz_node_name << ".south) -- "
+                    << "(" 
+                    << names[*it] << ".north);" << endl;
+            }
         }
-        pit = successor_probs.begin();
 #if 0
+        pit = successor_probs.begin();
         for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
             if (*pit != 1.f / successors.size()){
                 auto old_precision = output.precision();
