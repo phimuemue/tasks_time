@@ -70,6 +70,7 @@ class Snapshot {
                 );
         void tikz_string_dag_compact_internal(ostringstream& output,
                 map<Snapshot*, string>& names,
+                map<Snapshot*, unsigned int>& consec_num,
                 map<unsigned int, float>& levelcount,
                 myfloat probability,
                 unsigned int task_count_limit,

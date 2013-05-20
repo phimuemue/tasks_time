@@ -408,6 +408,7 @@ string Snapshot::tikz_string_dag_compact(
     ostringstream output;
     map<Snapshot*, string> positions;
     map<unsigned int, float> level_count;
+    map<Snapshot*, unsigned int> consec_num;
     map<Snapshot*, bool> lv_done;
     compute_level_widths(level_count, lv_done, 1);
     for_each(level_count.begin(), level_count.end(),
@@ -418,6 +419,7 @@ string Snapshot::tikz_string_dag_compact(
     output << "\\begin{tikzpicture}[scale=.2, anchor=south west]" << endl;
     tikz_string_dag_compact_internal(output, 
             positions,
+            consec_num,
             level_count,
             1,
             task_count_limit,
@@ -447,6 +449,7 @@ void Snapshot::compute_level_widths(map<unsigned int, float>& level_count,
 
 void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         map<Snapshot*, string>& names,
+        map<Snapshot*, unsigned int>& consec_num,
         map<unsigned int, float>& level_count,
         myfloat probability,
         unsigned int task_count_limit,
@@ -462,6 +465,8 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
     };
     char partindex = 0;
     if(names.find(this) == names.end()){
+        //assert(consec_num.find(this)==consec_num.end());
+        consec_num[this] = consec_num.size() + 1;
         // draw current snapshot at proper position
         float width = intree.get_max_width() * 1.5f + 2;
         float height = 12.;
@@ -476,19 +481,33 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         output << "\\begin{tikzpicture}[scale=.2]" << endl;
         output << tikz_string() << endl;
         output << "\\end{tikzpicture}" << endl;
+        // draw expected value
         if(show_expectancy){
             output << "\\nodepart{" << tikz_partnames[partindex++] << "}" << endl
                 << "\\footnotesize{"
                 << expected_runtime() << "}" << endl;
         }
+        // draw probabilities
         if(show_probabilities){
+            vector<pair<Snapshot*,myfloat>> successor_probs_in_order;
+            auto tmp_pit = successor_probs.begin();
+            for(auto sit = successors.begin(); sit!=successors.end(); ++sit, ++tmp_pit){
+                successor_probs_in_order.push_back(
+                        pair<Snapshot*, myfloat>(*sit, *tmp_pit)
+                        );
+            }
+            sort(successor_probs_in_order.begin(), successor_probs_in_order.end(),
+                    [&](const pair<Snapshot*,myfloat>& a, const pair<Snapshot*,myfloat>& b) -> bool {
+                        return consec_num[a.first] > consec_num[b.first];
+                    }
+                );
             output << "\\nodepart{" << tikz_partnames[partindex++] << "}" << endl
                 << "\\footnotesize{$";
             auto old_precision = output.precision();
             output << setprecision(2);
-            for(auto pit=successor_probs.begin(); pit!=successor_probs.end(); ++pit){
-                output << (*pit < 1 ? (*pit)*100 : *pit);
-                if(next(pit) != successor_probs.end()){
+            for(auto pit=successor_probs_in_order.begin(); pit!=successor_probs_in_order.end(); ++pit){
+                output << (pit->second < 1 ? (pit->second)*100 : pit->second);
+                if(next(pit) != successor_probs_in_order.end()){
                     output << "\\:";
                 }
             }
@@ -499,15 +518,9 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         // draw successors
         auto pit = successor_probs.begin();
         for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
-            (*it)->tikz_string_dag_compact_internal(output,
-                names,
-                level_count,
-                *pit,
-                task_count_limit,
-                false,
-                depth+1,
-                show_expectancy,
-                show_probabilities);
+            (*it)->tikz_string_dag_compact_internal(
+                    output, names, consec_num, level_count, *pit, task_count_limit, false,
+                    depth+1, show_expectancy, show_probabilities);
         }
         level_count[depth] += width;
         // connect (we have to draw probabilities seperately!)
@@ -519,21 +532,6 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
                     << names[*it] << ".north);" << endl;
             }
         }
-#if 0
-        pit = successor_probs.begin();
-        for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
-            if (*pit != 1.f / successors.size()){
-                auto old_precision = output.precision();
-                output << "\\draw[draw opacity=0] (" << tikz_node_name << ".south) -- "
-                    << "node[draw opacity=1, anchor=base, draw=black, fill=white]{\\footnotesize{" 
-                    << setprecision(2) 
-                    << *pit 
-                    << "}}(" 
-                    << names[*it] << ".north);" << endl;
-                output << setprecision(old_precision);
-            }
-        }
-#endif
     }
 }
 
