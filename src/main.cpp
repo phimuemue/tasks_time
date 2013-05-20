@@ -225,30 +225,20 @@ int main(int argc, char** argv){
     print_version();
 
     // vector<pair<Task, Task>> e1;
-    // vector<pair<Task, Task>> e2;
-    // 
-    // tree_from_string("0 0 0 1 2 1 2 3", e1);
-    // tree_from_string("0 0 0 1 1 2 2 3", e2);
+    // tree_from_string("0 0 0 1 1 2 2 3", e1);
     // Intree t1(e1);
-    // Intree t2(e2);
-    // tree_id out;
-    // vector<task_id> pref;
-    // map<task_id,task_id> isom;
-    // Intree t1n = Intree::canonical_intree(t1, pref, isom, out);
-    // Intree t2n = Intree::canonical_intree(t2, pref, isom, out);
-    // cout << t1n << endl;
-    // cout << t2n << endl;
-    // 
-    // vector<task_id> preds;
-    // vector<pair<Task, Task>> edg;
-    // randomEdges(5, edg);
-    // t1n = Intree(edg);
-    // cout << t1n << endl;
-    // t1n.get_predecessors(1, preds);
-    // for(auto it=preds.begin(); it!=preds.end(); ++it){
-    //     cout << *it << endl;
-    // }
-    // 
+
+    // vector<task_id> marked1 = {4, 8};
+    // vector<task_id> marked2 = {6, 8};
+
+    // Snapshot s1 = *Snapshot::canonical_snapshot(Snapshot(t1, marked1));
+    // Snapshot s2 = *Snapshot::canonical_snapshot(Snapshot(t1, marked2));
+
+    // cout << s1 << endl;
+    // cout << s2 << endl;
+
+    // cout << t1.longest_chain_length() << endl;
+
     // return 1;
 
     try{

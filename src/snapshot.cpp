@@ -135,7 +135,7 @@ Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
     }
     isomorphism.clear();
     tid = 0;
-    Intree::canonical_intree(Snapshot::pool.find(find_key)->second->intree, newmarked, isomorphism, tid);
+    //Intree::canonical_intree(Snapshot::pool.find(find_key)->second->intree, newmarked, isomorphism, tid);
     return Snapshot::pool.find(find_key)->second;
 }
 
@@ -484,17 +484,17 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         }
         if(show_probabilities){
             output << "\\nodepart{" << tikz_partnames[partindex++] << "}" << endl
-                << "\\footnotesize{";
+                << "\\footnotesize{$";
             auto old_precision = output.precision();
             output << setprecision(2);
             for(auto pit=successor_probs.begin(); pit!=successor_probs.end(); ++pit){
-                output << *pit;
+                output << (*pit < 1 ? (*pit)*100 : *pit);
                 if(next(pit) != successor_probs.end()){
-                    output << " ";
+                    output << "\\:";
                 }
             }
             output << setprecision(old_precision);
-            output << "}" << endl;
+            output << "$}" << endl;
         }
         output << "};" << endl;
         // draw successors
