@@ -25,7 +25,6 @@ Intree Intree::canonical_intree(const Intree& _t,
         const vector<task_id>& _preferred,
         map<task_id, task_id>& isomorphism,
         tree_id& out){
-    cout << "CANONICAL INTREE on " << _t << endl;
     Intree t(_t);
     vector<task_id> preferred(_preferred);
     map<task_id, task_id> inner_iso_rev;
@@ -34,12 +33,12 @@ Intree Intree::canonical_intree(const Intree& _t,
         inner_iso_rev[it->first] = it->first;
     }
     // make leaves minimal
-    cout << "Tree before minimal leaves: " << t << endl;
-    cout << "Preferred before minimal leaves: ";
-    for(auto pit=preferred.begin(); pit!=preferred.end(); ++pit){
-        cout << *pit << ", ";
-    }
-    cout << endl;
+    // cout << "Tree before minimal leaves: " << t << endl;
+    // cout << "Preferred before minimal leaves: ";
+    // for(auto pit=preferred.begin(); pit!=preferred.end(); ++pit){
+    //     cout << *pit << ", ";
+    // }
+    // cout << endl;
     vector<task_id> leaves;
     t.get_leaves(leaves);
     sort(leaves.begin(), leaves.end(),
@@ -67,12 +66,12 @@ Intree Intree::canonical_intree(const Intree& _t,
                 }
                 );
     }
-    cout << "Tree after minimal leaves: " << t << endl;
-    cout << "Preferred after minimal leaves: ";
-    for(auto pit=preferred.begin(); pit!=preferred.end(); ++pit){
-        cout << *pit << ", ";
-    }
-    cout << endl;
+    // cout << "Tree after minimal leaves: " << t << endl;
+    // cout << "Preferred after minimal leaves: ";
+    // for(auto pit=preferred.begin(); pit!=preferred.end(); ++pit){
+    //     cout << *pit << ", ";
+    // }
+    // cout << endl;
     // initialize marked_count
     map<task_id, unsigned int> marked_count;
     for(auto it=preferred.begin(); it!=preferred.end(); ++it){
@@ -128,23 +127,23 @@ Intree Intree::canonical_intree(const Intree& _t,
                     return canonical_names[a] > canonical_names[b];
                     }
                 );
-            if(predecessors.size() > 0){
-                cout << "Sorted predecessors: ";
-                for_each(predecessors.begin(), predecessors.end(),
-                        [&](const task_id& a){
-                        cout << a;
-                        cout << "(";
-                        for_each(canonical_names[a].begin(), canonical_names[a].end(),
-                            [&](const unsigned short& x){
-                                cout << x;
-                            }
-                            );
-                        cout << ")";
-                        cout << ", ";
-                        }
-                        );
-                cout << endl;
-            }
+            // if(predecessors.size() > 0){
+            //     cout << "Sorted predecessors: ";
+            //     for_each(predecessors.begin(), predecessors.end(),
+            //             [&](const task_id& a){
+            //             cout << a;
+            //             cout << "(";
+            //             for_each(canonical_names[a].begin(), canonical_names[a].end(),
+            //                 [&](const unsigned short& x){
+            //                     cout << x;
+            //                 }
+            //                 );
+            //             cout << ")";
+            //             cout << ", ";
+            //             }
+            //             );
+            //     cout << endl;
+            // }
             all_predecessors[*it] = predecessors;
             vector<vector<unsigned short>> canonical_names_predecessors;
             canonical_name.push_back(0);
@@ -166,22 +165,22 @@ Intree Intree::canonical_intree(const Intree& _t,
         // sort tasks according to their canonical name
         sort(rit->begin(), rit->end(),
                 [&](const task_id& a, const task_id& b) -> bool {
-                cout << a << "(";
-                for_each(canonical_names[a].begin(), canonical_names[a].end(),
-                    [](const unsigned int x){
-                        cout << x;
-                    }
-                    );
-                cout << ")";
-                cout << " vs ";
-                cout << b << "(";
-                for_each(canonical_names[b].begin(), canonical_names[b].end(),
-                    [](const unsigned int x){
-                        cout << x;
-                    }
-                    );
-                cout << ")";
-                cout << endl;
+                // cout << a << "(";
+                // for_each(canonical_names[a].begin(), canonical_names[a].end(),
+                //     [](const unsigned int x){
+                //         cout << x;
+                //     }
+                //     );
+                // cout << ")";
+                // cout << " vs ";
+                // cout << b << "(";
+                // for_each(canonical_names[b].begin(), canonical_names[b].end(),
+                //     [](const unsigned int x){
+                //         cout << x;
+                //     }
+                //     );
+                // cout << ")";
+                // cout << endl;
                 if(canonical_names[a].size() < canonical_names[b].size()) {
                     return false;
                 }
@@ -204,15 +203,15 @@ Intree Intree::canonical_intree(const Intree& _t,
                 return canonical_names[a] > canonical_names[b];
                 }
             );
-        if(rit->size() > 0){
-            cout << "Sorted level: ";
-            for_each(rit->begin(), rit->end(),
-                    [&](const task_id& a){
-                    cout << a << ", ";
-                    }
-                    );
-            cout << endl;
-        }
+        // if(rit->size() > 0){
+        //     cout << "Sorted level: ";
+        //     for_each(rit->begin(), rit->end(),
+        //             [&](const task_id& a){
+        //             cout << a << ", ";
+        //             }
+        //             );
+        //     cout << endl;
+        // }
     }
     for(auto rit = tasks_by_level.rbegin(); rit!=tasks_by_level.rend(); ++rit){
         // sort(rit->begin(), rit->end(),
@@ -249,15 +248,15 @@ Intree Intree::canonical_intree(const Intree& _t,
         //     return canonical_names[a] > canonical_names[b];
         //     }
         // );
-        if(rit->size() > 0){
-            cout << "Sorted LEVEL': ";
-            for_each(rit->begin(), rit->end(),
-                    [&](const task_id& a){
-                    cout << a << ", ";
-                    }
-                    );
-            cout << endl;
-        }
+        // if(rit->size() > 0){
+        //     cout << "Sorted LEVEL': ";
+        //     for_each(rit->begin(), rit->end(),
+        //             [&](const task_id& a){
+        //             cout << a << ", ";
+        //             }
+        //             );
+        //     cout << endl;
+        // }
     }
     // assign consecutive numbers to tasks
     task_id consecutive_num = 0;
@@ -276,15 +275,15 @@ Intree Intree::canonical_intree(const Intree& _t,
                     }
                     );
             //isomorphism[*tit] = consecutive_num;
-            cout << "Assinging: " << *tit;
-            cout << "(";
-            for_each(canonical_names[*tit].begin(), canonical_names[*tit].end(),
-                [](const unsigned int x){
-                    cout << x;
-                }
-                );
-            cout << ")";
-            cout << " -> " << consecutive_num << endl;
+            // cout << "Assinging: " << *tit;
+            // cout << "(";
+            // for_each(canonical_names[*tit].begin(), canonical_names[*tit].end(),
+            //     [](const unsigned int x){
+            //         cout << x;
+            //     }
+            //     );
+            // cout << ")";
+            // cout << " -> " << consecutive_num << endl;
             isomorphism[inner_iso_rev[*tit]] = consecutive_num;
             consecutive_num++;
         }
