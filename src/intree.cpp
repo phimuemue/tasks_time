@@ -306,7 +306,7 @@ Intree Intree::canonical_intree(const Intree& _t,
             throw 1;
         }
         out <<= 1;
-        out = out | (canonical_names[0][i] ? 1ul : 0ul);
+        out = out | (canonical_names[0][i] > 0 ? 1ul : 0ul);
     }
     // cout << "Original: " << _t << endl;
     // cout << "iso: " << endl;

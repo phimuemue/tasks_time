@@ -135,7 +135,7 @@ Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
     }
     isomorphism.clear();
     tid = 0;
-    //Intree::canonical_intree(Snapshot::pool.find(find_key)->second->intree, newmarked, isomorphism, tid);
+    Intree::canonical_intree(Snapshot::pool.find(find_key)->second->intree, newmarked, isomorphism, tid);
     return Snapshot::pool.find(find_key)->second;
 }
 
