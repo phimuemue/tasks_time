@@ -469,7 +469,7 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         consec_num[this] = consec_num.size() + 1;
         // draw current snapshot at proper position
         float width = intree.get_max_width() * 1.5f + 2;
-        float height = 12.;
+        float height = 15.;
         ostringstream tikz_nn;
         tikz_nn << "sn" << this << "W" << int(level_count[depth]) << "";
         string tikz_node_name = tikz_nn.str();
