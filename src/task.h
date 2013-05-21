@@ -37,7 +37,7 @@ private:
 public:
     Task();
     Task(const Task& t);
-    Task(task_id id, Distribution d = Exponential, myfloat param1 = 1, myfloat param2 = 2);
+    Task(task_id id, Distribution d = Exponential, myfloat param1 = (myfloat)1, myfloat param2 = (myfloat)2);
     task_id get_id() const;
 
     void elapse(myfloat t);
