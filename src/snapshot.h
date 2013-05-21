@@ -26,6 +26,8 @@ class Snapshot {
         vector<Snapshot*> successors;
         vector<myfloat> successor_probs;
         vector<myfloat> probabilities;
+
+        // TikZ output stuff
         string tikz_string_internal_qtree(const task_id,
                 map<task_id,vector<task_id>>&, bool = true) const;
         unsigned int get_subtree_width(const task_id,
@@ -39,7 +41,7 @@ class Snapshot {
                 bool show_expectancy,
                 bool show_probabilities,
                 map<Snapshot*, unsigned int>& consec_num,
-                float left,
+                string right_of,
                 float top) const;
         static map<snapshot_id, Snapshot*> pool;
         void compute_level_widths(map<unsigned int, float>& level_count,
@@ -51,6 +53,9 @@ class Snapshot {
                 unsigned int depth=0);
         unsigned int width_of_task(const task_id t, 
                 map<task_id,vector<task_id>>& rt) const;
+        void tikz_dag_by_levels(map<unsigned int, vector<Snapshot*>>& levels,
+                unsigned int depth = 1
+                ) const;
     public:
         Snapshot();
         Snapshot(const Snapshot& s);

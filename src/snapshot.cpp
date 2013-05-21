@@ -416,7 +416,7 @@ string Snapshot::tikz_string_dag_compact(
                 a.second = a.second * -0.5f;
             }
             );
-    output << "\\begin{tikzpicture}[scale=.2, anchor=south west]" << endl;
+    output << "\\begin{tikzpicture}[scale=.2, anchor=west]" << endl;
     tikz_string_dag_compact_internal(output, 
             positions,
             consec_num,
@@ -458,17 +458,23 @@ void Snapshot::tikz_draw_node(ostream& output,
         bool show_expectancy,
         bool show_probabilities,
         map<Snapshot*, unsigned int>& consec_num,
-        float left,
+        string right_of,
         float top) const {
     unsigned partindex = 0;
     vector<string> tikz_partnames = {
         "two", "three", "four", "five"
     };
     string tikz_node_name = this->tikz_node_name();
-    output << "\\node[draw=black, rectangle split, rectangle split parts=" 
-        << (int)show_expectancy+(int)show_probabilities+1
-        << "] (" << tikz_node_name << ")"
-        << " at (" << left << ", -" << top << ") {" << endl;
+    output << "\\node[draw=black, rectangle split, anchor=south west, rectangle split parts=" 
+        << (int)show_expectancy+(int)show_probabilities+1;
+    output << "] (" << tikz_node_name << ")";
+    if(right_of == ""){
+        output << " at (" << right_of << ", -" << top << ")";
+    }
+    else {
+        output << " at ([xshift=2cm]" << right_of << ")";
+    }
+    output << "{" << endl;
     output << "\\begin{tikzpicture}[scale=.2]" << endl;
     output << tikz_string() << endl;
     output << "\\end{tikzpicture}" << endl;
@@ -508,6 +514,20 @@ void Snapshot::tikz_draw_node(ostream& output,
     output << "};" << endl;
 }
 
+void Snapshot::tikz_dag_by_levels(map<unsigned int, vector<Snapshot*>>& levels,
+        unsigned int depth
+        ) const {
+    if(find(levels[depth].begin(), levels[depth].end(), this) == levels[depth].end()){
+        // sorry for const_cast, TODO: can this be done better?
+        levels[depth].push_back(const_cast<Snapshot*>(this));
+    }
+    for_each(successors.begin(), successors.end(),
+            [&](const Snapshot* s){
+                s->tikz_dag_by_levels(levels, depth+1);
+            }
+            );
+}
+
 void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         map<Snapshot*, string>& names,
         map<Snapshot*, unsigned int>& consec_num,
@@ -518,26 +538,46 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
         unsigned int depth,
         bool show_expectancy,
         bool show_probabilities){
+    if(first){
+        map<unsigned int, vector<Snapshot*>> levels;
+        tikz_dag_by_levels(levels, 1);
+        // draw all snaps
+        for(unsigned int l=1; l<intree.count_tasks()+2-task_count_limit; ++l){
+            for(auto it=levels[l].begin(); it!=levels[l].end(); ++it){
+                string prev = "dummyL";
+                output << "\\node[draw opacity=0, fill opacity=0, anchor=south west] (" << prev
+                    << ") at (" 
+                    << levels[l].size() * -3.f << ", " << (int)l * (int)-15 << "){};" << endl;
+                if(it!=levels[l].begin()){
+                    prev = (*(it-1))->tikz_node_name() + ".south east";
+                }
+                (*it)->tikz_draw_node(output, show_expectancy, show_probabilities, consec_num, prev, l*15);
+                names[*it] = (*it)->tikz_node_name();
+                consec_num[*it] = consec_num.size();
+            }
+        }
+        // connect (we have to draw probabilities seperately!)
+        for(unsigned int l=1; l<intree.count_tasks()+1-task_count_limit; ++l){
+            for(auto it=levels[l].begin(); it!=levels[l].end(); ++it){
+                auto pit = (*it)->successor_probs.begin();
+                for(auto sit=(*it)->successors.begin(); sit!=(*it)->successors.end(); ++sit, ++pit){
+                    output << "\\draw (" << (*it)->tikz_node_name() << ".south) -- "
+                        << "(" 
+                        << names[*sit] << ".north);" << endl;
+                }
+            }
+        }
+    }
+    
     //assert(names.size() == consec_num.size());
     if(intree.count_tasks() < task_count_limit){
         return;
     }
     if(names.find(this) == names.end()){
-        consec_num[this] = consec_num.size() + 1;
+        //consec_num[this] = consec_num.size() + 1;
         // draw current snapshot at proper position
         float width = intree.get_max_width() * 1.5f + 2;
-        float height = 15.;
 
-        names[this] = tikz_node_name();
-        tikz_draw_node(output, show_expectancy, show_probabilities, consec_num, level_count[depth], depth*height);
-        // draw successors
-        auto pit = successor_probs.begin();
-        for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
-            (*it)->tikz_string_dag_compact_internal(
-                    output, names, consec_num, level_count, *pit, task_count_limit, false,
-                    depth+1, show_expectancy, show_probabilities);
-        }
-        level_count[depth] += width;
         // connect (we have to draw probabilities seperately!)
         if(intree.count_tasks() > task_count_limit){
             pit = successor_probs.begin();
