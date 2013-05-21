@@ -578,7 +578,7 @@ void Snapshot::tikz_string_dag_compact_internal(ostringstream& output,
     }
     if(names.find(this) == names.end()){
         // draw current snapshot at proper position
-        float width = intree.get_max_width() * 1.5f + 2;
+        //float width = intree.get_max_width() * 1.5f + 2;
 
         // connect (we have to draw probabilities seperately!)
         if(intree.count_tasks() > task_count_limit){
