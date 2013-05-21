@@ -252,30 +252,6 @@ myfloat Snapshot::expected_runtime() const {
     return result;
 }
 
-void Snapshot::dag_view_string_internal(ostringstream& output,
-        unsigned int task_count_limit,
-        myfloat probability,
-        unsigned int depth){
-    for(unsigned int i=0; i<depth; ++i){
-        output << " ";
-    }
-    output << *this << " " << expected_runtime() << " " << probability << endl;
-    if(intree.count_tasks() > task_count_limit){
-        if(!intree.is_chain()){
-            auto pit = successor_probs.begin();
-            for(auto it = successors.begin(); it!=successors.end(); ++it, ++pit){
-                (*it)->dag_view_string_internal(output, task_count_limit, *pit, depth+1);
-            }
-        }
-    }
-}
-
-string Snapshot::dag_view_string(unsigned int task_count_limit, unsigned int depth, myfloat probability){
-    ostringstream output;
-    dag_view_string_internal(output, task_count_limit);
-    return output.str();
-}
-
 void Snapshot::print_snapshot_dag(int depth){
     for(int i=-1; i<depth; ++i){
         cout << "*";

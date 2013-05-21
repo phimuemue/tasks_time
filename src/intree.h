@@ -58,7 +58,7 @@ class Intree {
         pair<Task, Task> get_edge_from(const Task& t) const;
         pair<Task, Task> get_edge_from(const task_id t) const;
 
-        bool is_chain();
+        bool is_chain() const;
         bool same_chain(const task_id t1, const task_id t2) const;
         unsigned int count_free_chains(vector<task_id>& marked) const;
         void get_chain(const Task& t, vector<task_id>& target) const;

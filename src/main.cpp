@@ -17,6 +17,7 @@
 // exporters
 #include "exporter.h"
 #include "tikzexporter.h"
+#include "dagviewexporter.h"
 
 #include "alltrees.h"
 
@@ -203,13 +204,6 @@ void generate_output(const po::variables_map& vm,
                 );
         for(unsigned int i= 0; i<s.size(); ++i){
             tikz_exporter.export_snapshot_dag(tikz_output, &s[i]);
-            // tikz_output 
-            //     << s[i].tikz_string_dag_compact(
-            //             vm["tikzlimit"].as<unsigned int>(),
-            //             vm["tikzexp"].as<bool>(),
-            //             vm["tikzprobs"].as<bool>()
-            //             ) 
-            //     << endl;
         }
         tikz_output.close();
     }
@@ -221,8 +215,9 @@ void generate_output(const po::variables_map& vm,
         }
         cout << "Writing dagview to " << filename << endl;
         dagview_output.open(filename);
+        DagviewExporter dagview_exporter;
         for(unsigned int i= 0; i<s.size(); ++i){
-            dagview_output << s[i].dag_view_string(vm["dagviewlimit"].as<unsigned int>()) << endl;
+            dagview_exporter.export_snapshot_dag(dagview_output, &s[i]);
         }
         dagview_output.close();
     }

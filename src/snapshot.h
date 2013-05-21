@@ -21,6 +21,7 @@ using namespace std;
 class Snapshot {
     friend class Probability_Computer;
     friend class TikzExporter;
+    friend class DagviewExporter;
     private:
         vector<task_id> marked;
         Intree intree;

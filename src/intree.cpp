@@ -448,7 +448,7 @@ pair<Task, Task> Intree::get_edge_from(const task_id t) const {
     throw 0;
 }
 
-bool Intree::is_chain(){
+bool Intree::is_chain() const {
     vector<vector<task_id>> chains;
     // TODO: this can be made more efficient
     get_chains(chains);
