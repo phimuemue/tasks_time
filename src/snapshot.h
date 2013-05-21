@@ -54,7 +54,8 @@ class Snapshot {
         unsigned int width_of_task(const task_id t, 
                 map<task_id,vector<task_id>>& rt) const;
         void tikz_dag_by_levels(map<unsigned int, vector<Snapshot*>>& levels,
-                unsigned int depth = 1
+                unsigned int depth,
+                map<Snapshot*, unsigned int>& consec_num
                 ) const;
     public:
         Snapshot();
