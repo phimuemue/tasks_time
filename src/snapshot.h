@@ -31,7 +31,16 @@ class Snapshot {
         unsigned int get_subtree_width(const task_id,
                 map<task_id,vector<task_id>>&) const;
         string tikz_string_internal(const task_id,
-                map<task_id,vector<task_id>>&, unsigned int depth=0, float leftoffset=0) const;
+                map<task_id,vector<task_id>>&, 
+                unsigned int depth=0,
+                float leftoffset=0) const;
+        string tikz_node_name() const;
+        void tikz_draw_node(ostream& output,
+                bool show_expectancy,
+                bool show_probabilities,
+                map<Snapshot*, unsigned int>& consec_num,
+                float left,
+                float top) const;
         static map<snapshot_id, Snapshot*> pool;
         void compute_level_widths(map<unsigned int, float>& level_count,
                 map<Snapshot*, bool>& done,
@@ -58,7 +67,7 @@ class Snapshot {
         string dag_view_string(unsigned int task_count_limit=0,
                 unsigned int depth=0,
                 myfloat probability=(myfloat)1);
-        string tikz_string();
+        string tikz_string() const;
         string tikz_string_dag(unsigned int task_count_limit=0,
                 bool first=true,
                 unsigned int = 1);
@@ -80,7 +89,7 @@ class Snapshot {
                 bool show_probabilities);
 
 
-        myfloat expected_runtime();
+        myfloat expected_runtime() const;
         void print_snapshot_dag(int depth=0);
         friend ostream& operator<<(ostream& os, const Snapshot& s);
 

@@ -20,6 +20,7 @@
 \usepackage[left=3.5cm,right=3.5cm]{geometry}
 
 \usetikzlibrary{shapes.multipart,chains}
+\usetikzlibrary{positioning}
 
 \newtheorem{definition}{Definition}[chapter]
 \newtheorem{theorem}{Theorem}[chapter]
@@ -3970,8 +3971,9 @@ If we use HLF on the following tree, we obtian a runtime of 1079/216 ($<5$).
 \section{The current TikZ-file}
 
 \begin{tikzpicture}
-  \node[draw=black,anchor=base] (a) at (1,1) {asdf};
+  \node[draw=black,anchor=base] (a) at (1,1) {hhjjweiojb};
   \node[draw=black,anchor=base] (b) at (3,1) {\huge{asdf}};
+  \node[right=of a, draw=red] (ra) {test};
   \node[draw=black] (c) at (5,1) {asdf};
   
 \end{tikzpicture}
