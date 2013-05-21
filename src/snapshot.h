@@ -19,12 +19,15 @@
 using namespace std;
 
 class Snapshot {
+    // TODO: I dont want no friends!!!
     friend class Probability_Computer;
     friend class TikzExporter;
     friend class DagviewExporter;
+    friend class SimpleExporter;
     private:
         vector<task_id> marked;
         Intree intree;
+        // TODO: combine successors and successor_probs into 1 vector!
         vector<Snapshot*> successors;
         vector<myfloat> successor_probs;
         vector<myfloat> probabilities;

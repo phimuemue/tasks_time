@@ -252,19 +252,6 @@ myfloat Snapshot::expected_runtime() const {
     return result;
 }
 
-void Snapshot::print_snapshot_dag(int depth){
-    for(int i=-1; i<depth; ++i){
-        cout << "*";
-    } 
-    cout << " ";
-    cout << *this;
-    // cout << " (" << expected_runtime() << ") ";
-    cout << endl;
-    for(auto it=successors.begin(); it!=successors.end(); ++it){
-        (*it)->print_snapshot_dag(depth+1);
-    }
-}
-
 ostream& operator<<(ostream& os, const Snapshot& s){
     os << "<" << s.intree << " | [";
     
