@@ -7,9 +7,9 @@
 
 using namespace std;
 
-class SnapshotExporter {
+class Exporter {
     public:
-        virtual void export_snapshot(ostream& output, const Snapshot* s) const = 0;
+        virtual void export_snapshot_dag(ostream& output, const Snapshot* s) const = 0;
 };
 
 #endif

@@ -20,6 +20,7 @@ using namespace std;
 
 class Snapshot {
     friend class Probability_Computer;
+    friend class TikzExporter;
     private:
         vector<task_id> marked;
         Intree intree;
