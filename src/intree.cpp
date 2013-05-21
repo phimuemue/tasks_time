@@ -506,7 +506,7 @@ unsigned int Intree::longest_chain_length() const{
     unsigned int result = 0;
     for_each(chains.begin(), chains.end(),
             [&result](const vector<task_id> c){
-                result = max(result, c.size());
+                result = max(result, (unsigned int)c.size());
             }
             );
     return result;
