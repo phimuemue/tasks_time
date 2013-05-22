@@ -30,6 +30,8 @@ class Snapshot {
         vector<myfloat> successor_probs;
 
     public:
+        // TODO: it would be nice if the following were const
+        // but then the default operator= is deleted.
         vector<task_id> marked;
         Intree intree;
 

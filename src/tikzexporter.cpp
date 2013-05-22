@@ -1,6 +1,5 @@
 #include "tikzexporter.h"
 
-
 TikzExporter::TikzExporter(){
     show_probabilities = true;
     show_expectancy = true;
@@ -118,17 +117,17 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
         tikz_dag_by_levels(s, levels, 1, consec_num);
         // draw all snaps
         for(unsigned int l=1; l<s->intree.count_tasks()+2-task_count_limit; ++l){
+            output << "\\begin{scope}[yshift=-" << l*12 << "cm]" << endl;
+            output << "\\matrix (line" << l << ") [column sep=1cm] {" << endl;
             for(auto it=levels[l].begin(); it!=levels[l].end(); ++it){
-                string prev = "dummyL";
-                output << "\\node[draw opacity=0, fill opacity=0, anchor=south west] (" << prev
-                    << ") at (" 
-                    << levels[l].size() * -3.f << ", " << (int)l * (int)-15 << "){};" << endl;
-                if(it!=levels[l].begin()){
-                    prev = tikz_node_name(*(it-1)) + ".south east";
-                }
-                tikz_draw_node(*it, output, show_expectancy, show_probabilities, consec_num, prev, l*15);
+                tikz_draw_node(*it, output, show_expectancy, show_probabilities, consec_num, "", l*15);
                 names[*it] = tikz_node_name(*it);
+                if(it!=levels[l].end()){
+                    output << " & " << endl;
+                }
             }
+            output << "\\\\" << endl << "};" << endl;
+            output << "\\end{scope}" << endl;
         }
         // connect (we have to draw probabilities seperately!)
         for(unsigned int l=1; l<s->intree.count_tasks()+1-task_count_limit; ++l){
@@ -174,15 +173,15 @@ void TikzExporter::tikz_draw_node(const Snapshot* s,
         "two", "three", "four", "five"
     };
     string tikz_this_nodes_name = tikz_node_name(s);
-    output << "\\node[draw=black, rectangle split, anchor=south west, rectangle split parts=" 
+    output << "\\node[draw=black, rectangle split,  rectangle split parts=" 
         << (int)show_expectancy+(int)show_probabilities+1;
     output << "] (" << tikz_this_nodes_name << ")";
-    if(right_of == ""){
-        output << " at (" << right_of << ", -" << top << ")";
-    }
-    else {
-        output << " at ([xshift=2cm]" << right_of << ")";
-    }
+    // if(right_of == ""){
+    //     output << " at (" << right_of << ", -" << top << ")";
+    // }
+    // else {
+    //     output << " at ([xshift=2cm]" << right_of << ")";
+    // }
     output << "{" << endl;
     output << "\\begin{tikzpicture}[scale=.2]" << endl;
     export_single_snaphot(output, s);
@@ -241,7 +240,7 @@ void TikzExporter::export_snapshot_dag(ostream& output, const Snapshot* s) const
                 a.second = a.second * -0.5f;
             }
             );
-    output << "\\begin{tikzpicture}[scale=.2, anchor=west]" << endl;
+    output << "\\begin{tikzpicture}[scale=.2]" << endl;
     tikz_string_dag_compact_internal(s, 
             output, 
             positions,

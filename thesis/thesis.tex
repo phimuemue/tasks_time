@@ -22,6 +22,7 @@
 \usetikzlibrary{shapes.multipart,chains}
 \usetikzlibrary{positioning}
 \usetikzlibrary{matrix}
+\usetikzlibrary{external} 
 
 \newtheorem{definition}{Definition}[chapter]
 \newtheorem{theorem}{Theorem}[chapter]
@@ -3971,12 +3972,101 @@ If we use HLF on the following tree, we obtian a runtime of 1079/216 ($<5$).
 
 \section{The current TikZ-file}
 
+\begin{tikzpicture}[]
+    \begin{scope}[]
+        \matrix[nodes={draw}, column sep=1cm]{
+            \node (A) {A}; &
+            \node (B) {B}; &
+            \node (C) {C}; &
+            \node (D) {D}; \\
+            };
+    \end{scope}
+    \begin{scope}[yshift=-1.5cm]
+        \matrix[nodes={draw}, column sep=1cm]{
+            \node (AB) {AB}; &
+            \node (AC) {AC}; &
+            \node (AD) {AD}; &
+            \node (BC) {BC}; &
+            \node (BD) {BD}; &
+            \node (CD) {CD}; \\
+        };
+     \end{scope}
+     \begin{scope}[yshift=-3cm]
+       \matrix[nodes={draw}, column sep=1cm]{
+         \node (ABC) {ABC}; &
+         \node (ABD) {ABD}; &
+         \node (ACD) {ACD}; &
+
+         \node[draw=black, rectangle split, anchor=south west,
+         rectangle split parts=3] (asdf2) {
+           \begin{tikzpicture}[scale=.2]
+             \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
+             \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+             \node[circle, scale=0.75, fill, red] (tid4) at
+             (0.75,4.5){}; \node[circle, scale=0.75, fill, red]
+             (tid5) at (2.25,4.5){}; \node[circle, scale=0.75,
+             fill] (tid6) at (3.75,4.5){}; \draw[](tid1) -- (tid4);
+             \draw[](tid1) -- (tid5); \draw[](tid1) -- (tid6);
+             \node[circle, scale=0.75, fill] (tid2) at (6,3){};
+             \node[circle, scale=0.75, fill, red] (tid7) at
+             (5.25,4.5){}; \node[circle, scale=0.75, fill] (tid8)
+             at (6.75,4.5){}; \draw[](tid2) -- (tid7);
+             \draw[](tid2) -- (tid8); \node[circle, scale=0.75,
+             fill] (tid3) at (8.25,3){}; \node[circle, scale=0.75,
+             fill] (tid9) at (8.25,4.5){}; \draw[](tid3) -- (tid9);
+             \draw[](tid0) -- (tid1); \draw[](tid0) -- (tid2);
+             \draw[](tid0) -- (tid3);
+           \end{tikzpicture}
+           \nodepart{two} \footnotesize{5.20782} \nodepart{three}
+           \footnotesize{$44\:22\:11\:22$} };
+         
+
+         \\
+       };
+     \end{scope}
+     \begin{scope}[yshift=-4.5cm]
+       \matrix[nodes={draw}, column sep=1cm]{
+         \node[draw=black, rectangle split, anchor=south west,
+         rectangle split parts=3] (asdf1) {
+           \begin{tikzpicture}[scale=.2]
+             \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
+             \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+             \node[circle, scale=0.75, fill, red] (tid4) at
+             (0.75,4.5){}; \node[circle, scale=0.75, fill, red]
+             (tid5) at (2.25,4.5){}; \node[circle, scale=0.75,
+             fill] (tid6) at (3.75,4.5){}; \draw[](tid1) -- (tid4);
+             \draw[](tid1) -- (tid5); \draw[](tid1) -- (tid6);
+             \node[circle, scale=0.75, fill] (tid2) at (6,3){};
+             \node[circle, scale=0.75, fill, red] (tid7) at
+             (5.25,4.5){}; \node[circle, scale=0.75, fill] (tid8)
+             at (6.75,4.5){}; \draw[](tid2) -- (tid7);
+             \draw[](tid2) -- (tid8); \node[circle, scale=0.75,
+             fill] (tid3) at (8.25,3){}; \node[circle, scale=0.75,
+             fill] (tid9) at (8.25,4.5){}; \draw[](tid3) -- (tid9);
+             \draw[](tid0) -- (tid1); \draw[](tid0) -- (tid2);
+             \draw[](tid0) -- (tid3);
+           \end{tikzpicture}
+           \nodepart{two} \footnotesize{5.20782} \nodepart{three}
+           \footnotesize{$44\:22\:11\:22$} };
+         \\
+       };
+     \end{scope}
+
+     \draw(asdf2.south) -- (asdf1.north);
+\end{tikzpicture}
+
 \begin{tikzpicture}
-  \node[draw=black,anchor=base] (a) at (1,1) {hhjjweiojb};
-  \node[draw=black,anchor=base] (b) at (3,1) {\huge{asdf}};
-  \node[right=of a, draw=red] (ra) {test};
-  \node[draw=black] (c) at (5,1) {asdf};
-  
+  \matrix(sadf)[]
+  {
+    \node (a) {asjdkljjwe jklwej}; \node[right=of a] {asdk}; \\
+    \node {sak}; \\
+    \node {slakdfj klsadj flksdajf klsdajf klsdajf lksdfj};\\
+  };
+  \begin{scope}[yshift=-3cm]
+    \node[draw=black,anchor=base] (a) at (1,1) {hhjjweiojb};
+    \node[draw=black,anchor=base] (b) at (3,1) {\huge{asdf}};
+    \node[right=of a, draw=red] (ra) {test};
+  \end{scope}
 \end{tikzpicture}
 
 \input{../default.tex}

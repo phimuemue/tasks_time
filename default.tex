@@ -1,11 +1,12 @@
-\begin{tikzpicture}[scale=.2, anchor=west]
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -15){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26141c0) at ([xshift=2cm]dummyL){
+\begin{tikzpicture}[scale=.2]
+\begin{scope}[yshift=-12cm]
+\matrix (line1) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14089d0){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
@@ -23,17 +24,22 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{6.125}
+\footnotesize{5.20782}
 \nodepart{three}
-\footnotesize{$25\:12\:12\:25\:25$}
+\footnotesize{$44\:22\:11\:22$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-15, -30){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261e5f0) at ([xshift=2cm]dummyL){
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-24cm]
+\matrix (line2) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1417150){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
 \node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
@@ -49,38 +55,12 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.625}
+\footnotesize{4.87551}
 \nodepart{three}
 \footnotesize{$67\:33$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-15, -30){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2611eb0) at ([xshift=2cm]sn0x261e5f0.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid2) -- (tid6);
-\draw[](tid2) -- (tid7);
-\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
-\node[circle, scale=0.75, fill] (tid8) at (6.75,4.5){};
-\draw[](tid3) -- (tid8);
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.625}
-\nodepart{three}
-\footnotesize{$67\:33$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-15, -30){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26163b0) at ([xshift=2cm]sn0x2611eb0.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1417b50){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
@@ -89,7 +69,7 @@
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
 \node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
 \node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
 \draw[](tid2) -- (tid6);
 \draw[](tid2) -- (tid7);
@@ -101,18 +81,18 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.625}
+\footnotesize{4.87346}
 \nodepart{three}
-\footnotesize{$33\:17\:17\:33$}
+\footnotesize{$33\:33\:33$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-15, -30){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2617080) at ([xshift=2cm]sn0x26163b0.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1417c10){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
 \draw[](tid1) -- (tid6);
@@ -127,90 +107,71 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.625}
+\footnotesize{4.87654}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1417e80){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\draw[](tid1) -- (tid6);
+\node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
+\node[circle, scale=0.75, fill, red] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\node[circle, scale=0.75, fill] (tid8) at (6.75,4.5){};
+\draw[](tid3) -- (tid8);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.87243}
+\nodepart{three}
+\footnotesize{$33\:33\:17\:17$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-36cm]
+\matrix (line3) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1417f40){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\draw[](tid2) -- (tid6);
+\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\draw[](tid3) -- (tid7);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.54321}
 \nodepart{three}
 \footnotesize{$67\:33$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-15, -30){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26126f0) at ([xshift=2cm]sn0x2617080.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\draw[](tid1) -- (tid6);
-\node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
-\node[circle, scale=0.75, fill, red] (tid7) at (5.25,4.5){};
-\draw[](tid2) -- (tid7);
-\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
-\node[circle, scale=0.75, fill] (tid8) at (6.75,4.5){};
-\draw[](tid3) -- (tid8);
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.625}
-\nodepart{three}
-\footnotesize{$33\:17\:33\:17$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-21, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2612000) at ([xshift=2cm]dummyL){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418000){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
-\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
-\draw[](tid2) -- (tid6);
-\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid3) -- (tid7);
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.125}
-\nodepart{three}
-\footnotesize{$50\:25\:25$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-21, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2615a00) at ([xshift=2cm]sn0x2612000.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\draw[](tid2) -- (tid6);
-\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid3) -- (tid7);
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.125}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-21, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26212b0) at ([xshift=2cm]sn0x2615a00.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
@@ -225,944 +186,1030 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.125}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-21, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2621ec0) at ([xshift=2cm]sn0x26212b0.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid2) -- (tid6);
-\draw[](tid2) -- (tid7);
-\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.125}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-21, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26219b0) at ([xshift=2cm]sn0x2621ec0.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
-\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid2) -- (tid6);
-\draw[](tid2) -- (tid7);
-\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.125}
-\nodepart{three}
-\footnotesize{$50\:50$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-21, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2622820) at ([xshift=2cm]sn0x26219b0.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\draw[](tid1) -- (tid6);
-\node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid2) -- (tid7);
-\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.125}
-\nodepart{three}
-\footnotesize{$50\:50$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-21, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2622950) at ([xshift=2cm]sn0x2622820.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\draw[](tid1) -- (tid6);
-\node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
-\node[circle, scale=0.75, fill, red] (tid7) at (5.25,4.5){};
-\draw[](tid2) -- (tid7);
-\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.125}
-\nodepart{three}
-\footnotesize{$50\:50$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2614f90) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\draw[](tid1) -- (tid4);
-\node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\draw[](tid3) -- (tid6);
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{4.625}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261e6b0) at ([xshift=2cm]sn0x2614f90.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\draw[](tid2) -- (tid6);
-\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{4.625}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261f7a0) at ([xshift=2cm]sn0x261e6b0.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
-\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
-\draw[](tid2) -- (tid6);
-\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{4.625}
-\nodepart{three}
-\footnotesize{$50\:50$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26232c0) at ([xshift=2cm]sn0x261f7a0.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\draw[](tid1) -- (tid6);
-\node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
-\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{4.625}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -75){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fa80) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\draw[](tid1) -- (tid4);
-\node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{4.125}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -75){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2620400) at ([xshift=2cm]sn0x261fa80.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{4.125}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -90){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fb40) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\draw[](tid1) -- (tid4);
-\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{3.625}
-\nodepart{three}
-\footnotesize{$50\:50$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -105){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261f8e0) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
-\node[circle, scale=0.75, fill, red] (tid3) at (0.75,4.5){};
-\draw[](tid1) -- (tid3);
-\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{3.25}
-\nodepart{three}
-\footnotesize{$50\:50$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -105){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fd90) at ([xshift=2cm]sn0x261f8e0.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
-\node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
-\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{3}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -120){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fe50) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (0.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
-\node[circle, scale=0.75, fill, red] (tid2) at (0.75,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid0) -- (tid1);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{3}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -120){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261ff10) at ([xshift=2cm]sn0x261fe50.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
-\node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
-\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{2.5}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -135){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2620120) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (0.75,1.5){};
-\node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
-\draw[](tid0) -- (tid1);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{2}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -150){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26201e0) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill, red] (tid0) at (0.75,1.5){};
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{1}
-\nodepart{three}
-\footnotesize{$$}
-};
-\draw (sn0x26141c0.south) -- (sn0x261e5f0.north);
-\draw (sn0x26141c0.south) -- (sn0x2611eb0.north);
-\draw (sn0x26141c0.south) -- (sn0x26163b0.north);
-\draw (sn0x26141c0.south) -- (sn0x2617080.north);
-\draw (sn0x26141c0.south) -- (sn0x26126f0.north);
-\draw (sn0x261e5f0.south) -- (sn0x2612000.north);
-\draw (sn0x261e5f0.south) -- (sn0x2615a00.north);
-\draw (sn0x2611eb0.south) -- (sn0x2612000.north);
-\draw (sn0x2611eb0.south) -- (sn0x26212b0.north);
-\draw (sn0x26163b0.south) -- (sn0x26212b0.north);
-\draw (sn0x26163b0.south) -- (sn0x2612000.north);
-\draw (sn0x26163b0.south) -- (sn0x2621ec0.north);
-\draw (sn0x26163b0.south) -- (sn0x26219b0.north);
-\draw (sn0x2617080.south) -- (sn0x2615a00.north);
-\draw (sn0x2617080.south) -- (sn0x2612000.north);
-\draw (sn0x26126f0.south) -- (sn0x2612000.north);
-\draw (sn0x26126f0.south) -- (sn0x26212b0.north);
-\draw (sn0x26126f0.south) -- (sn0x2622820.north);
-\draw (sn0x26126f0.south) -- (sn0x2622950.north);
-\draw (sn0x2612000.south) -- (sn0x2614f90.north);
-\draw (sn0x2612000.south) -- (sn0x261e6b0.north);
-\draw (sn0x2612000.south) -- (sn0x261f7a0.north);
-\draw (sn0x2615a00.south) -- (sn0x2614f90.north);
-\draw (sn0x26212b0.south) -- (sn0x261f7a0.north);
-\draw (sn0x2621ec0.south) -- (sn0x261f7a0.north);
-\draw (sn0x26219b0.south) -- (sn0x261f7a0.north);
-\draw (sn0x26219b0.south) -- (sn0x261e6b0.north);
-\draw (sn0x2622820.south) -- (sn0x261e6b0.north);
-\draw (sn0x2622820.south) -- (sn0x261f7a0.north);
-\draw (sn0x2622950.south) -- (sn0x261f7a0.north);
-\draw (sn0x2622950.south) -- (sn0x26232c0.north);
-\draw (sn0x2614f90.south) -- (sn0x261fa80.north);
-\draw (sn0x261e6b0.south) -- (sn0x261fa80.north);
-\draw (sn0x261f7a0.south) -- (sn0x261fa80.north);
-\draw (sn0x261f7a0.south) -- (sn0x2620400.north);
-\draw (sn0x26232c0.south) -- (sn0x2620400.north);
-\draw (sn0x261fa80.south) -- (sn0x261fb40.north);
-\draw (sn0x2620400.south) -- (sn0x261fb40.north);
-\draw (sn0x261fb40.south) -- (sn0x261f8e0.north);
-\draw (sn0x261fb40.south) -- (sn0x261fd90.north);
-\draw (sn0x261f8e0.south) -- (sn0x261fe50.north);
-\draw (sn0x261f8e0.south) -- (sn0x261ff10.north);
-\draw (sn0x261fd90.south) -- (sn0x261ff10.north);
-\draw (sn0x261fe50.south) -- (sn0x2620120.north);
-\draw (sn0x261ff10.south) -- (sn0x2620120.north);
-\draw (sn0x2620120.south) -- (sn0x26201e0.north);
-\end{tikzpicture}
-
-%%% Local Variables:
-%%% TeX-master: "thesis/thesis.tex"
-%%% End: 
-\begin{tikzpicture}[scale=.2, anchor=west]
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -15){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2614278) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\draw[](tid1) -- (tid6);
-\node[circle, scale=0.75, fill] (tid2) at (6,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\node[circle, scale=0.75, fill] (tid8) at (6.75,4.5){};
-\draw[](tid2) -- (tid7);
-\draw[](tid2) -- (tid8);
-\node[circle, scale=0.75, fill] (tid3) at (8.25,3){};
-\node[circle, scale=0.75, fill] (tid9) at (8.25,4.5){};
-\draw[](tid3) -- (tid9);
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{6.125}
-\nodepart{three}
-\footnotesize{$25\:50\:25$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-9, -30){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2611eb0) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid2) -- (tid6);
-\draw[](tid2) -- (tid7);
-\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
-\node[circle, scale=0.75, fill] (tid8) at (6.75,4.5){};
-\draw[](tid3) -- (tid8);
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.625}
-\nodepart{three}
-\footnotesize{$67\:33$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-9, -30){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261e5f0) at ([xshift=2cm]sn0x2611eb0.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
-\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid2) -- (tid6);
-\draw[](tid2) -- (tid7);
-\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
-\node[circle, scale=0.75, fill] (tid8) at (6.75,4.5){};
-\draw[](tid3) -- (tid8);
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.625}
-\nodepart{three}
-\footnotesize{$67\:33$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-9, -30){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26163b0) at ([xshift=2cm]sn0x261e5f0.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid2) -- (tid6);
-\draw[](tid2) -- (tid7);
-\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
-\node[circle, scale=0.75, fill, red] (tid8) at (6.75,4.5){};
-\draw[](tid3) -- (tid8);
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.625}
-\nodepart{three}
-\footnotesize{$33\:17\:17\:33$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-15, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2612000) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
-\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
-\draw[](tid2) -- (tid6);
-\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid3) -- (tid7);
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.125}
-\nodepart{three}
-\footnotesize{$50\:25\:25$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-15, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26212b0) at ([xshift=2cm]sn0x2612000.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
-\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
-\draw[](tid2) -- (tid6);
-\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
-\node[circle, scale=0.75, fill, red] (tid7) at (5.25,4.5){};
-\draw[](tid3) -- (tid7);
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.125}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-15, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2615a00) at ([xshift=2cm]sn0x26212b0.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\draw[](tid2) -- (tid6);
-\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid3) -- (tid7);
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.125}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-15, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2621ec0) at ([xshift=2cm]sn0x2615a00.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid2) -- (tid6);
-\draw[](tid2) -- (tid7);
-\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.125}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-15, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26219b0) at ([xshift=2cm]sn0x2621ec0.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
-\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid2) -- (tid6);
-\draw[](tid2) -- (tid7);
-\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.125}
-\nodepart{three}
-\footnotesize{$50\:50$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-9, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2614f90) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\draw[](tid1) -- (tid4);
-\node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\draw[](tid3) -- (tid6);
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{4.625}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-9, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261e6b0) at ([xshift=2cm]sn0x2614f90.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\draw[](tid2) -- (tid6);
-\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{4.625}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-9, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261f7a0) at ([xshift=2cm]sn0x261e6b0.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
-\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
-\draw[](tid2) -- (tid6);
-\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{4.625}
-\nodepart{three}
-\footnotesize{$50\:50$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -75){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fa80) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\draw[](tid1) -- (tid4);
-\node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{4.125}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -75){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2620400) at ([xshift=2cm]sn0x261fa80.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{4.125}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -90){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fb40) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\draw[](tid1) -- (tid4);
-\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{3.625}
-\nodepart{three}
-\footnotesize{$50\:50$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -105){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261f8e0) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
-\node[circle, scale=0.75, fill, red] (tid3) at (0.75,4.5){};
-\draw[](tid1) -- (tid3);
-\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{3.25}
-\nodepart{three}
-\footnotesize{$50\:50$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -105){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fd90) at ([xshift=2cm]sn0x261f8e0.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
-\node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
-\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{3}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -120){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fe50) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (0.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
-\node[circle, scale=0.75, fill, red] (tid2) at (0.75,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid0) -- (tid1);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{3}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -120){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261ff10) at ([xshift=2cm]sn0x261fe50.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
-\node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
-\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{2.5}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -135){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2620120) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (0.75,1.5){};
-\node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
-\draw[](tid0) -- (tid1);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{2}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -150){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26201e0) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill, red] (tid0) at (0.75,1.5){};
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{1}
-\nodepart{three}
-\footnotesize{$$}
-};
-\draw (sn0x2614278.south) -- (sn0x2611eb0.north);
-\draw (sn0x2614278.south) -- (sn0x261e5f0.north);
-\draw (sn0x2614278.south) -- (sn0x26163b0.north);
-\draw (sn0x2611eb0.south) -- (sn0x2612000.north);
-\draw (sn0x2611eb0.south) -- (sn0x26212b0.north);
-\draw (sn0x261e5f0.south) -- (sn0x2612000.north);
-\draw (sn0x261e5f0.south) -- (sn0x2615a00.north);
-\draw (sn0x26163b0.south) -- (sn0x26212b0.north);
-\draw (sn0x26163b0.south) -- (sn0x2612000.north);
-\draw (sn0x26163b0.south) -- (sn0x2621ec0.north);
-\draw (sn0x26163b0.south) -- (sn0x26219b0.north);
-\draw (sn0x2612000.south) -- (sn0x2614f90.north);
-\draw (sn0x2612000.south) -- (sn0x261e6b0.north);
-\draw (sn0x2612000.south) -- (sn0x261f7a0.north);
-\draw (sn0x26212b0.south) -- (sn0x261f7a0.north);
-\draw (sn0x2615a00.south) -- (sn0x2614f90.north);
-\draw (sn0x2621ec0.south) -- (sn0x261f7a0.north);
-\draw (sn0x26219b0.south) -- (sn0x261f7a0.north);
-\draw (sn0x26219b0.south) -- (sn0x261e6b0.north);
-\draw (sn0x2614f90.south) -- (sn0x261fa80.north);
-\draw (sn0x261e6b0.south) -- (sn0x261fa80.north);
-\draw (sn0x261f7a0.south) -- (sn0x261fa80.north);
-\draw (sn0x261f7a0.south) -- (sn0x2620400.north);
-\draw (sn0x261fa80.south) -- (sn0x261fb40.north);
-\draw (sn0x2620400.south) -- (sn0x261fb40.north);
-\draw (sn0x261fb40.south) -- (sn0x261f8e0.north);
-\draw (sn0x261fb40.south) -- (sn0x261fd90.north);
-\draw (sn0x261f8e0.south) -- (sn0x261fe50.north);
-\draw (sn0x261f8e0.south) -- (sn0x261ff10.north);
-\draw (sn0x261fd90.south) -- (sn0x261ff10.north);
-\draw (sn0x261fe50.south) -- (sn0x2620120.north);
-\draw (sn0x261ff10.south) -- (sn0x2620120.north);
-\draw (sn0x2620120.south) -- (sn0x26201e0.north);
-\end{tikzpicture}
-
-%%% Local Variables:
-%%% TeX-master: "thesis/thesis.tex"
-%%% End: 
-\begin{tikzpicture}[scale=.2, anchor=west]
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -15){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2614330) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\draw[](tid1) -- (tid6);
-\node[circle, scale=0.75, fill] (tid2) at (6,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\node[circle, scale=0.75, fill] (tid8) at (6.75,4.5){};
-\draw[](tid2) -- (tid7);
-\draw[](tid2) -- (tid8);
-\node[circle, scale=0.75, fill] (tid3) at (8.25,3){};
-\node[circle, scale=0.75, fill, red] (tid9) at (8.25,4.5){};
-\draw[](tid3) -- (tid9);
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{6.125}
-\nodepart{three}
-\footnotesize{$50\:25\:25$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-9, -30){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26163b0) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid2) -- (tid6);
-\draw[](tid2) -- (tid7);
-\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
-\node[circle, scale=0.75, fill, red] (tid8) at (6.75,4.5){};
-\draw[](tid3) -- (tid8);
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.625}
-\nodepart{three}
-\footnotesize{$17\:33\:17\:33$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-9, -30){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2623380) at ([xshift=2cm]sn0x26163b0.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\draw[](tid1) -- (tid6);
-\node[circle, scale=0.75, fill] (tid2) at (6,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\node[circle, scale=0.75, fill] (tid8) at (6.75,4.5){};
-\draw[](tid2) -- (tid7);
-\draw[](tid2) -- (tid8);
-\node[circle, scale=0.75, fill] (tid3) at (8.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.625}
+\footnotesize{4.54012}
 \nodepart{three}
 \footnotesize{$33\:67$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-9, -30){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2623a70) at ([xshift=2cm]sn0x2623380.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14194f0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid6);
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.53704}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419610){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\draw[](tid1) -- (tid6);
+\node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.53704}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419860){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\draw[](tid1) -- (tid6);
+\node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
+\node[circle, scale=0.75, fill, red] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.53086}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-48cm]
+\matrix (line4) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418180){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\draw[](tid1) -- (tid4);
+\node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid2) -- (tid5);
+\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\draw[](tid3) -- (tid6);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.21296}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418240){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\draw[](tid2) -- (tid6);
+\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.2037}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419a60){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\draw[](tid1) -- (tid6);
+\node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.18519}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-60cm]
+\matrix (line5) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418300){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\draw[](tid1) -- (tid4);
+\node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid2) -- (tid5);
+\node[circle, scale=0.75, fill, red] (tid3) at (3.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.87963}
+\nodepart{three}
+\footnotesize{$33\:67$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418f30){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill, red] (tid2) at (3.75,3){};
+\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.85185}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-72cm]
+\matrix (line6) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14183c0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (0.75,4.5){};
+\draw[](tid1) -- (tid3);
+\node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (2.25,4.5){};
+\draw[](tid2) -- (tid4);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.75}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418480){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\draw[](tid1) -- (tid4);
+\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (3.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.44444}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419030){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid4) at (2.25,4.5){};
+\draw[](tid1) -- (tid3);
+\draw[](tid1) -- (tid4);
+\node[circle, scale=0.75, fill, red] (tid2) at (3.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.66667}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-84cm]
+\matrix (line7) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418540){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (0.75,4.5){};
+\draw[](tid1) -- (tid3);
+\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.25}
+\nodepart{three}
+\footnotesize{$50\:50$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418ae0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+\node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (3.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{2.83333}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14190f0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid2) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid3) at (2.25,4.5){};
+\draw[](tid1) -- (tid2);
+\draw[](tid1) -- (tid3);
+\draw[](tid0) -- (tid1);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.5}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-96cm]
+\matrix (line8) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418640){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (0.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid2) at (0.75,4.5){};
+\draw[](tid1) -- (tid2);
+\draw[](tid0) -- (tid1);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418700){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
+\node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{2.5}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-108cm]
+\matrix (line9) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418800){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (0.75,1.5){};
+\node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
+\draw[](tid0) -- (tid1);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{2}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-120cm]
+\matrix (line10) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14188e0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill, red] (tid0) at (0.75,1.5){};
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{1}
+\nodepart{three}
+\footnotesize{$$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-132cm]
+\matrix (line11) [column sep=1cm] {
+\\
+};
+\end{scope}
+\draw (sn0x14089d0.south) -- (sn0x1417150.north);
+\draw (sn0x14089d0.south) -- (sn0x1417b50.north);
+\draw (sn0x14089d0.south) -- (sn0x1417c10.north);
+\draw (sn0x14089d0.south) -- (sn0x1417e80.north);
+\draw (sn0x1417150.south) -- (sn0x1417f40.north);
+\draw (sn0x1417150.south) -- (sn0x1418000.north);
+\draw (sn0x1417b50.south) -- (sn0x1418000.north);
+\draw (sn0x1417b50.south) -- (sn0x1417f40.north);
+\draw (sn0x1417b50.south) -- (sn0x14194f0.north);
+\draw (sn0x1417c10.south) -- (sn0x1417f40.north);
+\draw (sn0x1417e80.south) -- (sn0x1417f40.north);
+\draw (sn0x1417e80.south) -- (sn0x1418000.north);
+\draw (sn0x1417e80.south) -- (sn0x1419610.north);
+\draw (sn0x1417e80.south) -- (sn0x1419860.north);
+\draw (sn0x1417f40.south) -- (sn0x1418180.north);
+\draw (sn0x1417f40.south) -- (sn0x1418240.north);
+\draw (sn0x1418000.south) -- (sn0x1418180.north);
+\draw (sn0x1418000.south) -- (sn0x1418240.north);
+\draw (sn0x14194f0.south) -- (sn0x1418240.north);
+\draw (sn0x1419610.south) -- (sn0x1418240.north);
+\draw (sn0x1419860.south) -- (sn0x1418240.north);
+\draw (sn0x1419860.south) -- (sn0x1419a60.north);
+\draw (sn0x1418180.south) -- (sn0x1418300.north);
+\draw (sn0x1418240.south) -- (sn0x1418300.north);
+\draw (sn0x1418240.south) -- (sn0x1418f30.north);
+\draw (sn0x1419a60.south) -- (sn0x1418f30.north);
+\draw (sn0x1418300.south) -- (sn0x14183c0.north);
+\draw (sn0x1418300.south) -- (sn0x1418480.north);
+\draw (sn0x1418f30.south) -- (sn0x1419030.north);
+\draw (sn0x1418f30.south) -- (sn0x1418480.north);
+\draw (sn0x14183c0.south) -- (sn0x1418540.north);
+\draw (sn0x1418480.south) -- (sn0x1418540.north);
+\draw (sn0x1418480.south) -- (sn0x1418ae0.north);
+\draw (sn0x1419030.south) -- (sn0x14190f0.north);
+\draw (sn0x1419030.south) -- (sn0x1418540.north);
+\draw (sn0x1418540.south) -- (sn0x1418640.north);
+\draw (sn0x1418540.south) -- (sn0x1418700.north);
+\draw (sn0x1418ae0.south) -- (sn0x1418700.north);
+\draw (sn0x14190f0.south) -- (sn0x1418640.north);
+\draw (sn0x1418640.south) -- (sn0x1418800.north);
+\draw (sn0x1418700.south) -- (sn0x1418800.north);
+\draw (sn0x1418800.south) -- (sn0x14188e0.north);
+\end{tikzpicture}
+
+%%% Local Variables:
+%%% TeX-master: "thesis/thesis.tex"
+%%% End: 
+\begin{tikzpicture}[scale=.2]
+\begin{scope}[yshift=-12cm]
+\matrix (line1) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1408a88){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\draw[](tid1) -- (tid6);
+\node[circle, scale=0.75, fill] (tid2) at (6,3){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\node[circle, scale=0.75, fill] (tid8) at (6.75,4.5){};
+\draw[](tid2) -- (tid7);
+\draw[](tid2) -- (tid8);
+\node[circle, scale=0.75, fill] (tid3) at (8.25,3){};
+\node[circle, scale=0.75, fill] (tid9) at (8.25,4.5){};
+\draw[](tid3) -- (tid9);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{5.20782}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-24cm]
+\matrix (line2) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1417150){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid6);
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\node[circle, scale=0.75, fill] (tid8) at (6.75,4.5){};
+\draw[](tid3) -- (tid8);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.87551}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419ba0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
+\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid6);
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\node[circle, scale=0.75, fill, red] (tid8) at (6.75,4.5){};
+\draw[](tid3) -- (tid8);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.87243}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-36cm]
+\matrix (line3) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1417f40){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\draw[](tid2) -- (tid6);
+\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\draw[](tid3) -- (tid7);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.54321}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418000){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\draw[](tid2) -- (tid6);
+\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
+\node[circle, scale=0.75, fill, red] (tid7) at (5.25,4.5){};
+\draw[](tid3) -- (tid7);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.54012}
+\nodepart{three}
+\footnotesize{$33\:67$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14194f0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid6);
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.53704}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-48cm]
+\matrix (line4) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418180){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\draw[](tid1) -- (tid4);
+\node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid2) -- (tid5);
+\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\draw[](tid3) -- (tid6);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.21296}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418240){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\draw[](tid2) -- (tid6);
+\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.2037}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-60cm]
+\matrix (line5) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418300){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\draw[](tid1) -- (tid4);
+\node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid2) -- (tid5);
+\node[circle, scale=0.75, fill, red] (tid3) at (3.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.87963}
+\nodepart{three}
+\footnotesize{$33\:67$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418f30){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill, red] (tid2) at (3.75,3){};
+\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.85185}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-72cm]
+\matrix (line6) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14183c0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (0.75,4.5){};
+\draw[](tid1) -- (tid3);
+\node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (2.25,4.5){};
+\draw[](tid2) -- (tid4);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.75}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418480){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\draw[](tid1) -- (tid4);
+\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (3.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.44444}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419030){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid4) at (2.25,4.5){};
+\draw[](tid1) -- (tid3);
+\draw[](tid1) -- (tid4);
+\node[circle, scale=0.75, fill, red] (tid2) at (3.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.66667}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-84cm]
+\matrix (line7) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418540){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (0.75,4.5){};
+\draw[](tid1) -- (tid3);
+\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.25}
+\nodepart{three}
+\footnotesize{$50\:50$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418ae0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+\node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (3.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{2.83333}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14190f0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid2) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid3) at (2.25,4.5){};
+\draw[](tid1) -- (tid2);
+\draw[](tid1) -- (tid3);
+\draw[](tid0) -- (tid1);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.5}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-96cm]
+\matrix (line8) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418640){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (0.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid2) at (0.75,4.5){};
+\draw[](tid1) -- (tid2);
+\draw[](tid0) -- (tid1);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418700){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
+\node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{2.5}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-108cm]
+\matrix (line9) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418800){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (0.75,1.5){};
+\node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
+\draw[](tid0) -- (tid1);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{2}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-120cm]
+\matrix (line10) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14188e0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill, red] (tid0) at (0.75,1.5){};
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{1}
+\nodepart{three}
+\footnotesize{$$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-132cm]
+\matrix (line11) [column sep=1cm] {
+\\
+};
+\end{scope}
+\draw (sn0x1408a88.south) -- (sn0x1417150.north);
+\draw (sn0x1408a88.south) -- (sn0x1419ba0.north);
+\draw (sn0x1417150.south) -- (sn0x1417f40.north);
+\draw (sn0x1417150.south) -- (sn0x1418000.north);
+\draw (sn0x1419ba0.south) -- (sn0x1418000.north);
+\draw (sn0x1419ba0.south) -- (sn0x14194f0.north);
+\draw (sn0x1417f40.south) -- (sn0x1418180.north);
+\draw (sn0x1417f40.south) -- (sn0x1418240.north);
+\draw (sn0x1418000.south) -- (sn0x1418180.north);
+\draw (sn0x1418000.south) -- (sn0x1418240.north);
+\draw (sn0x14194f0.south) -- (sn0x1418240.north);
+\draw (sn0x1418180.south) -- (sn0x1418300.north);
+\draw (sn0x1418240.south) -- (sn0x1418300.north);
+\draw (sn0x1418240.south) -- (sn0x1418f30.north);
+\draw (sn0x1418300.south) -- (sn0x14183c0.north);
+\draw (sn0x1418300.south) -- (sn0x1418480.north);
+\draw (sn0x1418f30.south) -- (sn0x1419030.north);
+\draw (sn0x1418f30.south) -- (sn0x1418480.north);
+\draw (sn0x14183c0.south) -- (sn0x1418540.north);
+\draw (sn0x1418480.south) -- (sn0x1418540.north);
+\draw (sn0x1418480.south) -- (sn0x1418ae0.north);
+\draw (sn0x1419030.south) -- (sn0x14190f0.north);
+\draw (sn0x1419030.south) -- (sn0x1418540.north);
+\draw (sn0x1418540.south) -- (sn0x1418640.north);
+\draw (sn0x1418540.south) -- (sn0x1418700.north);
+\draw (sn0x1418ae0.south) -- (sn0x1418700.north);
+\draw (sn0x14190f0.south) -- (sn0x1418640.north);
+\draw (sn0x1418640.south) -- (sn0x1418800.north);
+\draw (sn0x1418700.south) -- (sn0x1418800.north);
+\draw (sn0x1418800.south) -- (sn0x14188e0.north);
+\end{tikzpicture}
+
+%%% Local Variables:
+%%% TeX-master: "thesis/thesis.tex"
+%%% End: 
+\begin{tikzpicture}[scale=.2]
+\begin{scope}[yshift=-12cm]
+\matrix (line1) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1408b40){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\draw[](tid1) -- (tid6);
+\node[circle, scale=0.75, fill] (tid2) at (6,3){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\node[circle, scale=0.75, fill] (tid8) at (6.75,4.5){};
+\draw[](tid2) -- (tid7);
+\draw[](tid2) -- (tid8);
+\node[circle, scale=0.75, fill] (tid3) at (8.25,3){};
+\node[circle, scale=0.75, fill, red] (tid9) at (8.25,4.5){};
+\draw[](tid3) -- (tid9);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{5.20531}
+\nodepart{three}
+\footnotesize{$22\:44\:11\:22$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-24cm]
+\matrix (line2) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419ba0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
+\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid6);
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\node[circle, scale=0.75, fill, red] (tid8) at (6.75,4.5){};
+\draw[](tid3) -- (tid8);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.87243}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1417b50){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid6);
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\node[circle, scale=0.75, fill, red] (tid8) at (6.75,4.5){};
+\draw[](tid3) -- (tid8);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.87346}
+\nodepart{three}
+\footnotesize{$33\:33\:33$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419d40){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\draw[](tid1) -- (tid6);
+\node[circle, scale=0.75, fill] (tid2) at (6,3){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\node[circle, scale=0.75, fill] (tid8) at (6.75,4.5){};
+\draw[](tid2) -- (tid7);
+\draw[](tid2) -- (tid8);
+\node[circle, scale=0.75, fill] (tid3) at (8.25,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.87037}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419e90){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
@@ -1178,16 +1225,21 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.625}
+\footnotesize{4.86934}
 \nodepart{three}
-\footnotesize{$17\:33\:33\:17$}
+\footnotesize{$67\:17\:17$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-18, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26212b0) at ([xshift=2cm]dummyL){
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-36cm]
+\matrix (line3) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418000){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
@@ -1202,17 +1254,41 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.125}
+\footnotesize{4.54012}
+\nodepart{three}
+\footnotesize{$33\:67$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14194f0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid6);
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.53704}
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-18, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2612000) at ([xshift=2cm]sn0x26212b0.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1417f40){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
 \node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
@@ -1226,66 +1302,18 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.125}
+\footnotesize{4.54321}
 \nodepart{three}
-\footnotesize{$25\:50\:25$}
+\footnotesize{$67\:33$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-18, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2621ec0) at ([xshift=2cm]sn0x2612000.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid2) -- (tid6);
-\draw[](tid2) -- (tid7);
-\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.125}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-18, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26219b0) at ([xshift=2cm]sn0x2621ec0.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
-\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid2) -- (tid6);
-\draw[](tid2) -- (tid7);
-\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.125}
-\nodepart{three}
-\footnotesize{$50\:50$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-18, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2622820) at ([xshift=2cm]sn0x26219b0.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419610){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
 \draw[](tid1) -- (tid6);
@@ -1298,17 +1326,17 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.125}
+\footnotesize{4.53704}
 \nodepart{three}
-\footnotesize{$50\:50$}
+\footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-18, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2622950) at ([xshift=2cm]sn0x2622820.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419860){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
@@ -1322,34 +1350,17 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.125}
+\footnotesize{4.53086}
 \nodepart{three}
-\footnotesize{$50\:50$}
+\footnotesize{$67\:33$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261f7a0) at ([xshift=2cm]dummyL){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
-\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
-\draw[](tid2) -- (tid6);
-\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{4.625}
-\nodepart{three}
-\footnotesize{$50\:50$}
+ & 
+\\
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2614f90) at ([xshift=2cm]sn0x261f7a0.south east){
+\end{scope}
+\begin{scope}[yshift=-48cm]
+\matrix (line4) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418180){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
@@ -1359,19 +1370,19 @@
 \node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \draw[](tid2) -- (tid5);
 \node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
 \draw[](tid3) -- (tid6);
 \draw[](tid0) -- (tid1);
 \draw[](tid0) -- (tid2);
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{4.625}
+\footnotesize{4.21296}
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261e6b0) at ([xshift=2cm]sn0x2614f90.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418240){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
@@ -1380,7 +1391,7 @@
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
 \node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
 \draw[](tid2) -- (tid6);
 \node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
 \draw[](tid0) -- (tid1);
@@ -1388,18 +1399,18 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{4.625}
+\footnotesize{4.2037}
 \nodepart{three}
-\footnotesize{$1$}
+\footnotesize{$67\:33$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26232c0) at ([xshift=2cm]sn0x261e6b0.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419a60){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
 \draw[](tid1) -- (tid6);
@@ -1410,12 +1421,17 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{4.625}
+\footnotesize{4.18519}
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -75){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fa80) at ([xshift=2cm]dummyL){
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-60cm]
+\matrix (line5) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418300){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
@@ -1424,18 +1440,18 @@
 \node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
 \node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (3.75,3){};
 \draw[](tid0) -- (tid1);
 \draw[](tid0) -- (tid2);
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{4.125}
+\footnotesize{3.87963}
 \nodepart{three}
-\footnotesize{$1$}
+\footnotesize{$33\:67$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -75){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2620400) at ([xshift=2cm]sn0x261fa80.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418f30){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
@@ -1443,37 +1459,83 @@
 \node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid2) at (3.75,3){};
 \node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
 \draw[](tid0) -- (tid1);
 \draw[](tid0) -- (tid2);
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{4.125}
+\footnotesize{3.85185}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-72cm]
+\matrix (line6) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14183c0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (0.75,4.5){};
+\draw[](tid1) -- (tid3);
+\node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (2.25,4.5){};
+\draw[](tid2) -- (tid4);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.75}
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -90){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fb40) at ([xshift=2cm]dummyL){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418480){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \draw[](tid1) -- (tid4);
 \node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (3.75,3){};
 \draw[](tid0) -- (tid1);
 \draw[](tid0) -- (tid2);
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{3.625}
+\footnotesize{3.44444}
 \nodepart{three}
-\footnotesize{$50\:50$}
+\footnotesize{$67\:33$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -105){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261f8e0) at ([xshift=2cm]dummyL){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419030){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid4) at (2.25,4.5){};
+\draw[](tid1) -- (tid3);
+\draw[](tid1) -- (tid4);
+\node[circle, scale=0.75, fill, red] (tid2) at (3.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.66667}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-84cm]
+\matrix (line7) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418540){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
@@ -1488,24 +1550,45 @@
 \nodepart{three}
 \footnotesize{$50\:50$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -105){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fd90) at ([xshift=2cm]sn0x261f8e0.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418ae0){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
 \node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
 \node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (3.75,3){};
 \draw[](tid0) -- (tid1);
 \draw[](tid0) -- (tid2);
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{3}
+\footnotesize{2.83333}
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -120){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fe50) at ([xshift=2cm]dummyL){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14190f0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid2) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid3) at (2.25,4.5){};
+\draw[](tid1) -- (tid2);
+\draw[](tid1) -- (tid3);
+\draw[](tid0) -- (tid1);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.5}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-96cm]
+\matrix (line8) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418640){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (0.75,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
@@ -1518,8 +1601,8 @@
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -120){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261ff10) at ([xshift=2cm]sn0x261fe50.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418700){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
 \node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
@@ -1532,8 +1615,13 @@
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -135){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2620120) at ([xshift=2cm]dummyL){
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-108cm]
+\matrix (line9) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418800){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (0.75,1.5){};
 \node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
@@ -1544,8 +1632,13 @@
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -150){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26201e0) at ([xshift=2cm]dummyL){
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-120cm]
+\matrix (line10) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14188e0){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill, red] (tid0) at (0.75,1.5){};
 \end{tikzpicture}
@@ -1554,57 +1647,69 @@
 \nodepart{three}
 \footnotesize{$$}
 };
-\draw (sn0x2614330.south) -- (sn0x26163b0.north);
-\draw (sn0x2614330.south) -- (sn0x2623380.north);
-\draw (sn0x2614330.south) -- (sn0x2623a70.north);
-\draw (sn0x26163b0.south) -- (sn0x26212b0.north);
-\draw (sn0x26163b0.south) -- (sn0x2612000.north);
-\draw (sn0x26163b0.south) -- (sn0x2621ec0.north);
-\draw (sn0x26163b0.south) -- (sn0x26219b0.north);
-\draw (sn0x2623380.south) -- (sn0x2621ec0.north);
-\draw (sn0x2623380.south) -- (sn0x26219b0.north);
-\draw (sn0x2623a70.south) -- (sn0x26219b0.north);
-\draw (sn0x2623a70.south) -- (sn0x2621ec0.north);
-\draw (sn0x2623a70.south) -- (sn0x2622820.north);
-\draw (sn0x2623a70.south) -- (sn0x2622950.north);
-\draw (sn0x26212b0.south) -- (sn0x261f7a0.north);
-\draw (sn0x2612000.south) -- (sn0x2614f90.north);
-\draw (sn0x2612000.south) -- (sn0x261e6b0.north);
-\draw (sn0x2612000.south) -- (sn0x261f7a0.north);
-\draw (sn0x2621ec0.south) -- (sn0x261f7a0.north);
-\draw (sn0x26219b0.south) -- (sn0x261f7a0.north);
-\draw (sn0x26219b0.south) -- (sn0x261e6b0.north);
-\draw (sn0x2622820.south) -- (sn0x261e6b0.north);
-\draw (sn0x2622820.south) -- (sn0x261f7a0.north);
-\draw (sn0x2622950.south) -- (sn0x261f7a0.north);
-\draw (sn0x2622950.south) -- (sn0x26232c0.north);
-\draw (sn0x261f7a0.south) -- (sn0x261fa80.north);
-\draw (sn0x261f7a0.south) -- (sn0x2620400.north);
-\draw (sn0x2614f90.south) -- (sn0x261fa80.north);
-\draw (sn0x261e6b0.south) -- (sn0x261fa80.north);
-\draw (sn0x26232c0.south) -- (sn0x2620400.north);
-\draw (sn0x261fa80.south) -- (sn0x261fb40.north);
-\draw (sn0x2620400.south) -- (sn0x261fb40.north);
-\draw (sn0x261fb40.south) -- (sn0x261f8e0.north);
-\draw (sn0x261fb40.south) -- (sn0x261fd90.north);
-\draw (sn0x261f8e0.south) -- (sn0x261fe50.north);
-\draw (sn0x261f8e0.south) -- (sn0x261ff10.north);
-\draw (sn0x261fd90.south) -- (sn0x261ff10.north);
-\draw (sn0x261fe50.south) -- (sn0x2620120.north);
-\draw (sn0x261ff10.south) -- (sn0x2620120.north);
-\draw (sn0x2620120.south) -- (sn0x26201e0.north);
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-132cm]
+\matrix (line11) [column sep=1cm] {
+\\
+};
+\end{scope}
+\draw (sn0x1408b40.south) -- (sn0x1419ba0.north);
+\draw (sn0x1408b40.south) -- (sn0x1417b50.north);
+\draw (sn0x1408b40.south) -- (sn0x1419d40.north);
+\draw (sn0x1408b40.south) -- (sn0x1419e90.north);
+\draw (sn0x1419ba0.south) -- (sn0x1418000.north);
+\draw (sn0x1419ba0.south) -- (sn0x14194f0.north);
+\draw (sn0x1417b50.south) -- (sn0x1418000.north);
+\draw (sn0x1417b50.south) -- (sn0x1417f40.north);
+\draw (sn0x1417b50.south) -- (sn0x14194f0.north);
+\draw (sn0x1419d40.south) -- (sn0x14194f0.north);
+\draw (sn0x1419e90.south) -- (sn0x14194f0.north);
+\draw (sn0x1419e90.south) -- (sn0x1419610.north);
+\draw (sn0x1419e90.south) -- (sn0x1419860.north);
+\draw (sn0x1418000.south) -- (sn0x1418180.north);
+\draw (sn0x1418000.south) -- (sn0x1418240.north);
+\draw (sn0x14194f0.south) -- (sn0x1418240.north);
+\draw (sn0x1417f40.south) -- (sn0x1418180.north);
+\draw (sn0x1417f40.south) -- (sn0x1418240.north);
+\draw (sn0x1419610.south) -- (sn0x1418240.north);
+\draw (sn0x1419860.south) -- (sn0x1418240.north);
+\draw (sn0x1419860.south) -- (sn0x1419a60.north);
+\draw (sn0x1418180.south) -- (sn0x1418300.north);
+\draw (sn0x1418240.south) -- (sn0x1418300.north);
+\draw (sn0x1418240.south) -- (sn0x1418f30.north);
+\draw (sn0x1419a60.south) -- (sn0x1418f30.north);
+\draw (sn0x1418300.south) -- (sn0x14183c0.north);
+\draw (sn0x1418300.south) -- (sn0x1418480.north);
+\draw (sn0x1418f30.south) -- (sn0x1419030.north);
+\draw (sn0x1418f30.south) -- (sn0x1418480.north);
+\draw (sn0x14183c0.south) -- (sn0x1418540.north);
+\draw (sn0x1418480.south) -- (sn0x1418540.north);
+\draw (sn0x1418480.south) -- (sn0x1418ae0.north);
+\draw (sn0x1419030.south) -- (sn0x14190f0.north);
+\draw (sn0x1419030.south) -- (sn0x1418540.north);
+\draw (sn0x1418540.south) -- (sn0x1418640.north);
+\draw (sn0x1418540.south) -- (sn0x1418700.north);
+\draw (sn0x1418ae0.south) -- (sn0x1418700.north);
+\draw (sn0x14190f0.south) -- (sn0x1418640.north);
+\draw (sn0x1418640.south) -- (sn0x1418800.north);
+\draw (sn0x1418700.south) -- (sn0x1418800.north);
+\draw (sn0x1418800.south) -- (sn0x14188e0.north);
 \end{tikzpicture}
 
 %%% Local Variables:
 %%% TeX-master: "thesis/thesis.tex"
 %%% End: 
-\begin{tikzpicture}[scale=.2, anchor=west]
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -15){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26143e8) at ([xshift=2cm]dummyL){
+\begin{tikzpicture}[scale=.2]
+\begin{scope}[yshift=-12cm]
+\matrix (line1) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1408bf8){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
 \node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
 \draw[](tid1) -- (tid4);
@@ -1623,17 +1728,74 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{6.125}
+\footnotesize{5.2053}
 \nodepart{three}
-\footnotesize{$75\:25$}
+\footnotesize{$22\:11\:44\:22$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -30){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26126f0) at ([xshift=2cm]dummyL){
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-24cm]
+\matrix (line2) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1417150){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid6);
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\node[circle, scale=0.75, fill] (tid8) at (6.75,4.5){};
+\draw[](tid3) -- (tid8);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.87551}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419ba0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
+\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid6);
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\node[circle, scale=0.75, fill, red] (tid8) at (6.75,4.5){};
+\draw[](tid3) -- (tid8);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.87243}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1417e80){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
@@ -1649,16 +1811,16 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.625}
+\footnotesize{4.87243}
 \nodepart{three}
-\footnotesize{$33\:17\:33\:17$}
+\footnotesize{$33\:33\:17\:17$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -30){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2623fc0) at ([xshift=2cm]sn0x26126f0.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x141ac30){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
 \node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
 \draw[](tid1) -- (tid4);
@@ -1675,17 +1837,22 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.625}
+\footnotesize{4.86728}
 \nodepart{three}
-\footnotesize{$1$}
+\footnotesize{$33\:67$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2612000) at ([xshift=2cm]dummyL){
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-36cm]
+\matrix (line3) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1417f40){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
 \node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
@@ -1699,16 +1866,16 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.125}
+\footnotesize{4.54321}
 \nodepart{three}
-\footnotesize{$50\:25\:25$}
+\footnotesize{$67\:33$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26212b0) at ([xshift=2cm]sn0x2612000.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418000){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
@@ -1723,12 +1890,60 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.125}
+\footnotesize{4.54012}
+\nodepart{three}
+\footnotesize{$33\:67$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14194f0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid6);
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.53704}
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2622820) at ([xshift=2cm]sn0x26212b0.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419610){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\draw[](tid1) -- (tid6);
+\node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.53704}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419860){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
@@ -1739,30 +1954,6 @@
 \draw[](tid1) -- (tid5);
 \draw[](tid1) -- (tid6);
 \node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid2) -- (tid7);
-\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.125}
-\nodepart{three}
-\footnotesize{$50\:50$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2622950) at ([xshift=2cm]sn0x2622820.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\draw[](tid1) -- (tid6);
-\node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
 \node[circle, scale=0.75, fill, red] (tid7) at (5.25,4.5){};
 \draw[](tid2) -- (tid7);
 \node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
@@ -1771,12 +1962,17 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.125}
+\footnotesize{4.53086}
 \nodepart{three}
-\footnotesize{$50\:50$}
+\footnotesize{$67\:33$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2614f90) at ([xshift=2cm]dummyL){
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-48cm]
+\matrix (line4) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418180){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
@@ -1786,46 +1982,24 @@
 \node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \draw[](tid2) -- (tid5);
 \node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
 \draw[](tid3) -- (tid6);
 \draw[](tid0) -- (tid1);
 \draw[](tid0) -- (tid2);
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{4.625}
+\footnotesize{4.21296}
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261e6b0) at ([xshift=2cm]sn0x2614f90.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418240){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\draw[](tid2) -- (tid6);
-\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{4.625}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261f7a0) at ([xshift=2cm]sn0x261e6b0.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
 \node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
@@ -1837,18 +2011,18 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{4.625}
+\footnotesize{4.2037}
 \nodepart{three}
-\footnotesize{$50\:50$}
+\footnotesize{$67\:33$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26232c0) at ([xshift=2cm]sn0x261f7a0.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419a60){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
 \draw[](tid1) -- (tid6);
@@ -1859,12 +2033,17 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{4.625}
+\footnotesize{4.18519}
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -75){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fa80) at ([xshift=2cm]dummyL){
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-60cm]
+\matrix (line5) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418300){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
@@ -1873,18 +2052,18 @@
 \node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
 \node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (3.75,3){};
 \draw[](tid0) -- (tid1);
 \draw[](tid0) -- (tid2);
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{4.125}
+\footnotesize{3.87963}
 \nodepart{three}
-\footnotesize{$1$}
+\footnotesize{$33\:67$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -75){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2620400) at ([xshift=2cm]sn0x261fa80.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418f30){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
@@ -1892,37 +2071,83 @@
 \node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid2) at (3.75,3){};
 \node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
 \draw[](tid0) -- (tid1);
 \draw[](tid0) -- (tid2);
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{4.125}
+\footnotesize{3.85185}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-72cm]
+\matrix (line6) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14183c0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (0.75,4.5){};
+\draw[](tid1) -- (tid3);
+\node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (2.25,4.5){};
+\draw[](tid2) -- (tid4);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.75}
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -90){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fb40) at ([xshift=2cm]dummyL){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418480){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \draw[](tid1) -- (tid4);
 \node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (3.75,3){};
 \draw[](tid0) -- (tid1);
 \draw[](tid0) -- (tid2);
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{3.625}
+\footnotesize{3.44444}
 \nodepart{three}
-\footnotesize{$50\:50$}
+\footnotesize{$67\:33$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -105){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261f8e0) at ([xshift=2cm]dummyL){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419030){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid4) at (2.25,4.5){};
+\draw[](tid1) -- (tid3);
+\draw[](tid1) -- (tid4);
+\node[circle, scale=0.75, fill, red] (tid2) at (3.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.66667}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-84cm]
+\matrix (line7) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418540){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
@@ -1937,24 +2162,45 @@
 \nodepart{three}
 \footnotesize{$50\:50$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -105){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fd90) at ([xshift=2cm]sn0x261f8e0.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418ae0){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
 \node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
 \node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (3.75,3){};
 \draw[](tid0) -- (tid1);
 \draw[](tid0) -- (tid2);
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{3}
+\footnotesize{2.83333}
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -120){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fe50) at ([xshift=2cm]dummyL){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14190f0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid2) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid3) at (2.25,4.5){};
+\draw[](tid1) -- (tid2);
+\draw[](tid1) -- (tid3);
+\draw[](tid0) -- (tid1);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.5}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-96cm]
+\matrix (line8) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418640){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (0.75,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
@@ -1967,8 +2213,8 @@
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -120){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261ff10) at ([xshift=2cm]sn0x261fe50.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418700){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
 \node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
@@ -1981,8 +2227,13 @@
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -135){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2620120) at ([xshift=2cm]dummyL){
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-108cm]
+\matrix (line9) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418800){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (0.75,1.5){};
 \node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
@@ -1993,8 +2244,13 @@
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -150){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26201e0) at ([xshift=2cm]dummyL){
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-120cm]
+\matrix (line10) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14188e0){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill, red] (tid0) at (0.75,1.5){};
 \end{tikzpicture}
@@ -2003,48 +2259,70 @@
 \nodepart{three}
 \footnotesize{$$}
 };
-\draw (sn0x26143e8.south) -- (sn0x26126f0.north);
-\draw (sn0x26143e8.south) -- (sn0x2623fc0.north);
-\draw (sn0x26126f0.south) -- (sn0x2612000.north);
-\draw (sn0x26126f0.south) -- (sn0x26212b0.north);
-\draw (sn0x26126f0.south) -- (sn0x2622820.north);
-\draw (sn0x26126f0.south) -- (sn0x2622950.north);
-\draw (sn0x2623fc0.south) -- (sn0x2622950.north);
-\draw (sn0x2612000.south) -- (sn0x2614f90.north);
-\draw (sn0x2612000.south) -- (sn0x261e6b0.north);
-\draw (sn0x2612000.south) -- (sn0x261f7a0.north);
-\draw (sn0x26212b0.south) -- (sn0x261f7a0.north);
-\draw (sn0x2622820.south) -- (sn0x261e6b0.north);
-\draw (sn0x2622820.south) -- (sn0x261f7a0.north);
-\draw (sn0x2622950.south) -- (sn0x261f7a0.north);
-\draw (sn0x2622950.south) -- (sn0x26232c0.north);
-\draw (sn0x2614f90.south) -- (sn0x261fa80.north);
-\draw (sn0x261e6b0.south) -- (sn0x261fa80.north);
-\draw (sn0x261f7a0.south) -- (sn0x261fa80.north);
-\draw (sn0x261f7a0.south) -- (sn0x2620400.north);
-\draw (sn0x26232c0.south) -- (sn0x2620400.north);
-\draw (sn0x261fa80.south) -- (sn0x261fb40.north);
-\draw (sn0x2620400.south) -- (sn0x261fb40.north);
-\draw (sn0x261fb40.south) -- (sn0x261f8e0.north);
-\draw (sn0x261fb40.south) -- (sn0x261fd90.north);
-\draw (sn0x261f8e0.south) -- (sn0x261fe50.north);
-\draw (sn0x261f8e0.south) -- (sn0x261ff10.north);
-\draw (sn0x261fd90.south) -- (sn0x261ff10.north);
-\draw (sn0x261fe50.south) -- (sn0x2620120.north);
-\draw (sn0x261ff10.south) -- (sn0x2620120.north);
-\draw (sn0x2620120.south) -- (sn0x26201e0.north);
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-132cm]
+\matrix (line11) [column sep=1cm] {
+\\
+};
+\end{scope}
+\draw (sn0x1408bf8.south) -- (sn0x1417150.north);
+\draw (sn0x1408bf8.south) -- (sn0x1419ba0.north);
+\draw (sn0x1408bf8.south) -- (sn0x1417e80.north);
+\draw (sn0x1408bf8.south) -- (sn0x141ac30.north);
+\draw (sn0x1417150.south) -- (sn0x1417f40.north);
+\draw (sn0x1417150.south) -- (sn0x1418000.north);
+\draw (sn0x1419ba0.south) -- (sn0x1418000.north);
+\draw (sn0x1419ba0.south) -- (sn0x14194f0.north);
+\draw (sn0x1417e80.south) -- (sn0x1417f40.north);
+\draw (sn0x1417e80.south) -- (sn0x1418000.north);
+\draw (sn0x1417e80.south) -- (sn0x1419610.north);
+\draw (sn0x1417e80.south) -- (sn0x1419860.north);
+\draw (sn0x141ac30.south) -- (sn0x1418000.north);
+\draw (sn0x141ac30.south) -- (sn0x1419860.north);
+\draw (sn0x1417f40.south) -- (sn0x1418180.north);
+\draw (sn0x1417f40.south) -- (sn0x1418240.north);
+\draw (sn0x1418000.south) -- (sn0x1418180.north);
+\draw (sn0x1418000.south) -- (sn0x1418240.north);
+\draw (sn0x14194f0.south) -- (sn0x1418240.north);
+\draw (sn0x1419610.south) -- (sn0x1418240.north);
+\draw (sn0x1419860.south) -- (sn0x1418240.north);
+\draw (sn0x1419860.south) -- (sn0x1419a60.north);
+\draw (sn0x1418180.south) -- (sn0x1418300.north);
+\draw (sn0x1418240.south) -- (sn0x1418300.north);
+\draw (sn0x1418240.south) -- (sn0x1418f30.north);
+\draw (sn0x1419a60.south) -- (sn0x1418f30.north);
+\draw (sn0x1418300.south) -- (sn0x14183c0.north);
+\draw (sn0x1418300.south) -- (sn0x1418480.north);
+\draw (sn0x1418f30.south) -- (sn0x1419030.north);
+\draw (sn0x1418f30.south) -- (sn0x1418480.north);
+\draw (sn0x14183c0.south) -- (sn0x1418540.north);
+\draw (sn0x1418480.south) -- (sn0x1418540.north);
+\draw (sn0x1418480.south) -- (sn0x1418ae0.north);
+\draw (sn0x1419030.south) -- (sn0x14190f0.north);
+\draw (sn0x1419030.south) -- (sn0x1418540.north);
+\draw (sn0x1418540.south) -- (sn0x1418640.north);
+\draw (sn0x1418540.south) -- (sn0x1418700.north);
+\draw (sn0x1418ae0.south) -- (sn0x1418700.north);
+\draw (sn0x14190f0.south) -- (sn0x1418640.north);
+\draw (sn0x1418640.south) -- (sn0x1418800.north);
+\draw (sn0x1418700.south) -- (sn0x1418800.north);
+\draw (sn0x1418800.south) -- (sn0x14188e0.north);
 \end{tikzpicture}
 
 %%% Local Variables:
 %%% TeX-master: "thesis/thesis.tex"
 %%% End: 
-\begin{tikzpicture}[scale=.2, anchor=west]
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -15){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26144a0) at ([xshift=2cm]dummyL){
+\begin{tikzpicture}[scale=.2]
+\begin{scope}[yshift=-12cm]
+\matrix (line1) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1408cb0){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
 \node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
 \draw[](tid1) -- (tid4);
@@ -2063,17 +2341,74 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{6.125}
+\footnotesize{5.20405}
 \nodepart{three}
-\footnotesize{$38\:12\:38\:12$}
+\footnotesize{$22\:11\:22\:11\:22\:11$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -30){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26126f0) at ([xshift=2cm]dummyL){
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-24cm]
+\matrix (line2) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1417b50){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid6);
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\node[circle, scale=0.75, fill, red] (tid8) at (6.75,4.5){};
+\draw[](tid3) -- (tid8);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.87346}
+\nodepart{three}
+\footnotesize{$33\:33\:33$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419ba0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
+\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid6);
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\node[circle, scale=0.75, fill, red] (tid8) at (6.75,4.5){};
+\draw[](tid3) -- (tid8);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.87243}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1417e80){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
@@ -2089,16 +2424,16 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.625}
+\footnotesize{4.87243}
 \nodepart{three}
-\footnotesize{$33\:17\:33\:17$}
+\footnotesize{$33\:33\:17\:17$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -30){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2623fc0) at ([xshift=2cm]sn0x26126f0.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x141ac30){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
 \node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
 \draw[](tid1) -- (tid4);
@@ -2115,17 +2450,17 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.625}
+\footnotesize{4.86728}
 \nodepart{three}
-\footnotesize{$1$}
+\footnotesize{$33\:67$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -30){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2623a70) at ([xshift=2cm]sn0x2623fc0.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419e90){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
@@ -2141,16 +2476,16 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.625}
+\footnotesize{4.86934}
 \nodepart{three}
-\footnotesize{$33\:17\:33\:17$}
+\footnotesize{$67\:17\:17$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -30){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2624570) at ([xshift=2cm]sn0x2623a70.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x141a5b0){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
 \node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
 \draw[](tid1) -- (tid4);
@@ -2167,40 +2502,21 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.625}
+\footnotesize{4.86626}
 \nodepart{three}
-\footnotesize{$1$}
+\footnotesize{$33\:67$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-18, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2612000) at ([xshift=2cm]dummyL){
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-36cm]
+\matrix (line3) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418000){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
-\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
-\draw[](tid2) -- (tid6);
-\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid3) -- (tid7);
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.125}
-\nodepart{three}
-\footnotesize{$50\:25\:25$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-18, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26212b0) at ([xshift=2cm]sn0x2612000.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
@@ -2215,65 +2531,41 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.125}
+\footnotesize{4.54012}
 \nodepart{three}
-\footnotesize{$1$}
+\footnotesize{$33\:67$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-18, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2622820) at ([xshift=2cm]sn0x26212b0.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1417f40){
 \begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
-\draw[](tid1) -- (tid6);
-\node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
+\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\draw[](tid2) -- (tid6);
+\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
 \node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid2) -- (tid7);
-\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\draw[](tid3) -- (tid7);
 \draw[](tid0) -- (tid1);
 \draw[](tid0) -- (tid2);
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.125}
+\footnotesize{4.54321}
 \nodepart{three}
-\footnotesize{$50\:50$}
+\footnotesize{$67\:33$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-18, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2622950) at ([xshift=2cm]sn0x2622820.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\draw[](tid1) -- (tid6);
-\node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
-\node[circle, scale=0.75, fill, red] (tid7) at (5.25,4.5){};
-\draw[](tid2) -- (tid7);
-\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{5.125}
-\nodepart{three}
-\footnotesize{$50\:50$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-18, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26219b0) at ([xshift=2cm]sn0x2622950.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14194f0){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
 \node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
@@ -2287,23 +2579,23 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.125}
+\footnotesize{4.53704}
 \nodepart{three}
-\footnotesize{$50\:50$}
+\footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-18, -45){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2621ec0) at ([xshift=2cm]sn0x26219b0.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419610){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\draw[](tid1) -- (tid6);
+\node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
 \node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
-\draw[](tid2) -- (tid6);
 \draw[](tid2) -- (tid7);
 \node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
 \draw[](tid0) -- (tid1);
@@ -2311,12 +2603,41 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{5.125}
+\footnotesize{4.53704}
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2614f90) at ([xshift=2cm]dummyL){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419860){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\draw[](tid1) -- (tid6);
+\node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
+\node[circle, scale=0.75, fill, red] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.53086}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-48cm]
+\matrix (line4) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418180){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
@@ -2326,46 +2647,24 @@
 \node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \draw[](tid2) -- (tid5);
 \node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
 \draw[](tid3) -- (tid6);
 \draw[](tid0) -- (tid1);
 \draw[](tid0) -- (tid2);
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{4.625}
+\footnotesize{4.21296}
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261e6b0) at ([xshift=2cm]sn0x2614f90.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418240){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
-\draw[](tid2) -- (tid6);
-\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid2);
-\draw[](tid0) -- (tid3);
-\end{tikzpicture}
-\nodepart{two}
-\footnotesize{4.625}
-\nodepart{three}
-\footnotesize{$1$}
-};
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261f7a0) at ([xshift=2cm]sn0x261e6b0.south east){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
 \node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
@@ -2377,18 +2676,18 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{4.625}
+\footnotesize{4.2037}
 \nodepart{three}
-\footnotesize{$50\:50$}
+\footnotesize{$67\:33$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-12, -60){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26232c0) at ([xshift=2cm]sn0x261f7a0.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419a60){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
-\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
 \draw[](tid1) -- (tid6);
@@ -2399,12 +2698,17 @@
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{4.625}
+\footnotesize{4.18519}
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -75){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fa80) at ([xshift=2cm]dummyL){
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-60cm]
+\matrix (line5) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418300){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
@@ -2413,18 +2717,18 @@
 \node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
 \node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (3.75,3){};
 \draw[](tid0) -- (tid1);
 \draw[](tid0) -- (tid2);
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{4.125}
+\footnotesize{3.87963}
 \nodepart{three}
-\footnotesize{$1$}
+\footnotesize{$33\:67$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -75){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2620400) at ([xshift=2cm]sn0x261fa80.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418f30){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
@@ -2432,37 +2736,83 @@
 \node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
 \draw[](tid1) -- (tid4);
 \draw[](tid1) -- (tid5);
-\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid2) at (3.75,3){};
 \node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
 \draw[](tid0) -- (tid1);
 \draw[](tid0) -- (tid2);
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{4.125}
+\footnotesize{3.85185}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-72cm]
+\matrix (line6) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14183c0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (0.75,4.5){};
+\draw[](tid1) -- (tid3);
+\node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (2.25,4.5){};
+\draw[](tid2) -- (tid4);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.75}
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -90){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fb40) at ([xshift=2cm]dummyL){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418480){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
 \node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
 \draw[](tid1) -- (tid4);
 \node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (3.75,3){};
 \draw[](tid0) -- (tid1);
 \draw[](tid0) -- (tid2);
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{3.625}
+\footnotesize{3.44444}
 \nodepart{three}
-\footnotesize{$50\:50$}
+\footnotesize{$67\:33$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -105){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261f8e0) at ([xshift=2cm]dummyL){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419030){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid4) at (2.25,4.5){};
+\draw[](tid1) -- (tid3);
+\draw[](tid1) -- (tid4);
+\node[circle, scale=0.75, fill, red] (tid2) at (3.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.66667}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-84cm]
+\matrix (line7) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418540){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
@@ -2477,24 +2827,45 @@
 \nodepart{three}
 \footnotesize{$50\:50$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -105){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fd90) at ([xshift=2cm]sn0x261f8e0.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418ae0){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
 \node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
 \node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (3.75,3){};
 \draw[](tid0) -- (tid1);
 \draw[](tid0) -- (tid2);
 \draw[](tid0) -- (tid3);
 \end{tikzpicture}
 \nodepart{two}
-\footnotesize{3}
+\footnotesize{2.83333}
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -120){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261fe50) at ([xshift=2cm]dummyL){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14190f0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid2) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid3) at (2.25,4.5){};
+\draw[](tid1) -- (tid2);
+\draw[](tid1) -- (tid3);
+\draw[](tid0) -- (tid1);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.5}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-96cm]
+\matrix (line8) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418640){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (0.75,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
@@ -2507,8 +2878,8 @@
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-6, -120){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x261ff10) at ([xshift=2cm]sn0x261fe50.south east){
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418700){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
 \node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
@@ -2521,8 +2892,13 @@
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -135){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x2620120) at ([xshift=2cm]dummyL){
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-108cm]
+\matrix (line9) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418800){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (0.75,1.5){};
 \node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
@@ -2533,8 +2909,13 @@
 \nodepart{three}
 \footnotesize{$1$}
 };
-\node[draw opacity=0, fill opacity=0, anchor=south west] (dummyL) at (-3, -150){};
-\node[draw=black, rectangle split, anchor=south west, rectangle split parts=3] (sn0x26201e0) at ([xshift=2cm]dummyL){
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-120cm]
+\matrix (line10) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14188e0){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill, red] (tid0) at (0.75,1.5){};
 \end{tikzpicture}
@@ -2543,46 +2924,567 @@
 \nodepart{three}
 \footnotesize{$$}
 };
-\draw (sn0x26144a0.south) -- (sn0x26126f0.north);
-\draw (sn0x26144a0.south) -- (sn0x2623fc0.north);
-\draw (sn0x26144a0.south) -- (sn0x2623a70.north);
-\draw (sn0x26144a0.south) -- (sn0x2624570.north);
-\draw (sn0x26126f0.south) -- (sn0x2612000.north);
-\draw (sn0x26126f0.south) -- (sn0x26212b0.north);
-\draw (sn0x26126f0.south) -- (sn0x2622820.north);
-\draw (sn0x26126f0.south) -- (sn0x2622950.north);
-\draw (sn0x2623fc0.south) -- (sn0x2622950.north);
-\draw (sn0x2623a70.south) -- (sn0x26219b0.north);
-\draw (sn0x2623a70.south) -- (sn0x2621ec0.north);
-\draw (sn0x2623a70.south) -- (sn0x2622820.north);
-\draw (sn0x2623a70.south) -- (sn0x2622950.north);
-\draw (sn0x2624570.south) -- (sn0x2622950.north);
-\draw (sn0x2612000.south) -- (sn0x2614f90.north);
-\draw (sn0x2612000.south) -- (sn0x261e6b0.north);
-\draw (sn0x2612000.south) -- (sn0x261f7a0.north);
-\draw (sn0x26212b0.south) -- (sn0x261f7a0.north);
-\draw (sn0x2622820.south) -- (sn0x261e6b0.north);
-\draw (sn0x2622820.south) -- (sn0x261f7a0.north);
-\draw (sn0x2622950.south) -- (sn0x261f7a0.north);
-\draw (sn0x2622950.south) -- (sn0x26232c0.north);
-\draw (sn0x26219b0.south) -- (sn0x261f7a0.north);
-\draw (sn0x26219b0.south) -- (sn0x261e6b0.north);
-\draw (sn0x2621ec0.south) -- (sn0x261f7a0.north);
-\draw (sn0x2614f90.south) -- (sn0x261fa80.north);
-\draw (sn0x261e6b0.south) -- (sn0x261fa80.north);
-\draw (sn0x261f7a0.south) -- (sn0x261fa80.north);
-\draw (sn0x261f7a0.south) -- (sn0x2620400.north);
-\draw (sn0x26232c0.south) -- (sn0x2620400.north);
-\draw (sn0x261fa80.south) -- (sn0x261fb40.north);
-\draw (sn0x2620400.south) -- (sn0x261fb40.north);
-\draw (sn0x261fb40.south) -- (sn0x261f8e0.north);
-\draw (sn0x261fb40.south) -- (sn0x261fd90.north);
-\draw (sn0x261f8e0.south) -- (sn0x261fe50.north);
-\draw (sn0x261f8e0.south) -- (sn0x261ff10.north);
-\draw (sn0x261fd90.south) -- (sn0x261ff10.north);
-\draw (sn0x261fe50.south) -- (sn0x2620120.north);
-\draw (sn0x261ff10.south) -- (sn0x2620120.north);
-\draw (sn0x2620120.south) -- (sn0x26201e0.north);
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-132cm]
+\matrix (line11) [column sep=1cm] {
+\\
+};
+\end{scope}
+\draw (sn0x1408cb0.south) -- (sn0x1417b50.north);
+\draw (sn0x1408cb0.south) -- (sn0x1419ba0.north);
+\draw (sn0x1408cb0.south) -- (sn0x1417e80.north);
+\draw (sn0x1408cb0.south) -- (sn0x141ac30.north);
+\draw (sn0x1408cb0.south) -- (sn0x1419e90.north);
+\draw (sn0x1408cb0.south) -- (sn0x141a5b0.north);
+\draw (sn0x1417b50.south) -- (sn0x1418000.north);
+\draw (sn0x1417b50.south) -- (sn0x1417f40.north);
+\draw (sn0x1417b50.south) -- (sn0x14194f0.north);
+\draw (sn0x1419ba0.south) -- (sn0x1418000.north);
+\draw (sn0x1419ba0.south) -- (sn0x14194f0.north);
+\draw (sn0x1417e80.south) -- (sn0x1417f40.north);
+\draw (sn0x1417e80.south) -- (sn0x1418000.north);
+\draw (sn0x1417e80.south) -- (sn0x1419610.north);
+\draw (sn0x1417e80.south) -- (sn0x1419860.north);
+\draw (sn0x141ac30.south) -- (sn0x1418000.north);
+\draw (sn0x141ac30.south) -- (sn0x1419860.north);
+\draw (sn0x1419e90.south) -- (sn0x14194f0.north);
+\draw (sn0x1419e90.south) -- (sn0x1419610.north);
+\draw (sn0x1419e90.south) -- (sn0x1419860.north);
+\draw (sn0x141a5b0.south) -- (sn0x14194f0.north);
+\draw (sn0x141a5b0.south) -- (sn0x1419860.north);
+\draw (sn0x1418000.south) -- (sn0x1418180.north);
+\draw (sn0x1418000.south) -- (sn0x1418240.north);
+\draw (sn0x1417f40.south) -- (sn0x1418180.north);
+\draw (sn0x1417f40.south) -- (sn0x1418240.north);
+\draw (sn0x14194f0.south) -- (sn0x1418240.north);
+\draw (sn0x1419610.south) -- (sn0x1418240.north);
+\draw (sn0x1419860.south) -- (sn0x1418240.north);
+\draw (sn0x1419860.south) -- (sn0x1419a60.north);
+\draw (sn0x1418180.south) -- (sn0x1418300.north);
+\draw (sn0x1418240.south) -- (sn0x1418300.north);
+\draw (sn0x1418240.south) -- (sn0x1418f30.north);
+\draw (sn0x1419a60.south) -- (sn0x1418f30.north);
+\draw (sn0x1418300.south) -- (sn0x14183c0.north);
+\draw (sn0x1418300.south) -- (sn0x1418480.north);
+\draw (sn0x1418f30.south) -- (sn0x1419030.north);
+\draw (sn0x1418f30.south) -- (sn0x1418480.north);
+\draw (sn0x14183c0.south) -- (sn0x1418540.north);
+\draw (sn0x1418480.south) -- (sn0x1418540.north);
+\draw (sn0x1418480.south) -- (sn0x1418ae0.north);
+\draw (sn0x1419030.south) -- (sn0x14190f0.north);
+\draw (sn0x1419030.south) -- (sn0x1418540.north);
+\draw (sn0x1418540.south) -- (sn0x1418640.north);
+\draw (sn0x1418540.south) -- (sn0x1418700.north);
+\draw (sn0x1418ae0.south) -- (sn0x1418700.north);
+\draw (sn0x14190f0.south) -- (sn0x1418640.north);
+\draw (sn0x1418640.south) -- (sn0x1418800.north);
+\draw (sn0x1418700.south) -- (sn0x1418800.north);
+\draw (sn0x1418800.south) -- (sn0x14188e0.north);
+\end{tikzpicture}
+
+%%% Local Variables:
+%%% TeX-master: "thesis/thesis.tex"
+%%% End: 
+\begin{tikzpicture}[scale=.2]
+\begin{scope}[yshift=-12cm]
+\matrix (line1) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1408d68){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+\node[circle, scale=0.75, fill] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\draw[](tid1) -- (tid6);
+\node[circle, scale=0.75, fill] (tid2) at (6,3){};
+\node[circle, scale=0.75, fill, red] (tid7) at (5.25,4.5){};
+\node[circle, scale=0.75, fill, red] (tid8) at (6.75,4.5){};
+\draw[](tid2) -- (tid7);
+\draw[](tid2) -- (tid8);
+\node[circle, scale=0.75, fill] (tid3) at (8.25,3){};
+\node[circle, scale=0.75, fill, red] (tid9) at (8.25,4.5){};
+\draw[](tid3) -- (tid9);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{5.20028}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-24cm]
+\matrix (line2) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x141ac30){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\draw[](tid1) -- (tid6);
+\node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
+\node[circle, scale=0.75, fill, red] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\node[circle, scale=0.75, fill, red] (tid8) at (6.75,4.5){};
+\draw[](tid3) -- (tid8);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.86728}
+\nodepart{three}
+\footnotesize{$33\:67$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x141a5b0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\draw[](tid1) -- (tid6);
+\node[circle, scale=0.75, fill] (tid2) at (6,3){};
+\node[circle, scale=0.75, fill, red] (tid7) at (5.25,4.5){};
+\node[circle, scale=0.75, fill, red] (tid8) at (6.75,4.5){};
+\draw[](tid2) -- (tid7);
+\draw[](tid2) -- (tid8);
+\node[circle, scale=0.75, fill] (tid3) at (8.25,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.86626}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-36cm]
+\matrix (line3) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418000){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\draw[](tid2) -- (tid6);
+\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
+\node[circle, scale=0.75, fill, red] (tid7) at (5.25,4.5){};
+\draw[](tid3) -- (tid7);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.54012}
+\nodepart{three}
+\footnotesize{$33\:67$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419860){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\draw[](tid1) -- (tid6);
+\node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
+\node[circle, scale=0.75, fill, red] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.53086}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14194f0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+\draw[](tid2) -- (tid6);
+\draw[](tid2) -- (tid7);
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.53704}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-48cm]
+\matrix (line4) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418180){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\draw[](tid1) -- (tid4);
+\node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid2) -- (tid5);
+\node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\draw[](tid3) -- (tid6);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.21296}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418240){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\draw[](tid2) -- (tid6);
+\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.2037}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419a60){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, red] (tid6) at (3.75,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\draw[](tid1) -- (tid6);
+\node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
+\node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{4.18519}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-60cm]
+\matrix (line5) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418300){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\draw[](tid1) -- (tid4);
+\node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid2) -- (tid5);
+\node[circle, scale=0.75, fill, red] (tid3) at (3.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.87963}
+\nodepart{three}
+\footnotesize{$33\:67$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418f30){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid5) at (2.25,4.5){};
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill, red] (tid2) at (3.75,3){};
+\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.85185}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-72cm]
+\matrix (line6) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14183c0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (0.75,4.5){};
+\draw[](tid1) -- (tid3);
+\node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (2.25,4.5){};
+\draw[](tid2) -- (tid4);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.75}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418480){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (0.75,4.5){};
+\draw[](tid1) -- (tid4);
+\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (3.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.44444}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1419030){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid4) at (2.25,4.5){};
+\draw[](tid1) -- (tid3);
+\draw[](tid1) -- (tid4);
+\node[circle, scale=0.75, fill, red] (tid2) at (3.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.66667}
+\nodepart{three}
+\footnotesize{$67\:33$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-84cm]
+\matrix (line7) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418540){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (0.75,4.5){};
+\draw[](tid1) -- (tid3);
+\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.25}
+\nodepart{three}
+\footnotesize{$50\:50$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418ae0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+\node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, red] (tid3) at (3.75,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{2.83333}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14190f0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, red] (tid2) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, red] (tid3) at (2.25,4.5){};
+\draw[](tid1) -- (tid2);
+\draw[](tid1) -- (tid3);
+\draw[](tid0) -- (tid1);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3.5}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-96cm]
+\matrix (line8) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418640){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (0.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid2) at (0.75,4.5){};
+\draw[](tid1) -- (tid2);
+\draw[](tid0) -- (tid1);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{3}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418700){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (1.5,1.5){};
+\node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, red] (tid2) at (2.25,3){};
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{2.5}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-108cm]
+\matrix (line9) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x1418800){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (0.75,1.5){};
+\node[circle, scale=0.75, fill, red] (tid1) at (0.75,3){};
+\draw[](tid0) -- (tid1);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{2}
+\nodepart{three}
+\footnotesize{$1$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-120cm]
+\matrix (line10) [column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=3] (sn0x14188e0){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill, red] (tid0) at (0.75,1.5){};
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{1}
+\nodepart{three}
+\footnotesize{$$}
+};
+ & 
+\\
+};
+\end{scope}
+\begin{scope}[yshift=-132cm]
+\matrix (line11) [column sep=1cm] {
+\\
+};
+\end{scope}
+\draw (sn0x1408d68.south) -- (sn0x141ac30.north);
+\draw (sn0x1408d68.south) -- (sn0x141a5b0.north);
+\draw (sn0x141ac30.south) -- (sn0x1418000.north);
+\draw (sn0x141ac30.south) -- (sn0x1419860.north);
+\draw (sn0x141a5b0.south) -- (sn0x14194f0.north);
+\draw (sn0x141a5b0.south) -- (sn0x1419860.north);
+\draw (sn0x1418000.south) -- (sn0x1418180.north);
+\draw (sn0x1418000.south) -- (sn0x1418240.north);
+\draw (sn0x1419860.south) -- (sn0x1418240.north);
+\draw (sn0x1419860.south) -- (sn0x1419a60.north);
+\draw (sn0x14194f0.south) -- (sn0x1418240.north);
+\draw (sn0x1418180.south) -- (sn0x1418300.north);
+\draw (sn0x1418240.south) -- (sn0x1418300.north);
+\draw (sn0x1418240.south) -- (sn0x1418f30.north);
+\draw (sn0x1419a60.south) -- (sn0x1418f30.north);
+\draw (sn0x1418300.south) -- (sn0x14183c0.north);
+\draw (sn0x1418300.south) -- (sn0x1418480.north);
+\draw (sn0x1418f30.south) -- (sn0x1419030.north);
+\draw (sn0x1418f30.south) -- (sn0x1418480.north);
+\draw (sn0x14183c0.south) -- (sn0x1418540.north);
+\draw (sn0x1418480.south) -- (sn0x1418540.north);
+\draw (sn0x1418480.south) -- (sn0x1418ae0.north);
+\draw (sn0x1419030.south) -- (sn0x14190f0.north);
+\draw (sn0x1419030.south) -- (sn0x1418540.north);
+\draw (sn0x1418540.south) -- (sn0x1418640.north);
+\draw (sn0x1418540.south) -- (sn0x1418700.north);
+\draw (sn0x1418ae0.south) -- (sn0x1418700.north);
+\draw (sn0x14190f0.south) -- (sn0x1418640.north);
+\draw (sn0x1418640.south) -- (sn0x1418800.north);
+\draw (sn0x1418700.south) -- (sn0x1418800.north);
+\draw (sn0x1418800.south) -- (sn0x14188e0.north);
 \end{tikzpicture}
 
 %%% Local Variables:
