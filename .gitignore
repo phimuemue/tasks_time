@@ -2,11 +2,20 @@
 ###################
 *.swp
 *.tex~
+*.sty
+*.out
 *.aux
 *.auxlock
 *.pdf
 *.dpth
 *.ps
+*.dblite
+*.dagview
+*.exrc
+thesis/pgfsubpic.tex
+thesis/pgftree.tex
+thesis/tikz-qtree-manual.tex
+thesis/tikz-qtree.tex
 
 # Compiled source #
 ###################
