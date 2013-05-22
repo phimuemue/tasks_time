@@ -32,8 +32,8 @@ class Snapshot {
     public:
         // TODO: it would be nice if the following were const
         // but then the default operator= is deleted.
-        vector<task_id> marked;
-        Intree intree;
+        const vector<task_id> marked;
+        const Intree intree;
 
         // Member spaces to offer nice iterators 
         // for probabilities and successors

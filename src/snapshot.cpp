@@ -38,12 +38,12 @@ Snapshot::Snapshot(Intree& t) :
 }
 
 Snapshot::Snapshot(Intree& t, vector<task_id> m) :
+    marked(m),
     intree(t),
     Successors(this),
     SuccessorProbs(this)
 {
     sort(m.begin(), m.end());
-    marked = m;
     for(auto it=m.begin(); it!=m.end(); ++it){
         vector<task_id> tmp;
         t.get_predecessors(*it, tmp);
