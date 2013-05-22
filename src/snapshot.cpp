@@ -15,6 +15,7 @@ void Snapshot::clear_pool(){
 }
 
 Snapshot::Snapshot() :
+    cache_expected_runtime(0),
     Successors(this),
     SuccessorProbs(this)
 {
@@ -22,6 +23,7 @@ Snapshot::Snapshot() :
 }
 
 Snapshot::Snapshot(const Snapshot& s) :
+    cache_expected_runtime(0),
     marked(s.marked),
     intree(s.intree),
     Successors(this),
@@ -30,6 +32,7 @@ Snapshot::Snapshot(const Snapshot& s) :
 }
 
 Snapshot::Snapshot(Intree& t) :
+    cache_expected_runtime(0),
     intree(t),
     Successors(this),
     SuccessorProbs(this)
@@ -38,6 +41,7 @@ Snapshot::Snapshot(Intree& t) :
 }
 
 Snapshot::Snapshot(Intree& t, vector<task_id> m) :
+    cache_expected_runtime(0),
     marked(m),
     intree(t),
     Successors(this),
@@ -233,6 +237,9 @@ void Snapshot::get_successors(const Scheduler& scheduler){
 }
 
 void Snapshot::compile_snapshot_dag(const Scheduler& scheduler){
+    if(successors.size() > 0){
+        return;
+    }
     get_successors(scheduler);
     for(unsigned int i=0; i<successors.size(); ++i){
         successors[i]->compile_snapshot_dag(scheduler);
@@ -244,6 +251,9 @@ size_t Snapshot::get_successor_count(){
 }
 
 myfloat Snapshot::expected_runtime() const {
+    if(cache_expected_runtime != 0){
+        return cache_expected_runtime;
+    }
     if (successors.size() == 0){
         return intree.get_task_by_id(0).get_expected_remaining_time();
     }
@@ -258,7 +268,7 @@ myfloat Snapshot::expected_runtime() const {
     for(unsigned int i=0; i<successors.size(); ++i){
         result += successor_probs[i] * suc_expected_runtimes[i];
     }
-    return result;
+    return cache_expected_runtime = result;
 }
 
 ostream& operator<<(ostream& os, const Snapshot& s){

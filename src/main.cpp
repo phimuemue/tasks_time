@@ -278,7 +278,8 @@ int main(int argc, char** argv){
                 s,
                 expected_runtimes);
 
-        // computed expected runtimes
+        // compute expected runtimes
+        cout << "Computing expected runtimes." << endl;
         assert(expected_runtimes.size() == s.size());
         for(unsigned int i= 0; i<s.size(); ++i){
             expected_runtimes[i] = s[i]->expected_runtime();

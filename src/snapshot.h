@@ -25,6 +25,9 @@ class Snapshot {
         // snapshots are organized in a pool (no duplicates)
         static map<snapshot_id, Snapshot*> pool;
 
+        // we cache the result of expected_runtime
+        mutable myfloat cache_expected_runtime;
+
         // TODO: combine successors and successor_probs into 1 vector!
         vector<Snapshot*> successors;
         vector<myfloat> successor_probs;
