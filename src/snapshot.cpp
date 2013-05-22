@@ -14,24 +14,33 @@ void Snapshot::clear_pool(){
     }
 }
 
-Snapshot::Snapshot(){
+Snapshot::Snapshot() :
+    Successors(this),
+    SuccessorProbs(this)
+{
 
 }
 
 Snapshot::Snapshot(const Snapshot& s) :
     marked(s.marked),
-    intree(s.intree)
+    intree(s.intree),
+    Successors(this),
+    SuccessorProbs(this)
     {
 }
 
 Snapshot::Snapshot(Intree& t) :
-    intree(t)
+    intree(t),
+    Successors(this),
+    SuccessorProbs(this)
 {
 
 }
 
 Snapshot::Snapshot(Intree& t, vector<task_id> m) :
-    intree(t)
+    intree(t),
+    Successors(this),
+    SuccessorProbs(this)
 {
     sort(m.begin(), m.end());
     marked = m;

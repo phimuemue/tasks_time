@@ -23,7 +23,6 @@ class Snapshot {
     friend class Probability_Computer;
     friend class TikzExporter;
     friend class DagviewExporter;
-    friend class SimpleExporter;
     private:
         // snapshots are organized in a pool (no duplicates)
         static map<snapshot_id, Snapshot*> pool;
@@ -36,13 +35,42 @@ class Snapshot {
         vector<myfloat> successor_probs;
 
     public:
+        // Member spaces to offer nice iterators 
+        // for probabilities and successors
+        struct Successors {
+            vector<Snapshot*>::const_iterator begin() const {
+                return my_Snapshot->Successors.begin();
+            }
+            vector<Snapshot*>::const_iterator end() const {
+                return my_Snapshot->Successors.end();
+            }
+            private:
+            friend class Snapshot;
+            Successors(Snapshot* s) : my_Snapshot(s) {}
+            Snapshot* my_Snapshot;
+        } Successors;
+        struct SuccessorProbs {
+            vector<myfloat>::const_iterator begin() const {
+                return my_Snapshot->successor_probs.begin();
+            }
+            vector<myfloat>::const_iterator end() const {
+                return my_Snapshot->successor_probs.end();
+            }
+            private:
+            friend class Snapshot;
+            SuccessorProbs(Snapshot* s) : my_Snapshot(s) {}
+            Snapshot* my_Snapshot;
+        } SuccessorProbs;
+
         Snapshot();
         Snapshot(const Snapshot& s);
         Snapshot(Intree& t);
         Snapshot(Intree& t, vector<task_id> m);
         ~Snapshot();
+
         static Snapshot* canonical_snapshot(const Snapshot& s);
-        static Snapshot* canonical_snapshot(Intree& t, vector<task_id> m);
+        static Snapshot* canonical_snapshot(Intree& t, 
+                vector<task_id> m);
 
         void get_successors(const Scheduler& scheduler);
         void compile_snapshot_dag(const Scheduler& scheduler);
