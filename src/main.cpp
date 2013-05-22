@@ -151,28 +151,28 @@ void create_snapshot_dags(const po::variables_map& vm,
         Intree& t,
         const Scheduler* sched,
         vector<vector<task_id>>& initial_settings,
-        vector<Snapshot>& s,
+        vector<Snapshot*>& s,
         vector<myfloat>& expected_runtimes){
     // generate all possible initial markings
     vector<task_id> marked;
     sched->get_initial_schedule(t, vm["processors"].as<int>(), initial_settings);
     //Snapshot s[initial_settings.size()];
-    s = vector<Snapshot>(initial_settings.size());
+    s = vector<Snapshot*>(initial_settings.size());
     for(unsigned int i= 0; i<initial_settings.size(); ++i){
-        s[i] = *Snapshot::canonical_snapshot(Snapshot(t, initial_settings[i]));
+        s[i] = Snapshot::canonical_snapshot(Snapshot(t, initial_settings[i]));
     }
 #if USE_CANONICAL_SNAPSHOT
     cout << "Warning: We are currently not considering "
             "probabilities for initial settings!" << endl;
     vector<Snapshot*> p_s;
     for(auto it=s.begin(); it!=s.end(); ++it){
-        p_s.push_back(Snapshot::canonical_snapshot(*it));
+        p_s.push_back(Snapshot::canonical_snapshot(**it));
     }
     sort(p_s.begin(), p_s.end());
     p_s.erase(unique(p_s.begin(), p_s.end()), p_s.end());
     s.clear();
     for(auto it=p_s.begin(); it!=p_s.end(); ++it){
-        s.push_back(**it);
+        s.push_back(*it);
     }
 #endif
 #if USE_SIMPLE_OPENMP
@@ -180,13 +180,13 @@ void create_snapshot_dags(const po::variables_map& vm,
 #endif
     cout << "Compiling snapshot DAGs." << endl;
     for(unsigned int i= 0; i<s.size(); ++i){
-        s[i].compile_snapshot_dag(*sched);
+        s[i]->compile_snapshot_dag(*sched);
     }
     expected_runtimes = vector<myfloat>(s.size());
 }
 
 void generate_output(const po::variables_map& vm,
-        vector<Snapshot>& s,
+        vector<Snapshot*>& s,
         const vector<vector<task_id>>& initial_settings
         ){ 
     if(vm.count("tikz")){
@@ -203,7 +203,7 @@ void generate_output(const po::variables_map& vm,
                 vm["tikzlimit"].as<unsigned int>()
                 );
         for(unsigned int i= 0; i<s.size(); ++i){
-            tikz_exporter.export_snapshot_dag(tikz_output, &s[i]);
+            tikz_exporter.export_snapshot_dag(tikz_output, s[i]);
         }
         tikz_output.close();
     }
@@ -217,7 +217,7 @@ void generate_output(const po::variables_map& vm,
         dagview_output.open(filename);
         DagviewExporter dagview_exporter;
         for(unsigned int i= 0; i<s.size(); ++i){
-            dagview_exporter.export_snapshot_dag(dagview_output, &s[i]);
+            dagview_exporter.export_snapshot_dag(dagview_output, s[i]);
         }
         dagview_output.close();
     }
@@ -268,7 +268,7 @@ int main(int argc, char** argv){
         
         // compute snapshot dags
         vector<vector<task_id>> initial_settings;
-        vector<Snapshot> s;
+        vector<Snapshot*> s;
         vector<myfloat> expected_runtimes;
 
         create_snapshot_dags(vm,
@@ -281,11 +281,11 @@ int main(int argc, char** argv){
         // computed expected runtimes
         assert(expected_runtimes.size() == s.size());
         for(unsigned int i= 0; i<s.size(); ++i){
-            expected_runtimes[i] = s[i].expected_runtime();
+            expected_runtimes[i] = s[i]->expected_runtime();
         }
         myfloat expected_runtime = 0;
         for(unsigned int i= 0; i<s.size(); ++i){
-            cout << s[i].markedstring() << ":\t";
+            cout << s[i]->markedstring() << ":\t";
             cout << expected_runtimes[i] << endl;
             expected_runtime += expected_runtimes[i];
         }
