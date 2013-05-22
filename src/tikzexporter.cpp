@@ -117,7 +117,11 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
         tikz_dag_by_levels(s, levels, 1, consec_num);
         // draw all snaps
         for(unsigned int l=1; l<s->intree.count_tasks()+2-task_count_limit; ++l){
-            output << "\\begin{scope}[yshift=-" << l*12 << "cm]" << endl;
+            output << "\\begin{scope}[yshift=\\leveltop"; 
+            for(unsigned int i=0; i<l; ++i){
+                output << "I";
+            }
+            output << " cm]" << endl;
             output << "\\matrix (line" << l << ") [column sep=1cm] {" << endl;
             for(auto it=levels[l].begin(); it!=levels[l].end(); ++it){
                 tikz_draw_node(*it, output, show_expectancy, show_probabilities, consec_num, "", l*15);
@@ -240,7 +244,18 @@ void TikzExporter::export_snapshot_dag(ostream& output, const Snapshot* s) const
                 a.second = a.second * -0.5f;
             }
             );
-    output << "\\begin{tikzpicture}[scale=.2]" << endl;
+    for(unsigned int l=1; l<s->intree.count_tasks()+1; ++l){
+        output << "\\renewcommand{\\leveltop"; 
+        for(unsigned int i=0; i<l; ++i){
+            output << "I";
+        }
+        output << "}" << "{-15cm + \\leveltop";
+        for(unsigned int i=1; i<l; ++i){
+            output << "I";
+        }
+        output << "}" << endl;
+    }
+    output << "\\begin{tikzpicture}[scale=.2, anchor=south]" << endl;
     tikz_string_dag_compact_internal(s, 
             output, 
             positions,
