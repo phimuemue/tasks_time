@@ -21,28 +21,26 @@ using namespace std;
 class Snapshot {
     // TODO: I dont want no friends!!!
     friend class Probability_Computer;
-    friend class TikzExporter;
-    friend class DagviewExporter;
     private:
         // snapshots are organized in a pool (no duplicates)
         static map<snapshot_id, Snapshot*> pool;
-
-        vector<task_id> marked;
-        Intree intree;
 
         // TODO: combine successors and successor_probs into 1 vector!
         vector<Snapshot*> successors;
         vector<myfloat> successor_probs;
 
     public:
+        vector<task_id> marked;
+        Intree intree;
+
         // Member spaces to offer nice iterators 
         // for probabilities and successors
         struct Successors {
             vector<Snapshot*>::const_iterator begin() const {
-                return my_Snapshot->Successors.begin();
+                return my_Snapshot->successors.begin();
             }
             vector<Snapshot*>::const_iterator end() const {
-                return my_Snapshot->Successors.end();
+                return my_Snapshot->successors.end();
             }
             private:
             friend class Snapshot;
@@ -71,6 +69,8 @@ class Snapshot {
         static Snapshot* canonical_snapshot(const Snapshot& s);
         static Snapshot* canonical_snapshot(Intree& t, 
                 vector<task_id> m);
+
+        unsigned int count_tasks() const;
 
         void get_successors(const Scheduler& scheduler);
         void compile_snapshot_dag(const Scheduler& scheduler);
