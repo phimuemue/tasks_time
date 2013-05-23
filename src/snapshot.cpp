@@ -52,7 +52,8 @@ Snapshot::Snapshot(Intree& t, vector<task_id> m) :
         vector<task_id> tmp;
         t.get_predecessors(*it, tmp);
         if(tmp.size()!=0){
-            cout << "Trying to construct snapshot with non-leaf marked tasks." << endl;
+            cout << "Trying to construct snapshot " 
+                << "with non-leaf marked tasks." << endl;
             cout << t << endl;
             for(auto it=m.begin(); it!=m.end(); ++it){
                 cout << *it << endl;
@@ -88,7 +89,8 @@ Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
     tree_id tid;
     Intree tmp = Intree::canonical_intree(t, m, isomorphism, tid);
 
-    // adjust m properly (i.e. always "lowest possible task" for 'iso-snap')
+    // adjust m properly (i.e. always "lowest possible task" 
+    // for 'iso-snap')
     transform(m.begin(), m.end(), m.begin(),
         [&](const task_id a) -> task_id {
             return isomorphism[a];
@@ -108,7 +110,8 @@ Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
     }
     map<task_id, vector<task_id>> predecessor_collection;
     for(auto it=counts.begin(); it!=counts.end(); ++it){
-        tmp.get_predecessors(it->first, predecessor_collection[it->first]);
+        tmp.get_predecessors(it->first,
+                predecessor_collection[it->first]);
         // remove non-leaf tasks from predecessors
         predecessor_collection[it->first].erase(
             remove_if(predecessor_collection[it->first].begin(),
@@ -148,7 +151,11 @@ Snapshot* Snapshot::canonical_snapshot(Intree& t, vector<task_id> m){
     }
     isomorphism.clear();
     tid = 0;
-    Intree::canonical_intree(Snapshot::pool.find(find_key)->second->intree, newmarked, isomorphism, tid);
+    Intree::canonical_intree(
+            Snapshot::pool.find(find_key)->second->intree,
+            newmarked,
+            isomorphism,
+            tid);
     return Snapshot::pool.find(find_key)->second;
 }
 
@@ -165,7 +172,8 @@ void Snapshot::get_successors(const Scheduler& scheduler){
     assert(finish_probs.size()==marked.size());
     // then, for each finished threads, compute all possible successors
     auto finish_prob_it = finish_probs.begin();
-    for(auto it = marked.begin(); it!=marked.end(); ++it, ++finish_prob_it){
+    for(auto it = marked.begin(); it!=marked.end(); 
+            ++it, ++finish_prob_it){
 #if SIMPLE_ISOMORPHISM_CHECK
         if(*finish_prob_it == 0)
             continue;
@@ -174,11 +182,13 @@ void Snapshot::get_successors(const Scheduler& scheduler){
         tmp.remove_task(*it);
         vector<pair<task_id,myfloat>> raw_sucs;
         scheduler.get_next_tasks(tmp, marked, raw_sucs);
-        // we have to check if the scheduler even found a new task to schedule
+        // we have to check if the scheduler even found 
+        // a new task to schedule
         if(raw_sucs.size() > 0){
             for(unsigned int i=0; i<raw_sucs.size(); ++i){
                 vector<task_id> newmarked(marked);
-                newmarked.erase(remove_if(newmarked.begin(), newmarked.end(),
+                newmarked.erase(remove_if(
+                            newmarked.begin(), newmarked.end(),
                             [it](const task_id& a){
                             return a==*it;
                             }), newmarked.end());
@@ -188,12 +198,14 @@ void Snapshot::get_successors(const Scheduler& scheduler){
                 sort(newmarked.begin(), newmarked.end());
                 // TODO: every "new" needs a "delete"
 #if USE_CANONICAL_SNAPSHOT
-                Snapshot* news = Snapshot::canonical_snapshot(tmp, newmarked);
+                Snapshot* news = Snapshot::canonical_snapshot(tmp, 
+                        newmarked);
 #else
                 Snapshot* news = new Snapshot(tmp, newmarked);
 #endif
                 successors.push_back(news);
-                successor_probs.push_back(*finish_prob_it * raw_sucs[i].second);
+                successor_probs.push_back(
+                        *finish_prob_it * raw_sucs[i].second);
             }
         }
         else {
@@ -205,7 +217,8 @@ void Snapshot::get_successors(const Scheduler& scheduler){
                         }), newmarked.end());
             // TODO: every "new" needs a "delete"
 #if USE_CANONICAL_SNAPSHOT
-            Snapshot* news = Snapshot::canonical_snapshot(tmp, newmarked);
+            Snapshot* news = Snapshot::canonical_snapshot(tmp, 
+                    newmarked);
 #else
             Snapshot* news = new Snapshot(tmp, newmarked);
 #endif
@@ -229,10 +242,11 @@ void Snapshot::get_successors(const Scheduler& scheduler){
             return a == NULL;
         }
     ), successors.end());
-    successor_probs.erase(remove_if(successor_probs.begin(), successor_probs.end(),
-        [](const myfloat& a) -> bool {
-            return a == (myfloat)0;
-        }
+    successor_probs.erase(remove_if(
+                successor_probs.begin(), successor_probs.end(),
+                [](const myfloat& a) -> bool {
+                    return a == (myfloat)0;
+                }
     ), successor_probs.end());
 }
 
@@ -258,8 +272,10 @@ myfloat Snapshot::expected_runtime() const {
         return intree.get_task_by_id(0).get_expected_remaining_time();
     }
     assert(successor_probs.size() == successors.size());
-    // TODO: compute expected minimum runtime of marked threads dynamically
-    myfloat expected_runtime_of_min_task = ((myfloat)1)/(myfloat)marked.size();
+    // TODO: compute expected minimum runtime of marked 
+    // threads dynamically
+    myfloat expected_runtime_of_min_task = 
+        ((myfloat)1)/(myfloat)marked.size();
     myfloat result = expected_runtime_of_min_task;
     myfloat suc_expected_runtimes[successors.size()];
     for(unsigned int i=0; i<successors.size(); ++i){
