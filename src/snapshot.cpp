@@ -314,6 +314,53 @@ ostream& operator<<(ostream& os, const Snapshot& s){
     return os;
 }
 
+Snapshot* Snapshot::optimize() const {
+    vector<pair<Snapshot*, myfloat>> new_sucs;
+    auto pit = successor_probs.begin();
+    for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
+        new_sucs.push_back(
+                pair<Snapshot*, myfloat>(*it, *pit)
+                );
+    }
+    // sort successors into different vectors, 
+    // each one only containing successors with
+    // same intree structure.
+    map<tree_id, decltype(new_sucs)> sucs_by_tree_id;
+    for_each(new_sucs.begin(), new_sucs.end(),
+        [&](const pair<Snapshot*, myfloat> s) {
+            tree_id tid;
+            map<task_id, task_id> iso;
+            Intree::canonical_intree(
+                s.first->intree,
+                s.first->marked,
+                iso,
+                tid);
+            sucs_by_tree_id[tid].push_back(s);
+        }
+    );
+    // traverse all sucs with same intree structure,
+    // and only leave the best!
+    for(auto it=sucs_by_tree_id.begin(); it!=sucs_by_tree_id.end(); ++it){
+        // sum up probabilities for current intree structure
+        myfloat prob_sum = (myfloat)0;
+        for_each(it->second.begin(), it->second.end(),
+            [&](const pair<Snapshot*, myfloat> s) {
+                prob_sum += s.second;
+            }
+        );
+        // get best intree structure
+        pair<Snapshot*, myfloat> best_one = 
+            *min_element(it->second.begin(), it->second.end(),
+            [](const pair<Snapshot*, myfloat>& a, 
+               const pair<Snapshot*, myfloat>& b) -> bool {
+                    return a.second < b.second;
+                }
+        );
+        // only leave the best element!
+        it->second = vector<pair<Snapshot*, myfloat>>{best_one};
+    }
+}
+
 string Snapshot::markedstring(){
     stringstream os;
     os << "[";

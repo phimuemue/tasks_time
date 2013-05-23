@@ -68,17 +68,21 @@ class Snapshot {
             Snapshot* my_Snapshot;
         } SuccessorProbs;
 
+        // constructors and destructors
         Snapshot();
         Snapshot(const Snapshot& s);
         Snapshot(Intree& t);
         Snapshot(Intree& t, vector<task_id> m);
         ~Snapshot();
 
+        // canonical snapshot stuff
         static Snapshot* canonical_snapshot(const Snapshot& s,
                 Snapshot* representant = NULL);
         static Snapshot* canonical_snapshot(Intree& t, 
                 vector<task_id> m,
                 Snapshot* representant = NULL);
+
+        Snapshot* optimize() const;
 
         unsigned int count_tasks() const;
 
