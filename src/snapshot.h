@@ -82,8 +82,10 @@ class Snapshot {
 
         unsigned int count_tasks() const;
 
-        void get_successors(const Scheduler& scheduler);
-        void compile_snapshot_dag(const Scheduler& scheduler);
+        void get_successors(const Scheduler& scheduler, 
+                Snapshot* representant = NULL);
+        void compile_snapshot_dag(const Scheduler& scheduler,
+                Snapshot* representant = NULL);
         size_t get_successor_count();
 
         myfloat expected_runtime() const;

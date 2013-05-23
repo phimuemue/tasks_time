@@ -82,7 +82,7 @@ Snapshot* Snapshot::canonical_snapshot(
         Snapshot* representant){
     Intree intreecopy(s.intree);
     vector<task_id> mcopy(s.marked);
-    return canonical_snapshot(intreecopy, mcopy);
+    return canonical_snapshot(intreecopy, mcopy, representant);
 }
 
 Snapshot* Snapshot::canonical_snapshot(
@@ -169,7 +169,8 @@ Snapshot* Snapshot::canonical_snapshot(
     return Snapshot::pool[representant].find(find_key)->second;
 }
 
-void Snapshot::get_successors(const Scheduler& scheduler){
+void Snapshot::get_successors(const Scheduler& scheduler,
+    Snapshot* representant){
     // we only want to compute the successors once
     if(successors.size()>0)
         return;
@@ -209,7 +210,8 @@ void Snapshot::get_successors(const Scheduler& scheduler){
                 // TODO: every "new" needs a "delete"
 #if USE_CANONICAL_SNAPSHOT
                 Snapshot* news = Snapshot::canonical_snapshot(tmp, 
-                        newmarked);
+                        newmarked,
+                        representant);
 #else
                 Snapshot* news = new Snapshot(tmp, newmarked);
 #endif
@@ -228,7 +230,8 @@ void Snapshot::get_successors(const Scheduler& scheduler){
             // TODO: every "new" needs a "delete"
 #if USE_CANONICAL_SNAPSHOT
             Snapshot* news = Snapshot::canonical_snapshot(tmp, 
-                    newmarked);
+                    newmarked,
+                    representant);
 #else
             Snapshot* news = new Snapshot(tmp, newmarked);
 #endif
@@ -260,13 +263,14 @@ void Snapshot::get_successors(const Scheduler& scheduler){
     ), successor_probs.end());
 }
 
-void Snapshot::compile_snapshot_dag(const Scheduler& scheduler){
+void Snapshot::compile_snapshot_dag(const Scheduler& scheduler,
+    Snapshot* representant){
     if(successors.size() > 0){
         return;
     }
-    get_successors(scheduler);
+    get_successors(scheduler, representant);
     for(unsigned int i=0; i<successors.size(); ++i){
-        successors[i]->compile_snapshot_dag(scheduler);
+        successors[i]->compile_snapshot_dag(scheduler, representant);
     }
 }
 
