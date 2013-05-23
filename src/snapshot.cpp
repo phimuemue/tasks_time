@@ -359,6 +359,8 @@ Snapshot* Snapshot::optimize() const {
         // only leave the best element!
         it->second = vector<pair<Snapshot*, myfloat>>{best_one};
     }
+    cout << "optimize for snapshots not yet implemented" << endl;
+    throw 1;
 }
 
 string Snapshot::markedstring(){
