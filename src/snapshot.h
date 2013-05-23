@@ -22,8 +22,11 @@ class Snapshot {
     // TODO: I dont want no friends!!!
     friend class Probability_Computer;
     private:
-        // snapshots are organized in a pool (no duplicates)
-        static map<snapshot_id, Snapshot*> pool;
+        // snapshots are organized in a set of pools (no duplicates)
+        // We need different pools for different schedulers,
+        // such that each pool is "indexed" by one representantive
+        // snapshot.
+        static map<Snapshot*, map<snapshot_id, Snapshot*>> pool;
 
         // we cache the result of expected_runtime
         mutable myfloat cache_expected_runtime;
@@ -71,9 +74,11 @@ class Snapshot {
         Snapshot(Intree& t, vector<task_id> m);
         ~Snapshot();
 
-        static Snapshot* canonical_snapshot(const Snapshot& s);
+        static Snapshot* canonical_snapshot(const Snapshot& s,
+                Snapshot* representant = NULL);
         static Snapshot* canonical_snapshot(Intree& t, 
-                vector<task_id> m);
+                vector<task_id> m,
+                Snapshot* representant = NULL);
 
         unsigned int count_tasks() const;
 
