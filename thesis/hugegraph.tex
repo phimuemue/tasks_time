@@ -5,7 +5,7 @@
 
 %%\revision$Header: /home/philipp/Documents/Uni/masterarbeit/thesis/thesis.tex,v 0.0 2013/04/08 12:19:13 philipp Exp$
 
-\documentclass[]{a0poster}
+\documentclass{report}
 
 \usepackage[english]{babel}
 \usepackage{lmodern}
@@ -17,12 +17,92 @@
 \usepackage{graphicx}
 \usepackage{tikz}
 \usepackage{suffix}
-\usepackage[left=3.5cm,right=3.5cm]{geometry}
+\usepackage{multicol}
+\usepackage[left=3.5cm,right=3.5cm,a0paper]{geometry}
+
+\usetikzlibrary{shapes.multipart,chains}
+\usetikzlibrary{positioning}
+\usetikzlibrary{matrix}
+\usetikzlibrary{external} 
+
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{theorem}{Theorem}[chapter]
+
+\newcommand{\p}[1]{Pr\left[#1\right]}
+\newcommand{\alltasks}{{\mathbb T}}
+\newcommand{\neededfor}{\rightarrow}
+\WithSuffix\newcommand\neededfor*{\stackrel{*}{\rightarrow}}
+
+% \getwidthofnode will measure the width of the node given as its second
+% parameter and store it into the first parameter.
+\makeatletter
+\newcommand\getwidthofnode[2]{%
+    \pgfextractx{#1}{\pgfpointanchor{#2}{east}}%
+    \pgfextractx{\pgf@xa}{\pgfpointanchor{#2}{west}}% \pgf@xa is a length defined by PGF for temporary storage. No need to create a new temporary length.
+    \addtolength{#1}{-\pgf@xa}%
+}
+\makeatother
 
 \begin{document}
+  
+% stuff to draw diagrams levelwise
+\newcommand{\leveltop}{0}
+\newcommand{\leveltopI}{0}
+\newcommand{\leveltopII}{0}
+\newcommand{\leveltopIII}{0}
+\newcommand{\leveltopIIII}{0}
+\newcommand{\leveltopIIIII}{0}
+\newcommand{\leveltopIIIIII}{0}
+\newcommand{\leveltopIIIIIII}{0}
+\newcommand{\leveltopIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIIIIIIIIIIII}{0}
 
-\newsavebox{\nodebox}
+\section{P2: A whole intree-DAG and its condensed counterpart}
 
-\input{../tikz.tex}
+\input{examples/p2/001112566_with_condensed.tex}
+
+\section{The current TikZ-file}
+
+%\input{../default.tex}
+
+
+\frame{
+  \begin{minipage}{.45\textwidth}
+    \section{Two proofs that HLF is not optimal for P3}
+
+    \begin{multicols}{4}
+      \subsection{P3, HLF for 0012346688}
+
+      \input{../0012346688hlf.tex}
+
+      \subsection{P3, opt for 0012346688}
+
+      \input{../0012346688opt.tex}
+    \end{multicols}
+
+  \end{minipage}
+}
+%\input{../000111223hlf.tex}
+%\input{../000111223opt.tex}
 
 \end{document}

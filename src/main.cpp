@@ -38,10 +38,14 @@ map<string, Scheduler*> scheds =
 void randomEdges(int n, vector<pair<Task,Task>>& target){
     mt19937 rng;
     rng.seed(time(NULL));
+    ofstream output;
+    output.open(".last.intree");
     for(int i=0; i<n; ++i){
         int a = rng()%(i+1);
+        output << a << " ";
         target.push_back(pair<Task,Task>(Task(i+1),Task(a)));
     }   
+    output.close();
 }
 
 void tree_from_string(string raw, vector<pair<Task,Task>>& target){
@@ -281,11 +285,10 @@ int main(int argc, char** argv){
                 expected_runtimes);
 
         // optimize current snapshot
-        vector<Snapshot*> s_opt(s.size());
         if(vm["optimize"].as<bool>()){
             cout << "Optimizing scheduling policies." << endl;
             for(unsigned int i= 0; i<s.size(); ++i){
-                s_opt[i] = s[i]->optimize();
+                s[i] = s[i]->optimize();
             }
         }
 
@@ -299,9 +302,6 @@ int main(int argc, char** argv){
         for(unsigned int i= 0; i<s.size(); ++i){
             cout << s[i]->markedstring() << ":\t";
             cout << s[i]->expected_runtime() << "\t";
-            if(vm["optimize"].as<bool>()){
-                cout << s_opt[i]->expected_runtime() << "\t";
-            }
             cout << endl;
             expected_runtime += expected_runtimes[i];
         }
