@@ -79,6 +79,7 @@ vars.Add(EnumVariable("USE_CANONICAL_SNAPSHOT", "Use flyweight pattern to reduce
 env = Environment(variables = vars,
                   CXXFLAGS=["-std=c++0x", "-Wall", "-fopenmp", 
                             "-O${OPT}", 
+                            "-g", # TODO: only if non-optimizing
                             "-DNUM_THREADS_DEFAULT=${NUM_THREADS_DEFAULT}",
                             #"-DNUM_PROCESSORS=${NUM_PROCESSORS}",
                             "-DSIMPLE_ISOMORPHISM_CHECK=${SIMPLE_ISOMORPHISM_CHECK}",
