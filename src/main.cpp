@@ -74,7 +74,7 @@ int read_variables_map_from_args(int argc,
     // generic options
     po::options_description generic_options("Generic");
     generic_options.add_options()
-        ("help", "Print help message");
+        ("help,h", "Print help message");
     // output options
     po::options_description output_options("Output");
     output_options.add_options()
@@ -108,7 +108,9 @@ int read_variables_map_from_args(int argc,
         ("processors,p", po::value<int>()->default_value(2), 
          "Number of processors to use.")
         ("scheduler,s", po::value<string>()->default_value("hlf"), 
-         "Scheduler type to use.");
+         "Scheduler type to use.")
+        ("optimize", po::value<bool>()->default_value(false)->zero_tokens(), 
+         "Generate optimal schedule by picking best successors.");
     po::options_description desc("Options");
     desc.add(generic_options)
         .add(input_options)
@@ -153,17 +155,17 @@ void create_snapshot_dags(const po::variables_map& vm,
         vector<vector<task_id>>& initial_settings,
         vector<Snapshot*>& s,
         vector<myfloat>& expected_runtimes){
+    cout << "Warning: We are currently not considering "
+            "probabilities for initial settings!" << endl;
     // generate all possible initial markings
     vector<task_id> marked;
     sched->get_initial_schedule(t, vm["processors"].as<int>(), initial_settings);
-    //Snapshot s[initial_settings.size()];
+    cout << "Generating initial settings." << endl;
     s = vector<Snapshot*>(initial_settings.size());
     for(unsigned int i= 0; i<initial_settings.size(); ++i){
         s[i] = Snapshot::canonical_snapshot(Snapshot(t, initial_settings[i]));
     }
 #if USE_CANONICAL_SNAPSHOT
-    cout << "Warning: We are currently not considering "
-            "probabilities for initial settings!" << endl;
     vector<Snapshot*> p_s;
     for(auto it=s.begin(); it!=s.end(); ++it){
         p_s.push_back(Snapshot::canonical_snapshot(**it));
@@ -280,8 +282,11 @@ int main(int argc, char** argv){
 
         // optimize current snapshot
         vector<Snapshot*> s_opt(s.size());
-        for(unsigned int i= 0; i<s.size(); ++i){
-            s_opt[i] = s[i]->optimize();
+        if(vm["optimize"].as<bool>()){
+            cout << "Optimizing scheduling policies." << endl;
+            for(unsigned int i= 0; i<s.size(); ++i){
+                s_opt[i] = s[i]->optimize();
+            }
         }
 
         // compute expected runtimes
@@ -293,9 +298,11 @@ int main(int argc, char** argv){
         myfloat expected_runtime = 0;
         for(unsigned int i= 0; i<s.size(); ++i){
             cout << s[i]->markedstring() << ":\t";
-            cout << s[i]->expected_runtime() << "\t" 
-                 << s_opt[i]->expected_runtime() << "\t" 
-                 << endl;
+            cout << s[i]->expected_runtime() << "\t";
+            if(vm["optimize"].as<bool>()){
+                cout << s_opt[i]->expected_runtime() << "\t";
+            }
+            cout << endl;
             expected_runtime += expected_runtimes[i];
         }
         expected_runtime /= (myfloat)s.size();

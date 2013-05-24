@@ -344,6 +344,19 @@ ostream& operator<<(ostream& os, const Snapshot& s){
 #define DEB(x) if (intree.count_tasks() == 7) x
 
 Snapshot* Snapshot::optimize() const {
+    tree_id tid;
+    map<task_id, task_id> iso;
+    Intree new_intree(intree);
+    vector<task_id> new_marked(marked);
+    Intree::canonical_intree(new_intree, new_marked, iso, tid);
+
+    
+    pair<tree_id, vector<task_id>> opt_finder(tid, new_marked);
+    if(Snapshot::pool[PoolOptimized].find(opt_finder) != 
+            Snapshot::pool[PoolOptimized].end()) {
+        return Snapshot::pool[PoolOptimized][opt_finder];
+    }
+
     vector<pair<Snapshot*, myfloat>> new_sucs;
     auto pit = successor_probs.begin();
     for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
@@ -424,17 +437,16 @@ Snapshot* Snapshot::optimize() const {
             new_successor_probs.push_back(s->second);
         }
     }
-    Intree new_intree(intree);
-    vector<task_id> new_marked(marked);
     Snapshot* result = new Snapshot(
         new_intree, 
         new_marked,
         new_successors,
         new_successor_probs
     );
-    tree_id tid;
-    map<task_id, task_id> iso;
-    Intree::canonical_intree(new_intree, new_marked, iso, tid);
+    // return Snapshot::canonical_snapshot(
+    //         new_intree,
+    //         new_marked,
+    //         PoolOptimized);
     Snapshot::pool[Snapshot::PoolKind::PoolOptimized]
                   [pair<tree_id, vector<task_id>>(tid, new_marked)] 
                   = (result);
