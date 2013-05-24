@@ -109,14 +109,21 @@ class Snapshot_Dag_Viewer(object):
             sss = sum(newprobs)
             if only_isos.get_active():
                 sss = 0
+                used_sss = 0
                 first_sibling = model.iter_children(parent)
+                print "actual: %s"%str(model[it][1])
                 while(first_sibling!=None):
+                    print "current: %s"%str(model[first_sibling][1])
                     current = model[first_sibling]
                     if current[1]==model[it][1]:
                         sss = sss + float(current[4])
+                        if current[0]:
+                            used_sss = used_sss + float(current[4])
                     first_sibling = model.iter_next(first_sibling)
-            if not only_isos.get_active():
-                newprobs = [x/sss for x in newprobs]
+            print "sum: %f: "%sss
+            print newprobs, sss, used_sss
+            if only_isos.get_active():
+                newprobs = [sss*x/used_sss for x in newprobs]
             print newprobs, sss
             # compute adjusted probabilities
             first_sibling = model.iter_children(parent)
@@ -127,10 +134,10 @@ class Snapshot_Dag_Viewer(object):
                 if only_isos.get_active()==True:
                     if current[1]==model[it][1]:
                         print "setting"
-                        current[5] = newprobs[i] 
+                        current[5] = newprobs[i]*(1 if current[0] else 0)
                         i = i + 1
                     else:
-                        current[5] = current[4]
+                        current[5] = current[4]*(1 if current[0] else 0)
                 elif current[0]:
                     current[5] = newprobs[i]
                     i=i+1
@@ -142,7 +149,7 @@ class Snapshot_Dag_Viewer(object):
                 first_sibling = model.iter_children(parent)
                 while(first_sibling!=None):
                     current = model[first_sibling]
-                    adj_rt = adj_rt + float(current[5]) * float(current[6])
+                    adj_rt = adj_rt + float(current[5])*float(current[6])
                     first_sibling = model.iter_next(first_sibling)
                 model[parent][6] = adj_rt
                 parent = model.iter_parent(parent)
