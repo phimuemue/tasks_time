@@ -1,0 +1,29 @@
+tasks\_time
+===========
+
+This is a collection of tools that is used to research scheduling 
+strategies for intrees of tasks that are exponentially distributed.
+Other distributions and/or task dependency layouts (such as DAGs)
+can be incorporated, but are currently not part of the program.
+
+Components
+----------
+
+* tasks: A program that can be used to generate a DAG of snapshots
+  and to generate visualization of that DAG. Use `--tikz` and 
+  `--dagview` as command line arguments to generate visualization.
+* dagviewer.py: A small tool to research the visual output generated
+  by the tasks program (`--dagview`) and to adjust and examine the 
+  scheduling strategy on demand.
+
+Requirements
+------------
+
+* scons is used to build the program, just invoke `scons` to build with
+  default parameters. Invoke `scons -h` to get an overview about the
+  compilation options.
+* gcc4.6.3 (might work with earlier versions and other compilers, though)
+* Boost::program_options
+* Boost::rational (only if built with `MYFLOAT=3` or `MYFLOAT=4`)
+
+
