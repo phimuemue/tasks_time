@@ -1,13 +1,13 @@
 #include "snapshot.h"
 
-map<Snapshot*, map<snapshot_id, Snapshot*>> Snapshot::pool;
+map<Snapshot::PoolKind, map<snapshot_id, Snapshot*>> Snapshot::pool;
 
 void Snapshot::clear_pool(){
     // We have to ensure that we don't double-delete some pointers
     // TODO: Why does it not work this way?
     map<Snapshot*, bool> done;
     for_each(Snapshot::pool.begin(), Snapshot::pool.end(),
-        [&](const pair<Snapshot*, map<snapshot_id, Snapshot*>>& p){
+        [&](const pair<Snapshot::PoolKind, map<snapshot_id, Snapshot*>>& p){
             for(auto it=p.second.begin(); it!=p.second.end(); ++it){
                 if(done.find(it->second)!=done.end()){
                     delete(it->second);
@@ -79,7 +79,7 @@ Snapshot::~Snapshot(){
 
 Snapshot* Snapshot::canonical_snapshot(
         const Snapshot& s,
-        Snapshot* representant){
+        Snapshot::PoolKind representant){
     Intree intreecopy(s.intree);
     vector<task_id> mcopy(s.marked);
     return canonical_snapshot(intreecopy, mcopy, representant);
@@ -88,7 +88,7 @@ Snapshot* Snapshot::canonical_snapshot(
 Snapshot* Snapshot::canonical_snapshot(
         Intree& t, 
         vector<task_id> m,
-        Snapshot* representant){
+        Snapshot::PoolKind representant){
     vector<task_id> original_m(m);
 #if USE_SIMPLE_OPENMP
     cout << "Warning! Using openmp with canonical snapshots!" << endl;
@@ -170,7 +170,7 @@ Snapshot* Snapshot::canonical_snapshot(
 }
 
 void Snapshot::get_successors(const Scheduler& scheduler,
-    Snapshot* representant){
+    Snapshot::PoolKind representant){
     // we only want to compute the successors once
     if(successors.size()>0)
         return;
@@ -264,7 +264,7 @@ void Snapshot::get_successors(const Scheduler& scheduler,
 }
 
 void Snapshot::compile_snapshot_dag(const Scheduler& scheduler,
-    Snapshot* representant){
+    Snapshot::PoolKind representant){
     if(successors.size() > 0){
         return;
     }
