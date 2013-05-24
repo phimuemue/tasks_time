@@ -67,6 +67,33 @@ Snapshot::Snapshot(Intree& t, vector<task_id> m) :
     }
 }
 
+Snapshot::Snapshot(Intree& t, 
+        vector<task_id>& m, 
+        vector<Snapshot*>& s,
+        vector<myfloat>& sp) :
+    cache_expected_runtime(0),
+    successors(s),
+    successor_probs(sp),
+    marked(m),
+    intree(t),
+    Successors(this),
+    SuccessorProbs(this)
+{
+    sort(m.begin(), m.end());
+    for(auto it=m.begin(); it!=m.end(); ++it){
+        vector<task_id> tmp;
+        t.get_predecessors(*it, tmp);
+        if(tmp.size()!=0){
+            cout << "Trying to construct snapshot " 
+                << "with non-leaf marked tasks." << endl;
+            cout << t << endl;
+            for(auto it=m.begin(); it!=m.end(); ++it){
+                cout << *it << endl;
+            }
+            throw 1;
+        }
+    }
+}
 Snapshot::~Snapshot(){
 #if USE_CANONICAL_SNAPSHOT
     Snapshot::pool.clear();
@@ -314,12 +341,15 @@ ostream& operator<<(ostream& os, const Snapshot& s){
     return os;
 }
 
+#define DEB(x) if (intree.count_tasks() == 7) x
+
 Snapshot* Snapshot::optimize() const {
     vector<pair<Snapshot*, myfloat>> new_sucs;
     auto pit = successor_probs.begin();
     for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
+        auto optimized_suc = (*it)->optimize();
         new_sucs.push_back(
-                pair<Snapshot*, myfloat>(*it, *pit)
+                pair<Snapshot*, myfloat>(optimized_suc, *pit)
                 );
     }
     // sort successors into different vectors, 
@@ -342,25 +372,75 @@ Snapshot* Snapshot::optimize() const {
     // and only leave the best!
     for(auto it=sucs_by_tree_id.begin(); it!=sucs_by_tree_id.end(); ++it){
         // sum up probabilities for current intree structure
-        myfloat prob_sum = (myfloat)0;
+        myfloat orig_prob_sum = (myfloat)0;
         for_each(it->second.begin(), it->second.end(),
-            [&](const pair<Snapshot*, myfloat> s) {
-                prob_sum += s.second;
+            [&](const pair<Snapshot*, myfloat>& s) {
+                orig_prob_sum += s.second;
             }
         );
-        // get best intree structure
+        // get one best intree structure
         pair<Snapshot*, myfloat> best_one = 
             *min_element(it->second.begin(), it->second.end(),
             [](const pair<Snapshot*, myfloat>& a, 
                const pair<Snapshot*, myfloat>& b) -> bool {
-                    return a.second < b.second;
+                    return a.first->expected_runtime() <    
+                           b.first->expected_runtime();
                 }
         );
-        // only leave the best element!
-        it->second = vector<pair<Snapshot*, myfloat>>{best_one};
+        // only leave the best element(s)!
+        it->second.erase(
+            remove_if(it->second.begin(), it->second.end(),
+                [&best_one](const pair<Snapshot*, myfloat>& a) -> bool {
+                    return a.first->expected_runtime() > 
+                           best_one.first->expected_runtime();
+                }
+            ),
+            it->second.end()
+        );
+        // compute new sum of probabilities to normalize the old ones
+        myfloat new_prob_sum = (myfloat)0;
+        for_each(it->second.begin(), it->second.end(),
+            [&](const pair<Snapshot*, myfloat>& s) {
+                new_prob_sum += s.second;
+            }
+        );
+        // normalize old probabilities so that total sum is still 1
+        transform(it->second.begin(), it->second.end(), it->second.begin(),
+            [&](pair<Snapshot*, myfloat>& s) -> pair<Snapshot*, myfloat> {
+                return pair<Snapshot*, myfloat>(
+                        s.first,
+                        orig_prob_sum * s.second / new_prob_sum
+                    );
+            }
+        );
     }
-    cout << "optimize for snapshots not yet implemented" << endl;
-    throw 1;
+    // put all new successors/probs into new vectors and return optimized
+    // version of snapshot
+    vector<Snapshot*> new_successors;
+    vector<myfloat> new_successor_probs;
+    for(auto it=sucs_by_tree_id.begin(); it!=sucs_by_tree_id.end(); ++it){
+        for(auto s=it->second.begin(); s!=it->second.end(); ++s){
+            new_successors.push_back(s->first);
+            new_successor_probs.push_back(s->second);
+        }
+    }
+    Intree new_intree(intree);
+    vector<task_id> new_marked(marked);
+    Snapshot* result = new Snapshot(
+        new_intree, 
+        new_marked,
+        new_successors,
+        new_successor_probs
+    );
+    tree_id tid;
+    map<task_id, task_id> iso;
+    Intree::canonical_intree(new_intree, new_marked, iso, tid);
+    Snapshot::pool[Snapshot::PoolKind::PoolOptimized]
+                  [pair<tree_id, vector<task_id>>(tid, new_marked)] 
+                  = (result);
+    return result;
+    // cout << "optimize for snapshots not yet implemented" << endl;
+    // throw 1;
 }
 
 string Snapshot::markedstring(){

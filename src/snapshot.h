@@ -22,14 +22,19 @@ class Snapshot {
     // TODO: I dont want no friends!!!
     friend class Probability_Computer;
     private:
+        // private constructor which sets *everything*
+        Snapshot(Intree& t, 
+            vector<task_id>& m, 
+            vector<Snapshot*>& s,
+            vector<myfloat>& sp);
+
+        // snapshots are organized in a set of pools (no duplicates)
+        // We need different pools for different versions of the snap,
+        // such that each pool is "indexed" by one kind of pool.
         enum PoolKind {
             PoolDefault = 0,
             PoolOptimized,
         };
-        // snapshots are organized in a set of pools (no duplicates)
-        // We need different pools for different schedulers,
-        // such that each pool is "indexed" by one representantive
-        // snapshot.
         static map<PoolKind, map<snapshot_id, Snapshot*>> pool;
 
         // we cache the result of expected_runtime
@@ -72,7 +77,7 @@ class Snapshot {
             Snapshot* my_Snapshot;
         } SuccessorProbs;
 
-        // constructors and destructors
+        // constructors and destructors - TODO: should they be private?
         Snapshot();
         Snapshot(const Snapshot& s);
         Snapshot(Intree& t);

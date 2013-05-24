@@ -278,6 +278,12 @@ int main(int argc, char** argv){
                 s,
                 expected_runtimes);
 
+        // optimize current snapshot
+        vector<Snapshot*> s_opt(s.size());
+        for(unsigned int i= 0; i<s.size(); ++i){
+            s_opt[i] = s[i]->optimize();
+        }
+
         // compute expected runtimes
         cout << "Computing expected runtimes." << endl;
         assert(expected_runtimes.size() == s.size());
@@ -287,7 +293,9 @@ int main(int argc, char** argv){
         myfloat expected_runtime = 0;
         for(unsigned int i= 0; i<s.size(); ++i){
             cout << s[i]->markedstring() << ":\t";
-            cout << expected_runtimes[i] << endl;
+            cout << s[i]->expected_runtime() << "\t" 
+                 << s_opt[i]->expected_runtime() << "\t" 
+                 << endl;
             expected_runtime += expected_runtimes[i];
         }
         expected_runtime /= (myfloat)s.size();
