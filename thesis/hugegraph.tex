@@ -1,4 +1,4 @@
-%%% thesis.tex --- 
+%%% hugegraph.tex --- 
 
 %% Author: philipp@pmpc
 %% Version: $Id: thesis.tex,v 0.0 2013/04/08 12:19:13 philipp Exp$
@@ -18,7 +18,7 @@
 \usepackage{tikz}
 \usepackage{suffix}
 \usepackage{multicol}
-\usepackage[left=3.5cm,right=3.5cm,a0paper]{geometry}
+\usepackage[a0paper,left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 
 \usetikzlibrary{shapes.multipart,chains}
 \usetikzlibrary{positioning}
@@ -46,6 +46,8 @@
 
 \begin{document}
   
+\setlength{\columnseprule}{1pt}
+
 % stuff to draw diagrams levelwise
 \newcommand{\leveltop}{0}
 \newcommand{\leveltopI}{0}
@@ -78,9 +80,32 @@
 \newcommand{\leveltopIIIIIIIIIIIIIIIIIIIIIIIIIIII}{0}
 \newcommand{\leveltopIIIIIIIIIIIIIIIIIIIIIIIIIIIII}{0}
 
+\begin{multicols}{3}
+  
+\section{Notation and stuff}
+
+\begin{itemize}
+\item Each task is assigned a unique number (task id).
+\item A simple notation for intrees is as follows: Since each task has at most one successor (w.l.o.g. task 0 is the only task with no successor), we list the successor tasks of tasks 1,2,3,\dots in successive order, i.e. $(0 0 1 2)$ means that task 1 has successor 0, task 2 has successor 0, task 3 has successor 1, task 4 has successor 2.
+\end{itemize}
+
+\section{Insights so far}
+
+\begin{itemize}
+\item For P2, it can be seen that snapshots with same ``chain profile'' (longest chain/vertices aside this chain) have same exptected length.
+\item For P3, it can be easily seen that ``ordinary HLF'' (i.e. picking an arbitrary top-level task) does not always produce optimal results (just try the intree $(0 0 0 1 1 1 2 2 3)$, and obtain different solutions for different runs of HLF.
+\item It can be shown that HLF is not optimal for P3.
+\item It seems that \emph{often} the optimal solutions for P3 are HLF-ones.
+\item HLF for P3 is often quite near to the optimal.
+\end{itemize}
+
+\vfill
+
 \section{P2: A whole intree-DAG and its condensed counterpart}
 
 \input{../0011123669hlf.tex}
+
+\end{multicols}
 
 \hrule
 
@@ -105,6 +130,17 @@
     \end{multicols}
   \end{minipage}
 }
+
+\hrule
+
+\frame{
+  \begin{minipage}{.4\textwidth}
+    \subsection{P3, HLF for}
+    \input{../default.tex}
+  \end{minipage}
+}
+
+
 
 %\input{../000111223hlf.tex}
 %\input{../000111223opt.tex}

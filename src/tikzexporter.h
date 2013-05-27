@@ -4,11 +4,10 @@
 #include "exporter.h"
 
 class TikzExporter : public Exporter {
-    private:
+    protected:
         bool show_probabilities;
         bool show_expectancy;
         unsigned int task_count_limit;
-    protected:
         // routines to draw one single snapshot properly
         unsigned int get_subtree_width(const task_id,
                 const map<task_id, vector<task_id>>&) const;
@@ -23,7 +22,7 @@ class TikzExporter : public Exporter {
                 const map<task_id, vector<task_id>>& rt,
                 const unsigned int depth,
                 const float leftoffset) const;
-        void export_single_snaphot(ostream& output, const Snapshot* s) const;
+        virtual void export_single_snaphot(ostream& output, const Snapshot* s) const;
         void tikz_draw_node(const Snapshot* s,
                 ostream& output,
                 bool show_expectancy,
@@ -33,13 +32,13 @@ class TikzExporter : public Exporter {
                 float top) const ;
         // routines to draw DAG of snaps
         string tikz_node_name(const Snapshot* s) const;
-        void tikz_dag_by_levels(const Snapshot* s,
+        virtual void tikz_dag_by_levels(const Snapshot* s,
                 map<unsigned int, 
                 vector<Snapshot*>>& levels,
                 unsigned int depth,
                 map<Snapshot*, unsigned int>& consec_num
                 ) const;
-        void tikz_string_dag_compact_internal(const Snapshot* s,
+        virtual void tikz_string_dag_compact_internal(const Snapshot* s,
                 ostream& output,
                 map<Snapshot*, string>& names,
                 map<Snapshot*, unsigned int>& consec_num,

@@ -17,6 +17,7 @@
 // exporters
 #include "exporter.h"
 #include "tikzexporter.h"
+#include "tikzchainsideexporter.h"
 #include "dagviewexporter.h"
 
 #include "alltrees.h"
@@ -203,7 +204,7 @@ void generate_output(const po::variables_map& vm,
         }
         cout << "Writing tikz to " << filename << endl;
         tikz_output.open(filename);
-        TikzExporter tikz_exporter(
+        TikzChainSideExporter tikz_exporter(
                 vm["tikzexp"].as<bool>(),
                 vm["tikzprobs"].as<bool>(),
                 vm["tikzlimit"].as<unsigned int>()
