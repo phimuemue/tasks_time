@@ -33,12 +33,6 @@ Intree Intree::canonical_intree(const Intree& _t,
         inner_iso_rev[it->first] = it->first;
     }
     // make leaves minimal
-    // cout << "Tree before minimal leaves: " << t << endl;
-    // cout << "Preferred before minimal leaves: ";
-    // for(auto pit=preferred.begin(); pit!=preferred.end(); ++pit){
-    //     cout << *pit << ", ";
-    // }
-    // cout << endl;
     vector<task_id> leaves;
     t.get_leaves(leaves);
     sort(leaves.begin(), leaves.end(),
@@ -66,23 +60,11 @@ Intree Intree::canonical_intree(const Intree& _t,
                 }
                 );
     }
-    // cout << "Tree after minimal leaves: " << t << endl;
-    // cout << "Preferred after minimal leaves: ";
-    // for(auto pit=preferred.begin(); pit!=preferred.end(); ++pit){
-    //     cout << *pit << ", ";
-    // }
-    // cout << endl;
     // initialize marked_count
     map<task_id, unsigned int> marked_count;
     for(auto it=preferred.begin(); it!=preferred.end(); ++it){
         marked_count[*it] = 1;
     }
-    // cout << "MAX: " << max_tid;
-    // cout << endl;
-    // cout << "Inner iso: " << endl;
-    // for(auto it=inner_iso_rev.begin(); it!=inner_iso_rev.end(); ++it){
-    //     cout << it->first << " -> " << it->second << endl;
-    // }
     vector<vector<task_id>> tasks_by_level(t.taskmap.size());
     // store tasks grouped by level
     for(auto it=t.taskmap.begin(); it!=t.taskmap.end(); ++it){
@@ -96,15 +78,11 @@ Intree Intree::canonical_intree(const Intree& _t,
             vector<unsigned short> canonical_name;
             vector<task_id> predecessors;
             t.get_predecessors(*it, predecessors);
-            for(auto pit=predecessors.begin(); pit!=predecessors.end(); ++pit){
-                // cout << "Inc mc[" << *it << "] by " << marked_count[*pit] << " (from " << *pit << ")" << endl;
-                marked_count[*it] += marked_count[*pit];
+            for(auto pit : predecessors){
+                marked_count[*it] += marked_count[pit];
             }
             sort(predecessors.begin(), predecessors.end(),
                     [&](const task_id& a, const task_id& b) -> bool {
-                    // cout << a << ": b" << canonical_names[a] 
-                    // << "(" << marked_count[a] << ")" << " vs " << b << ": b" << canonical_names[b]
-                    // << "(" << marked_count[b] << ")" << endl;
                     if(canonical_names[a].size() < canonical_names[b].size()) {
                         return false;
                     }
@@ -127,29 +105,13 @@ Intree Intree::canonical_intree(const Intree& _t,
                     return canonical_names[a] > canonical_names[b];
                     }
                 );
-            // if(predecessors.size() > 0){
-            //     cout << "Sorted predecessors: ";
-            //     for_each(predecessors.begin(), predecessors.end(),
-            //             [&](const task_id& a){
-            //             cout << a;
-            //             cout << "(";
-            //             for_each(canonical_names[a].begin(), canonical_names[a].end(),
-            //                 [&](const unsigned short& x){
-            //                     cout << x;
-            //                 }
-            //                 );
-            //             cout << ")";
-            //             cout << ", ";
-            //             }
-            //             );
-            //     cout << endl;
-            // }
             all_predecessors[*it] = predecessors;
             vector<vector<unsigned short>> canonical_names_predecessors;
             canonical_name.push_back(0);
-            for (auto pit=predecessors.begin(); pit!=predecessors.end(); ++pit){
-                for(unsigned int i = 0; i<canonical_names[*pit].size(); ++i){
-                    vector<unsigned short>& tmp_bs = canonical_names[*pit];
+            for(auto pit : predecessors){
+                for(unsigned int i = 0; i<canonical_names[pit].size(); ++i){
+                    vector<unsigned short>& tmp_bs =
+                        canonical_names[pit];
                     unsigned short tmp = tmp_bs[i];
                     canonical_name.push_back(tmp);
                 }
@@ -165,22 +127,6 @@ Intree Intree::canonical_intree(const Intree& _t,
         // sort tasks according to their canonical name
         sort(rit->begin(), rit->end(),
                 [&](const task_id& a, const task_id& b) -> bool {
-                // cout << a << "(";
-                // for_each(canonical_names[a].begin(), canonical_names[a].end(),
-                //     [](const unsigned int x){
-                //         cout << x;
-                //     }
-                //     );
-                // cout << ")";
-                // cout << " vs ";
-                // cout << b << "(";
-                // for_each(canonical_names[b].begin(), canonical_names[b].end(),
-                //     [](const unsigned int x){
-                //         cout << x;
-                //     }
-                //     );
-                // cout << ")";
-                // cout << endl;
                 if(canonical_names[a].size() < canonical_names[b].size()) {
                     return false;
                 }
@@ -203,95 +149,24 @@ Intree Intree::canonical_intree(const Intree& _t,
                 return canonical_names[a] > canonical_names[b];
                 }
             );
-        // if(rit->size() > 0){
-        //     cout << "Sorted level: ";
-        //     for_each(rit->begin(), rit->end(),
-        //             [&](const task_id& a){
-        //             cout << a << ", ";
-        //             }
-        //             );
-        //     cout << endl;
-        // }
-    }
-    for(auto rit = tasks_by_level.rbegin(); rit!=tasks_by_level.rend(); ++rit){
-        // sort(rit->begin(), rit->end(),
-        //     [&](const task_id& a, const task_id& b) -> bool {
-        //     if(canonical_names[a].size() < canonical_names[b].size()) {
-        //         return false;
-        //     }
-        //     else if (canonical_names[a].size() > canonical_names[b].size()) {
-        //         return true;
-        //     }
-        //     if (canonical_names[a] == canonical_names[b]){
-        //         {
-        //             auto mc_a = marked_count[a];
-        //             auto mc_b = marked_count[b];
-        //             if(mc_a != mc_b)
-        //                 return mc_b < mc_a;
-        //             auto dist_a = distance(preferred.begin(),
-        //                 find(preferred.begin(), preferred.end(), a));
-        //             auto dist_b = distance(preferred.begin(),
-        //                 find(preferred.begin(), preferred.end(), b));
-        //             if (dist_a != dist_b)
-        //                 return a < b;
-        //             return dist_a < dist_b;
-        //         }
-        //         //auto ca = canonical_names[t.get_edge_from(a).second.get_id()];
-        //         //auto cb = canonical_names[t.get_edge_from(b).second.get_id()];
-        //         //if (ca.size() < cb.size())
-        //         //    return false;
-        //         //else if(ca.size() > cb.size())
-        //         //    return true;
-        //         //if(ca==cb)
-        //         //return ca > cb;
-        //     }
-        //     return canonical_names[a] > canonical_names[b];
-        //     }
-        // );
-        // if(rit->size() > 0){
-        //     cout << "Sorted LEVEL': ";
-        //     for_each(rit->begin(), rit->end(),
-        //             [&](const task_id& a){
-        //             cout << a << ", ";
-        //             }
-        //             );
-        //     cout << endl;
-        // }
     }
     // assign consecutive numbers to tasks
     task_id consecutive_num = 0;
     deque<task_id> q;
     q.push_back(0);
-    //for(auto it = tasks_by_level.begin(); it!=tasks_by_level.end(); ++it){
-        //for(auto tit = it->begin(); tit!=it->end(); ++tit)
-        while(q.size() > 0)
-        {
-            task_id _tit = q.front();
-            q.pop_front();
-            task_id* tit = &_tit;
-            for_each(all_predecessors[*tit].begin(), all_predecessors[*tit].end(),
-                    [&](const task_id tid){
-                        q.push_back(tid);
-                    }
-                    );
-            //isomorphism[*tit] = consecutive_num;
-            // cout << "Assinging: " << *tit;
-            // cout << "(";
-            // for_each(canonical_names[*tit].begin(), canonical_names[*tit].end(),
-            //     [](const unsigned int x){
-            //         cout << x;
-            //     }
-            //     );
-            // cout << ")";
-            // cout << " -> " << consecutive_num << endl;
-            isomorphism[inner_iso_rev[*tit]] = consecutive_num;
-            consecutive_num++;
-        }
-    //}
-    // cout << "Isomorphism in canonical_intree:" << endl;
-    // for(auto it=isomorphism.begin(); it!=isomorphism.end(); ++it){
-    //     cout << it->first << " -> " << it->second << endl;
-    // }
+    while(q.size() > 0)
+    {
+        task_id _tit = q.front();
+        q.pop_front();
+        task_id* tit = &_tit;
+        for_each(all_predecessors[*tit].begin(), all_predecessors[*tit].end(),
+                [&](const task_id tid){
+                q.push_back(tid);
+                }
+                );
+        isomorphism[inner_iso_rev[*tit]] = consecutive_num;
+        consecutive_num++;
+    }
     vector<pair<Task, Task>> edges;
     for(auto it=_t.edges.begin(); it!=_t.edges.end(); ++it){
         edges.push_back(pair<Task,Task>(Task(isomorphism[it->first]),Task(isomorphism[it->second])));
@@ -307,12 +182,6 @@ Intree Intree::canonical_intree(const Intree& _t,
         out <<= 1;
         out = out | (canonical_names[0][i] > 0 ? 1ul : 0ul);
     }
-    // cout << "Original: " << _t << endl;
-    // cout << "iso: " << endl;
-    // for(auto it=isomorphism.begin(); it!=isomorphism.end(); ++it){
-    //     cout << it->first << " -> " << it->second << endl;
-    // }
-    // cout << "Result:   " << Intree(edges) << endl;
     return Intree(edges);
 }
 
