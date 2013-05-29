@@ -251,7 +251,7 @@ void TikzExporter::export_snapshot_dag(ostream& output, const Snapshot* s) const
         for(unsigned int i=0; i<l; ++i){
             output << "I";
         }
-        output << "}" << "{-15cm + \\leveltop";
+        output << "}" << "{-" << level_distance << "cm + \\leveltop";
         for(unsigned int i=1; i<l; ++i){
             output << "I";
         }

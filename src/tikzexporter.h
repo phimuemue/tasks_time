@@ -5,10 +5,6 @@
 
 class TikzExporter : public Exporter {
     private:
-        bool show_reaching_probabilities;
-        bool show_probabilities;
-        bool show_expectancy;
-        unsigned int task_count_limit;
     protected:
         // routines to draw one single snapshot properly
         unsigned int get_subtree_width(const task_id,
@@ -48,6 +44,13 @@ class TikzExporter : public Exporter {
                 unsigned int depth) const ;
 
     public:
+        // adjustment variables for TikZ plots
+        bool show_reaching_probabilities;
+        bool show_probabilities;
+        bool show_expectancy;
+        unsigned int task_count_limit;
+        float level_distance;
+
         TikzExporter();
         TikzExporter(bool se=true,
                 bool sp=true,
