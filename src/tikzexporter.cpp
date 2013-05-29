@@ -185,7 +185,7 @@ void TikzExporter::tikz_draw_node(const Snapshot* s,
     output << "{" << endl;
     if(show_reaching_probabilities){
         output << "\\footnotesize{" 
-            << orig->get_reaching_probability(s)
+            << orig->get_reaching_probability(s) * 100
             << "}" << endl;
         output << "\\nodepart{" 
             << tikz_partnames[partindex++] << "}" << endl;
