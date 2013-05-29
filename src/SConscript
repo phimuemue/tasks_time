@@ -1,6 +1,7 @@
 import datetime
 import re
 import getpass
+import os
 
 # Code generation if we want to get all trees (and some even more than once)
 def write_all_trees_to_file(source, target, env):
@@ -55,6 +56,9 @@ def create_version_info(*a,**b):
 
 # variables
 vars = Variables()
+vars.Add(EnumVariable("COMPILER", 
+            "Compiler command (default g++)", "g++", 
+            allowed_values=("g++", "icpc")))
 vars.Add(EnumVariable("OPT", 
             "Optimization level can be set to 0, 1, 2 or 3", "0", 
             allowed_values=("0", "1", "2", "3")))
@@ -76,7 +80,11 @@ vars.Add(EnumVariable("USE_CANONICAL_SNAPSHOT", "Use flyweight pattern to reduce
             allowed_values=("0", "1")))
 
 # we use C++11 (mainly to simplify some writing in C++)
+
+env = Environment() 
 env = Environment(variables = vars,
+                  ENV = {'PATH' : os.environ['PATH']},
+                  CXX="${COMPILER}",
                   CXXFLAGS=["-std=c++0x", "-Wall", "-fopenmp", 
                             "-O${OPT}", 
                             "-g", # TODO: only if non-optimizing
