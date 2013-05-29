@@ -25,6 +25,7 @@ class TikzExporter : public Exporter {
                 const float leftoffset) const;
         void export_single_snaphot(ostream& output, const Snapshot* s) const;
         void tikz_draw_node(const Snapshot* s,
+                const Snapshot* orig,
                 ostream& output,
                 bool show_expectancy,
                 bool show_probabilities,

@@ -124,7 +124,7 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
             output << " cm]" << endl;
             output << "\\matrix (line" << l << ") [column sep=1cm] {" << endl;
             for(auto it=levels[l].begin(); it!=levels[l].end(); ++it){
-                tikz_draw_node(*it, output, show_expectancy, show_probabilities, consec_num, "", l*15);
+                tikz_draw_node(*it, s, output, show_expectancy, show_probabilities, consec_num, "", l*15);
                 names[*it] = tikz_node_name(*it);
                 if(it!=levels[l].end()){
                     output << " & " << endl;
@@ -166,6 +166,7 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
 }
 
 void TikzExporter::tikz_draw_node(const Snapshot* s,
+        const Snapshot* orig,
         ostream& output,
         bool show_expectancy,
         bool show_probabilities,
@@ -187,6 +188,10 @@ void TikzExporter::tikz_draw_node(const Snapshot* s,
     //     output << " at ([xshift=2cm]" << right_of << ")";
     // }
     output << "{" << endl;
+    output << "\\footnotesize{" 
+        << orig->get_reaching_probability(s)
+        << "}" << endl;
+    output << "\\nodepart{" << tikz_partnames[partindex++] << "}" << endl;
     output << "\\begin{tikzpicture}[scale=.2]" << endl;
     export_single_snaphot(output, s);
     output << "\\end{tikzpicture}" << endl;

@@ -99,6 +99,11 @@ class Snapshot {
                 Snapshot::PoolKind representant = PoolDefault);
         size_t get_successor_count();
 
+        const Snapshot* get_next_on_successor_path(const Snapshot* t) const;
+        myfloat get_reaching_probability(const Snapshot* target) const;
+        myfloat get_reaching_probability(const Snapshot* target,
+                const Snapshot* orig) const;
+
         myfloat expected_runtime() const;
         friend ostream& operator<<(ostream& os, const Snapshot& s);
 

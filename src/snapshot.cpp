@@ -341,7 +341,37 @@ ostream& operator<<(ostream& os, const Snapshot& s){
     return os;
 }
 
-#define DEB(x) if (intree.count_tasks() == 7) x
+const Snapshot* Snapshot::get_next_on_successor_path(const Snapshot* t) const {
+    if(this==t){
+        return t;
+    }
+    for(Snapshot* it : successors){
+        const Snapshot* nosp = it->get_next_on_successor_path(t);
+        if(nosp != NULL){
+            return it;
+        }
+    }
+    return NULL;
+}
+
+myfloat Snapshot::get_reaching_probability(const Snapshot* t) const {
+    myfloat result = (myfloat)0;
+    if(t->intree.count_tasks()==1 || t==this){
+        return (myfloat)1;
+    }
+    if(t->intree.count_tasks() > intree.count_tasks()){
+        return (myfloat)0;
+    }
+    auto pit=successor_probs.begin();
+    for(Snapshot* it : successors){
+        const Snapshot* nosp = it->get_next_on_successor_path(t);
+        if(nosp!=NULL){
+            result += (*pit) * it->get_reaching_probability(t);
+        }
+        pit++;
+    }
+    return result;
+}
 
 Snapshot* Snapshot::optimize() const {
     tree_id tid;
