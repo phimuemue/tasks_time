@@ -2,11 +2,13 @@
 
 TikzExporter::TikzExporter(){
     show_probabilities = true;
+    show_reaching_probabilities = true;
     show_expectancy = true;
     task_count_limit = 0;
 }
 
-TikzExporter::TikzExporter(bool se, bool sp, unsigned int tcl) :
+TikzExporter::TikzExporter(bool se, bool sp, bool srp, unsigned int tcl) :
+    show_reaching_probabilities(srp),
     show_probabilities(sp), 
     show_expectancy(se),
     task_count_limit(tcl)
@@ -109,9 +111,7 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
         myfloat probability,
         unsigned int task_count_limit,
         bool first,
-        unsigned int depth,
-        bool show_expectancy,
-        bool show_probabilities) const {
+        unsigned int depth) const {
     if(first){
         map<unsigned int, vector<Snapshot*>> levels;
         tikz_dag_by_levels(s, levels, 1, consec_num);
@@ -124,7 +124,10 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
             output << " cm]" << endl;
             output << "\\matrix (line" << l << ") [column sep=1cm] {" << endl;
             for(auto it=levels[l].begin(); it!=levels[l].end(); ++it){
-                tikz_draw_node(*it, s, output, show_expectancy, show_probabilities, consec_num, "", l*15);
+                tikz_draw_node(*it, 
+                        s,
+                        output,
+                        consec_num);
                 names[*it] = tikz_node_name(*it);
                 if(it!=levels[l].end()){
                     output << " & " << endl;
@@ -168,25 +171,17 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
 void TikzExporter::tikz_draw_node(const Snapshot* s,
         const Snapshot* orig,
         ostream& output,
-        bool show_expectancy,
-        bool show_probabilities,
-        map<Snapshot*, unsigned int>& consec_num,
-        string right_of,
-        float top) const {
+        map<Snapshot*, unsigned int>& consec_num) const {
     unsigned partindex = 0;
     vector<string> tikz_partnames = {
         "two", "three", "four", "five"
     };
     string tikz_this_nodes_name = tikz_node_name(s);
     output << "\\node[draw=black, rectangle split,  rectangle split parts=" 
-        << (int)show_expectancy+(int)show_probabilities+1;
+        << (int)show_expectancy +
+           (int)show_probabilities +
+           (int)show_reaching_probabilities+1;
     output << "] (" << tikz_this_nodes_name << ")";
-    // if(right_of == ""){
-    //     output << " at (" << right_of << ", -" << top << ")";
-    // }
-    // else {
-    //     output << " at ([xshift=2cm]" << right_of << ")";
-    // }
     output << "{" << endl;
     output << "\\footnotesize{" 
         << orig->get_reaching_probability(s)
@@ -269,9 +264,7 @@ void TikzExporter::export_snapshot_dag(ostream& output, const Snapshot* s) const
             1,
             task_count_limit,
             true,
-            1,
-            show_expectancy,
-            show_probabilities);
+            1);
     output << "\\end{tikzpicture}" << endl;
     output << endl;
     output << "%%% Local Variables:" << endl;

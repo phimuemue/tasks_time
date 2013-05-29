@@ -5,6 +5,7 @@
 
 class TikzExporter : public Exporter {
     private:
+        bool show_reaching_probabilities;
         bool show_probabilities;
         bool show_expectancy;
         unsigned int task_count_limit;
@@ -27,11 +28,7 @@ class TikzExporter : public Exporter {
         void tikz_draw_node(const Snapshot* s,
                 const Snapshot* orig,
                 ostream& output,
-                bool show_expectancy,
-                bool show_probabilities,
-                map<Snapshot*, unsigned int>& consec_num,
-                string right_of,
-                float top) const ;
+                map<Snapshot*, unsigned int>& consec_num) const ;
         // routines to draw DAG of snaps
         string tikz_node_name(const Snapshot* s) const;
         void tikz_dag_by_levels(const Snapshot* s,
@@ -48,13 +45,14 @@ class TikzExporter : public Exporter {
                 myfloat probability,
                 unsigned int task_count_limit,
                 bool first,
-                unsigned int depth,
-                bool show_expectancy,
-                bool show_probabilities) const ;
+                unsigned int depth) const ;
 
     public:
         TikzExporter();
-        TikzExporter(bool se=true, bool sp=true, unsigned int tcl=0);
+        TikzExporter(bool se=true,
+                bool sp=true,
+                bool srp=true,
+                unsigned int tcl=0);
         ~TikzExporter();
         void export_snapshot_dag(ostream& output, const Snapshot* s) const;
 };

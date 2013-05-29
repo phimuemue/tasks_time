@@ -94,6 +94,8 @@ int read_variables_map_from_args(int argc,
          "Draw expected values in TikZ.")
         ("tikzprobs", po::value<bool>()->default_value(true), 
          "Draw transition probabilities in TikZ.")
+        ("tikzreachprobs", po::value<bool>()->default_value(true), 
+         "Draw reaching probabilities in TikZ.")
         ;
     // input options
     po::options_description input_options("Input");
@@ -206,6 +208,7 @@ void generate_output(const po::variables_map& vm,
         TikzExporter tikz_exporter(
                 vm["tikzexp"].as<bool>(),
                 vm["tikzprobs"].as<bool>(),
+                vm["tikzreachprobs"].as<bool>(),
                 vm["tikzlimit"].as<unsigned int>()
                 );
         for(unsigned int i= 0; i<s.size(); ++i){
