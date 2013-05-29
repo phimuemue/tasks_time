@@ -21,7 +21,8 @@ void Snapshot::clear_pool(){
 Snapshot::Snapshot() :
     cache_expected_runtime(0),
     Successors(this),
-    Probabilities(this)
+    Probabilities(this),
+    SuccessorProbabilities(this)
 {
 
 }
@@ -31,7 +32,8 @@ Snapshot::Snapshot(const Snapshot& s) :
     marked(s.marked),
     intree(s.intree),
     Successors(this),
-    Probabilities(this)
+    Probabilities(this),
+    SuccessorProbabilities(this)
     {
 }
 
@@ -39,7 +41,8 @@ Snapshot::Snapshot(Intree& t) :
     cache_expected_runtime(0),
     intree(t),
     Successors(this),
-    Probabilities(this)
+    Probabilities(this),
+    SuccessorProbabilities(this)
 {
 
 }
@@ -49,7 +52,8 @@ Snapshot::Snapshot(Intree& t, vector<task_id> m) :
     marked(m),
     intree(t),
     Successors(this),
-    Probabilities(this)
+    Probabilities(this),
+    SuccessorProbabilities(this)
 {
     sort(m.begin(), m.end());
     for(auto it=m.begin(); it!=m.end(); ++it){
@@ -77,7 +81,8 @@ Snapshot::Snapshot(Intree& t,
     marked(m),
     intree(t),
     Successors(this),
-    Probabilities(this)
+    Probabilities(this),
+    SuccessorProbabilities(this)
 {
     sort(m.begin(), m.end());
     for(auto it=m.begin(); it!=m.end(); ++it){

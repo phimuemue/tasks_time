@@ -9,6 +9,7 @@
 #include<algorithm>
 #include<sstream>
 #include<iomanip>
+#include<boost/iterator/zip_iterator.hpp>
 
 #include "config.h"
 #include "intree.h"
@@ -74,6 +75,30 @@ class Snapshot {
             Probabilities(Snapshot* s) : my_Snapshot(s) {}
             Snapshot* my_Snapshot;
         } Probabilities;
+        struct SuccessorProbabilities {
+            typedef boost::tuple<
+                vector<Snapshot*>::const_iterator,
+                vector<myfloat>::const_iterator
+                > sp_tuple;
+            boost::zip_iterator<sp_tuple> begin() const {
+                return boost::make_zip_iterator(
+                    boost::make_tuple(
+                        my_Snapshot->successors.begin(),
+                        my_Snapshot->successor_probs.begin())
+                );
+            };
+            boost::zip_iterator<sp_tuple> end() const {
+                return boost::make_zip_iterator(
+                    boost::make_tuple(
+                        my_Snapshot->successors.end(),
+                        my_Snapshot->successor_probs.end())
+                );
+            };
+            private:
+            friend class Snapshot;
+            SuccessorProbabilities(Snapshot* s) : my_Snapshot(s) {}
+            Snapshot* my_Snapshot;
+        } SuccessorProbabilities;
 
         // constructors and destructors - TODO: should they be private?
         Snapshot();
