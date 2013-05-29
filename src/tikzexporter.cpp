@@ -183,10 +183,13 @@ void TikzExporter::tikz_draw_node(const Snapshot* s,
            (int)show_reaching_probabilities+1;
     output << "] (" << tikz_this_nodes_name << ")";
     output << "{" << endl;
-    output << "\\footnotesize{" 
-        << orig->get_reaching_probability(s)
-        << "}" << endl;
-    output << "\\nodepart{" << tikz_partnames[partindex++] << "}" << endl;
+    if(show_reaching_probabilities){
+        output << "\\footnotesize{" 
+            << orig->get_reaching_probability(s)
+            << "}" << endl;
+        output << "\\nodepart{" 
+            << tikz_partnames[partindex++] << "}" << endl;
+    }
     output << "\\begin{tikzpicture}[scale=.2]" << endl;
     export_single_snaphot(output, s);
     output << "\\end{tikzpicture}" << endl;
