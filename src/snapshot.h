@@ -62,7 +62,7 @@ class Snapshot {
             Successors(Snapshot* s) : my_Snapshot(s) {}
             Snapshot* my_Snapshot;
         } Successors;
-        struct SuccessorProbs {
+        struct Probabilities {
             vector<myfloat>::const_iterator begin() const {
                 return my_Snapshot->successor_probs.begin();
             }
@@ -71,9 +71,9 @@ class Snapshot {
             }
             private:
             friend class Snapshot;
-            SuccessorProbs(Snapshot* s) : my_Snapshot(s) {}
+            Probabilities(Snapshot* s) : my_Snapshot(s) {}
             Snapshot* my_Snapshot;
-        } SuccessorProbs;
+        } Probabilities;
 
         // constructors and destructors - TODO: should they be private?
         Snapshot();

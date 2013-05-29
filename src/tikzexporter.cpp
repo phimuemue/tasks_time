@@ -139,7 +139,7 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
         // connect (we have to draw probabilities seperately!)
         for(unsigned int l=1; l<s->intree.count_tasks()+1-task_count_limit; ++l){
             for(auto it=levels[l].begin(); it!=levels[l].end(); ++it){
-                auto pit = (*it)->SuccessorProbs.begin();
+                auto pit = (*it)->Probabilities.begin();
                 for(auto sit=(*it)->Successors.begin(); sit!=(*it)->Successors.end(); ++sit, ++pit){
                     output << "\\draw (" << tikz_node_name(*it) << ".south) -- "
                         << "(" 
@@ -158,7 +158,7 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
 
         // connect (we have to draw probabilities seperately!)
         if(s->intree.count_tasks() > task_count_limit){
-            auto pit = s->SuccessorProbs.begin();
+            auto pit = s->Probabilities.begin();
             for(auto it=s->Successors.begin(); it!=s->Successors.end(); ++it, ++pit){
                 output << "\\draw (" << tikz_node_name(s) << ".south) -- "
                     << "(" 
@@ -202,7 +202,7 @@ void TikzExporter::tikz_draw_node(const Snapshot* s,
     // draw probabilities
     if(show_probabilities){
         vector<pair<Snapshot*,myfloat>> successor_probs_in_order;
-        auto tmp_pit = s->SuccessorProbs.begin();
+        auto tmp_pit = s->Probabilities.begin();
         for(auto sit = s->Successors.begin(); sit!=s->Successors.end(); ++sit, ++tmp_pit){
             successor_probs_in_order.push_back(
                     pair<Snapshot*, myfloat>(*sit, *tmp_pit)
