@@ -367,13 +367,13 @@ myfloat Snapshot::get_reaching_probability(const Snapshot* t) const {
     if(t->intree.count_tasks() > intree.count_tasks()){
         return (myfloat)0;
     }
-    auto pit=successor_probs.begin();
-    for(Snapshot* it : successors){
-        const Snapshot* nosp = it->get_next_on_successor_path(t);
+    for(auto it : SuccessorProbabilities){
+        const Snapshot* nosp = 
+            it.get<0>()->get_next_on_successor_path(t);
         if(nosp!=NULL){
-            result += (*pit) * it->get_reaching_probability(t);
+            result += 
+                (it.get<1>()) * it.get<0>()->get_reaching_probability(t);
         }
-        pit++;
     }
     return result;
 }
@@ -393,11 +393,10 @@ Snapshot* Snapshot::optimize() const {
     }
 
     vector<pair<Snapshot*, myfloat>> new_sucs;
-    auto pit = successor_probs.begin();
-    for(auto it=successors.begin(); it!=successors.end(); ++it, ++pit){
-        auto optimized_suc = (*it)->optimize();
+    for(auto it : SuccessorProbabilities){
+        auto optimized_suc = it.get<0>()->optimize();
         new_sucs.push_back(
-                pair<Snapshot*, myfloat>(optimized_suc, *pit)
+                pair<Snapshot*, myfloat>(optimized_suc, it.get<1>())
                 );
     }
     // sort successors into different vectors, 
