@@ -122,7 +122,8 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
                 output << "I";
             }
             output << " cm]" << endl;
-            output << "\\matrix (line" << l << ") [column sep=1cm] {" << endl;
+            output << "\\matrix (line" << l << ")"
+                << "[column sep=" << sibling_distance << "cm] {" << endl;
             for(auto it=levels[l].begin(); it!=levels[l].end(); ++it){
                 tikz_draw_node(*it, 
                         s,

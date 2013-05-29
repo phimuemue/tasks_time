@@ -98,6 +98,8 @@ int read_variables_map_from_args(int argc,
          "Draw reaching probabilities in TikZ.")
         ("tikzheight", po::value<float>()->default_value(15.f), 
          "Determines the level distance in the Snap-DAG.")
+        ("tikzwidth", po::value<float>()->default_value(1.f), 
+         "Determines the sibling distance in the Snap-DAG.")
         ;
     // input options
     po::options_description input_options("Input");
@@ -214,6 +216,7 @@ void generate_output(const po::variables_map& vm,
                 vm["tikzlimit"].as<unsigned int>()
                 );
         tikz_exporter.level_distance = vm["tikzheight"].as<float>();
+        tikz_exporter.sibling_distance = vm["tikzwidth"].as<float>();
         for(unsigned int i= 0; i<s.size(); ++i){
             tikz_exporter.export_snapshot_dag(tikz_output, s[i]);
         }

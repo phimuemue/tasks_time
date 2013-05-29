@@ -50,6 +50,7 @@ class TikzExporter : public Exporter {
         bool show_expectancy;
         unsigned int task_count_limit;
         float level_distance;
+        float sibling_distance;
 
         TikzExporter();
         TikzExporter(bool se=true,
