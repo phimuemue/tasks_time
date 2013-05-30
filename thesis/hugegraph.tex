@@ -1,4 +1,4 @@
-%%% thesis.tex --- 
+%%% hugegraph.tex --- 
 
 %% Author: philipp@pmpc
 %% Version: $Id: thesis.tex,v 0.0 2013/04/08 12:19:13 philipp Exp$
@@ -45,7 +45,7 @@
 \makeatother
 
 \begin{document}
-  
+
 % stuff to draw diagrams levelwise
 \newcommand{\leveltop}{0}
 \newcommand{\leveltopI}{0}
@@ -84,29 +84,39 @@
 
 \hrule
 
-\section{Two proofs that HLF is not optimal for P3}
+
+
+\section{Several proofs that HLF is not optimal for P3}
 \frame{
-  \begin{minipage}{.4\textwidth}
-    \begin{multicols}{2}
-      \subsection{P3, HLF for 001234668855}
-      \input{../001234668855hlf.tex}
-      \subsection{P3, opt for 001234668855}
-      \input{../001234668855opt.tex}
-    \end{multicols}
+  \begin{minipage}{.25\textwidth}
+    \subsection{Different runs of P3-HLF yield diffe\-rent results on 001112}
+    \centering{}
+    \input{../001112hlf.tex}
   \end{minipage}
 }
 \frame{
-  \begin{minipage}{.4\textwidth}
-    \begin{multicols}{2}
-      \subsection{P3, HLF for 0012346688}
-      \input{../0012346688hlf.tex}
-      \subsection{P3, opt for 0012346688}
-      \input{../0012346688opt.tex}
-    \end{multicols}
+  \begin{minipage}{.25\textwidth}
+    \subsection{P3-HLF not optimal for 0012346688}
+    \input{../0012346688hlf.tex}
+    \input{../0012346688opt.tex}
+  \end{minipage}
+}
+\frame{
+  \begin{minipage}{.25\textwidth}
+    \subsection{P3-HLF not optimal  for 0012446788}
+    \input{../0012446788hlf.tex}
+    \input{../0012446788opt.tex}
+  \end{minipage}
+}
+\frame{
+  \begin{minipage}{.25\textwidth}
+    \subsection{P3-HLF not optimal for 00123455799}
+    \input{../00123455799hlf.tex}
+    \input{../00123455799opt.tex}
   \end{minipage}
 }
 
-%\input{../000111223hlf.tex}
-%\input{../000111223opt.tex}
+% \input{../000111223hlf.tex}
+% \input{../000111223opt.tex}
 
 \end{document}

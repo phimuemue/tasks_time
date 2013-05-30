@@ -4000,7 +4000,9 @@ If we use HLF on the following tree, we obtian a runtime of 1079/216 ($<5$).
 
 \section{P2: A whole intree-DAG and its condensed counterpart}
 
-\input{examples/p2/001112566_with_condensed.tex}
+\input{../0011123669hlf.tex}
+
+%\input{examples/p2/001112566_with_condensed.tex}
 
 \section{The current TikZ-file}
 
@@ -4008,7 +4010,16 @@ If we use HLF on the following tree, we obtian a runtime of 1079/216 ($<5$).
 
 \section{Some proofs that HLF is not optimal for P3}
 
+This section showcases some situations, where HLF is not optimal. Figure \ref{fig:hlf-001112} an intree, where HLF can choose at some points, and different choices result in different runtimes. 
+
 Figures \ref{fig:hlf-vs-opt-0012346688}, \ref{fig:hlf-vs-opt-0012446788} and \ref{fig:hlf-vs-opt-00123455799} show two examples that prove that HLF is not optimal for three processors.
+
+\begin{figure}[ht]
+  \centering
+  \input{../001112hlf.tex}
+  \caption{HLF on 001112. Different runs of HLF do not necessarily produce the same result.}
+  \label{fig:hlf-001112}
+\end{figure}
 
 \begin{figure}[ht]
   \centering
@@ -4033,9 +4044,5 @@ Figures \ref{fig:hlf-vs-opt-0012346688}, \ref{fig:hlf-vs-opt-0012446788} and \re
   \caption{HLF vs. optimal solution for 00123455799 (taken from Chandy/Reynolds)}
   \label{fig:hlf-vs-opt-00123455799}
 \end{figure}
-
-
-
-
 
 \end{document}
