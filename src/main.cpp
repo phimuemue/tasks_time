@@ -86,6 +86,8 @@ int read_variables_map_from_args(int argc,
          "Generate output for DAG viewer in file.")
         ("dagviewlimit", po::value<unsigned int>()->default_value(0), 
          "Only show snapshots with a certain amount of tasks in dagview.")
+        ("dagviewonlybest", po::value<bool>()->default_value(false)->zero_tokens(), 
+         "Only show best schedule in dagview.")
         ("tikz", po::value<string>()->implicit_value(""), 
          "Generate TikZ-Output of snapshot(s) in file.")
         ("tikzlimit", po::value<unsigned int>()->default_value(0), 
@@ -198,7 +200,8 @@ void create_snapshot_dags(const po::variables_map& vm,
 }
 
 void generate_output(const po::variables_map& vm,
-        vector<Snapshot*>& s,
+        const vector<Snapshot*>& s,
+        const vector<Snapshot*>& best,
         const vector<vector<task_id>>& initial_settings
         ){ 
     if(vm.count("tikz")){
@@ -231,8 +234,9 @@ void generate_output(const po::variables_map& vm,
         cout << "Writing dagview to " << filename << endl;
         dagview_output.open(filename);
         DagviewExporter dagview_exporter(vm["dagviewlimit"].as<unsigned int>());
-        for(unsigned int i= 0; i<s.size(); ++i){
-            dagview_exporter.export_snapshot_dag(dagview_output, s[i]);
+        bool onlybest = vm["dagviewonlybest"].as<bool>();
+        for(Snapshot* it : (onlybest ? best : s)){
+            dagview_exporter.export_snapshot_dag(dagview_output, it);
         }
         dagview_output.close();
     }
@@ -333,7 +337,7 @@ int main(int argc, char** argv){
             << " of initial settings (thus is wrong)!)" << endl;
 
         // output stuff
-        generate_output(vm, s, initial_settings);
+        generate_output(vm, s, best, initial_settings);
 #if USE_CANONICAL_SNAPSHOT
         Snapshot::clear_pool();
 #endif
