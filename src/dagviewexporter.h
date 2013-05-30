@@ -5,7 +5,6 @@
 
 class DagviewExporter : public Exporter {
     private:
-        unsigned int task_count_limit;
         void dag_view_string_internal(const Snapshot* s,
                 ostream& output,
                 unsigned int task_count_limit,
@@ -17,6 +16,7 @@ class DagviewExporter : public Exporter {
                 unsigned int depth, 
                 myfloat probability) const ;
     public:
+        unsigned int task_count_limit;
         DagviewExporter();
         DagviewExporter(unsigned int tcl);
         ~DagviewExporter();

@@ -230,7 +230,7 @@ void generate_output(const po::variables_map& vm,
         }
         cout << "Writing dagview to " << filename << endl;
         dagview_output.open(filename);
-        DagviewExporter dagview_exporter;
+        DagviewExporter dagview_exporter(vm["dagviewlimit"].as<unsigned int>());
         for(unsigned int i= 0; i<s.size(); ++i){
             dagview_exporter.export_snapshot_dag(dagview_output, s[i]);
         }
@@ -308,11 +308,24 @@ int main(int argc, char** argv){
             expected_runtimes[i] = s[i]->expected_runtime();
         }
         myfloat expected_runtime = 0;
+        vector<Snapshot*> best {s[0]};
         for(unsigned int i= 0; i<s.size(); ++i){
+            if(s[i]->expected_runtime() <= best[0]->expected_runtime()){
+                if(s[i]->expected_runtime() < best[0]->expected_runtime()){
+                    best.clear();
+                }
+                best.push_back(s[i]);
+            }
             cout << s[i]->markedstring() << ":\t";
             cout << s[i]->expected_runtime() << "\t";
             cout << endl;
             expected_runtime += expected_runtimes[i];
+        }
+        cout << "Best results:" << endl;
+        for(Snapshot* it : best){
+            cout << it->markedstring() << ":\t";
+            cout << it->expected_runtime() << "\t";
+            cout << endl;
         }
         expected_runtime /= (myfloat)s.size();
         cout << "Total expected run time: " << expected_runtime 
