@@ -159,6 +159,7 @@ class Snapshot_Dag_Viewer(object):
         self.window.connect("delete_event", self.delete_event)
         self.layout = gtk.VBox()
         self.window.add(self.layout)
+        self.window.set_title(path)
         self.ts = gtk.TreeStore(bool, str, str, str, str, str, str)
         self.tv = gtk.TreeView(self.ts)
         # options

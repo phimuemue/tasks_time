@@ -36,7 +36,7 @@ typedef mpq_class myfloat;
 #endif 
 
 typedef int task_id;
-typedef unsigned long long tree_id;
+typedef std::vector<unsigned char> tree_id;
 typedef std::pair<tree_id, std::vector<task_id>> snapshot_id;
 
 #define NOTASK (-1)

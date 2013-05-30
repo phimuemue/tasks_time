@@ -278,7 +278,7 @@ int main(int argc, char** argv){
         Intree t = generate_tree(vm);
         cout << "Raw form:\t" << t << endl;
         map<task_id, task_id> isomorphism;
-        tree_id tid = 0;
+        tree_id tid;
         cout << "Normalized:  \t" 
              << Intree::canonical_intree(t, 
                      vector<task_id>(),
@@ -329,7 +329,9 @@ int main(int argc, char** argv){
         for(Snapshot* it : best){
             cout << it->markedstring() << ":\t";
             cout << it->expected_runtime() << "\t";
+#if MYFLOAT==GNUMP_RATIONAL
             cout << "(" << it->expected_runtime().get_d() << ")" << endl;
+#endif
             cout << endl;
         }
         expected_runtime /= (myfloat)s.size();
