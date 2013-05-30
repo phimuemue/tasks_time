@@ -406,9 +406,10 @@ Snapshot* Snapshot::optimize() const {
     for(const pair<Snapshot*, myfloat>& s : new_sucs){
         tree_id tid;
         map<task_id, task_id> iso;
+        vector<task_id> none_marked;
         Intree::canonical_intree(
             s.first->intree,
-            s.first->marked,
+            none_marked,
             iso,
             tid);
         sucs_by_tree_id[tid].push_back(s);
