@@ -4006,7 +4006,9 @@ If we use HLF on the following tree, we obtian a runtime of 1079/216 ($<5$).
 
 \input{../default.tex}
 
-\section{P3, HLF vs. OPT for 0012346688}
+\section{Some proofs that HLF is not optimal for P3}
+
+Figures \ref{fig:hlf-vs-opt-0012346688}, \ref{fig:hlf-vs-opt-0012446788} and \ref{fig:hlf-vs-opt-00123455799} show two examples that prove that HLF is not optimal for three processors.
 
 \begin{figure}[ht]
   \centering
@@ -4016,15 +4018,24 @@ If we use HLF on the following tree, we obtian a runtime of 1079/216 ($<5$).
   \label{fig:hlf-vs-opt-0012346688}
 \end{figure}
 
-\section{P3, HLF vs. OPT for 0012446788}
-
 \begin{figure}[ht]
   \centering
   \input{../0012446788hlf.tex}
   \input{../0012446788opt.tex}
-  \caption{HLF vs. optimal solution for 0012446788}
+  \caption{HLF vs. optimal solution for 0012446788 (taken from Ernst Mayr)}
   \label{fig:hlf-vs-opt-0012446788}
 \end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \input{../00123455799hlf.tex}
+  \input{../00123455799opt.tex}
+  \caption{HLF vs. optimal solution for 00123455799 (taken from Chandy/Reynolds)}
+  \label{fig:hlf-vs-opt-00123455799}
+\end{figure}
+
+
+
 
 
 \end{document}
