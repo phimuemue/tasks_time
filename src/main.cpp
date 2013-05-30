@@ -329,6 +329,7 @@ int main(int argc, char** argv){
         for(Snapshot* it : best){
             cout << it->markedstring() << ":\t";
             cout << it->expected_runtime() << "\t";
+            cout << "(" << it->expected_runtime().get_d() << ")" << endl;
             cout << endl;
         }
         expected_runtime /= (myfloat)s.size();
