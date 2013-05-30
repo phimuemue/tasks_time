@@ -73,7 +73,7 @@ number_types = [(0, "float"),
                 (3, "rational<long>")]
 vars.Add(EnumVariable("MYFLOAT", "Datatype for rational numbers:\n" 
             + "\n".join(["     %d %s"%(x) for x in number_types]), "0",
-            allowed_values=("0", "1", "2", "3")))
+            allowed_values=("0", "1", "2", "3", "4")))
 vars.Add(EnumVariable("USE_SIMPLE_OPENMP", "Simple multithreading for computing topmost successors. Currently only working for value 0.", 0,
             allowed_values=("0", "1")))
 vars.Add(EnumVariable("USE_CANONICAL_SNAPSHOT", "Use flyweight pattern to reduce amout of memory used at the price of (possibly only slightly) higher computation time.", 1,
@@ -96,6 +96,8 @@ env = Environment(variables = vars,
                             "-DUSE_CANONICAL_SNAPSHOT=${USE_CANONICAL_SNAPSHOT}",
                             ], 
                   LIBS = ["boost_program_options",
+                  "gmpxx",
+                  "gmp"
                   ],
                   LINKFLAGS="-fopenmp",
                   build_dir = "build"

@@ -12,11 +12,14 @@
 #define DOUBLE 1
 #define RATIONAL_INT 2
 #define RATIONAL_LONG 3
+#define GNUMP_RATIONAL 4
 
 #if MYFLOAT==RATIONAL_LONG
 #include<boost/rational.hpp>
 #elif MYFLOAT==RATIONAL_INT
 #include<boost/rational.hpp>
+#elif MYFLOAT==GNUMP_RATIONAL
+#include<gmpxx.h>
 #endif
 
 // TODO: Add support for rational<gmplib-bigint>
@@ -25,9 +28,11 @@ typedef float myfloat;
 #elif MYFLOAT==DOUBLE
 typedef double myfloat;
 #elif MYFLOAT==RATIONAL_INT
-typedef boost::rational<int> myfloat;
+typedef boost::rational<unsigned int> myfloat;
 #elif MYFLOAT==RATIONAL_LONG
-typedef boost::rational<long> myfloat;
+typedef boost::rational<unsigned long long> myfloat;
+#elif MYFLOAT==GNUMP_RATIONAL
+typedef mpq_class myfloat;
 #endif 
 
 typedef int task_id;

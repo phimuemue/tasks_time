@@ -80,7 +80,7 @@ void HLFscheduler::get_next_tasks(const Intree& t,
         maxlevel = t.get_level(it->first) > maxlevel ? t.get_level(it->first) : maxlevel;
     }
     tmp.erase(remove_if(tmp.begin(), tmp.end(),
-                [maxlevel, t](const pair<task_id, myfloat>& a){
+                [maxlevel, t](const pair<task_id, myfloat>& a) -> bool {
                     if(a.first==NOTASK)
                         return false;
                     return t.get_level(a.first)!=maxlevel;

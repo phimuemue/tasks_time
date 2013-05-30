@@ -384,7 +384,7 @@ unsigned int Intree::longest_chain_length() const{
 void Intree::get_reverse_tree(map<task_id, vector<task_id>>& rt) const{
     queue<task_id> q;
     q.push(0);
-    rt[0] = {};
+    rt[0] = vector<task_id>();
     while (q.size() > 0){
         task_id current = q.front();
         q.pop();
@@ -393,7 +393,7 @@ void Intree::get_reverse_tree(map<task_id, vector<task_id>>& rt) const{
                 q.push(it->first);
                 rt[it->second].push_back(it->first);
                 if(rt.find(it->first) == rt.end()){
-                    rt[it->first] = {};
+                    rt[it->first] = vector<task_id>();
                 }
             }
         }
