@@ -314,7 +314,7 @@ int main(int argc, char** argv){
         myfloat expected_runtime = 0;
         vector<Snapshot*> best {s[0]};
         for(unsigned int i= 0; i<s.size(); ++i){
-            if(s[i]->expected_runtime() <= best[0]->expected_runtime()){
+            if(i>0 && s[i]->expected_runtime() <= best[0]->expected_runtime()){
                 if(s[i]->expected_runtime() < best[0]->expected_runtime()){
                     best.clear();
                 }
