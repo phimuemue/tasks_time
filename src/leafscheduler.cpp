@@ -10,7 +10,7 @@ void Leafscheduler::all_possible_combinations(
         target.push_back(vector<task_id>());
         return;
     }
-    if(n==t.size()){
+    if(n>=t.size()){
         target.push_back(t);
         return;
     }
