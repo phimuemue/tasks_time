@@ -501,3 +501,20 @@ string Snapshot::markedstring(){
     os << "]";
     return os.str();
 }
+
+unsigned long Snapshot::count_snapshots_in_dag(){
+    map<const Snapshot*, bool> tmp;
+    return count_snapshots_in_dag(tmp);
+}
+
+unsigned long Snapshot::count_snapshots_in_dag(map<const Snapshot*, bool>& tmp){
+    if(tmp.find(this)!=tmp.end()){
+        return 0;
+    }
+    tmp[this] = true;
+    unsigned long sum = 1;
+    for(auto s : Successors){
+        sum += s->count_snapshots_in_dag(tmp);
+    }
+    return sum;
+}
