@@ -3,6 +3,6 @@
 
 #include<iostream>
 
-void print_version();
+void print_version(bool=false);
 
 #endif
