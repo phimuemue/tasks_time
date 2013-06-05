@@ -19,6 +19,7 @@
 // schedulers
 #include "hlfscheduler.h"
 #include "hlfnfcscheduler.h"
+#include "hlfdeterministicscheduler.h"
 
 // exporters
 #include "exporter.h"
@@ -39,9 +40,10 @@ map<string, Scheduler*> scheds =
     {"leaf", new Leafscheduler()}, 
     {"hlf", new HLFscheduler()},
     {"hlfnfc", new HLFNFCscheduler()},
+    {"hlfdet", new HLFDeterministicScheduler()},
 };
 // TODO: can we solve this more elegant?
-#define SCHEDULERS_AVAILABLE "leaf, hlf, hlfnfc"
+#define SCHEDULERS_AVAILABLE "leaf, hlf, hlfnfc, hlfdet"
 
 void randomEdges(int n, vector<pair<Task,Task>>& target){
     mt19937 rng;

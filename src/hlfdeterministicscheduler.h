@@ -3,7 +3,7 @@
 
 #include <algorithm>
 
-#include "leafscheduler.h"
+#include "hlfscheduler.h"
 
 class HLFDeterministicScheduler : public HLFscheduler {
     public:
