@@ -132,7 +132,7 @@ int read_variables_map_from_args(int argc,
     try{
         po::store(po::parse_command_line(argc, argv, desc), vm);
         if(vm.count("help")){
-            print_version(false);
+            print_version(true);
             cout << "Help." << endl
                 << desc << endl;
             return 1;
@@ -249,7 +249,7 @@ int main(int argc, char** argv){
     omp_set_nested(1);
 #endif
 
-    print_version(true);
+    print_version(false);
 
     // vector<pair<Task, Task>> e1;
     // tree_from_string("0 0 0 1 1 2 2 3", e1);
