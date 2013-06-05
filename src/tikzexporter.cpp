@@ -120,6 +120,19 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
     if(first){
         map<unsigned int, vector<Snapshot*>> levels;
         tikz_dag_by_levels(s, levels, 1, consec_num);
+        for(auto& it : levels){
+            sort(it.second.begin(), it.second.end(),
+                [](const Snapshot* a, const Snapshot* b) -> bool {
+                    map<task_id, task_id> iso;
+                    tree_id ta, tb;
+                    Intree::canonical_intree(
+                        a->intree, a->marked, iso, ta);
+                    Intree::canonical_intree(
+                        b->intree, b->marked, iso, tb);
+                    return ta < tb;
+                }
+            );
+        }
         // draw all snaps
         for(unsigned int l=1; l<s->intree.count_tasks()+2-task_count_limit; ++l){
             output << "\\begin{scope}[yshift=\\leveltop"; 
