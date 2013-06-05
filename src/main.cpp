@@ -1,6 +1,8 @@
+#include<sys/ioctl.h>
+#include<time.h>
+
 #include<iostream>
 #include<random>
-#include<time.h>
 #include<string>
 #include<fstream>
 
@@ -74,15 +76,23 @@ void read_raw_tree_from_file(string path, vector<pair<Task,Task>>& target){
     tree_from_string(raw, target);
 }
 
+#define LINE_LENGTH get_terminal_line_length()
+
+unsigned short get_terminal_line_length(){
+    struct winsize w;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+    return w.ws_col;
+}
+
 int read_variables_map_from_args(int argc, 
         char** argv, 
         po::variables_map& vm){
     // generic options
-    po::options_description generic_options("Generic");
+    po::options_description generic_options("Generic", LINE_LENGTH);
     generic_options.add_options()
         ("help,h", "Print help message");
     // output options
-    po::options_description dv_output_options("Dagview output");
+    po::options_description dv_output_options("Dagview output", LINE_LENGTH);
     dv_output_options.add_options()
         ("dagview", po::value<string>()->implicit_value(""), 
          "Generate output for DAG viewer in file.")
@@ -91,7 +101,7 @@ int read_variables_map_from_args(int argc,
         ("dagviewonlybest", po::value<bool>()->default_value(false)->zero_tokens(), 
          "Only show best schedule in dagview.")
         ;
-    po::options_description tikz_output_options("Tikz output");
+    po::options_description tikz_output_options("Tikz output", LINE_LENGTH);
     tikz_output_options.add_options()
         ("tikz", po::value<string>()->implicit_value(""), 
          "Generate TikZ-Output of snapshot(s) in file.")
@@ -109,7 +119,7 @@ int read_variables_map_from_args(int argc,
          "Determines the sibling distance in the Snap-DAG.")
         ;
     // input options
-    po::options_description input_options("Input");
+    po::options_description input_options("Input", LINE_LENGTH);
     input_options.add_options()
         ("direct", po::value<string>(), 
          "Direct input of tree (sequence of edge "
@@ -120,7 +130,7 @@ int read_variables_map_from_args(int argc,
          "Number of tasks in a random graph. Only used "
          "if no input file is given.");
     // configurational things
-    po::options_description config_options("Config");
+    po::options_description config_options("Config", LINE_LENGTH);
     config_options.add_options()
         ("processors,p", po::value<int>()->default_value(2), 
          "Number of processors to use.")
@@ -128,7 +138,7 @@ int read_variables_map_from_args(int argc,
          "Scheduler type to use (" SCHEDULERS_AVAILABLE ").")
         ("optimize", po::value<bool>()->default_value(false)->zero_tokens(), 
          "Generate optimal schedule by picking best successors.");
-    po::options_description desc("Options");
+    po::options_description desc("Options", LINE_LENGTH);
     desc
         .add(config_options)
         .add(input_options)
