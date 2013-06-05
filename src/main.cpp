@@ -34,6 +34,8 @@ map<string, Scheduler*> scheds =
     {"hlf", new HLFscheduler()},
     {"hlfnfc", new HLFNFCscheduler()},
 };
+// TODO: can we solve this more elegant?
+#define SCHEDULERS_AVAILABLE "leaf, hlf, hlfnfc"
 
 void randomEdges(int n, vector<pair<Task,Task>>& target){
     mt19937 rng;
@@ -80,14 +82,17 @@ int read_variables_map_from_args(int argc,
     generic_options.add_options()
         ("help,h", "Print help message");
     // output options
-    po::options_description output_options("Output");
-    output_options.add_options()
+    po::options_description dv_output_options("Dagview output");
+    dv_output_options.add_options()
         ("dagview", po::value<string>()->implicit_value(""), 
          "Generate output for DAG viewer in file.")
         ("dagviewlimit", po::value<unsigned int>()->default_value(0), 
          "Only show snapshots with a certain amount of tasks in dagview.")
         ("dagviewonlybest", po::value<bool>()->default_value(false)->zero_tokens(), 
          "Only show best schedule in dagview.")
+        ;
+    po::options_description tikz_output_options("Tikz output");
+    tikz_output_options.add_options()
         ("tikz", po::value<string>()->implicit_value(""), 
          "Generate TikZ-Output of snapshot(s) in file.")
         ("tikzlimit", po::value<unsigned int>()->default_value(0), 
@@ -120,14 +125,16 @@ int read_variables_map_from_args(int argc,
         ("processors,p", po::value<int>()->default_value(2), 
          "Number of processors to use.")
         ("scheduler,s", po::value<string>()->default_value("hlf"), 
-         "Scheduler type to use.")
+         "Scheduler type to use (" SCHEDULERS_AVAILABLE ").")
         ("optimize", po::value<bool>()->default_value(false)->zero_tokens(), 
          "Generate optimal schedule by picking best successors.");
     po::options_description desc("Options");
-    desc.add(generic_options)
-        .add(input_options)
-        .add(output_options)
+    desc
         .add(config_options)
+        .add(input_options)
+        .add(dv_output_options)
+        .add(tikz_output_options)
+        .add(generic_options)
         ;
     try{
         po::store(po::parse_command_line(argc, argv, desc), vm);
