@@ -18,7 +18,7 @@ class HLFscheduler : public Leafscheduler {
         void get_initial_schedule(const Intree& t, 
                 const unsigned int, 
                 vector<vector<task_id>>&) const;
-        void get_next_tasks(const Intree& t, 
+        virtual void get_next_tasks(const Intree& t, 
                 const vector<task_id>& marked,
                 vector<pair<task_id,myfloat>>& target) const;
 };
