@@ -3,12 +3,12 @@
 char builtby[] = "muellerp";
 char version[] = "0";
 char minor[] = "3";
-char build[] = "115";
-char date[] = "2013/06/04 15:34:15";
+char build[] = "125";
+char date[] = "2013/06/05 10:54:56";
 
 using namespace std;
 
-void print_version(){
+void print_version(bool long_version){
     cout << "-----------------------------------------------------------------" << endl;
     cout << "+  " << endl << 
             "+         o---o---o---o---o-\\           " << endl <<
