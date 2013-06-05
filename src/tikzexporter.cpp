@@ -40,7 +40,12 @@ void TikzExporter::export_single_snapshot_internal(ostream& output,
     output << "\\node[";
     output << "circle, scale=0.75, fill";
     if(marked.size() == 0 || find(marked.begin(), marked.end(), t) != marked.end()){
-        output << ", red";
+        if(black_and_white){
+            output << ", fill=white, draw=black, task_cross";
+        }
+        else{
+            output << ", red";
+        }
     }
     float complete_width=get_subtree_width(t, rt);
     output << "] (tid" << t << ") at (" 

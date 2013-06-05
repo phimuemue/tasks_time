@@ -22,6 +22,7 @@
 \usetikzlibrary{shapes.multipart,chains}
 \usetikzlibrary{positioning}
 \usetikzlibrary{matrix}
+\usetikzlibrary{automata}
 \usetikzlibrary{external} 
 
 \newtheorem{definition}{Definition}[chapter]
@@ -31,6 +32,17 @@
 \newcommand{\alltasks}{{\mathbb T}}
 \newcommand{\neededfor}{\rightarrow}
 \WithSuffix\newcommand\neededfor*{\stackrel{*}{\rightarrow}}
+
+\tikzstyle{task_cross}=[
+    {path picture={ 
+        \draw[black]
+        (path picture bounding box.south east) -- 
+        (path picture bounding box.north west) 
+        (path picture bounding box.south west) -- 
+        (path picture bounding box.north east);
+      }
+    }
+]
 
 % \getwidthofnode will measure the width of the node given as its second
 % parameter and store it into the first parameter.
