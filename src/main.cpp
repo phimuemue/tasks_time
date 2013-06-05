@@ -1,4 +1,7 @@
+#ifndef unix
 #include<sys/ioctl.h>
+#endif
+
 #include<time.h>
 
 #include<iostream>
@@ -79,9 +82,13 @@ void read_raw_tree_from_file(string path, vector<pair<Task,Task>>& target){
 #define LINE_LENGTH get_terminal_line_length()
 
 unsigned short get_terminal_line_length(){
+#if unix
     struct winsize w;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
     return w.ws_col;
+#else
+    return 70;
+#endif
 }
 
 int read_variables_map_from_args(int argc, 
