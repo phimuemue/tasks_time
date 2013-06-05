@@ -1,4 +1,8 @@
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+#else
 #include<sys/ioctl.h>
+#endif
+
 #include<time.h>
 
 #include<iostream>
@@ -79,9 +83,13 @@ void read_raw_tree_from_file(string path, vector<pair<Task,Task>>& target){
 #define LINE_LENGTH get_terminal_line_length()
 
 unsigned short get_terminal_line_length(){
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    return 70
+#else
     struct winsize w;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
     return w.ws_col;
+#endif
 }
 
 int read_variables_map_from_args(int argc, 
