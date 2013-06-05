@@ -174,10 +174,6 @@ Intree Intree::canonical_intree(const Intree& _t,
     // TODO: Expand to more than 64 bits!
     out.clear();
     for(unsigned int i=0; i<canonical_names[0].size(); ++i){
-        if(i>8*sizeof(tree_id)){
-            cout << "More bits than can be stored in tree_id." << endl;
-            throw 1;
-        }
         out.push_back(canonical_names[0][i] > 0 ? 1u : 0u);
     }
     return Intree(edges);

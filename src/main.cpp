@@ -104,11 +104,11 @@ int read_variables_map_from_args(int argc,
     // output options
     po::options_description dv_output_options("Dagview output", LINE_LENGTH);
     dv_output_options.add_options()
-        ("dagview", po::value<string>()->implicit_value(""), 
+        ("dv", po::value<string>()->implicit_value(""), 
          "Generate output for DAG viewer in file.")
-        ("dagviewlimit", po::value<unsigned int>()->default_value(0), 
+        ("dvlimit", po::value<unsigned int>()->default_value(0), 
          "Only show snapshots with a certain amount of tasks in dagview.")
-        ("dagviewonlybest", po::value<bool>()->default_value(false)->zero_tokens(), 
+        ("dvonlybest", po::value<bool>()->default_value(false)->zero_tokens(), 
          "Only show best schedule in dagview.")
         ;
     po::options_description tikz_output_options("Tikz output", LINE_LENGTH);
@@ -123,9 +123,9 @@ int read_variables_map_from_args(int argc,
          "Draw transition probabilities in TikZ.")
         ("tikzreachprobs", po::value<bool>()->default_value(true), 
          "Draw reaching probabilities in TikZ.")
-        ("tikzheight", po::value<float>()->default_value(15.f), 
+        ("tikzld", po::value<float>()->default_value(15.f), 
          "Determines the level distance in the Snap-DAG.")
-        ("tikzwidth", po::value<float>()->default_value(1.f), 
+        ("tikzsd", po::value<float>()->default_value(1.f), 
          "Determines the sibling distance in the Snap-DAG.")
         ("tikzbw", po::value<bool>()->default_value(false)->zero_tokens(), 
          "Do not use color in TikZ output.")
@@ -248,24 +248,24 @@ void generate_output(const po::variables_map& vm,
                 vm["tikzreachprobs"].as<bool>(),
                 vm["tikzlimit"].as<unsigned int>()
                 );
-        tikz_exporter.level_distance = vm["tikzheight"].as<float>();
-        tikz_exporter.sibling_distance = vm["tikzwidth"].as<float>();
+        tikz_exporter.level_distance = vm["tikzld"].as<float>();
+        tikz_exporter.sibling_distance = vm["tikzsd"].as<float>();
         tikz_exporter.black_and_white = vm["tikzbw"].as<bool>();
         for(unsigned int i= 0; i<s.size(); ++i){
             tikz_exporter.export_snapshot_dag(tikz_output, s[i]);
         }
         tikz_output.close();
     }
-    if(vm.count("dagview")){
+    if(vm.count("dv")){
         ofstream dagview_output;
-        string filename = vm["dagview"].as<string>();
+        string filename = vm["dv"].as<string>();
         if(filename==""){
             filename = "dag.dagview";
         }
         cout << "Writing dagview to " << filename << endl;
         dagview_output.open(filename);
-        DagviewExporter dagview_exporter(vm["dagviewlimit"].as<unsigned int>());
-        bool onlybest = vm["dagviewonlybest"].as<bool>();
+        DagviewExporter dagview_exporter(vm["dvlimit"].as<unsigned int>());
+        bool onlybest = vm["dvonlybest"].as<bool>();
         for(Snapshot* it : (onlybest ? best : s)){
             dagview_exporter.export_snapshot_dag(dagview_output, it);
         }
