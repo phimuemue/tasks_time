@@ -20,6 +20,7 @@
 #include "hlfscheduler.h"
 #include "hlfnfcscheduler.h"
 #include "hlfdeterministicscheduler.h"
+#include "hlfrandomscheduler.h"
 
 // exporters
 #include "exporter.h"
@@ -35,15 +36,18 @@ namespace po = boost::program_options;
 #define NUM_THREADS_DEFAULT 5
 #endif
 
-map<string, Scheduler*> scheds = 
+map<string, Scheduler*> schedulers = 
 {
+    // "all possibilities" scheduler
     {"leaf", new Leafscheduler()}, 
+    // HLF schedulers (variants)
     {"hlf", new HLFscheduler()},
     {"hlfnfc", new HLFNFCscheduler()},
     {"hlfdet", new HLFDeterministicScheduler()},
+    {"hlfrand", new HLFRandomScheduler()},
 };
 // TODO: can we solve this more elegant?
-#define SCHEDULERS_AVAILABLE "leaf, hlf, hlfnfc, hlfdet"
+#define SCHEDULERS_AVAILABLE "leaf, hlf, hlfnfc, hlfdet, hlfrand"
 
 void randomEdges(int n, vector<pair<Task,Task>>& target){
     mt19937 rng;
@@ -321,9 +325,13 @@ int main(int argc, char** argv){
         vector<Snapshot*> s;
         vector<myfloat> expected_runtimes;
 
+        if(schedulers.find(vm["scheduler"].as<string>()) == schedulers.end()){
+            cout << "Scheduler " << vm["scheduler"].as<string>() << " not found." << endl;
+            return 1;
+        }
         create_snapshot_dags(vm,
                 t,
-                scheds[vm["scheduler"].as<string>()],
+                schedulers[vm["scheduler"].as<string>()],
                 initial_settings,
                 s,
                 expected_runtimes);
