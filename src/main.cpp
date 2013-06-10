@@ -369,7 +369,7 @@ int main(int argc, char** argv){
             cout << it->markedstring() << ":\t";
             cout << it->expected_runtime() << "\t";
 #if MYFLOAT==GNUMP_RATIONAL
-            cout << "(" << it->expected_runtime().get_d() << ")" << endl;
+            cout << "(" << it->expected_runtime().get_d() << ")";
 #endif
             cout << "\t(" << it->count_snapshots_in_dag() << ")" << endl;
         }
