@@ -107,7 +107,11 @@
 \node[circle, scale=0.75, fill, task_scheduled] (tid3) at (2.25,4.5){};
 \draw[](tid1) -- (tid2);
 \draw[](tid1) -- (tid3);
+\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
+\node[circle, scale=0.75, fill, red] (tid4) at (3.75,4.5){};
+\draw[](tid2) -- (tid4);
 \draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
 \end{tikzpicture}
 \nodepart{three}
 \footnotesize{3.5}

@@ -1,0 +1,97 @@
+\chapter{Theoretical foundations}
+\label{chap:theoretical-foundations}
+
+\section{Some probability}
+\label{sec:some-probability}
+
+As we will see later, we will often be using probability distributions (in particular continuous probability distributions).
+
+\subsection{Exponential distribution}
+\label{sec:exponential-distribution}
+
+\begin{definition}
+  A continuous random variable is \emph{exponentially distributed} with parameter $\lambda$ if it has density 
+  \begin{equation*}
+    f(x) =
+    \begin{cases}
+      \lambda \cdot e^{-\lambda x} & \text{ if } x \geq 0 
+      \\ 0 & \text{ otherwise}
+    \end{cases}
+    .
+  \end{equation*}
+\end{definition}
+
+Note that the above definition also determines the distribution function $F$ of an exponentially distributed random variable as follows:
+
+\begin{equation*}
+  F(x) =
+  \begin{cases}
+    1-e^{\lambda x} & \text{ if } x \geq 0 \\
+    0 & \text{ otherwise}
+  \end{cases}
+\end{equation*}
+
+\begin{theorem}
+  Let $X_1,\dots,X_n$ be exponentially-distributed random variables with respective parameters $\lambda_1,\dots,\lambda_n$. Then, the ranvom variable $Z:=\min_{i\in\left\{ 1,\dots,n \right\}} \left\{ X_i \right\}$ is exponentially distributed with parameter $\lambda=\lambda_1+\dots+\lambda_n$.
+\end{theorem}
+
+\begin{proof}
+  We prove the claim by induction. 
+
+  Suppose, we have two exponentially distributed random variables $X_1$ resp. $X_2$ with parameters $\lambda_1$ resp. $\lambda_2$. We then can compute
+  \begin{align*}
+    \p{min\left\{ X_1,X_2 \right\} \geq x} & = \p{X_1 \geq x \wedge X_2 \geq x} = \\ 
+    & = \p{X_1 \geq x}\cdot\p{X_2 \geq x} = \\
+    & = e^{-\lambda_1 x} \cdot e^{-\lambda_2 x} = \\
+    & = e^{-\lambda_1 x - \lambda_2 x} = \\
+    & = e^{-\left( \lambda_1+\lambda_2 \right) \cdot x},
+  \end{align*}
+  from which we can conclude that $\min\left\{ X_1,X_2 \right\}$ is exponentially distributed with parameter $\lambda_1 + \lambda_2$. By induction, we obtain our claim.
+\end{proof}
+
+\subsection{Uniform distribution}
+\label{sec:uniform-distribution}
+
+\begin{definition}
+  A continuous random variable is \emph{uniformly distributed} over the interval $\left[ a,b \right]$ if it has density
+  \begin{equation*}
+    f(x) =
+    \begin{cases}
+      \frac{1}{b-a} & \text{ if } x\in\left[ a,b \right] \\
+      0 & \text{ otherwise}
+    \end{cases}.
+  \end{equation*}
+\end{definition}
+
+The density of a uniform random variable is thus given by
+\begin{equation*}
+  F(x) = \begin{cases}
+    0 & \text{ if } x<a \\
+    \frac{x-a}{b-a} & \text{ if } x\in\left[ a,b \right] \\
+    1 & \text{ if } x>b
+  \end{cases}.
+\end{equation*}
+
+
+\subsection{General stuff}
+\label{sec:probability-misc}
+
+\begin{theorem}
+  Let $X_1,\dots,X_n$ be independent, identically distributed, continuous random variables and let $i\in\left\{ 1,\dots,n \right\}$. Then 
+  \begin{equation}
+    \label{eq:probability-that-cont-random-variable-is-smallest-out-of-iid-is-one-over-n}
+    \p{X_i = \min_{j\in\left\{ 1,\dots,n \right\}}\left\{ X_j \right\}} = \frac{1}{n}.
+  \end{equation}
+\end{theorem}
+
+\begin{proof}
+  It is clear that 
+  \begin{equation*}
+    \p{X_1 = \min_{j\in\left\{ 1,\dots,n \right\}}\left\{ X_j \right\}} = \p{X_2 = \min_{j\in\left\{ 1,\dots,n \right\}}\left\{ X_j \right\}} = \dots = \p{X_n = \min_{j\in\left\{ 1,\dots,n \right\}}\left\{ X_j \right\}},
+  \end{equation*}
+  because all random variables $X_1$ through $X_n$ behave the same. Thus we can deduce equation (\ref{eq:probability-that-cont-random-variable-is-smallest-out-of-iid-is-one-over-n}).
+\end{proof}
+
+%%% Local Variables:
+%%% TeX-master: "../thesis.tex"
+%%% End: 
