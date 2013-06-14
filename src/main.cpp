@@ -132,6 +132,8 @@ int read_variables_map_from_args(int argc,
          "Determines the level distance in the Snap-DAG.")
         ("tikzsd", po::value<float>()->default_value(1.f), 
          "Determines the sibling distance in the Snap-DAG.")
+        ("tikzonlybest", po::value<bool>()->default_value(false)->zero_tokens(), 
+         "Only show best schedule in TikZ output.")
         ;
     // input options
     po::options_description input_options("Input", LINE_LENGTH);
@@ -253,8 +255,9 @@ void generate_output(const po::variables_map& vm,
                 );
         tikz_exporter.level_distance = vm["tikzld"].as<float>();
         tikz_exporter.sibling_distance = vm["tikzsd"].as<float>();
-        for(unsigned int i= 0; i<s.size(); ++i){
-            tikz_exporter.export_snapshot_dag(tikz_output, s[i]);
+        bool onlybest = vm["tikzonlybest"].as<bool>();
+        for(Snapshot* it : (onlybest ? best : s)){
+            tikz_exporter.export_snapshot_dag(tikz_output, it);
         }
         tikz_output.close();
     }
