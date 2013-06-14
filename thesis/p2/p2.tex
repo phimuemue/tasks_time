@@ -4,6 +4,8 @@
 \section{Another recursion describing optimal expected run time}
 \label{sec:p2-simple-method-for-runtime}
 
+\newcommand{\profile}[1]{\llbracket #1 \rrbracket}
+
 If one considers the problem of scheduling an intree onto two processors, it becomes clear that HLF is optimal (\todo{Proof.}). Moreover, we can conclude that we can compute the optimal expected finish time in polynomial time.
 
 This section shows how the original problem of an intree DAG can be mapped onto another, more compact structure.
@@ -25,8 +27,6 @@ The intrees in figure \ref{fig:p2-four-intrees-with-same-profile-6-3-1} have the
 We can use the number of tasks per level as a (non-bijective) ``encoding'' of intrees. For now, we call this encoding a \emph{profile} of the intree. The above intrees would all be encoded as a profile containing the numbers 6, 3 and 1 in that order. We denote the profile by $\llbracket 6, 3, 1 \rrbracket$.
 
 Note that not all sequences of numbers can be used as profiles. In particular, the last number in a profile is (w.l.o.g.) 1 (since we have only one task as the root of the tree). Moreover, it can not be the case that there is a zero in a profile (since this would imply that there is \emph{no task} on one specific level in the intree).
-
-\newcommand{\profile}[1]{\llbracket #1 \rrbracket}
 
 Moreover, for two processors and HLF-scheduling, we can easily conclude the successors of a profile. Let us consider an example here: If we have the profile $\llbracket 5,4,2,1 \rrbracket$, then 2 of the 5 topmost tasks have to be scheduled. If one of these tasks is finished, we reach $\profile{4,4,2,1}$.
 
