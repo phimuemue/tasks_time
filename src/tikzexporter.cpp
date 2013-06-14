@@ -1,12 +1,5 @@
 #include "tikzexporter.h"
 
-TikzExporter::TikzExporter(){
-    show_probabilities = true;
-    show_reaching_probabilities = true;
-    show_expectancy = true;
-    task_count_limit = 0;
-}
-
 TikzExporter::TikzExporter(bool se, bool sp, bool srp, unsigned int tcl) :
     show_reaching_probabilities(srp),
     show_probabilities(sp), 

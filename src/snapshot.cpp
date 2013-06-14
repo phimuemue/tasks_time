@@ -201,6 +201,30 @@ Snapshot* Snapshot::canonical_snapshot(
     return Snapshot::pool[representant].find(find_key)->second;
 }
 
+
+
+Snapshot* Snapshot::find_snapshot_in_pool(const Snapshot& s,
+        Snapshot::PoolKind representant){
+    Intree t(s.intree);
+    vector<task_id> newmarked(s.marked);
+    return find_snapshot_in_pool(t, newmarked, representant);
+}
+
+Snapshot* Snapshot::find_snapshot_in_pool(Intree& t,
+        vector<task_id> m,
+        Snapshot::PoolKind representant){
+    tree_id tid;
+    t.get_raw_tree_id(tid);
+    snapshot_id find_key = snapshot_id(tid, m);
+    Snapshot* result;
+    if(Snapshot::pool[representant].find(find_key) == Snapshot::pool[representant].end()){
+        Snapshot::pool[representant][find_key] = new Snapshot(t, m);
+    }
+    result = Snapshot::pool[representant][find_key];
+    return result;
+}
+
+
 void Snapshot::get_successors(const Scheduler& scheduler,
     Snapshot::PoolKind representant){
     // we only want to compute the successors once
@@ -245,7 +269,10 @@ void Snapshot::get_successors(const Scheduler& scheduler,
                         newmarked,
                         representant);
 #else
-                Snapshot* news = new Snapshot(tmp, newmarked);
+                //Snapshot* news = new Snapshot(tmp, newmarked);
+                Snapshot* news = Snapshot::find_snapshot_in_pool(tmp,
+                        newmarked,
+                        representant);
 #endif
                 successors.push_back(news);
                 successor_probs.push_back(
@@ -265,7 +292,10 @@ void Snapshot::get_successors(const Scheduler& scheduler,
                     newmarked,
                     representant);
 #else
-            Snapshot* news = new Snapshot(tmp, newmarked);
+            //Snapshot* news = new Snapshot(tmp, newmarked);
+            Snapshot* news = Snapshot::find_snapshot_in_pool(tmp,
+                    newmarked,
+                    representant);
 #endif
             successors.push_back(news);
             successor_probs.push_back(*finish_prob_it);
@@ -517,4 +547,8 @@ unsigned long Snapshot::count_snapshots_in_dag(map<const Snapshot*, bool>& tmp){
         sum += s->count_snapshots_in_dag(tmp);
     }
     return sum;
+}
+
+bool Snapshot::operator== (const Snapshot& s) const {
+    return marked==s.marked && intree==s.intree;
 }

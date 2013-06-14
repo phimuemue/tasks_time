@@ -66,9 +66,12 @@ class Intree {
         void get_chains(vector<vector<task_id>>& target) const;
         unsigned int longest_chain_length() const;
 
+        void get_raw_tree_id(tree_id& target);
+
         void get_reverse_tree(map<task_id, vector<task_id>>& rt) const;
         unsigned int get_max_width(task_id tid = 0) const;
 
+        bool operator==(const Intree& t) const;
         friend ostream& operator<<(ostream& os, const Intree& t);
 };
 

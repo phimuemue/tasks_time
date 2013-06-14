@@ -27,13 +27,13 @@ class TikzExporter : public Exporter {
                 map<Snapshot*, unsigned int>& consec_num) const ;
         // routines to draw DAG of snaps
         string tikz_node_name(const Snapshot* s) const;
-        void tikz_dag_by_levels(const Snapshot* s,
+        virtual void tikz_dag_by_levels(const Snapshot* s,
                 map<unsigned int, 
                 vector<Snapshot*>>& levels,
                 unsigned int depth,
                 map<Snapshot*, unsigned int>& consec_num
                 ) const;
-        void tikz_string_dag_compact_internal(const Snapshot* s,
+        virtual void tikz_string_dag_compact_internal(const Snapshot* s,
                 ostream& output,
                 map<Snapshot*, string>& names,
                 map<Snapshot*, unsigned int>& consec_num,
@@ -52,7 +52,6 @@ class TikzExporter : public Exporter {
         float level_distance;
         float sibling_distance;
 
-        TikzExporter();
         TikzExporter(bool se=true,
                 bool sp=true,
                 bool srp=true,

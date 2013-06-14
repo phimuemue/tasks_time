@@ -112,7 +112,14 @@ class Snapshot {
         // canonical snapshot stuff
         static Snapshot* canonical_snapshot(const Snapshot& s,
                 Snapshot::PoolKind representant = PoolDefault);
+        // TODO: is it necessary to pass m by val?
         static Snapshot* canonical_snapshot(Intree& t, 
+                vector<task_id> m,
+                Snapshot::PoolKind representant = PoolDefault);
+
+        static Snapshot* find_snapshot_in_pool(const Snapshot& s,
+                Snapshot::PoolKind representant = PoolDefault);
+        static Snapshot* find_snapshot_in_pool(Intree& t,
                 vector<task_id> m,
                 Snapshot::PoolKind representant = PoolDefault);
 
@@ -132,6 +139,7 @@ class Snapshot {
                 const Snapshot* orig) const;
 
         myfloat expected_runtime() const;
+        bool operator== (const Snapshot& s) const ;
         friend ostream& operator<<(ostream& os, const Snapshot& s);
 
         string markedstring();

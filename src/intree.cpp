@@ -374,6 +374,15 @@ unsigned int Intree::longest_chain_length() const{
             );
     return result;
 }
+
+void Intree::get_raw_tree_id(tree_id& target){
+    for(unsigned int i=0; i<edges.size(); ++i){
+        target.push_back((task_id)-1);
+    }
+    for(const pair<task_id, task_id>& it : edges){
+        target[it.first] = it.second;
+    }
+}
     
 void Intree::get_reverse_tree(map<task_id, vector<task_id>>& rt) const{
     queue<task_id> q;
@@ -424,4 +433,8 @@ ostream& operator<<(ostream& os, const Intree& t){
             os << " ";
     }
     return os;
+}
+
+bool Intree::operator==(const Intree& t) const {
+    return edges==t.edges;
 }
