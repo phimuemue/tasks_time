@@ -64,10 +64,10 @@ Unfortunately, this recurrence relation does not make the original problem much 
 \begin{conjecture}
   Let $\profile{n_1,n_2,\dots,n_r}$ be a profile where 
   $\left|\left\{ i \in \left\{ 2,3,\dots,r \right\} \mid n_i > 1 \right\}\right| \leq 1$ 
-  (i.e. all but at most two profile entries -- including the first one -- are 1).
+  (i.e. all but at most one profile entry -- besides possibly the first entry -- are 1).
   Then we can compute 
   \begin{equation*}
-    \profile{n_1,n_2,\dots,n_r} = \sum_{i=1}^r \left( \frac{A_i(n_i)}{2^{n_i+i-2}} \right),
+    \profile{n_1,n_2,\dots,n_r} = \sum_{i=1}^r \left( \frac{A_{i-1}(n_i - 2)}{2^{n_i+i-2}} \right),
   \end{equation*}
   where $A_i$ is inductively defined as follows:
   \begin{align*}
@@ -76,7 +76,29 @@ Unfortunately, this recurrence relation does not make the original problem much 
   \end{align*}
 \end{conjecture}
 
-Note that there are closed expressions for $A_i(n)$ for a fixed $i$. However, these formulae are quite complex and do not contribute to clarity, which is why we omit them here.
+Table \ref{tab:example-values-an-p2-profile} shows values for $A_i(n)$ for $(i,n) \in \left( \left\{ 0,1,\dots,4 \right\} \times \left\{ -1,0,1,2,\dots,5 \right\} \right)$.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}[ht]{ccccccccl}
+    $n$ & -1 & 0 & 1 & 2 & 3 & 4 & 5 & Closed term \\
+    \hline
+    $A_0(n)$ & 0 & 1 & 4 & 12 & 32 & 80 & 192 & 
+    $(n+1)\cdot 2^{n}$ \\
+    $A_1(n)$ & 0 & 1 & 5 & 17 & 49 & 129 & 321 & 
+    $n\cdot 2^{n+1} + 1$ \\
+    $A_2(n)$ & 0 & 1 & 6 & 23 & 72 & 201& 522 & 
+    $(n-1)\cdot 2^{n+2}+n+5$ \\
+    $A_3(n)$ & 0 & 1 & 7 & 30 & 102 & 303 & 825 & 
+    $(n-2)\cdot 2^{n+3}+(n^2+11 n+34)/2$ \\
+    $A_4(n)$ & 0 & 1 & 8 & 38 & 140 & 443 & 1268 &
+    $(n-3)\cdot2^{n+4}+\binom{n+3}{3}+4\cdot\left(\binom{n+1}{2}+4 n+12\right)$ \\
+  \end{tabular}
+  \caption{Example values for $A_i(n)$}
+  \label{tab:example-values-an-p2-profile}
+\end{table}
+
+Note that there are closed expressions for $A_i(n)$ for a fixed $i$. However, these formulae are quite complex (also see table \ref{tab:example-values-an-p2-profile}) and we were not able to deduce a \emph{simple} pattern. It seems that $A_i(n)$ involves the term $(n+1-i)\cdot 2^{n+i}$ in some way, and the remaining term seems to be a polynomial in $n$.
 
 We examined this conjecture, but we were not able to deduce a more general formula that holds if more entries in the profile differ from 1.
 
