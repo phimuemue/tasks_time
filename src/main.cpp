@@ -360,7 +360,10 @@ int main(int argc, char** argv){
                 best.push_back(s[i]);
             }
             cout << s[i]->markedstring() << ":\t";
-            cout << s[i]->expected_runtime() << "\t";
+            cout << s[i]->expected_runtime();
+            cout << "\t(" << s[i]->expected_time_for_n_processors(3) << "/";
+            cout << s[i]->expected_time_for_n_processors(2) << "/";
+            cout << s[i]->expected_time_for_n_processors(1) << ")";
             cout << endl;
             expected_runtime += expected_runtimes[i];
         }
