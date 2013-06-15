@@ -6,9 +6,12 @@
 
 \newcommand{\profile}[1]{\llbracket #1 \rrbracket}
 
-If one considers the problem of scheduling an intree onto two processors, it becomes clear that HLF is optimal (\todo{Proof.}). Moreover, we can conclude that we can compute the optimal expected finish time in polynomial time.
+If one considers the problem of scheduling an intree onto two processors, it becomes clear that HLF is optimal (\todo{Proof.}). \todo{Is the following correct:} Moreover, we can conclude that we can compute the optimal expected finish time in polynomial time.
 
 This section shows how the original problem of an intree DAG can be mapped onto another, more compact structure.
+
+\subsection{Profiles of Intrees}
+\label{sec:p2-simple-method-runtime-profiles-for-intrees}
 
 If we consider the trees in figure \ref{fig:p2-four-intrees-with-same-profile-6-3-1}, we can compute that for two processors HLF always yields an expected run time of $\frac{49}{8}$ for each of them, which is optimal:
 
@@ -24,15 +27,29 @@ If we consider the trees in figure \ref{fig:p2-four-intrees-with-same-profile-6-
 
 The intrees in figure \ref{fig:p2-four-intrees-with-same-profile-6-3-1} have the following in common: At each level, they have the same amount of tasks (six tasks at the topmost level, three in the middle one and one at the bottom level).
 
-We can use the number of tasks per level as a (non-bijective) ``encoding'' of intrees. For now, we call this encoding a \emph{profile} of the intree. The above intrees would all be encoded as a profile containing the numbers 6, 3 and 1 in that order. We denote the profile by $\llbracket 6, 3, 1 \rrbracket$.
+We can use the number of tasks per level as a (non-bijective) ``encoding'' of intrees. For now, we call this encoding a \emph{profile} of the intree. The above intrees would all be encoded as a profile containing the numbers 6, 3 and 1 in that order. We denote the profile by $\profile{6, 3, 1}$.
 
-Note that not all sequences of numbers can be used as profiles. In particular, the last number in a profile is (w.l.o.g.) 1 (since we have only one task as the root of the tree). Moreover, it can not be the case that there is a zero in a profile (since this would imply that there is \emph{no task} on one specific level in the intree).
+Note that not all sequences of numbers can be used as profiles. In particular, the last number in a profile is (w.l.o.g.) 1 (since we have only one task as the root of the tree)\footnote{This, of course, introduces some overhead in notation, but we leave it as it is since it is easier to read this way.}. Moreover, it can not be the case that there is a zero in a profile (since this would imply that there is \emph{no task} on one specific level in the intree).
 
-Moreover, for two processors and HLF-scheduling, we can easily conclude the successors of a profile. Let us consider an example here: If we have the profile $\llbracket 5,4,2,1 \rrbracket$, then 2 of the 5 topmost tasks have to be scheduled. If one of these tasks is finished, we reach $\profile{4,4,2,1}$.
+\subsection{Profiles and HLF}
+\label{sec:p2-simple-method-runtime-profiles-hlf}
 
-Another interesting case is $\profile{1,5,2,1}$, where the (single) topmost task and one of the 5 tasks on the second level are scheduled. If the topmost task is finished (which happens with probability $\frac{1}{2}$), we reach $\profile{5,2,1}$. If the scheduled task on the second level finishes first, we reach $\profile{1,4,2,1}$.
+For two processors and HLF-scheduling, we can easily conclude the successors of a profile. Let us first of all consider some examples here: If we have the profile $\profile{5,4,2,1}$, then two of the five topmost tasks \emph{have to be scheduled} (since we are using HLF). If one of these two topmost tasks is finished, we reach $\profile{4,4,2,1}$ (see figure \ref{fig:p2-profiles-successors-of-5421-always-same} for reference).
 
-We now use the profile notation to denote the expected run time (i.e. we say $\profile{6,3,1} = \frac{49}{8}$ --- see image above).
+\begin{figure}[ht]
+  \centering
+  \input{p2/profiles_5421_suc_4421}
+  \caption{Intree with profile $\profile{5,4,2,1}$. \emph{All} possible HLF-successors of the original intree have profile $\profile{4,4,2,1}$.}
+  \label{fig:p2-profiles-successors-of-5421-always-same}
+\end{figure}
+
+\todo{More figures.}
+
+Another interesting case is $\profile{1,5,2,1}$, where the (single) topmost task and one of the five tasks on the second level are scheduled. If the topmost task is finished (which happens with probability $\frac{1}{2}$), we reach $\profile{5,2,1}$. If the scheduled task on the second level finishes first, we reach $\profile{1,4,2,1}$.
+
+The last example we want to give here is $\profile{1,1,1,3,1}$. In this case, the single topmost task and one of the three tasks of the second lowest level have to be scheduled. If the topmost task finishes first (which happens with probability $\frac{1}{2}$), the resulting profile will be $\profile{1,1,3,1}$ (where again the topmost task and one of the tree tasks in the second lowest level are scheduled). If the other scheduled task finishes first, we reach $\profile{1,1,1,2,1}$, where the single topmost task and one of the remaining \emph{two} tasks on the second lowest level are scheduled.
+
+We now use the profile notation to denote the expected run time (i.e. we say $\profile{6,3,1} = \frac{49}{8}$ --- see figure \ref{fig:p2-four-intrees-with-same-profile-6-3-1}).
 
 Exploiting this notation, we can define the following recursive formula that can be used to compute the optimal expected run time:
 
@@ -47,7 +64,7 @@ Exploiting this notation, we can define the following recursive formula that can
 \end{equation}
 where $SUC(\profile{n_1,\dots,n_r}) = \profile{n_1, n_2, n_3,\dots,n_{j-1},n_j-1,n_{j+1},\dots,n_r}$ such that $j$ is the minimum index such that $n_j>1$.
 
-We can simplify equation (\ref{eq:p2-profile-optimal-exp-run-time}) to the following:
+If we consider the second case of equation (\ref{eq:p2-profile-optimal-exp-run-time}), we see that we can simplify it to the following:
 
 \begin{equation}
   \label{eq:p2-profile-optimal-exp-run-time-def-simplified}
@@ -59,7 +76,7 @@ We can simplify equation (\ref{eq:p2-profile-optimal-exp-run-time}) to the follo
 \end{equation}
 with $SUC$ as defined before.
 
-Unfortunately, this recurrence relation does not make the original problem much more easy. However, we were able to deduce the following conjecture.
+Unfortunately, this recurrence relation does not significantly simplify the original problem. However, we were able to deduce the following conjecture.
 
 \begin{conjecture}
   Let $\profile{n_1,n_2,\dots,n_r}$ be a profile where 
@@ -77,6 +94,8 @@ Unfortunately, this recurrence relation does not make the original problem much 
 \end{conjecture}
 
 Table \ref{tab:example-values-an-p2-profile} shows values for $A_i(n)$ for $(i,n) \in \left( \left\{ 0,1,\dots,4 \right\} \times \left\{ -1,0,1,2,\dots,5 \right\} \right)$.
+
+\todo{OEIS zitieren.}
 
 \begin{table}[ht]
   \centering
@@ -98,7 +117,7 @@ Table \ref{tab:example-values-an-p2-profile} shows values for $A_i(n)$ for $(i,n
   \label{tab:example-values-an-p2-profile}
 \end{table}
 
-Note that there are closed expressions for $A_i(n)$ for a fixed $i$. However, these formulae are quite complex (also see table \ref{tab:example-values-an-p2-profile}) and we were not able to deduce a \emph{simple} pattern. It seems that $A_i(n)$ involves the term $(n+1-i)\cdot 2^{n+i}$ in some way, and the remaining term seems to be a polynomial in $n$.
+Note that there are closed expressions for $A_i(n)$ for a fixed $i$. However, these formulae are quite complex (also see table \ref{tab:example-values-an-p2-profile}) and we were not able to deduce a \emph{simple} pattern according to which $A_i(n)$ can be constructed\todo[Hr. Mayr]{Sagen Ihnen die Polynombestandteile in Tabelle \ref{tab:example-values-an-p2-profile} etwas?}. It seems that $A_i(n)$ involves the term $(n+1-i)\cdot 2^{n+i}$ in some way, and the remaining term seems to be a polynomial in $n$.
 
 We examined this conjecture, but we were not able to deduce a more general formula that holds if more entries in the profile differ from 1.
 

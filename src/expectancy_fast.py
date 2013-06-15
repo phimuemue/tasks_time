@@ -31,18 +31,34 @@ def exp_test(levels):
                 newlevels.append(1)
     return Fraction((levels[0]),2) + Fraction(1,2) * ( exp_test(levels[1:]) + exp_test(newlevels) )
 
-referencelist = [1,1,1,1]
+#print referencelist, ": ", ref
+
+l = 4
+pos = 2
+referencelist = [1 for _ in xrange(l)]
+#referencelist = [randint(1,4) for _ in xrange(l)]
+referencelist[pos] = 1
 ref = exp_test(referencelist)
-print ref
 
-for i in xrange(1,10):
-    print exp_test([i for _ in xrange(2)])
+for i in xrange(1, 7):
+    lst = referencelist[:]
+    lst[pos] = i
+    print "%s: %s [%s]"%(str(lst).ljust(len(str(referencelist))+4), str(exp_test(lst)).ljust(10), str(exp_test(lst)-ref))
+    
 
+
+
+# for i in xrange(1,10):
+#     print exp_test([i for _ in xrange(2)])
+# 
 for i in xrange(1, 6):
         lst = referencelist[:]
-        lst[randint(0,len(lst)-1)] = randint(1,10)
-        lst[randint(0,len(lst)-1)] = randint(1,10)
+        lst[randint(0,len(lst)-1)] = randint(1,5)
+        #lst[randint(0,len(lst)-1)] = randint(1,10)
+        if(randint(1,2)==2):
+            lst[0] = randint(1,5)
         nr = [float(get_seq_elem(d, n-1))/pow(2,n+(d-1)) for (d, n) in enumerate(lst)]
+        print nr
         # compute result experimental
         result = exp_test(lst)
         # test: formula correct?
@@ -51,5 +67,3 @@ for i in xrange(1, 6):
         for nri in nr:
             test = test + nri
         print "%s: %s\t (%f / %f) \t %f %f"%(str(lst).ljust(10), str(result).ljust(10), float(result), test,  result-ref, (result-ref)*pow(2.,2))
-
-
