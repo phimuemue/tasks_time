@@ -6,6 +6,33 @@ void Leafscheduler::all_possible_combinations(
         const unsigned int minindex,
         vector<vector<task_id>>& target
         ) const {
+    // common special cases
+    if (n==2) {
+        for(unsigned int i1 = minindex; i1 < t.size(); ++i1){
+            for(unsigned int i2 = i1+1; i2 < t.size(); ++i2){
+                vector<task_id> tmp;
+                tmp.push_back(t[i1]);
+                tmp.push_back(t[i2]);
+                target.push_back(tmp);
+            }
+        }
+        return;
+    }
+    if (n==3) {
+        cout << "Juhu" << endl;
+        for(unsigned int i1 = minindex; i1 < t.size(); ++i1){
+            for(unsigned int i2 = i1+1; i2 < t.size(); ++i2){
+                for(unsigned int i3 = i2+1; i3 < t.size(); ++i3){
+                    vector<task_id> tmp;
+                    tmp.push_back(t[i1]);
+                    tmp.push_back(t[i2]);
+                    tmp.push_back(t[i3]);
+                    target.push_back(tmp);
+                }
+            }
+        }
+        return;
+    }
     if(n==0){
         target.push_back(vector<task_id>());
         return;
