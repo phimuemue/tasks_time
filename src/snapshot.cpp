@@ -363,6 +363,22 @@ myfloat Snapshot::expected_runtime() const {
     return cache_expected_runtime = result;
 }
 
+myfloat Snapshot::expected_time_for_n_processors(unsigned int p) const {
+    if(p==1 && intree.count_tasks() == 1){
+        return 1;
+    }
+    myfloat result = (myfloat)0;
+    for(auto it : SuccessorProbabilities){
+        myfloat tmp = it.get<1>();
+        myfloat transition_time = ((myfloat)1)/((myfloat) marked.size());
+        myfloat future_time = it.get<0>()->expected_time_for_n_processors(p);
+        tmp *= ((marked.size() == p ? transition_time : 0) + future_time);
+        result += tmp;
+    }
+    return result;
+}
+
+
 ostream& operator<<(ostream& os, const Snapshot& s){
     os << "<" << s.intree << " | [";
     

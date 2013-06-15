@@ -371,7 +371,11 @@ int main(int argc, char** argv){
 #if MYFLOAT==GNUMP_RATIONAL
             cout << "(" << it->expected_runtime().get_d() << ")";
 #endif
-            cout << "\t(" << it->count_snapshots_in_dag() << ")" << endl;
+            cout << "\t(" << it->count_snapshots_in_dag() << " snaps)";
+            cout << "\t(" << it->expected_time_for_n_processors(3) << "/";
+            cout << it->expected_time_for_n_processors(2) << "/";
+            cout << it->expected_time_for_n_processors(1) << ")";
+            cout << endl;
         }
         expected_runtime /= (myfloat)s.size();
         cout << "Total expected run time: " << expected_runtime 

@@ -139,6 +139,9 @@ class Snapshot {
                 const Snapshot* orig) const;
 
         myfloat expected_runtime() const;
+
+        myfloat expected_time_for_n_processors(unsigned int p) const;
+
         bool operator== (const Snapshot& s) const ;
         friend ostream& operator<<(ostream& os, const Snapshot& s);
 
