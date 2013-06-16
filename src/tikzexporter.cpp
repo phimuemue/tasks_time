@@ -4,7 +4,8 @@ TikzExporter::TikzExporter(bool se, bool sp, bool srp, unsigned int tcl) :
     show_reaching_probabilities(srp),
     show_probabilities(sp), 
     show_expectancy(se),
-    task_count_limit(tcl)
+    task_count_limit(tcl),
+    horizontal(false)
 {
 }
 
@@ -127,9 +128,19 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
             for(unsigned int i=0; i<l; ++i){
                 output << "I";
             }
-            output << " cm]" << endl;
-            output << "\\matrix (line" << l << ")"
-                << "[column sep=" << sibling_distance << "cm] {" << endl;
+            output << " cm";
+            if(horizontal){
+                output << ", anchor = center";
+            }
+            output << "]" << endl;
+            output << "\\matrix (line" << l << ")";
+            if(horizontal){
+                output << "[row sep=";
+            }
+            else {
+                output << "column sep=";
+            }
+            output << sibling_distance << "cm] {" << endl;
             for(auto it=levels[l].begin(); it!=levels[l].end(); ++it){
                 tikz_draw_node(*it, 
                         s,
@@ -137,10 +148,16 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
                         consec_num);
                 names[*it] = tikz_node_name(*it);
                 if(it!=levels[l].end()){
-                    output << " & " << endl;
+                    if(horizontal){
+                        output << " \\\\ " << endl;
+                    }
+                    else{
+                        output << " & " << endl;
+                    }
                 }
             }
-            output << "\\\\" << endl << "};" << endl;
+            output << "\\\\" << endl;
+            output << "};" << endl;
             output << "\\end{scope}" << endl;
         }
         // connect (we have to draw probabilities seperately!)
@@ -148,10 +165,20 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
             for(auto it=levels[l].begin(); it!=levels[l].end(); ++it){
                 for(auto sit:(*it)->Successors){
                     output << "\\draw ("
-                        << tikz_node_name(*it)
-                        << ".south) -- "
-                        << "(" 
-                        << names[sit] << ".north);" << endl;
+                        << tikz_node_name(*it);
+                    if(horizontal){
+                        output << ".east) -- ";
+                    }
+                    else{
+                        output << ".south) -- ";
+                    }
+                    output << "(" << names[sit];
+                    if(horizontal){
+                        output << ".west);" << endl;
+                    }
+                    else{
+                        output << ".north);" << endl;
+                    }
                 }
             }
         }
@@ -264,7 +291,11 @@ void TikzExporter::export_snapshot_dag(ostream& output, const Snapshot* s) const
         }
         output << "}" << endl;
     }
-    output << "\\begin{tikzpicture}[scale=.2, anchor=south]" << endl;
+    output << "\\begin{tikzpicture}[scale=.2, anchor=south";
+    if(horizontal){
+        output << ", rotate=90";
+    }
+    output << "]" << endl;
     tikz_string_dag_compact_internal(s, 
             output, 
             positions,

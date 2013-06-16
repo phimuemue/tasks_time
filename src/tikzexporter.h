@@ -51,6 +51,7 @@ class TikzExporter : public Exporter {
         unsigned int task_count_limit;
         float level_distance;
         float sibling_distance;
+        bool horizontal;
 
         TikzExporter(bool se=true,
                 bool sp=true,

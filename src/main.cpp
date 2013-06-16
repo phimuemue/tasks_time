@@ -119,6 +119,8 @@ int read_variables_map_from_args(int argc,
     tikz_output_options.add_options()
         ("tikz", po::value<string>()->implicit_value(""), 
          "Generate TikZ-Output of snapshot(s) in file.")
+        ("tikzhorizontal", po::value<bool>()->default_value(false)->zero_tokens(), 
+         "Draw horizontal TikZ-DAG instead of vertical TikZ-DAG.")
         ("tikzlimit", po::value<unsigned int>()->default_value(0), 
          "Only show snapshots with a certain amount of tasks in TikZ.")
         ("tikzexp", po::value<bool>()->default_value(true), 
@@ -254,6 +256,7 @@ void generate_output(const po::variables_map& vm,
                 );
         tikz_exporter.level_distance = vm["tikzld"].as<float>();
         tikz_exporter.sibling_distance = vm["tikzsd"].as<float>();
+        tikz_exporter.horizontal = vm["tikzhorizontal"].as<bool>();
         bool onlybest = vm["tikzonlybest"].as<bool>();
         for(Snapshot* it : (onlybest ? best : s)){
             tikz_exporter.export_snapshot_dag(tikz_output, it);
