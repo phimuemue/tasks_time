@@ -20,7 +20,6 @@ upper = int(sys.argv[2])
 
 fil = open("optimal_utilization_%d_%d.txt"%(lower, upper), "a")
 for c in generate_trees(lower, upper):
-    print c
     fil.write(str(c))
     fil.write("\n")
     tasks = subprocess.Popen(["build/tasks", "-p3", "-s", "leaf", "--direct", "\""+" ".join([str(i) for i in c])+"\""], stdout=subprocess.PIPE)
