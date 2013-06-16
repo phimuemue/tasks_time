@@ -19,7 +19,7 @@ def generate_trees(M,N):
 def random_trees(N):
     lst = [[j for j in xrange(i+1)] for i in xrange(N+1)]
     while(True):
-        yield[random.choice(l) for l in lst]
+        yield(random.choice(l) for l in lst)
 
 lower = 0
 upper = 0

@@ -138,7 +138,7 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
                 output << "[row sep=";
             }
             else {
-                output << "column sep=";
+                output << "[column sep=";
             }
             output << sibling_distance << "cm] {" << endl;
             for(auto it=levels[l].begin(); it!=levels[l].end(); ++it){
