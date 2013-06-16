@@ -22,7 +22,7 @@ fil = open("optimal_utilization_%d_%d.txt"%(lower, upper), "a")
 for c in generate_trees(lower, upper):
     fil.write(str(c))
     fil.write("\n")
-    tasks = subprocess.Popen(["build/tasks", "-p3", "-s", "leaf", "--direct", "\""+" ".join([str(i) for i in c])+"\""], stdout=subprocess.PIPE)
+    tasks = subprocess.Popen(["build/tasks", "-p3", "-s", "leaf", "--optimize", "--direct", "\""+" ".join([str(i) for i in c])+"\""], stdout=subprocess.PIPE)
     tasks.wait()
     output = tasks.communicate()[0]
     printing = False

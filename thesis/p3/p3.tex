@@ -1,0 +1,46 @@
+\chapter{Three Processors}
+\label{chap:p3}
+
+\input{p3/hlf_not_optimal}
+
+\section{Disproving two intuitive approaches}
+\label{sec:p3-disproving-long-p3-and-short-p1-time}
+
+When we want to construct an optimal P3 schedule, we might be tempted to think that (at least) one of the two following criteria should be fulfilled:
+
+\begin{description}
+\item[P3L] Try to keep three processors busy as long as possible.
+\item[P1S] Try to keep the time where only one processor is busy as short as possible.
+\end{description}
+
+Unfortunately, both of them are wrong (at least if considered separately).
+
+\subsection{A counter example disproving P3L}
+\label{sec:counter-example-disproving-p3l-optimality}
+
+Figure \ref{fig:p3-p3l-suboptimal-example} shows an example, where the optimal schedule keeps three processors busy for expected 0.77777 time steps, while a suboptimal schedule keeps three processors busy for a longer expected time, namely about 0.851852 time steps.
+
+\begin{figure}[ht]
+  \centering
+  \input{p3/p3l_suboptimal}
+  \caption{An intree whose optimal schedule is expected to keep three processors busy for roughly 0.77777 time steps, while a suboptimal schedule is expected to keep three processors busy for roughly 0.851852 time steps.\todo{See figure \ref{fig:p3-p1s-suboptimal-example}!}}
+  \label{fig:p3-p3l-suboptimal-example}
+\end{figure}
+
+\subsection{A counter example disproving P1S}
+\label{sec:counter-example-disproving-p1s-optimality}
+
+Figure \ref{fig:p3-p1s-suboptimal-example} shows an intree with the property that the optimal schedule has an expected timespan of roughly 2.59259, within which only one processor is busy. On the other hand, a suboptimal schedule has a timespan of roughly 2.55555 within which only one processor is busy.
+
+This shows that it can be useful to accept a shorter longer time with only one processor busy, probably acchieving a longer timespan where three processors are busy.
+
+\begin{figure}[ht]
+  \centering
+  \input{p3/p1s_suboptimal}
+  \caption{An intree where the expected time with only one processor being busy is longer within the optimal schedule ($\approx 2.59259$) than within a suboptimal schedule ($\approx 2.555555$).\todo{Write expected times which only one busy processor in subfigures.} \todo{Convert to fractions.}\todo{Which one is optimal? Subfigures!}}
+  \label{fig:p3-p1s-suboptimal-example}
+\end{figure}
+
+%%% Local Variables:
+%%% TeX-master: "../thesis.tex"
+%%% End: 
