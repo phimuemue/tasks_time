@@ -2,6 +2,7 @@ import itertools
 import subprocess
 import datetime
 import sys
+import random
 
 def generate_trees(M,N):
     for n in xrange(M,N+1):
@@ -15,11 +16,26 @@ def generate_trees(M,N):
             if good:
                 yield comb
 
-lower = int(sys.argv[1])
-upper = int(sys.argv[2])
+def random_trees(N):
+    lst = [[j for j in xrange(i+1)] for i in xrange(N+1)]
+    while(True):
+        yield[random.choice(l) for l in lst]
 
-fil = open("optimal_utilization_%d_%d.txt"%(lower, upper), "a")
-for c in generate_trees(lower, upper):
+lower = 0
+upper = 0
+if sys.argv[1]=="random":
+    lower = "random"
+    upper = int(sys.argv[2])
+else:
+    lower = int(sys.argv[1])
+    upper = int(sys.argv[2])
+
+if lower=="random":
+    fil = open("optimal_utilization_%d_rand.txt"%(upper),"a")
+else:
+    fil = open("optimal_utilization_%d_%d.txt"%(lower, upper), "a")
+for c in [generate_trees(lower, upper), random_trees(upper)][lower=="random"]:
+    print c
     fil.write(str(c))
     fil.write("\n")
     tasks = subprocess.Popen(["build/tasks", "-p3", "-s", "leaf", "--optimize", "--direct", "\""+" ".join([str(i) for i in c])+"\""], stdout=subprocess.PIPE)

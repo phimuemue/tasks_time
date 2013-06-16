@@ -15,10 +15,9 @@ When we want to construct an optimal P3 schedule, we might be tempted to think t
 
 Unfortunately, both of them are wrong (at least if considered separately).
 
-\subsection{A counter example disproving P3L}
-\label{sec:counter-example-disproving-p3l-optimality}
-
 Figure \ref{fig:p3-p3l-suboptimal-example} shows an example, where the optimal schedule keeps three processors busy for expected 0.77777 time steps, while a suboptimal schedule keeps three processors busy for a longer expected time, namely about 0.851852 time steps.
+
+From this we can conclude that it may be advantageous in some cases to accept a shorter time with three busy processors, thereby possibly also decreasing the time where only one processor is busy.
 
 \begin{figure}[ht]
   \centering
@@ -27,12 +26,9 @@ Figure \ref{fig:p3-p3l-suboptimal-example} shows an example, where the optimal s
   \label{fig:p3-p3l-suboptimal-example}
 \end{figure}
 
-\subsection{A counter example disproving P1S}
-\label{sec:counter-example-disproving-p1s-optimality}
-
 Figure \ref{fig:p3-p1s-suboptimal-example} shows an intree with the property that the optimal schedule has an expected timespan of roughly 2.59259, within which only one processor is busy. On the other hand, a suboptimal schedule has a timespan of roughly 2.55555 within which only one processor is busy.
 
-This shows that it can be useful to accept a shorter longer time with only one processor busy, probably acchieving a longer timespan where three processors are busy.
+This shows that it can be useful to accept a longer time with only one processor busy, probably acchieving a longer time span where three processors are busy.
 
 \begin{figure}[ht]
   \centering
