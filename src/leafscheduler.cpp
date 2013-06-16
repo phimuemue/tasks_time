@@ -8,6 +8,12 @@ void Leafscheduler::all_possible_combinations(
         ) const {
     // common special cases
     if (n==2) {
+        if(t.size()==1){
+            vector<task_id> tmp;
+            tmp.push_back(t[0]);
+            target.push_back(tmp);
+            return;
+        }
         for(unsigned int i1 = minindex; i1 < t.size(); ++i1){
             for(unsigned int i2 = i1+1; i2 < t.size(); ++i2){
                 vector<task_id> tmp;
@@ -19,7 +25,19 @@ void Leafscheduler::all_possible_combinations(
         return;
     }
     if (n==3) {
-        cout << "Juhu" << endl;
+        if(t.size()==1){
+            vector<task_id> tmp;
+            tmp.push_back(t[0]);
+            target.push_back(tmp);
+            return;
+        }
+        if(t.size()==2){
+            vector<task_id> tmp;
+            tmp.push_back(t[0]);
+            tmp.push_back(t[1]);
+            target.push_back(tmp);
+            return;
+        }
         for(unsigned int i1 = minindex; i1 < t.size(); ++i1){
             for(unsigned int i2 = i1+1; i2 < t.size(); ++i2){
                 for(unsigned int i3 = i2+1; i3 < t.size(); ++i3){
