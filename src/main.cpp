@@ -280,6 +280,31 @@ void generate_output(const po::variables_map& vm,
     }
 }
 
+void generate_stats(const po::variables_map& vm,
+        const vector<Snapshot*>& s,
+        const vector<Snapshot*>& best,
+        const vector<vector<task_id>>& initial_settings
+        ){
+    for(unsigned int i= 0; i<s.size(); ++i){
+        if(find(best.begin(), best.end(), s[i]) != best.end()){
+            cout << "* ";
+        }
+        else{
+            cout << "  ";
+        }
+        cout << s[i]->markedstring() << ":\t";
+        cout << s[i]->expected_runtime();
+#if MYFLOAT==GNUMP_RATIONAL
+        cout << "(" << s[i]->expected_runtime().get_d() << ")";
+#endif
+        cout << "\t(" << s[i]->expected_time_for_n_processors(3) << "/";
+        cout << s[i]->expected_time_for_n_processors(2) << "/";
+        cout << s[i]->expected_time_for_n_processors(1) << ")";
+        cout << "\t(" << s[i]->count_snapshots_in_dag() << " snaps)";
+        cout << endl;
+    }
+}
+
 // TODO: rule-of-three everywhere!
 int main(int argc, char** argv){
 #if USE_SIMPLE_OPENMP // openmp settings - useful?
@@ -362,28 +387,10 @@ int main(int argc, char** argv){
                 }
                 best.push_back(s[i]);
             }
-            cout << s[i]->markedstring() << ":\t";
-            cout << s[i]->expected_runtime();
-            cout << "\t(" << s[i]->expected_time_for_n_processors(3) << "/";
-            cout << s[i]->expected_time_for_n_processors(2) << "/";
-            cout << s[i]->expected_time_for_n_processors(1) << ")";
-            cout << endl;
             expected_runtime += expected_runtimes[i];
         }
-        cout << "Best results:" << endl;
-        for(Snapshot* it : best){
-            cout << it->markedstring() << ":\t";
-            cout << it->expected_runtime() << "\t";
-#if MYFLOAT==GNUMP_RATIONAL
-            cout << "(" << it->expected_runtime().get_d() << ")";
-#endif
-            cout << "\t(" << it->count_snapshots_in_dag() << " snaps)";
-            cout << "\t(" << it->expected_time_for_n_processors(3) << "/";
-            cout << it->expected_time_for_n_processors(2) << "/";
-            cout << it->expected_time_for_n_processors(1) << ")";
-            cout << endl;
-        }
         expected_runtime /= (myfloat)s.size();
+        generate_stats(vm, s, best, initial_settings);
         cout << "Total expected run time: " << expected_runtime 
             << " (Warning: This number does not consider probabilities"
             << " of initial settings (thus is wrong)!)" << endl;
