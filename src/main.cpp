@@ -390,12 +390,15 @@ int main(int argc, char** argv){
             expected_runtime += expected_runtimes[i];
         }
         expected_runtime /= (myfloat)s.size();
+
+        // output stats
         generate_stats(vm, s, best, initial_settings);
+
         cout << "Total expected run time: " << expected_runtime 
             << " (Warning: This number does not consider probabilities"
             << " of initial settings (thus is wrong)!)" << endl;
 
-        // output stuff
+        // output stuff to files
         generate_output(vm, s, best, initial_settings);
 #if USE_CANONICAL_SNAPSHOT
         Snapshot::clear_pool();
