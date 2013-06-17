@@ -7,13 +7,13 @@ print filename
 
 f = open(filename, "r")
 
-splitter = re.compile("\[(.*)\]:\W+(.*?)\W\((.*)\)")
+splitter = re.compile(". \[(.*)\]:\W+(.*?)\W\((.*)\)\W*\(.*\)")
 current_intree = ""
 current_stuff = []
 count = 0
 
 for l in f:
-    if not l.startswith("["): #]
+    if not (l.startswith("*") or l.startswith(" ")): #]
         count = count + 1
         if(len(current_stuff)>1):
             printme3 = False

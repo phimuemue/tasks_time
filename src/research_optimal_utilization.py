@@ -50,7 +50,7 @@ for c in [generate_trees(lower, upper), random_trees(upper)][lower=="random"]:
     output = tasks.communicate()[0]
     printing = False
     for l in output.splitlines():
-        if l.startswith("Best"):
+        if l.startswith("Total"):
             printing = False
         if printing:
             fil.write(l)
