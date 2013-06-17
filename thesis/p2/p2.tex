@@ -4,7 +4,7 @@
 \section{Another recursion describing optimal expected run time}
 \label{sec:p2-simple-method-for-runtime}
 
-\newcommand{\profile}[1]{\llbracket #1 \rrbracket}
+\newcommand{\profile}[1]{\left\llbracket #1 \right\rrbracket}
 
 If one considers the problem of scheduling an intree onto two processors, it becomes clear that HLF is optimal (\todo{Proof.}). \todo{Is the following correct:} Moreover, we can conclude that we can compute the optimal expected finish time in polynomial time.
 
@@ -76,28 +76,41 @@ If we consider the second case of equation (\ref{eq:p2-profile-optimal-exp-run-t
 \end{equation}
 with $SUC$ as defined before.
 
-Unfortunately, this recurrence relation does not significantly simplify the original problem. However, we were able to deduce the following conjecture.
+Unfortunately, this recurrence relation does not significantly simplify the original problem. However, we were able to deduce a theorem that can be used for special cases.
 
-\begin{conjecture}
-  Let $\profile{n_1,n_2,\dots,n_r}$ be a profile where 
-  $\left|\left\{ i \in \left\{ 2,3,\dots,r \right\} \mid n_i > 1 \right\}\right| \leq 1$ 
-  (i.e. all but at most one profile entry -- besides possibly the first entry -- are 1).
-  Then we can compute 
+%\newcommand{\profileones}[1]{\mathbb{1}^#1}
+\newcommand{\profileones}[1]{(1)^{#1}}
+\begin{definition}[Compact notation of profiles]
+  For a profile $p$, we introduce a shorthand notation that groups successive ones. That is, instead of writing $j$ consecutive ones, we simply write $\profileones{j}$.
+\end{definition}
+
+As a simple example, we rewrite $\profile{2,1,1,1,5,2,1,1,1,1,1,2,1}$ as 
+$\profile{2,\profileones{3},5,2,\profileones{5},2,\profileones{1}}$.
+
+\begin{theorem}
+  \label{theo:simple-profiles-exp-runtime-for-p2-hlf}
+  Let $\profile{n_1,\profileones{j-2},n_j,\profileones{r-j}}$ be a profile 
+  %where 
+  %$\left|\left\{ i \in \left\{ 2,3,\dots,r \right\} \mid n_i > 1 \right\}\right| \leq 1$ 
+  (i.e. at most the first and one other entry of the profile are different from 1).
+  Then it holds that
   \begin{equation*}
-    \profile{n_1,n_2,\dots,n_r} = \sum_{i=1}^r \left( \frac{A_{i-1}(n_i - 2)}{2^{n_i+i-2}} \right),
+    \profile{n_1,\profileones{j-2},n_j,\profileones{r-j}} = 
+    r + \frac{A_0(n_1-2)}{2^{n_1-1}} + \frac{A_{j-1}(n_j-2)}{2^{n_j+j-2}},
   \end{equation*}
+  % Then we can compute 
+  % \begin{equation*}
+  %   \profile{n_1,n_2,\dots,n_r} = 
+  %   r + \sum_{i=1}^r \left( \frac{A_{i-1}(n_i - 2)}{2^{n_i+i-2}} \right),
+  % \end{equation*}
   where $A_i$ is inductively defined as follows:
   \begin{align*}
     A_0(n) & = (n+1) \cdot 2^n \\
-    A_{i+1}(n) & = \sum_{k=1}^n A_{i}(k)
+    A_{i+1}(n) & = \sum_{k=0}^n A_{i}(k)
   \end{align*}
-\end{conjecture}
+\end{theorem}
 
-Table \ref{tab:example-values-an-p2-profile} shows values for $A_i(n)$ for $(i,n) \in \left( \left\{ 0,1,\dots,4 \right\} \times \left\{ -1,0,1,2,\dots,5 \right\} \right)$.
-
-\todo{OEIS zitieren.}
-
-\begin{table}[ht]
+\begin{table}
   \centering
   \begin{tabular}[ht]{ccccccccl}
     $n$ & -1 & 0 & 1 & 2 & 3 & 4 & 5 & Closed term \\
@@ -113,13 +126,96 @@ Table \ref{tab:example-values-an-p2-profile} shows values for $A_i(n)$ for $(i,n
     $A_4(n)$ & 0 & 1 & 8 & 38 & 140 & 443 & 1268 &
     $(n-3)\cdot2^{n+4}+\binom{n+3}{3}+4\cdot\left(\binom{n+1}{2}+4 n+12\right)$ \\
   \end{tabular}
-  \caption{Example values for $A_i(n)$}
+  \caption{Example values for $A_i(n)$. \todo{OEIS zitieren.}}
   \label{tab:example-values-an-p2-profile}
 \end{table}
 
-Note that there are closed expressions for $A_i(n)$ for a fixed $i$. However, these formulae are quite complex (also see table \ref{tab:example-values-an-p2-profile}) and we were not able to deduce a \emph{simple} pattern according to which $A_i(n)$ can be constructed\todo[Hr. Mayr]{Sagen Ihnen die Polynombestandteile in Tabelle \ref{tab:example-values-an-p2-profile} etwas?}. It seems that $A_i(n)$ involves the term $(n+1-i)\cdot 2^{n+i}$ in some way, and the remaining term seems to be a polynomial in $n$.
+Before we prove theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf}, let us have a look at table \ref{tab:example-values-an-p2-profile} showing values for $A_i(n)$ for small values of $i$ and $n$.
+%$(i,n) \in \left( \left\{ 0,1,\dots,4 \right\} \times \left\{ -1,0,1,2,\dots,5 \right\} \right)$. 
 
-We examined this conjecture, but we were not able to deduce a more general formula that holds if more entries in the profile differ from 1.
+From this table and by looking at the definition of $A_i(n)$ we can deduce a simple lemma that will later be useful.
+
+Note that there are closed expressions for $A_i(n)$ for $i\leq 5$ (and possibly for higher values of $i$, as well). However, these formulae are quite complex (also see table \ref{tab:example-values-an-p2-profile}) and we were not able to deduce a \emph{simple} pattern according to which $A_i(n)$ can be constructed\todo[Hr. Mayr]{Sagen Ihnen die Polynombestandteile in Tabelle \ref{tab:example-values-an-p2-profile} etwas?}. It seems that $A_i(n)$ involves the term $(n+1-i)\cdot 2^{n+i}$ in some way, and the remaining term seems to be a polynomial in $n$.
+
+\begin{lemma}
+  \label{lemma:p2-hlf-profiles-an-simple-recurrence}
+  Let $A_i(n)$ be as defined in theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf}. Then, we have
+  \begin{equation*}
+    A_{j-1}(n) + A_{j}(n-1) = A_{j}(n).
+  \end{equation*}
+\end{lemma}
+
+\begin{proof}
+  Proof is trivial by definition of $A_{j}(n) = \sum_{k=0}^{n} A_{j-1}(k) = A_{j-1}(n) + \sum_{k=0}^{n-1} A_{j-1}(k) = A_{j-1}(n) + A_{j}(n-1)$.
+\end{proof}
+
+We can now proof theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf}.
+
+\begin{proof}[Proof of theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf}]
+  We prove theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf} by complete induction. The base case $\profile{\profileones{r}} = r$ is clear because in this case we can always schedule exactly one task. Since there are $r$ tasks in total, this results in an expected run time of $r$ (each task is expected to be exponentially distributed with expectation 1).
+
+  We now consider the special cases where \emph{all elements but one} in the profile are 1. That is, we consider the profile, whose elements are all 1, exctept the element at position $j$, which will be $n$. That is, we examine
+  \begin{equation*}
+    \profile{\profileones{j-1},n,\profileones{r-j}}.
+  \end{equation*}
+  We can rewrite this using the definition and afterwards apply the induction hypothesis:
+
+  \begin{eqnarray*}
+    \profile{\profileones{j-1},n,\profileones{r-j}}.
+    & = & 
+    \frac{1}{2} + \frac{1}{2} \cdot 
+    \left( 
+      \profile{\profileones{j-2},n,\profileones{r-j}} + 
+      \profile{\profileones{j-1},n-1,\profileones{r-j}}
+    \right) = \\
+    & = & 
+    \frac{1}{2} + \frac{1}{2} \cdot 
+    \left( 
+      (r-1) + \frac{A_{j-2}(n-2)}{2^{n+(j-1)-2}} +
+      r + \frac{A_{j-1}(n-3)}{2^{(n-1)+j-2}}
+    \right)
+  \end{eqnarray*}
+  We now apply lemma Lemma \ref{lemma:p2-hlf-profiles-an-simple-recurrence} and obtain
+  \begin{eqnarray*}
+    \profile{\profileones{j-1},n,\profileones{r-j}}
+    & = & 
+    \frac{1}{2} + \frac{1}{2} \cdot 
+    \left( 
+      (r-1)+r + 
+      \frac{A_{j-2}(n-2) + A_{j-1}(n-3)}{2^{n+j-3}} +
+    \right) = \\
+    & = &
+    \frac{1}{2} + \frac{1}{2} \cdot 
+    \left( 
+      2r - 1
+      \frac{A_{j-1}(n-2)}{2^{n+j-3}} +
+    \right) = \\
+    & = &
+    \frac{1}{2} + 
+    r - \frac{1}{2}
+    \frac{A_{j-1}(n-2)}{2^{n+j-2}} = \\
+    & = &
+    r + \frac{A_{j-1}(n-2)}{2^{n+j-2}}
+  \end{eqnarray*}
+
+  We conclude the proof by deriving the expected run time for $\profile{m,\profileones{j-2},n,\profileones{r-j}}$. We do this by applying the definition and thereby reducing the problem to $\profile{\profileones{j-1},n,\profileones{r-j}}$:
+
+  \begin{eqnarray*}
+    \profile{m,\profileones{j-2},n,\profileones{r-j}}
+    & = & 
+    \frac{m-1}{2} + \profile{\profileones{j-1},n,\profileones{r-j}} = \\
+    & = &
+    \frac{m-1}{2} + r + \frac{A_{j-1}(n-2)}{2^{n+j-2}} = \\
+    & = &
+    \frac{(m-1)\cdot 2^{m-2}}{2^{m-1}} + r + \frac{A_{j-1}(n-2)}{2^{n+j-2}} = \\
+    & = &
+    \frac{A_0(m-2)}{2^{m-1}} + r + \frac{A_{j-1}(n-2)}{2^{n+j-2}}
+  \end{eqnarray*}
+  
+  This concludes the proof.
+\end{proof}
+
+Even if we were not able to deduce a more general formula that holds if more entries in the profile differ from 1, this might serve as a starting point for a more advanced proof.
 
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"

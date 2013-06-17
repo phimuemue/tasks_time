@@ -32,8 +32,9 @@
 \newcommand{\remark}[2][]{\textcolor{red!70!yellow}{REMARK\ifthenelse{\equal{#1}{}}{}{[#1]}: #2}}
 
 \newtheorem{definition}{Definition}[chapter]
-\newtheorem{theorem}{Theorem}[chapter]
-\newtheorem{conjecture}{Conjecture}[chapter]
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{conjecture}[definition]{Conjecture}
 
 \newcommand{\p}[1]{Pr\left[#1\right]}
 \newcommand{\alltasks}{{\mathbb T}}

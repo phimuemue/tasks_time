@@ -33,6 +33,9 @@ for l in f:
                         print "3pl really suboptimal"
                     if m[1][2] > c[1][2]:
                         print "1ps really suboptimal"
+                    if m[1][0] < c[1][0] and m[1][2] > c[1][2]:
+                        print "alarm"
+                        print m, c
                 for i in current_stuff:
                     print i[0], i[1]
         current_intree = l

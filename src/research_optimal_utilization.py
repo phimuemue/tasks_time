@@ -9,6 +9,13 @@ def generate_trees(M,N):
         print "Beginning with %d tasks"%n
         lst = [[j for j in xrange(i+1)] for i in xrange(n)]
         for comb in itertools.product(*lst):
+            useful = True
+            for i in xrange(len(comb)-1):
+                if comb[i]>comb[i+1]:
+                    useful = False
+                    break
+            if not useful:
+                continue
             good = True
             for i in xrange(n):
                 if comb[i]>i:
@@ -19,7 +26,7 @@ def generate_trees(M,N):
 def random_trees(N):
     lst = [[j for j in xrange(i+1)] for i in xrange(N+1)]
     while(True):
-        yield(random.choice(l) for l in lst)
+        yield tuple(random.choice(l) for l in lst)
 
 lower = 0
 upper = 0
