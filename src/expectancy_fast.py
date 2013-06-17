@@ -40,6 +40,12 @@ referencelist = [1 for _ in xrange(l)]
 referencelist[pos] = 1
 ref = exp_test(referencelist)
 
+for i in xrange(1,9):
+    for j in xrange(1,9):
+        lst = [2] * i + [1] * j
+        print lst, exp_test(lst)
+exit()
+
 for i in xrange(1, 7):
     lst = referencelist[:]
     lst[pos] = i
