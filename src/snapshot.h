@@ -40,6 +40,7 @@ class Snapshot {
 
         // we cache the result of expected_runtime
         mutable myfloat cache_expected_runtime;
+        mutable map<unsigned int, myfloat> cache_expected_runtime_for_n_procs;
 
         // TODO: combine successors and successor_probs into 1 vector!
         vector<Snapshot*> successors;

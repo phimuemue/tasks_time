@@ -364,6 +364,9 @@ myfloat Snapshot::expected_runtime() const {
 }
 
 myfloat Snapshot::expected_time_for_n_processors(unsigned int p) const {
+    if(cache_expected_runtime_for_n_procs.find(p) != cache_expected_runtime_for_n_procs.end()){
+        return cache_expected_runtime_for_n_procs[p];
+    }
     if(p==1 && intree.count_tasks() == 1){
         return 1;
     }
@@ -375,6 +378,7 @@ myfloat Snapshot::expected_time_for_n_processors(unsigned int p) const {
         tmp *= ((marked.size() == p ? transition_time : 0) + future_time);
         result += tmp;
     }
+    cache_expected_runtime_for_n_procs[p] = result;
     return result;
 }
 
