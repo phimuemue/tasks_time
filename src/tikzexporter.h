@@ -14,7 +14,7 @@ class TikzExporter : public Exporter {
                 map<Snapshot*, bool>& done,
                 unsigned int depth) const;
 
-        void export_single_snapshot_internal(ostream& output,
+        virtual void export_single_snapshot_internal(ostream& output,
                 const Snapshot& s,
                 const task_id t,
                 const map<task_id, vector<task_id>>& rt,

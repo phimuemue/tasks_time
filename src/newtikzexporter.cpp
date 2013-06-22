@@ -46,15 +46,15 @@ void TikzExporter2::tikz_dag_by_levels(const TikzNode* s,
     // for(auto it : consec_num){
     //     cout << "E: " << *(it.first.snapshot) << endl;
     // }
-    cout << "Wanna add " << s->snapshot << ": " << *s->snapshot << endl;
+    //cout << "Wanna add " << s->snapshot << ": " << *s->snapshot << endl;
     if(consec_num.find(*s)==consec_num.end()){
-        cout << "Adding " << s->snapshot << ": " << *s->snapshot << endl;
+        //cout << "Adding " << s->snapshot << ": " << *s->snapshot << endl;
         levels[depth].push_back(s);
         consec_num[*s] = consec_num.size();
         tikz_representants[s] = const_cast<TikzNode*>(s);
     }
     else {
-        cout << "Already have " << s->snapshot << ": " << *s->snapshot << endl;
+        //cout << "Already have " << s->snapshot << ": " << *s->snapshot << endl;
         //const Snapshot* snaptmp = s->snapshot;
         //tikz_representants[s] = tikz_nodes.find(consec_num.find(*s)->first.snapshot)->second;
         // for(auto& it : tikz_nodes){
@@ -91,7 +91,7 @@ void TikzExporter2::tikz_dag_by_levels(const TikzNode* s,
     //         }
     //     }
     // }
-    cout << endl;
+    //cout << endl;
 }
 
 void TikzExporter2::export_snapshot_dag(ostream& output, const Snapshot* s) const {

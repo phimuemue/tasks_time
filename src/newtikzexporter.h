@@ -4,7 +4,7 @@
 #include "tikzexporter.h"
 
 class TikzExporter2 : public TikzExporter {
-    private:
+    protected:
         class TikzNode;
         typedef pair<TikzNode*, myfloat> TNSuc;
         typedef vector<TNSuc> TNSucs;
@@ -21,7 +21,6 @@ class TikzExporter2 : public TikzExporter {
                     return snapshot < b.snapshot;
                 }
         };
-    protected:
         // routines to draw one single snapshot properly are in TikzExporter
 
         // routines to draw DAG of snaps
