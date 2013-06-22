@@ -43,26 +43,44 @@ void TikzExporter2::tikz_dag_by_levels(const TikzNode* s,
                 tikz_representants,
                 consec_num);
     }
+    // for(auto it : consec_num){
+    //     cout << "E: " << *(it.first.snapshot) << endl;
+    // }
+    cout << "Wanna add " << s->snapshot << ": " << *s->snapshot << endl;
     if(consec_num.find(*s)==consec_num.end()){
-        cout << "Adding " << *s->snapshot << endl;
+        cout << "Adding " << s->snapshot << ": " << *s->snapshot << endl;
         levels[depth].push_back(s);
-        for(auto& it : tikz_nodes){
-            auto& cur_tikz_node = it.second;
-            for(auto& tsuc : cur_tikz_node->successors){
-                if(*tsuc.first->snapshot==*s->snapshot){
-                    //auto new_one = const_cast<TikzNode*>(levels[depth].back());
-                    // cout << "Found as suc of " << *cur_tikz_node->snapshot << endl;
-                    // cout << "Changing:" << endl;
-                    // cout << "Original: " << *tsuc.first->snapshot << tsuc.first << endl;
-                    // cout << "New:      " << *new_one->snapshot << new_one->snapshot << endl;
-                    // tsuc.first = new_one;
-                    //cout << "Now:      " << *tsuc.first->snapshot << tsuc.first->snapshot << endl;
-                    //tikz_representants[tsuc.first] = const_cast<TikzNode*>(s);
-                }
-            }
-        }
+        consec_num[*s] = consec_num.size();
+        tikz_representants[s] = const_cast<TikzNode*>(s);
     }
-    consec_num[*s] = consec_num.size();
+    else {
+        cout << "Already have " << s->snapshot << ": " << *s->snapshot << endl;
+        //const Snapshot* snaptmp = s->snapshot;
+        //tikz_representants[s] = tikz_nodes.find(consec_num.find(*s)->first.snapshot)->second;
+        // for(auto& it : tikz_nodes){
+        //     auto& cur_tikz_node = it.second;
+        //     for(auto& tsuc : cur_tikz_node->successors){
+        //         if(tsuc.first->snapshot==s->snapshot){
+        //             auto new_one = const_cast<TikzNode*>(levels[depth].back());
+        //             cout << "Found as suc of " << *cur_tikz_node->snapshot << endl;
+        //             cout << "Changing:" << endl;
+        //             cout << "Original: " << *tsuc.first->snapshot << tsuc.first << endl;
+        //             cout << "New:      " << *new_one->snapshot << new_one->snapshot << endl;
+        //             tsuc.first = new_one;
+        //             cout << "Now:      " << *tsuc.first->snapshot << tsuc.first->snapshot << endl;
+        //             tikz_representants[tsuc.first] = const_cast<TikzNode*>(s);
+        //         }
+        //     }
+        // }
+        // for(auto& it : tikz_nodes){
+        //     auto& cur_tikz_node = it.second;
+        //     for(auto& tsuc : cur_tikz_node->successors){
+        //         if(tsuc.first->snapshot==snaptmp){
+        //             cout << "Something wrong!" << endl;
+        //         }
+        //     }
+        // }
+    }
     // if(depth==1){
     //     for(unsigned int i=0; i<levels.size(); ++i){
     //         for(auto it : levels[i]){
@@ -73,11 +91,13 @@ void TikzExporter2::tikz_dag_by_levels(const TikzNode* s,
     //         }
     //     }
     // }
+    cout << endl;
 }
 
 void TikzExporter2::export_snapshot_dag(ostream& output, const Snapshot* s) const {
     map<const Snapshot*, TikzNode*> tikz_nodes;
     generate_tikz_nodes(s, s, tikz_nodes);
+    assert(tikz_nodes.size() == s->count_snapshots_in_dag());
     map<const TikzNode, unsigned int> consec_num;
     map<unsigned int, vector<const TikzNode*>> levels;
     map<const TikzNode*, TikzNode*> tikz_representants;
@@ -101,6 +121,15 @@ void TikzExporter2::export_snapshot_dag(ostream& output, const Snapshot* s) cons
     // export to TikZ
     export_snapshot_dag_begin(output, s);
     map<const TikzNode*, string> names;
+    // for(auto& level : levels){
+    //     for(auto& it: level.second){
+    //         names[it] = tikz_node_name(it->snapshot);
+    //     }
+    // }
+    for(auto& tn : tikz_nodes){
+        names[tn.second] = tikz_node_name(tn.second->snapshot);
+    }
+    cout << "SIZE: " << names.size() << endl;
     tikz_string_dag_compact_internal(tikz_nodes[s],
             output,
             tikz_representants,
@@ -215,6 +244,7 @@ void TikzExporter2::tikz_string_dag_compact_internal(const TikzNode* s,
         for(unsigned int l=1; l<s->snapshot->intree.count_tasks()+1-task_count_limit; ++l){
             for(auto it=levels[l].begin(); it!=levels[l].end(); ++it){
                 for(auto sit:(*it)->successors){
+                    names[sit.first] = tikz_node_name(sit.first->snapshot);
                     output << "\\draw ("
                         << tikz_node_name((*it)->snapshot)
                         << ".south) -- "

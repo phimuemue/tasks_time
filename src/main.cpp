@@ -26,6 +26,7 @@
 #include "exporter.h"
 #include "tikzexporter.h"
 #include "newtikzexporter.h"
+#include "newtikzexporter.h"
 #include "dagviewexporter.h"
 
 #include "alltrees.h"
