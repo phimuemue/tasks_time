@@ -552,12 +552,12 @@ string Snapshot::markedstring(){
     return os.str();
 }
 
-unsigned long Snapshot::count_snapshots_in_dag(){
+unsigned long Snapshot::count_snapshots_in_dag() const {
     map<const Snapshot*, bool> tmp;
     return count_snapshots_in_dag(tmp);
 }
 
-unsigned long Snapshot::count_snapshots_in_dag(map<const Snapshot*, bool>& tmp){
+unsigned long Snapshot::count_snapshots_in_dag(map<const Snapshot*, bool>& tmp) const {
     if(tmp.find(this)!=tmp.end()){
         return 0;
     }
