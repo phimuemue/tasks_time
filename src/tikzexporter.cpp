@@ -242,9 +242,19 @@ void TikzExporter::tikz_draw_node(const Snapshot* s,
                     );
         }
         sort(successor_probs_in_order.begin(), successor_probs_in_order.end(),
-                [&](const pair<Snapshot*,myfloat>& a, const pair<Snapshot*,myfloat>& b) -> bool {
-                return consec_num[a.first] < consec_num[b.first];
+                [](const pair<Snapshot*,myfloat>& a, const pair<Snapshot*,myfloat>& b) -> bool {
+                map<task_id, task_id> iso;
+                tree_id ta, tb;
+                Intree::canonical_intree(
+                    a.first->intree, a.first->marked, iso, ta);
+                Intree::canonical_intree(
+                    b.first->intree, b.first->marked, iso, tb);
+                return ta < tb;
                 }
+                // The following does not coincide with the sorting in levels!
+                // [&](const pair<Snapshot*,myfloat>& a, const pair<Snapshot*,myfloat>& b) -> bool {
+                // return consec_num[a.first] < consec_num[b.first];
+                // }
             );
         output << "\\nodepart{" << tikz_partnames[partindex++] << "}" << endl
             << "\\footnotesize{$";
