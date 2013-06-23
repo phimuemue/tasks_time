@@ -12,7 +12,8 @@ class ChainSideExporter : public TikzExporter2 {
                 const map<task_id, vector<task_id>>& rt,
                 const unsigned int depth,
                 const float leftoffset) const;
-
+        bool same_chain_side(const TikzNode* a, const TikzNode *b) const;
+        virtual void consolidate_levels(map<unsigned int, vector<const TikzNode*>>& levels) const ;
 };
 
 #endif

@@ -214,9 +214,15 @@ void create_snapshot_dags(const po::variables_map& vm,
     sched->get_initial_schedule(t, vm["processors"].as<int>(), initial_settings);
     cout << "Generating initial settings." << endl;
     s = vector<Snapshot*>(initial_settings.size());
+#if USE_CANONICAL_SNAPSHOT
     for(unsigned int i= 0; i<initial_settings.size(); ++i){
         s[i] = Snapshot::canonical_snapshot(Snapshot(t, initial_settings[i]));
     }
+#else
+    for(unsigned int i= 0; i<initial_settings.size(); ++i){
+        s[i] = Snapshot::find_snapshot_in_pool(Snapshot(t, initial_settings[i]));
+    }
+#endif
 #if USE_CANONICAL_SNAPSHOT
     vector<Snapshot*> p_s;
     for(auto it=s.begin(); it!=s.end(); ++it){
@@ -252,7 +258,7 @@ void generate_output(const po::variables_map& vm,
         }
         cout << "Writing tikz to " << filename << endl;
         tikz_output.open(filename);
-        TikzExporter2 tikz_exporter(
+        TikzExporter tikz_exporter(
                 vm["tikzexp"].as<bool>(),
                 vm["tikzprobs"].as<bool>(),
                 vm["tikzreachprobs"].as<bool>(),

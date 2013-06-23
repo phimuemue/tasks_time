@@ -94,6 +94,11 @@ void TikzExporter2::tikz_dag_by_levels(const TikzNode* s,
     //cout << endl;
 }
 
+void TikzExporter2::consolidate_levels(map<unsigned int, vector<const TikzNode*>>& levels) const{
+    // this can be used in inherited classes to modify the level structure!
+    return;
+}
+
 void TikzExporter2::export_snapshot_dag(ostream& output, const Snapshot* s) const {
     map<const Snapshot*, TikzNode*> tikz_nodes;
     generate_tikz_nodes(s, s, tikz_nodes);
@@ -105,6 +110,7 @@ void TikzExporter2::export_snapshot_dag(ostream& output, const Snapshot* s) cons
         tikz_representants[it.second] = it.second;
     }
     tikz_dag_by_levels(tikz_nodes[s], levels, 1, tikz_nodes, tikz_representants, consec_num);
+    consolidate_levels(levels);
     for(auto& it : levels){
         sort(it.second.begin(), it.second.end(),
                 [](const TikzNode* a, const TikzNode* b) -> bool {
@@ -129,7 +135,6 @@ void TikzExporter2::export_snapshot_dag(ostream& output, const Snapshot* s) cons
     for(auto& tn : tikz_nodes){
         names[tn.second] = tikz_node_name(tn.second->snapshot);
     }
-    cout << "SIZE: " << names.size() << endl;
     tikz_string_dag_compact_internal(tikz_nodes[s],
             output,
             tikz_representants,
@@ -293,3 +298,45 @@ void TikzExporter2::export_snapshot_dag_end(ostream& output, const Snapshot* s) 
     output << "%%% End: " << endl;
 }
 
+void TikzExporter2::merge_tikz_nodes(map<unsigned int, vector<const TikzNode*>>& levels,
+        unsigned int l,
+        const TikzNode* a,
+        const TikzNode* b) const {
+    assert(find(levels[l].begin(), levels[l].end(), a)!=levels[l].end());
+    assert(find(levels[l].begin(), levels[l].end(), b)!=levels[l].end());
+    TikzExporter2::TNSucs new_successors(a->successors);
+    for(auto& it : new_successors){
+        it.second = it.second * (myfloat)a->reaching_prob;
+    }
+    for(auto it : b->successors){
+        for(auto& f : new_successors){
+            if(f.first == it.first){
+                f.second = f.second + (it.second * b->reaching_prob);
+            }
+        }
+    }
+    // merge TikzNodes in current level
+    // TODO: Need a delete after the new!
+    TikzNode* combined_tn = new TikzNode(a->snapshot,
+            a->reaching_prob + b->reaching_prob, new_successors
+            );
+    levels[l].erase(remove(levels[l].begin(), levels[l].end(), a), levels[l].end());
+    levels[l].erase(remove(levels[l].begin(), levels[l].end(), b), levels[l].end());
+    levels[l].push_back(combined_tn);
+    // update successor in parent levels
+    for(auto& tn : levels[l-1]){
+        for(unsigned int i = 0; i < tn->successors.size(); ++i){
+            if(tn->successors[i].first == a || tn->successors[i].first == b){
+                TikzExporter2::TNSucs new_sucs(tn->successors);
+                for(unsigned int j = i+1; j < new_sucs.size(); ++j){
+                    if(new_sucs[j].first == a || new_sucs[j].first == b){
+                        //tn->successors[i].second += tn->successors[j].second;
+                        new_sucs.erase(new_sucs.begin()+j);
+                        new_sucs[i].second += new_sucs[j].second;
+                    }
+                }
+                break;
+            }
+        }
+    }
+}

@@ -52,6 +52,11 @@ class TikzExporter2 : public TikzExporter {
                 map<const TikzNode, unsigned int>& consec_num) const ;
         void export_snapshot_dag_begin(ostream& output, const Snapshot* s) const;
         void export_snapshot_dag_end(ostream& output, const Snapshot* s) const;
+        void merge_tikz_nodes(map<unsigned int, vector<const TikzNode*>>& levels,
+                unsigned int level,
+                const TikzNode* a,
+                const TikzNode* b) const;
+        virtual void consolidate_levels(map<unsigned int, vector<const TikzNode*>>& levels) const ;
     public:
         // adjustment variables for TikZ plots
         bool show_reaching_probabilities;
