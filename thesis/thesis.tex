@@ -20,6 +20,7 @@
 \usepackage{stmaryrd}
 \usepackage{ifthen}
 \usepackage[left=2.5cm,right=2.5cm]{geometry}
+\usepackage{cite}
 
 \usetikzlibrary{shapes.multipart,chains}
 \usetikzlibrary{positioning}
@@ -38,6 +39,7 @@
 \newtheorem{conjecture}[definition]{Conjecture}
 
 \newcommand{\E}[1]{\mathbb{E}\left[ #1 \right]}
+\newcommand{\naturals}{\mathbb{N}}
 
 \newcommand{\p}[1]{Pr\left[#1\right]}
 \newcommand{\alltasks}{{\mathbb T}}
@@ -152,5 +154,7 @@ This is just a test chapter to see how we can draw the intrees and the snapshot 
 
 \include{p3/p3}
 
+\bibliographystyle{plain}
+\bibliography{bib}
 
 \end{document}

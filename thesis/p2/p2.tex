@@ -79,7 +79,8 @@ with $SUC$ as defined before.
 Unfortunately, this recurrence relation does not significantly simplify the original problem. However, we were able to deduce a theorem that can be used for special cases.
 
 %\newcommand{\profileones}[1]{\mathbb{1}^#1}
-\newcommand{\profileones}[1]{(1)^{#1}}
+\newcommand{\profilerepeat}[2]{(#1)^{#2}}
+\newcommand{\profileones}[1]{\profilerepeat{1}{#1}}
 \begin{definition}[Compact notation of profiles]
   For a profile $p$, we introduce a shorthand notation that groups successive ones. That is, instead of writing $j$ consecutive ones, we simply write $\profileones{j}$.
 \end{definition}
@@ -182,13 +183,13 @@ We can now proof theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf}.
     \frac{1}{2} + \frac{1}{2} \cdot 
     \left( 
       (r-1)+r + 
-      \frac{A_{j-2}(n-2) + A_{j-1}(n-3)}{2^{n+j-3}} +
+      \frac{A_{j-2}(n-2) + A_{j-1}(n-3)}{2^{n+j-3}}
     \right) = \\
     & = &
     \frac{1}{2} + \frac{1}{2} \cdot 
     \left( 
       2r - 1
-      \frac{A_{j-1}(n-2)}{2^{n+j-3}} +
+      \frac{A_{j-1}(n-2)}{2^{n+j-3}}
     \right) = \\
     & = &
     \frac{1}{2} + 
@@ -213,6 +214,30 @@ We can now proof theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf}.
   \end{eqnarray*}
   
   This concludes the proof.
+\end{proof}
+
+Moritz Maaß has shown another property in \cite{MoritzMaasDiploma}, that we are able to generalize.
+
+\begin{theorem}[Intrees with exactly two leaves]
+  Let $l, k\in\naturals$, $a\in\naturals_0$ and $\profile{\profilerepeat{1}{l-k}, \profilerepeat{2}{k}, \profilerepeat{1}{a+1}}$. Then, it holds that
+  \begin{eqnarray*}
+    \profile{\profilerepeat{1}{l-k}, \profilerepeat{2}{k}, \profilerepeat{1}{a+1}} 
+    = & &
+    % the following is an incorrect simplification of Maple
+    % a
+    % + 2 
+    % - \frac{\binom{l+k-1}{k} + \binom{l+k-1}{l}}{2^{l+k}}
+    % +  \sum_{i=1}^k \sum_{j=1}^l \left( \frac{1}{2} \right)^{k-i+l-j+1}\cdot \binom{k-i+l-j}{l-j}
+    \sum_{i=1}^k \left(\frac{1}{2}\right)^{l+i-1} \cdot \binom{l+i-2}{i-1} \cdot \left( k-i+2 \right) \\
+    & + & \sum_{j=1}^l \left(\frac{1}{2}\right)^{k+j-1} \cdot \binom{k+j-2}{j-1} \cdot \left( l-j+2 \right) \\
+    & + & \sum_{i=1}^k \sum_{j=1}^l \left( \frac{1}{2}^{k-i+l-j+1}\cdot\binom{ki+l-j}{l-j} \right) \\
+    & + & a
+    .
+  \end{eqnarray*}
+\end{theorem}
+
+\begin{proof}
+  \todo{Proof.}
 \end{proof}
 
 Even if we were not able to deduce a more general formula that holds if more entries in the profile differ from 1, this might serve as a starting point for a more advanced proof.

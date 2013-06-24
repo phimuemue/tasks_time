@@ -40,10 +40,15 @@ referencelist = [1 for _ in xrange(l)]
 referencelist[pos] = 1
 ref = exp_test(referencelist)
 
-for i in xrange(1,9):
-    for j in xrange(1,9):
+for i in xrange(1,8):
+    for j in xrange(1,2):
         lst = [2] * i + [1] * j
-        print lst, exp_test(lst)
+        print "[%d, %d] %s"%(i, j, str(exp_test(lst)))
+        lst2 = [1,1] + lst
+        print "[%d, %d]' %s"%(i, j, str(exp_test(lst2)))
+        print exp_test(lst2) - exp_test(lst)
+
+print(exp_test([1,2,1]))
 exit()
 
 for i in xrange(1, 7):
