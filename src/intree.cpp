@@ -376,7 +376,7 @@ unsigned int Intree::longest_chain_length() const{
 }
 
 void Intree::get_raw_tree_id(tree_id& target){
-    for(unsigned int i=0; i<edges.size(); ++i){
+    for(unsigned int i=0; i<edges.size()+1; ++i){
         target.push_back((task_id)-1);
     }
     for(const pair<task_id, task_id>& it : edges){
