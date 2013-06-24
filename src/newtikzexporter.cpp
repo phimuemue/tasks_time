@@ -7,7 +7,8 @@ TikzExporter2::TikzExporter2(bool se,
     show_reaching_probabilities(srp),
     show_probabilities(sp),
     show_expectancy(se),
-    task_count_limit(tcl)
+    task_count_limit(tcl),
+    horizontal(false)
 {
 }
 
@@ -46,55 +47,11 @@ void TikzExporter2::tikz_dag_by_levels(const TikzNode* s,
                 tikz_representants,
                 consec_num);
     }
-    // for(auto it : consec_num){
-    //     cout << "E: " << *(it.first.snapshot) << endl;
-    // }
-    //cout << "Wanna add " << s->snapshot << ": " << *s->snapshot << endl;
     if(consec_num.find(*s)==consec_num.end()){
-        //cout << "Adding " << s->snapshot << ": " << *s->snapshot << endl;
         levels[depth].push_back(s);
         consec_num[*s] = consec_num.size();
         tikz_representants[s] = const_cast<TikzNode*>(s);
     }
-    else {
-        //cout << "Already have " << s->snapshot << ": " << *s->snapshot << endl;
-        //const Snapshot* snaptmp = s->snapshot;
-        //tikz_representants[s] = tikz_nodes.find(consec_num.find(*s)->first.snapshot)->second;
-        // for(auto& it : tikz_nodes){
-        //     auto& cur_tikz_node = it.second;
-        //     for(auto& tsuc : cur_tikz_node->successors){
-        //         if(tsuc.first->snapshot==s->snapshot){
-        //             auto new_one = const_cast<TikzNode*>(levels[depth].back());
-        //             cout << "Found as suc of " << *cur_tikz_node->snapshot << endl;
-        //             cout << "Changing:" << endl;
-        //             cout << "Original: " << *tsuc.first->snapshot << tsuc.first << endl;
-        //             cout << "New:      " << *new_one->snapshot << new_one->snapshot << endl;
-        //             tsuc.first = new_one;
-        //             cout << "Now:      " << *tsuc.first->snapshot << tsuc.first->snapshot << endl;
-        //             tikz_representants[tsuc.first] = const_cast<TikzNode*>(s);
-        //         }
-        //     }
-        // }
-        // for(auto& it : tikz_nodes){
-        //     auto& cur_tikz_node = it.second;
-        //     for(auto& tsuc : cur_tikz_node->successors){
-        //         if(tsuc.first->snapshot==snaptmp){
-        //             cout << "Something wrong!" << endl;
-        //         }
-        //     }
-        // }
-    }
-    // if(depth==1){
-    //     for(unsigned int i=0; i<levels.size(); ++i){
-    //         for(auto it : levels[i]){
-    //             for(auto suc : it->successors){
-    //                 //assert(
-    //                 find(levels[i+1].begin(), levels[i+1].end(), suc.first)!=levels[i+1].end());
-    //             }
-    //         }
-    //     }
-    // }
-    //cout << endl;
 }
 
 void TikzExporter2::consolidate_levels(map<unsigned int, vector<const TikzNode*>>& levels) const{
@@ -244,9 +201,19 @@ void TikzExporter2::tikz_string_dag_compact_internal(const TikzNode* s,
             for(unsigned int i=0; i<l; ++i){
                 output << "I";
             }
-            output << " cm]" << endl;
-            output << "\\matrix (line" << l << ")"
-                << "[column sep=" << sibling_distance << "cm] {" << endl;
+            output << " cm";
+            if(horizontal){
+                output << ", anchor = center";
+            }
+            output << "]" << endl;
+            output << "\\matrix (line" << l << ")";
+            if(horizontal){
+                output << "[row sep=";
+            }
+            else {
+                output << "[column sep=";
+            }
+            output << sibling_distance << "cm] {" << endl;
             for(auto it=levels[l].begin(); it!=levels[l].end(); ++it){
                 tikz_draw_node(*it, 
                         s->snapshot,
@@ -255,7 +222,12 @@ void TikzExporter2::tikz_string_dag_compact_internal(const TikzNode* s,
                         consec_num);
                 names[*it] = tikz_node_name((*it)->snapshot);
                 if(it!=levels[l].end()){
-                    output << " & " << endl;
+                    if(horizontal){
+                        output << " \\\\ " << endl;
+                    }
+                    else{
+                        output << " & " << endl;
+                    }
                 }
             }
             output << "\\\\" << endl << "};" << endl;
@@ -267,10 +239,20 @@ void TikzExporter2::tikz_string_dag_compact_internal(const TikzNode* s,
                 for(auto sit:(*it)->successors){
                     names[sit.first] = tikz_node_name(sit.first->snapshot);
                     output << "\\draw ("
-                        << tikz_node_name((*it)->snapshot)
-                        << ".south) -- "
-                        << "(" 
-                        << names[sit.first] << ".north);" << endl;
+                        << tikz_node_name((*it)->snapshot);
+                    if(horizontal){
+                        output << ".east) -- ";
+                    }
+                    else{
+                        output << ".south) -- ";
+                    }
+                    output << "(" << tikz_node_name((sit.first)->snapshot);
+                    if(horizontal){
+                        output << ".west);" << endl;
+                    }
+                    else{
+                        output << ".north);" << endl;
+                    }
                 }
             }
         }
@@ -343,19 +325,13 @@ void TikzExporter2::merge_tikz_nodes(map<unsigned int, vector<const TikzNode*>>&
     levels[l].erase(remove(levels[l].begin(), levels[l].end(), a), levels[l].end());
     levels[l].erase(remove(levels[l].begin(), levels[l].end(), b), levels[l].end());
     levels[l].push_back(combined_tn);
-    cout << "The combined is: " << combined_tn << ": " << *combined_tn->snapshot << endl;
     
     // update successor in parent levels
     for(unsigned int idx = 0; idx < levels[l-1].size(); ++idx){
-        cout << "Checking " << *levels[l-1][idx]->snapshot << endl;
-        for(auto tmp : levels[l-1][idx]->successors){
-            cout << "  " << tmp.first << ": " << *tmp.first->snapshot << endl;
-        }
         TikzNode* tn = const_cast<TikzNode*>(levels[l-1][idx]);
         // first: substitute a and b by combined_tn
         for(unsigned int i = 0; i < tn->successors.size(); ++i){
             if(tn->successors[i].first == a || tn->successors[i].first == b){
-                cout << "Changing a suc of " << *tn->snapshot << endl;
                 tn->successors[i].first = combined_tn;
             }
         }
@@ -363,17 +339,9 @@ void TikzExporter2::merge_tikz_nodes(map<unsigned int, vector<const TikzNode*>>&
             for(unsigned int j = i+1; j < tn->successors.size(); ++j){
                 // we have to properly decide which one we want to keep
                 if(tn->successors[i].first == combined_tn && tn->successors[j].first == combined_tn){
-                    cout << "Merging requires to change " << *tn->snapshot << ", whose origs are: " << endl;
-                    for(auto tmp : tn->successors){
-                        cout << tmp.first << ": " << *tmp.first->snapshot << endl;
-                    }
                     tn->successors[i].first = combined_tn;
                     tn->successors[i].second += tn->successors[j].second;
                     tn->successors.erase(tn->successors.begin() + j);
-                    cout << "New sucs are: " << endl;
-                    for(auto tmp : tn->successors){
-                        cout << tmp.first << ": " << *tmp.first->snapshot << endl;
-                    }
                 }
             }
         }

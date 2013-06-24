@@ -26,6 +26,20 @@
 \usetikzlibrary{external} 
 %\tikzexternalize
 
+
+\tikzstyle{task_cross}=[
+    {path picture={ 
+        \draw[black]
+        (path picture bounding box.south east) -- 
+        (path picture bounding box.north west) 
+        (path picture bounding box.south west) -- 
+        (path picture bounding box.north east);
+      }
+    }
+]
+
+\tikzstyle{task_scheduled}=[fill=white, draw=black, task_cross]
+
 \newtheorem{definition}{Definition}[chapter]
 \newtheorem{theorem}{Theorem}[chapter]
 
@@ -117,6 +131,7 @@
 }
 
 \input{../default.tex}
+\input{../default_chain.tex}
 
 % \input{../000111223hlf.tex}
 % \input{../000111223opt.tex}

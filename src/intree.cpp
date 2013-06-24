@@ -364,6 +364,9 @@ void Intree::get_chains(vector<vector<task_id>>& target) const {
 }
 
 unsigned int Intree::longest_chain_length() const{
+    if(edges.size()==0){
+        return 1;
+    }
     vector<vector<task_id>> chains;
     get_chains(chains);
     unsigned int result = 0;
@@ -377,7 +380,7 @@ unsigned int Intree::longest_chain_length() const{
 
 void Intree::get_raw_tree_id(tree_id& target){
     task_id max_id = (max_element(edges.begin(), edges.end())->first);
-    for(unsigned int i=0; i<max_id+1; ++i){
+    for(unsigned int i=0; i<max_id+1u; ++i){
         target.push_back((task_id)-1);
     }
     for(const pair<task_id, task_id>& it : edges){
