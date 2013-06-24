@@ -17,6 +17,9 @@ TikzExporter2::~TikzExporter2(){
 void TikzExporter2::generate_tikz_nodes(const Snapshot* s,
         const Snapshot* orig,
         map<const Snapshot*, TikzNode*>& target) const {
+    if(target.find(s) != target.end()){
+        return;
+    }
     for(auto it : s->Successors){
         generate_tikz_nodes(it, orig, target);
     }
@@ -167,7 +170,8 @@ void TikzExporter2::tikz_draw_node(const TikzNode* s,
     output << "{" << endl;
     if(show_reaching_probabilities){
         output << "\\footnotesize{" 
-            << orig->get_reaching_probability(s->snapshot) * 100
+            << s->reaching_prob * 100
+            // << orig->get_reaching_probability(s->snapshot) * 100
             << "}" << endl;
         output << "\\nodepart{" 
             << tikz_partnames[partindex++] << "}" << endl;
@@ -184,15 +188,27 @@ void TikzExporter2::tikz_draw_node(const TikzNode* s,
     // draw probabilities
     if(show_probabilities){
         vector<pair<TikzNode*,myfloat>> successor_probs_in_order;
-        for(auto sit : s->snapshot->SuccessorProbabilities){
+        //for(auto sit : s->snapshot->SuccessorProbabilities)
+        for(auto sit : s->successors)
+        {
             successor_probs_in_order.push_back(
-                    pair<TikzNode*, myfloat>(tikz_nodes[sit.get<0>()], sit.get<1>())
+                    pair<TikzNode*, myfloat>(sit.first, sit.second)
                     );
         }
         sort(successor_probs_in_order.begin(), successor_probs_in_order.end(),
-                [&](const pair<TikzNode*,myfloat>& a, const pair<TikzNode*,myfloat>& b) -> bool {
-                return consec_num[*a.first] < consec_num[*b.first];
+                [](const pair<TikzNode*,myfloat>& a, const pair<TikzNode*,myfloat>& b) -> bool {
+                map<task_id, task_id> iso;
+                tree_id ta, tb;
+                Intree::canonical_intree(
+                    a.first->snapshot->intree, a.first->snapshot->marked, iso, ta);
+                Intree::canonical_intree(
+                    b.first->snapshot->intree, b.first->snapshot->marked, iso, tb);
+                return ta < tb;
                 }
+                // The following does not coincide with levels
+                // [&](const pair<TikzNode*,myfloat>& a, const pair<TikzNode*,myfloat>& b) -> bool {
+                // return consec_num[*a.first] < consec_num[*b.first];
+                // }
             );
         output << "\\nodepart{" << tikz_partnames[partindex++] << "}" << endl
             << "\\footnotesize{$";
@@ -304,38 +320,61 @@ void TikzExporter2::merge_tikz_nodes(map<unsigned int, vector<const TikzNode*>>&
         const TikzNode* b) const {
     assert(find(levels[l].begin(), levels[l].end(), a)!=levels[l].end());
     assert(find(levels[l].begin(), levels[l].end(), b)!=levels[l].end());
-    TikzExporter2::TNSucs new_successors(a->successors);
-    for(auto& it : new_successors){
-        it.second = it.second * (myfloat)a->reaching_prob;
-    }
+    TikzExporter2::TNSucs combined_sucs(a->successors);
+    // for(auto& it : combined_sucs){
+    //     it.second = it.second * (myfloat)a->reaching_prob;
+    // }
     for(auto it : b->successors){
-        for(auto& f : new_successors){
+        for(auto& f : combined_sucs){
             if(f.first == it.first){
-                f.second = f.second + (it.second * b->reaching_prob);
+                //f.second = f.second + (it.second * b->reaching_prob);
+                f.second = f.second + it.second;
             }
         }
+    }
+    for(auto& it : combined_sucs){
+        it.second = it.second / (myfloat)2;
     }
     // merge TikzNodes in current level
     // TODO: Need a delete after the new!
     TikzNode* combined_tn = new TikzNode(a->snapshot,
-            a->reaching_prob + b->reaching_prob, new_successors
+            a->reaching_prob + b->reaching_prob, combined_sucs
             );
     levels[l].erase(remove(levels[l].begin(), levels[l].end(), a), levels[l].end());
     levels[l].erase(remove(levels[l].begin(), levels[l].end(), b), levels[l].end());
     levels[l].push_back(combined_tn);
+    cout << "The combined is: " << combined_tn << ": " << *combined_tn->snapshot << endl;
+    
     // update successor in parent levels
-    for(auto& tn : levels[l-1]){
+    for(unsigned int idx = 0; idx < levels[l-1].size(); ++idx){
+        cout << "Checking " << *levels[l-1][idx]->snapshot << endl;
+        for(auto tmp : levels[l-1][idx]->successors){
+            cout << "  " << tmp.first << ": " << *tmp.first->snapshot << endl;
+        }
+        TikzNode* tn = const_cast<TikzNode*>(levels[l-1][idx]);
+        // first: substitute a and b by combined_tn
         for(unsigned int i = 0; i < tn->successors.size(); ++i){
             if(tn->successors[i].first == a || tn->successors[i].first == b){
-                TikzExporter2::TNSucs new_sucs(tn->successors);
-                for(unsigned int j = i+1; j < new_sucs.size(); ++j){
-                    if(new_sucs[j].first == a || new_sucs[j].first == b){
-                        //tn->successors[i].second += tn->successors[j].second;
-                        new_sucs.erase(new_sucs.begin()+j);
-                        new_sucs[i].second += new_sucs[j].second;
+                cout << "Changing a suc of " << *tn->snapshot << endl;
+                tn->successors[i].first = combined_tn;
+            }
+        }
+        for(unsigned int i = 0; i < tn->successors.size(); ++i){
+            for(unsigned int j = i+1; j < tn->successors.size(); ++j){
+                // we have to properly decide which one we want to keep
+                if(tn->successors[i].first == combined_tn && tn->successors[j].first == combined_tn){
+                    cout << "Merging requires to change " << *tn->snapshot << ", whose origs are: " << endl;
+                    for(auto tmp : tn->successors){
+                        cout << tmp.first << ": " << *tmp.first->snapshot << endl;
+                    }
+                    tn->successors[i].first = combined_tn;
+                    tn->successors[i].second += tn->successors[j].second;
+                    tn->successors.erase(tn->successors.begin() + j);
+                    cout << "New sucs are: " << endl;
+                    for(auto tmp : tn->successors){
+                        cout << tmp.first << ": " << *tmp.first->snapshot << endl;
                     }
                 }
-                break;
             }
         }
     }

@@ -221,6 +221,7 @@ Snapshot* Snapshot::find_snapshot_in_pool(Intree& t,
         Snapshot::pool[representant][find_key] = new Snapshot(t, m);
     }
     result = Snapshot::pool[representant][find_key];
+    assert(result->intree == t);
     return result;
 }
 

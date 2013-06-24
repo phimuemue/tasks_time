@@ -25,6 +25,26 @@ bool ChainSideExporter::same_chain_side(
 }
 
 void ChainSideExporter::consolidate_levels(map<unsigned int, vector<const TikzNode*>>& levels) const {
-    for(unsigned int l = 0; l<levels.size(); ++l){
+    cout << "Consolidatio" << endl;
+    for(unsigned int l = levels.size()-1; !(l > levels.size()-1); --l)
+    // for(unsigned int l = 0; l < levels.size(); ++l)
+    {
+        cout << "Testing level " << l << endl;
+        bool something_done = true;
+        do {
+            something_done = false;
+            for(unsigned int i=0; i<levels[l].size(); ++i){
+                for(unsigned int j=i+1; j<levels[l].size(); ++j){
+                    if(same_chain_side(levels[l][i], levels[l][j])){
+                        cout << "Merging " << endl
+                            << *levels[l][i]->snapshot << endl
+                            << *levels[l][j]->snapshot << endl;
+                        merge_tikz_nodes(levels, l, levels[l][i], levels[l][j]);
+                        something_done = true;
+                    }
+                }
+            }
+        } while (something_done == true);
     }
+    cout << "Consolidation done" << endl;
 }
