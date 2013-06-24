@@ -206,9 +206,8 @@ void create_snapshot_dags(const po::variables_map& vm,
         const Scheduler* sched,
         vector<vector<task_id>>& initial_settings,
         vector<Snapshot*>& s,
+        vector<myfloat>& probs,
         vector<myfloat>& expected_runtimes){
-    cout << "Warning: We are currently not considering "
-            "probabilities for initial settings!" << endl;
     // generate all possible initial markings
     vector<task_id> marked;
     sched->get_initial_schedule(t, vm["processors"].as<int>(), initial_settings);
@@ -224,15 +223,23 @@ void create_snapshot_dags(const po::variables_map& vm,
     }
 #endif
 #if USE_CANONICAL_SNAPSHOT
-    vector<Snapshot*> p_s;
+    vector<pair<Snapshot*, myfloat>> p_s;
     for(auto it=s.begin(); it!=s.end(); ++it){
-        p_s.push_back(Snapshot::canonical_snapshot(**it));
+        p_s.push_back(pair<Snapshot*, myfloat>(Snapshot::canonical_snapshot(**it),(myfloat)1/(myfloat)(s.size())));
     }
-    sort(p_s.begin(), p_s.end());
-    p_s.erase(unique(p_s.begin(), p_s.end()), p_s.end());
+    for(unsigned int i=0; i<p_s.size(); ++i){
+        for(unsigned int j=i+1; j<p_s.size(); ++j){
+            if(p_s[i].first == p_s[j].first){
+                p_s[i].second += p_s[j].second;
+                p_s.erase(p_s.begin() + j);
+            }
+        }
+    }
     s.clear();
+    probs.clear();
     for(auto it=p_s.begin(); it!=p_s.end(); ++it){
-        s.push_back(*it);
+        s.push_back(it->first);
+        probs.push_back(it->second);
     }
 #endif
 #if USE_SIMPLE_OPENMP
@@ -383,6 +390,7 @@ int main(int argc, char** argv){
         // compute snapshot dags
         vector<vector<task_id>> initial_settings;
         vector<Snapshot*> s;
+        vector<myfloat> probs;
         vector<myfloat> expected_runtimes;
 
         if(schedulers.find(vm["scheduler"].as<string>()) == schedulers.end()){
@@ -394,6 +402,7 @@ int main(int argc, char** argv){
                 schedulers[vm["scheduler"].as<string>()],
                 initial_settings,
                 s,
+                probs,
                 expected_runtimes);
 
         // optimize current snapshot
@@ -419,16 +428,15 @@ int main(int argc, char** argv){
                 }
                 best.push_back(s[i]);
             }
-            expected_runtime += expected_runtimes[i];
+            expected_runtime += expected_runtimes[i] * probs[i];
         }
-        expected_runtime /= (myfloat)s.size();
+        //expected_runtime /= (myfloat)s.size();
 
         // output stats
         generate_stats(vm, s, best, initial_settings);
 
         cout << "Total expected run time: " << expected_runtime 
-            << " (Warning: This number does not consider probabilities"
-            << " of initial settings (thus is wrong)!)" << endl;
+             << endl;
 
         // output stuff to files
         generate_output(vm, s, best, initial_settings);
