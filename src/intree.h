@@ -65,6 +65,7 @@ class Intree {
         void get_chain(const task_id t, vector<task_id>& target) const;
         void get_chains(vector<vector<task_id>>& target) const;
         unsigned int longest_chain_length() const;
+        void get_profile(vector<unsigned int>& target) const;
 
         void get_raw_tree_id(tree_id& target);
 

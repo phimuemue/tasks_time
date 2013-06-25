@@ -378,6 +378,18 @@ unsigned int Intree::longest_chain_length() const{
     return result;
 }
 
+void Intree::get_profile(vector<unsigned int>& target) const {
+    assert(target.size()==0);
+    for(unsigned int i=0; i<longest_chain_length(); ++i){
+        target.push_back(0);
+    }
+    for(auto it : edges){
+        target[get_level(it.first)]++;
+    }
+    assert(target[0]==0);
+    target[0] = 1;
+}
+
 void Intree::get_raw_tree_id(tree_id& target){
     task_id max_id = (max_element(edges.begin(), edges.end())->first);
     for(unsigned int i=0; i<max_id+1u; ++i){
