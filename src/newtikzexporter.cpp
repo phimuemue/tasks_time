@@ -133,7 +133,8 @@ void TikzExporter2::tikz_draw_node(const TikzNode* s,
         output << "\\nodepart{" 
             << tikz_partnames[partindex++] << "}" << endl;
     }
-    output << "\\begin{tikzpicture}[scale=.2]" << endl;
+    output << "\\begin{tikzpicture}[scale=.2";
+    output << "]" << endl;
     export_single_snaphot(output, s->snapshot);
     output << "\\end{tikzpicture}" << endl;
     // draw expected value
@@ -284,7 +285,11 @@ void TikzExporter2::export_snapshot_dag_begin(ostream& output, const Snapshot* s
         }
         output << "}" << endl;
     }
-    output << "\\begin{tikzpicture}[scale=.2, anchor=south]" << endl;
+    output << "\\begin{tikzpicture}[scale=.2, anchor=south";
+    if(horizontal){
+        output << ", rotate=90";
+    }
+    output << "]" << endl;
 }
 
 
