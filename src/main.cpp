@@ -111,7 +111,7 @@ int read_variables_map_from_args(int argc,
     // output options
     po::options_description dv_output_options("Dagview output", LINE_LENGTH);
     dv_output_options.add_options()
-        ("dv", po::value<string>()->implicit_value(""), 
+        ("dv", po::value<string>()->implicit_value("dag.dagview"), 
          "Generate output for DAG viewer in file.")
         ("dvlimit", po::value<unsigned int>()->default_value(0), 
          "Only show snapshots with a certain amount of tasks in dagview.")
@@ -120,11 +120,11 @@ int read_variables_map_from_args(int argc,
         ;
     po::options_description tikz_output_options("Tikz output", LINE_LENGTH);
     tikz_output_options.add_options()
-        ("tikz", po::value<string>()->implicit_value(""), 
+        ("tikz", po::value<string>()->implicit_value("default.tex"), 
          "Generate raw TikZ-Output of snapshot(s) in file.")
-        ("tikzchainside", po::value<string>()->implicit_value(""), 
+        ("tikzchainside", po::value<string>()->implicit_value("default_chain.tex"), 
          "Generate condensed (longest chain/side nodes) TikZ-Output of snapshot(s) in file.")
-        ("tikzprofile", po::value<string>()->implicit_value(""), 
+        ("tikzprofile", po::value<string>()->implicit_value("default_profile.tex"), 
          "Generate profile graph TikZ-Output of snapshot(s) in file.")
         ("tikzhorizontal", po::value<bool>()->default_value(false)->zero_tokens(), 
          "Draw horizontal TikZ-DAG instead of vertical TikZ-DAG.")
@@ -263,9 +263,6 @@ void generate_output(const po::variables_map& vm,
     if(vm.count("tikz")){
         ofstream tikz_output;
         string filename = vm["tikz"].as<string>();
-        if(filename==""){
-            filename = "default.tex";
-        }
         cout << "Writing tikz to " << filename << endl;
         tikz_output.open(filename);
         TikzExporter tikz_exporter(
@@ -286,9 +283,6 @@ void generate_output(const po::variables_map& vm,
     if(vm.count("tikzchainside")){
         ofstream tikz_output;
         string filename = vm["tikzchainside"].as<string>();
-        if(filename==""){
-            filename = "default_chain.tex";
-        }
         cout << "Writing tikz to " << filename << endl;
         tikz_output.open(filename);
         ChainSideExporter tikz_exporter;
@@ -308,9 +302,6 @@ void generate_output(const po::variables_map& vm,
     if(vm.count("tikzprofile")){
         ofstream tikz_output;
         string filename = vm["tikzprofile"].as<string>();
-        if(filename==""){
-            filename = "default_profile.tex";
-        }
         cout << "Writing tikz to " << filename << endl;
         tikz_output.open(filename);
         ProfileExporter tikz_exporter;
@@ -330,9 +321,6 @@ void generate_output(const po::variables_map& vm,
     if(vm.count("dv")){
         ofstream dagview_output;
         string filename = vm["dv"].as<string>();
-        if(filename==""){
-            filename = "dag.dagview";
-        }
         cout << "Writing dagview to " << filename << endl;
         dagview_output.open(filename);
         DagviewExporter dagview_exporter(vm["dvlimit"].as<unsigned int>());
@@ -376,23 +364,6 @@ int main(int argc, char** argv){
 #endif
 
     print_version(false);
-
-    // vector<pair<Task, Task>> e1;
-    // tree_from_string("0 0 0 1 1 2 2 3", e1);
-    // Intree t1(e1);
-
-    // vector<task_id> marked1 = {4, 8};
-    // vector<task_id> marked2 = {6, 8};
-
-    // Snapshot s1 = *Snapshot::canonical_snapshot(Snapshot(t1, marked1));
-    // Snapshot s2 = *Snapshot::canonical_snapshot(Snapshot(t1, marked2));
-
-    // cout << s1 << endl;
-    // cout << s2 << endl;
-
-    // cout << t1.longest_chain_length() << endl;
-
-    // return 1;
 
     try{
         // command line parsing stuff
