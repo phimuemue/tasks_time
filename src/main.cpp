@@ -27,6 +27,7 @@
 #include "tikzexporter.h"
 #include "newtikzexporter.h"
 #include "chainsideexporter.h"
+#include "profileexporter.h"
 #include "dagviewexporter.h"
 
 #include "alltrees.h"
@@ -123,6 +124,8 @@ int read_variables_map_from_args(int argc,
          "Generate raw TikZ-Output of snapshot(s) in file.")
         ("tikzchainside", po::value<string>()->implicit_value(""), 
          "Generate condensed (longest chain/side nodes) TikZ-Output of snapshot(s) in file.")
+        ("tikzprofile", po::value<string>()->implicit_value(""), 
+         "Generate profile graph TikZ-Output of snapshot(s) in file.")
         ("tikzhorizontal", po::value<bool>()->default_value(false)->zero_tokens(), 
          "Draw horizontal TikZ-DAG instead of vertical TikZ-DAG.")
         ("tikzlimit", po::value<unsigned int>()->default_value(0), 
@@ -289,6 +292,28 @@ void generate_output(const po::variables_map& vm,
         cout << "Writing tikz to " << filename << endl;
         tikz_output.open(filename);
         ChainSideExporter tikz_exporter;
+        tikz_exporter.task_count_limit = vm["tikzlimit"].as<unsigned int>();
+        tikz_exporter.show_probabilities = vm["tikzprobs"].as<bool>();
+        tikz_exporter.show_reaching_probabilities = vm["tikzreachprobs"].as<bool>(); 
+        tikz_exporter.show_expectancy = vm["tikzexp"].as<bool>();
+        tikz_exporter.level_distance = vm["tikzld"].as<float>();
+        tikz_exporter.sibling_distance = vm["tikzsd"].as<float>();
+        tikz_exporter.horizontal = vm["tikzhorizontal"].as<bool>();
+        bool onlybest = vm["tikzonlybest"].as<bool>();
+        for(Snapshot* it : (onlybest ? best : s)){
+            tikz_exporter.export_snapshot_dag(tikz_output, it);
+        }
+        tikz_output.close();
+    }
+    if(vm.count("tikzprofile")){
+        ofstream tikz_output;
+        string filename = vm["tikzprofile"].as<string>();
+        if(filename==""){
+            filename = "default_profile.tex";
+        }
+        cout << "Writing tikz to " << filename << endl;
+        tikz_output.open(filename);
+        ProfileExporter tikz_exporter;
         tikz_exporter.task_count_limit = vm["tikzlimit"].as<unsigned int>();
         tikz_exporter.show_probabilities = vm["tikzprobs"].as<bool>();
         tikz_exporter.show_reaching_probabilities = vm["tikzreachprobs"].as<bool>(); 
