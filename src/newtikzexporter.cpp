@@ -307,14 +307,13 @@ void TikzExporter2::merge_tikz_nodes(map<unsigned int, vector<const TikzNode*>>&
         const TikzNode* b) const {
     assert(find(levels[l].begin(), levels[l].end(), a)!=levels[l].end());
     assert(find(levels[l].begin(), levels[l].end(), b)!=levels[l].end());
+    if(a->snapshot->expected_runtime() != b->snapshot->expected_runtime()){
+        cerr << "Warning: Snapshots to be merged have different run times." << endl;
+    }
     TikzExporter2::TNSucs combined_sucs(a->successors);
-    // for(auto& it : combined_sucs){
-    //     it.second = it.second * (myfloat)a->reaching_prob;
-    // }
     for(auto it : b->successors){
         for(auto& f : combined_sucs){
             if(f.first == it.first){
-                //f.second = f.second + (it.second * b->reaching_prob);
                 f.second = f.second + it.second;
             }
         }
