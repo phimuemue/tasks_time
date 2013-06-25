@@ -71,6 +71,12 @@
 
 \begin{document}
 
+% profiles and stuff
+\newcommand{\profile}[1]{\left\llbracket #1 \right\rrbracket}
+%\newcommand{\profileones}[1]{\mathbb{1}^#1}
+\newcommand{\profilerepeat}[2]{(#1)^{#2}}
+\newcommand{\profileones}[1]{\profilerepeat{1}{#1}}
+
 % stuff to draw diagrams levelwise
 \newcommand{\leveltop}{0}
 \newcommand{\leveltopI}{0}
@@ -147,8 +153,8 @@ This is just a test chapter to see how we can draw the intrees and the snapshot 
 \section{The current TikZ-file}
 
 \input{../default.tex}
+\input{../default_profile.tex}
 \input{../default_chain.tex}
-
 
 \include{p2/p2}
 

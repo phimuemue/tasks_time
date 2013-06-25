@@ -4,8 +4,6 @@
 \section{Another recursion describing optimal expected run time}
 \label{sec:p2-simple-method-for-runtime}
 
-\newcommand{\profile}[1]{\left\llbracket #1 \right\rrbracket}
-
 If one considers the problem of scheduling an intree onto two processors, it becomes clear that HLF is optimal (\todo{Proof.}). \todo{Is the following correct:} Moreover, we can conclude that we can compute the optimal expected finish time in polynomial time.
 
 This section shows how the original problem of an intree DAG can be mapped onto another, more compact structure.
@@ -78,9 +76,6 @@ with $SUC$ as defined before.
 
 Unfortunately, this recurrence relation does not significantly simplify the original problem. However, we were able to deduce a theorem that can be used for special cases.
 
-%\newcommand{\profileones}[1]{\mathbb{1}^#1}
-\newcommand{\profilerepeat}[2]{(#1)^{#2}}
-\newcommand{\profileones}[1]{\profilerepeat{1}{#1}}
 \begin{definition}[Compact notation of profiles]
   For a profile $p$, we introduce a shorthand notation that groups successive ones. That is, instead of writing $j$ consecutive ones, we simply write $\profileones{j}$.
 \end{definition}
