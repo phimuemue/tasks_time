@@ -320,7 +320,7 @@ The size of the profile DAG (starting at a certain profile $P$) is then clearly 
   Let $P=\profile{n_1,\dots,n_r}$ be a profile. Then, 
   \begin{equation*}
     \left| S^P \right| = 
-    \sum _{j=1}^{r} j \cdot n_j 
+    \sum _{j=1}^{r-1} j \cdot n_j 
     -0.5r^2 + 1.5 r.
   \end{equation*}
 \end{theorem}
@@ -333,7 +333,7 @@ The size of the profile DAG (starting at a certain profile $P$) is then clearly 
   
   In a successing profile, the entry at position $p$ can take exactly the values $1, 2, 3, \dots, n_p-1$ (where $n_p$ is th entry at positon $p$ in profile $P$). This yields the term $(n_i-1)$. Moreover, we stated that the entry at position $p$ can only be smaller if \emph{all previous entries} are 1. Thus, we can simply sum um the terms for the different positions, yielding the above sum.
 
-  We now sum up over the different \emph{lengths} (ranging from 1 to $r$) of the successor profiles, and afterwards apply well-known summation rules and formulae for triangular numbers:
+  We now sum up over the different possible \emph{lengths} (ranging from 1 to $r$) of the successor profiles, and afterwards apply well-known summation rules and formulae for triangular numbers:
   \begin{eqnarray*}
     \left| S^P \right| & = & \sum_{j=1}^{r} \left( 1+ \sum_{i=j}^{r-1} (n_i-1) \right) \\
     &=& \sum_{j=1}^{r} 1 + \sum_{j=1}^{r} \left( \sum_{i=j}^{r-1} n_i \right) - \sum_{j=1}^{r}\sum_{i=j}^{r-1} 1 \\
@@ -342,7 +342,7 @@ The size of the profile DAG (starting at a certain profile $P$) is then clearly 
     &=&\sum _{j=1}^{r} \left( \sum _{i=j}^{r-1}n_{{i}} \right) + -0.5r^2 + 1.5 r
   \end{eqnarray*}
 
-  It remains to be shown that $\sum _{j=1}^{r} \left( \sum _{i=j}^{r-1}n_{{i}} \right) = \sum_{j=1}^{r}(j-1)\cdot n_j$. This can be seen by considering the following:
+  It remains to be shown that $\sum _{j=1}^{r} \left( \sum _{i=j}^{r-1}n_{{i}} \right) = \sum_{j=1}^{r-1}(j-1)\cdot n_j$. This can be seen by considering the following:
   \begin{eqnarray*}
     \setlength{\arraycolsep}{2pt}
     \begin{array}{cccccccccccccccc}
@@ -359,8 +359,78 @@ The size of the profile DAG (starting at a certain profile $P$) is then clearly 
       &=& n_1 &+& 2 n_2 & + & 3 n_3 &+& 4 n_4 &+& \dots & + & (r-2)\cdot n_{r-2} &+& (r-1)\cdot n_{r-1} & \\
     \end{array}
   \end{eqnarray*}
-  This shows that $\left|S^P\right| = \sum _{j=1}^{r-1} j \cdot n_j + 
+  This shows that $\left|S^P\right| = \sum _{j=1}^{r-1} j \cdot n_j 
     -0.5r^2 + 1.5 r$.
+\end{proof}
+
+Now that we know the size of the profile DAG, this imposes the question how many nodes a profile DAG has \emph{in the worst case} if we consider an intree with exactly $n$ tasks.
+
+\begin{theorem}
+  \label{the:profile-dags-exact-size}
+  For an intree with $n$ nodes and $r$ levels (i.e. an intree having a profile with $r$ entries), the maximum size of the profile DAG is reached if the profile is of the form $\profile{\profileones{r-2},n-r+1,1}$.
+\end{theorem}
+
+\begin{proof}
+  We compute the number of nodes in the profile DAG for the profile $P^*= \profile{\profileones{r-2},n-r+1,1}$. According to theorem \ref{the:profile-dags-exact-size}, it is exactly
+  \begin{equation*}
+    \sum_{j=1}^{r-2} j\cdot 1 + (r-1)\cdot(n-r+1) = \frac{(r-1)\cdot(r-2)}{2} + (r-1)\cdot(n-r+1).
+  \end{equation*}
+  We consider now an arbitrary profile, but express it in terms of $P^*$. That is, we consider a profile $P=\profile{n_1,\dots,n_r}$, where $n_i = 1 + b_i$, for $i\in\left\{1,2,\dots,r-2\right\}$ and $n_{r-1} = (n-r+1) + b_{r-1}$. Note that this means that each $n_i$ (entry in $P$) is expressed as the corresponding entry in $P^*$ plus some constant $b_i$ chosen appropriately. Of course $n_r = 1$.
+
+  Two observations are important now:
+
+  \begin{itemize}
+  \item Since all $n_i \in \naturals$, we can condlude that $b_i \geq 0$ for $i\in\{1,2,\dots,r-2\}$.
+  \item Since the number of all tasks has to be the same, we know that $P^*$ and $P$ must have the same number of tasks (namely $n$). This means that
+    \begin{equation*}
+      n = \sum_{i=1}^r n_i = \sum_{i=1}^{r-2} \left[ 1+b_i \right] + \left[(n-r+1)+b_{r-1} \right] + 1.
+    \end{equation*}
+    We simplify the above to
+    \begin{equation*}
+      \sum_{i=1}^{r-2} \left[ 1+b_i \right] + \left[(n-r+1)+b_{r-1} \right] + 1 =
+      \sum_{i=1}^{r-2} b_i + r-2 + n-r+1+b_{r-1}+1 = 
+      n + \sum_{i=1}^{r-1} b_i
+    \end{equation*}
+    From this we can conclude that $b_{r-1} = -(\sum_{i=1}^{r-2})$.
+  \end{itemize}
+
+  We can now compute the number of nodes for profile $P$ (remember: an arbitrary profile expressed through $P^*$ and the $b_i$'s):
+
+  \begin{eqnarray*}
+    \sum_{j=1}^{r-1} j \cdot n_j &=& \sum_{j=1}^{r-2} j\cdot (1+b_j) + (r-1)(n-r+1+b_{r-1}) \\
+    &=& \sum_{j=1}^{r-2} j + \sum_{j=1}^{r-2} j\cdot b_j + (r-1)\left(n-r+1-(\sum_{j=1}^{r-2} b_j)\right) \\
+    &=& \frac{(r-2)\cdot(r-1)}{2} + (r-1)(n-r+1) + \sum_{j=1}^{r-2} j\cdot b_j - \sum_{j=1}^{r-2} (r-1) \cdot b_j \\
+    &=& \underbrace{\frac{(r-2)\cdot(r-1)}{2} + (r-1)(n-r+1)}_{\text{Number of nodes in DAG for $P^*$}} + \sum_{j=1}^{r-2} b_j \cdot (j-r+1) \\
+  \end{eqnarray*}
+  
+  We recognize that the result contains the number of nodes in a profile DAG for profile $P^*=\profile{\profileones{r-2},n-r+1,1}$ --- and some additional term (namely $\sum_{j=1}^{r-2} b_j \cdot (j-r+1)$).
+
+  However, in this term we can see that $(j-r+1) < 0$ (since $j$ ranges from 1 to r-2). This means, that the whole sum $\sum_{j=1}^{r-2} b_j \cdot (j-r+1) \leq 0$ (since all $b_j$ are positive for $j\in\left\{ 1,2,\dots,r-2\right\}$). That means, this sum gets 0 \emph{if and only if} all $b_j$ are 0 for $j\in\left\{ 1,2,\dots,r-2\right\}$.
+
+  This, however, proves that the profile $P^*$ is the profile with exactly $r$ entries and $n$ tasks that maximizes the number of nodes in the profile DAG.
+\end{proof}
+
+It remains to explain how to choose $r$ in a way such that given the number of tasks $n$, we can construct a profile with $r$ entries such that the resulting profile DAG has the maximum number of nodes over \emph{all} intrees with $n$ tasks.
+
+\begin{theorem}
+  Given a natural number $n$, the profile maximizing the number of nodes in the profile DAG is of the form $P^*=\profile{\profileones{r-2},n-r+1,1}$, where $r$ is either $\lfloor n/2\rfloor$ or $\lceil n/2 \rceil$ (one of both --- can be chosen at will).
+\end{theorem}
+
+\begin{proof}
+  We consider the number of nodes in a profile DAG for a profile of the form $\profile{\profileones{r-2},n-r+1,1}$, given by theorem \ref{the:profile-dags-exact-size}:
+  \begin{equation*}
+    \sum_{j=1}^{r-2} j \cdot 1 + (r-1)\cdot(n-r+1) = \frac{(r-2)\cdot(r-1)}{2} + (r-1)\cdot(n-r+1)
+  \end{equation*}
+
+  Our goal is now to maximize this term by choosing $r$ accordingly depending on $n$. We simplify the above to
+  \begin{equation*}
+    r+r \left( n-r+1 \right) -1 = -r^2+r\cdot(n+2)-1
+  \end{equation*}
+  and recognize that this is a parabola having the derivative
+  \begin{equation*}
+    3+n-2r,
+  \end{equation*}
+  meaning that its maximum is at $r=0.5n + 1.5$.
 \end{proof}
 
 %%% Local Variables:
