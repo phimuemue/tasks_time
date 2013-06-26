@@ -87,11 +87,6 @@ void TikzExporter2::export_snapshot_dag(ostream& output, const Snapshot* s) cons
     // export to TikZ
     export_snapshot_dag_begin(output, s);
     map<const TikzNode*, string> names;
-    // for(auto& level : levels){
-    //     for(auto& it: level.second){
-    //         names[it] = tikz_node_name(it->snapshot);
-    //     }
-    // }
     for(auto& tn : tikz_nodes){
         names[tn.second] = tikz_node_name(tn.second->snapshot);
     }

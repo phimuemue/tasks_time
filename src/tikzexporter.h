@@ -58,7 +58,7 @@ class TikzExporter : public Exporter {
                 bool srp=true,
                 unsigned int tcl=0);
         ~TikzExporter();
-        void export_snapshot_dag(ostream& output, const Snapshot* s) const;
+        virtual void export_snapshot_dag(ostream& output, const Snapshot* s) const;
 };
 
 #endif

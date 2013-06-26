@@ -9,6 +9,7 @@
 #include<random>
 #include<string>
 #include<fstream>
+#include<memory>
 
 #include<boost/program_options.hpp>
 
@@ -260,64 +261,33 @@ void generate_output(const po::variables_map& vm,
         const vector<Snapshot*>& best,
         const vector<vector<task_id>>& initial_settings
         ){ 
-    if(vm.count("tikz")){
-        ofstream tikz_output;
-        string filename = vm["tikz"].as<string>();
-        cout << "Writing tikz to " << filename << endl;
-        tikz_output.open(filename);
-        TikzExporter tikz_exporter(
-                vm["tikzexp"].as<bool>(),
-                vm["tikzprobs"].as<bool>(),
-                vm["tikzreachprobs"].as<bool>(),
-                vm["tikzlimit"].as<unsigned int>()
-                );
-        tikz_exporter.level_distance = vm["tikzld"].as<float>();
-        tikz_exporter.sibling_distance = vm["tikzsd"].as<float>();
-        tikz_exporter.horizontal = vm["tikzhorizontal"].as<bool>();
-        bool onlybest = vm["tikzonlybest"].as<bool>();
-        for(Snapshot* it : (onlybest ? best : s)){
-            tikz_exporter.export_snapshot_dag(tikz_output, it);
+    // TikZ export
+    map<string, unique_ptr<TikzExporter2>> exporters; 
+    exporters["tikz"] = unique_ptr<TikzExporter2>(new TikzExporter2());
+    exporters["tikzchainside"] = unique_ptr<TikzExporter2>(new ChainSideExporter());
+    exporters["tikzprofile"] = unique_ptr<TikzExporter2>(new ProfileExporter());
+    for(auto& it : exporters){
+        if(vm.count(it.first)){
+            ofstream tikz_output;
+            string filename = vm[it.first].as<string>();
+            cout << "Writing " << it.first << " to " << filename << endl;
+            tikz_output.open(filename);
+            TikzExporter2& exporter = *it.second;
+            exporter.task_count_limit = vm["tikzlimit"].as<unsigned int>();
+            exporter.show_probabilities = vm["tikzprobs"].as<bool>();
+            exporter.show_reaching_probabilities = vm["tikzreachprobs"].as<bool>(); 
+            exporter.show_expectancy = vm["tikzexp"].as<bool>();
+            exporter.level_distance = vm["tikzld"].as<float>();
+            exporter.sibling_distance = vm["tikzsd"].as<float>();
+            exporter.horizontal = vm["tikzhorizontal"].as<bool>();
+            bool onlybest = vm["tikzonlybest"].as<bool>();
+            for(Snapshot* it : (onlybest ? best : s)){
+                exporter.export_snapshot_dag(tikz_output, it);
+            }
+            tikz_output.close();
         }
-        tikz_output.close();
     }
-    if(vm.count("tikzchainside")){
-        ofstream tikz_output;
-        string filename = vm["tikzchainside"].as<string>();
-        cout << "Writing tikz to " << filename << endl;
-        tikz_output.open(filename);
-        ChainSideExporter tikz_exporter;
-        tikz_exporter.task_count_limit = vm["tikzlimit"].as<unsigned int>();
-        tikz_exporter.show_probabilities = vm["tikzprobs"].as<bool>();
-        tikz_exporter.show_reaching_probabilities = vm["tikzreachprobs"].as<bool>(); 
-        tikz_exporter.show_expectancy = vm["tikzexp"].as<bool>();
-        tikz_exporter.level_distance = vm["tikzld"].as<float>();
-        tikz_exporter.sibling_distance = vm["tikzsd"].as<float>();
-        tikz_exporter.horizontal = vm["tikzhorizontal"].as<bool>();
-        bool onlybest = vm["tikzonlybest"].as<bool>();
-        for(Snapshot* it : (onlybest ? best : s)){
-            tikz_exporter.export_snapshot_dag(tikz_output, it);
-        }
-        tikz_output.close();
-    }
-    if(vm.count("tikzprofile")){
-        ofstream tikz_output;
-        string filename = vm["tikzprofile"].as<string>();
-        cout << "Writing tikz to " << filename << endl;
-        tikz_output.open(filename);
-        ProfileExporter tikz_exporter;
-        tikz_exporter.task_count_limit = vm["tikzlimit"].as<unsigned int>();
-        tikz_exporter.show_probabilities = vm["tikzprobs"].as<bool>();
-        tikz_exporter.show_reaching_probabilities = vm["tikzreachprobs"].as<bool>(); 
-        tikz_exporter.show_expectancy = vm["tikzexp"].as<bool>();
-        tikz_exporter.level_distance = vm["tikzld"].as<float>();
-        tikz_exporter.sibling_distance = vm["tikzsd"].as<float>();
-        tikz_exporter.horizontal = vm["tikzhorizontal"].as<bool>();
-        bool onlybest = vm["tikzonlybest"].as<bool>();
-        for(Snapshot* it : (onlybest ? best : s)){
-            tikz_exporter.export_snapshot_dag(tikz_output, it);
-        }
-        tikz_output.close();
-    }
+    // dagview export
     if(vm.count("dv")){
         ofstream dagview_output;
         string filename = vm["dv"].as<string>();
