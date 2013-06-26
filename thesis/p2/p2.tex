@@ -4,6 +4,8 @@
 \section{Profiles}
 \label{sec:p2-profiles}
 
+\todo{Prove that same profiles have same runtime.}
+
 If one considers the problem of scheduling an intree onto two processors, it becomes clear that HLF is optimal (\todo{Proof.}). \todo{Is the following correct:} Moreover, we can conclude that we can compute the optimal expected finish time in polynomial time.
 
 This section shows how the original problem of an intree DAG can be mapped onto another, more compact structure.
@@ -304,6 +306,7 @@ Let $P=\profile{n_1,\dots,n_r}$ be a profile of lenght $r$. The set of successin
     \exists p \in \left\{ r-j+1,\dots,r \right\}.\,
     \bigwedge_{i=1}^{p-1} m_i = 1 \ \wedge m_p < n_p
   \right\}.
+  \todo{Beispiel}
 \end{equation*}
 
 The set of \emph{all} successing profiles clearly is then
@@ -316,14 +319,15 @@ The set of \emph{all} successing profiles clearly is then
 
 The size of the profile DAG (starting at a certain profile $P$) is then clearly denoted by the size of $S^P$.
 
-\begin{theorem}[Size of profile DAG]
+\begin{lemma}[Size of profile DAG]
+  \label{lem:profile-dags-exact-size}
   Let $P=\profile{n_1,\dots,n_r}$ be a profile. Then, 
   \begin{equation*}
     \left| S^P \right| = 
     \sum _{j=1}^{r-1} j \cdot n_j 
     -0.5r^2 + 1.5 r.
   \end{equation*}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
   If $P=\profile{n_1,\dots,n_r}$ is a profile, then the size of the set $S^P_j$ is
@@ -365,13 +369,13 @@ The size of the profile DAG (starting at a certain profile $P$) is then clearly 
 
 Now that we know the size of the profile DAG, this imposes the question how many nodes a profile DAG has \emph{in the worst case} if we consider an intree with exactly $n$ tasks.
 
-\begin{theorem}
-  \label{the:profile-dags-exact-size}
+\begin{lemma}
+  \label{lem:profile-dags-form-of-maximum-profile}
   For an intree with $n$ nodes and $r$ levels (i.e. an intree having a profile with $r$ entries), the maximum size of the profile DAG is reached if the profile is of the form $\profile{\profileones{r-2},n-r+1,1}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
-  We compute the number of nodes in the profile DAG for the profile $P^*= \profile{\profileones{r-2},n-r+1,1}$. According to theorem \ref{the:profile-dags-exact-size}, it is exactly
+  We compute the number of nodes in the profile DAG for the profile $P^*= \profile{\profileones{r-2},n-r+1,1}$. According to lemma  \ref{lem:profile-dags-exact-size}, it is exactly
   \begin{equation*}
     \sum_{j=1}^{r-2} j\cdot 1 + (r-1)\cdot(n-r+1) = \frac{(r-1)\cdot(r-2)}{2} + (r-1)\cdot(n-r+1).
   \end{equation*}
@@ -412,25 +416,72 @@ Now that we know the size of the profile DAG, this imposes the question how many
 
 It remains to explain how to choose $r$ in a way such that given the number of tasks $n$, we can construct a profile with $r$ entries such that the resulting profile DAG has the maximum number of nodes over \emph{all} intrees with $n$ tasks.
 
-\begin{theorem}
+\begin{lemma}[Structure of worst-case profile]
+  \label{lemma:worst-case-profile-structure}
   Given a natural number $n$, the profile maximizing the number of nodes in the profile DAG is of the form $P^*=\profile{\profileones{r-2},n-r+1,1}$, where $r$ is either $\lfloor n/2\rfloor$ or $\lceil n/2 \rceil$ (one of both --- can be chosen at will).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
-  We consider the number of nodes in a profile DAG for a profile of the form $\profile{\profileones{r-2},n-r+1,1}$, given by theorem \ref{the:profile-dags-exact-size}:
+  The fact that the profile maximum the number of nodes in the profile DAG is of the form $\profile{\profileones{r-2},n-r+1,1}$ follows directly from lemma \ref{lem:profile-dags-form-of-maximum-profile}. Thus, we can restrict ourselves onto those if we look for profiles maximizing the number of nodes in a profile DAG for a certain number of tasks.
+  
+  We consider the number of nodes in a profile DAG for a profile of the form $\profile{\profileones{r-2},n-r+1,1}$, given by lemma \ref{lem:profile-dags-exact-size}:
   \begin{equation*}
-    \sum_{j=1}^{r-2} j \cdot 1 + (r-1)\cdot(n-r+1) = \frac{(r-2)\cdot(r-1)}{2} + (r-1)\cdot(n-r+1)
+    \sum_{j=1}^{r-2} j \cdot 1 + (r-1)\cdot(n-r+1) -0.5r^2 +1.5r = \frac{(r-2)\cdot(r-1)}{2} + (r-1)\cdot(n-r+1) -0.5r^2 +1.5r
   \end{equation*}
 
   Our goal is now to maximize this term by choosing $r$ accordingly depending on $n$. We simplify the above to
   \begin{equation*}
     r+r \left( n-r+1 \right) -1 = -r^2+r\cdot(n+2)-1
   \end{equation*}
-  and recognize that this is a parabola having the derivative
+  and recognize that this is a downward opened parabola having the derivative
   \begin{equation*}
     3+n-2r,
   \end{equation*}
-  meaning that its maximum is at $r=0.5n + 1.5$.
+  meaning that its maximum is at $r=\frac{n+2}{2}$. Since this is only a natural number if $n$ is even and since we have -- as said before -- a parabola, we can simply apply rounding to get the maximum for natural-values. This means, we can derive natural solution: $r^*=\lfloor \frac{n+2}{2} \rfloor$ or $r^*=\lceil \frac{n+2}{2} \rceil$ (can be chosen at will since we have a parabola). Without loss of generality, we focus on $r^*=\lfloor \frac{n+2}{2} \rfloor = \lfloor\frac{n}{2} \rfloor + 1$.
+
+  This means that the profile DAG has a maximum of nodes if we consider the profile
+  \begin{equation*}
+    \profile{\profileones{r^*-2},n-r^*+1,1} = 
+    \profile{
+      \profileones{\left( \left\lfloor\frac{n}{2} \right\rfloor + 1 \right)-2},
+      n-\left( \left\lfloor\frac{n}{2} \right\rfloor + 1 \right)+1,
+      1
+    } = 
+    \profile{
+      \profileones{ \left\lfloor\frac{n}{2} \right\rfloor - 1},
+      \left\lceil \frac{n}{2} \right\rceil,
+      1
+    } 
+  \end{equation*}
+  Similarily, we could have chosen $r^*=\lceil\frac{n}{2}\rceil+1$. This shows the claim.
+\end{proof}
+
+We can now combine the lemmata to the following theorem:
+
+\begin{theorem}[Size of snapshot DAG]
+  For an intree with exactly $n$ tasks, the profile DAG has at most $\lfloor \frac{n}{2} \rfloor \cdot \lceil \frac{n}{2} \rceil +1$ nodes.
+\end{theorem}
+
+\begin{proof}
+  Lemma \ref{lemma:worst-case-profile-structure} gives us that the wors-case profile is $P^*=\profile{ \profileones{ \left\lfloor\frac{n}{2} \right\rfloor - 1}, \left\lceil \frac{n}{2} \right\rceil, 1 }$, which we use to compute the number of nodes in the corresponding worst-case profile DAG according to lemma \ref{lem:profile-dags-exact-size}:
+  \renewcommand{\r}{\left(\left\lfloor\frac{n}{2}\right\rfloor + 1\right)}
+  \begin{equation*}
+    \frac{(\r-2)\cdot(\r-1)}{2} + 
+    \left(\r-1\right)\cdot\left( \left\lceil \frac{n}{2} \right\rceil \right)
+    - \frac{1}{2} \cdot \r^2 + \frac{3}{2} \cdot \r     
+  \end{equation*}
+  We simplify the above to
+  \newcommand{\ceiln}{\left\lceil \frac{n}{2} \right\rceil}
+  \newcommand{\floorn}{\left\lfloor \frac{n}{2} \right\rfloor}
+  \begin{eqnarray*}
+    \frac{\left( \floorn -1 \right)\left( \floorn \right)}{2}
+    + \floorn \cdot \ceiln
+    - \frac{\floorn^2 + 2\cdot \floorn + 1}{2}
+    + \frac{3\cdot \floorn + 3}{2}
+    & = &
+    \ceiln \cdot \floorn + 1,
+  \end{eqnarray*}
+  proving the claim.
 \end{proof}
 
 %%% Local Variables:
