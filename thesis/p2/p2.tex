@@ -1,8 +1,8 @@
 \chapter{Two Processors}
 \label{chap:p2}
 
-\section{Another recursion describing optimal expected run time}
-\label{sec:p2-simple-method-for-runtime}
+\section{Profiles}
+\label{sec:p2-profiles}
 
 If one considers the problem of scheduling an intree onto two processors, it becomes clear that HLF is optimal (\todo{Proof.}). \todo{Is the following correct:} Moreover, we can conclude that we can compute the optimal expected finish time in polynomial time.
 
@@ -29,6 +29,15 @@ We can use the number of tasks per level as a (non-bijective) ``encoding'' of in
 
 Note that not all sequences of numbers can be used as profiles. In particular, the last number in a profile is (w.l.o.g.) 1 (since we have only one task as the root of the tree)\footnote{This, of course, introduces some overhead in notation, but we leave it as it is since it is easier to read this way.}. Moreover, it can not be the case that there is a zero in a profile (since this would imply that there is \emph{no task} on one specific level in the intree).
 
+Moreover, we introduce a abbreviating notation for profiles.
+
+\begin{definition}[Compact notation of profiles]
+  For a profile $p$, we introduce a shorthand notation that groups successive ones. That is, instead of writing $j$ consecutive ones, we simply write $\profileones{j}$.
+\end{definition}
+
+As a simple example, we rewrite $\profile{2,1,1,1,5,2,1,1,1,1,1,2,1}$ as 
+$\profile{2,\profileones{3},5,2,\profileones{5},2,\profileones{1}}$.
+
 \subsection{Profiles and HLF}
 \label{sec:p2-simple-method-runtime-profiles-hlf}
 
@@ -47,17 +56,23 @@ Another interesting case is $\profile{1,5,2,1}$, where the (single) topmost task
 
 The last example we want to give here is $\profile{1,1,1,3,1}$. In this case, the single topmost task and one of the three tasks of the second lowest level have to be scheduled. If the topmost task finishes first (which happens with probability $\frac{1}{2}$), the resulting profile will be $\profile{1,1,3,1}$ (where again the topmost task and one of the tree tasks in the second lowest level are scheduled). If the other scheduled task finishes first, we reach $\profile{1,1,1,2,1}$, where the single topmost task and one of the remaining \emph{two} tasks on the second lowest level are scheduled.
 
-We now use the profile notation to denote the expected run time (i.e. we say $\profile{6,3,1} = \frac{49}{8}$ --- see figure \ref{fig:p2-four-intrees-with-same-profile-6-3-1}).
+\section{Expected runtime for two processor HLF using profiles}
+\label{sec:p2-profiles-hlf-exp-runtime}
 
-Exploiting this notation, we can define the following recursive formula that can be used to compute the optimal expected run time:
+We now use the profile notation to denote the expected run time (i.e. we say $\E{\profile{6,3,1}} = \frac{49}{8}$ --- see figure \ref{fig:p2-four-intrees-with-same-profile-6-3-1}).
+
+\subsection{A recursive definition}
+\label{sec:p2-profile-exp-run-time-rec-def}
+
+Exploiting profile notation, we can define the following recursive formula that can be used to compute the optimal expected run time:
 
 \begin{equation}
   \label{eq:p2-profile-optimal-exp-run-time}
-  \profile{n_1, \dots, n_r} =
+  \E{\profile{n_1, \dots, n_r}} =
   \begin{cases}
     r, & \text{ if } n_1 = n_2 = \dots = n_r = 1 \\
-    \frac{n_1-1}{2} + \profile{1, n_2, n_3, \dots, n_r} , & \text{ if } n_r\geq 2 \\
-    \frac{1}{2} + \frac{1}{2} \cdot \left( \profile{n_2, \dots, n_r} + SUC(\profile{n_1,\dots,n_r}) \right) ,& \text{ otherwise }
+    \frac{n_1-1}{2} + \E{\profile{1, n_2, n_3, \dots, n_r}} , & \text{ if } n_r\geq 2 \\
+    \frac{1}{2} + \frac{1}{2} \cdot \left( \E{\profile{n_2, \dots, n_r}} + \E{SUC(\profile{n_1,\dots,n_r})} \right) ,& \text{ otherwise }
   \end{cases},
 \end{equation}
 where $SUC(\profile{n_1,\dots,n_r}) = \profile{n_1, n_2, n_3,\dots,n_{j-1},n_j-1,n_{j+1},\dots,n_r}$ such that $j$ is the minimum index such that $n_j>1$.
@@ -66,22 +81,18 @@ If we consider the second case of equation (\ref{eq:p2-profile-optimal-exp-run-t
 
 \begin{equation}
   \label{eq:p2-profile-optimal-exp-run-time-def-simplified}
-  \profile{n_1, \dots, n_r} =
+  \E{\profile{n_1, \dots, n_r}} =
   \begin{cases}
     r, & \text{ if } n_1 = n_2 = \dots = n_r = 1 \\
-    \frac{n_1}{2} + \frac{1}{2} \cdot \left( \profile{n_2, \dots, n_r} + SUC(\profile{1,n_2,\dots,n_r}) \right) ,& \text{ otherwise }
+    \frac{n_1}{2} + \frac{1}{2} \cdot \left( \E{\profile{n_2, \dots, n_r}} + \E{SUC(\profile{1,n_2,\dots,n_r})} \right) ,& \text{ otherwise }
   \end{cases},
 \end{equation}
 with $SUC$ as defined before.
 
-Unfortunately, this recurrence relation does not significantly simplify the original problem. However, we were able to deduce a theorem that can be used for special cases.
+\subsection{Solving the recurrence for special cases}
+\label{sec:p2-profile-exp-runtime-closed-form-spec-cases}
 
-\begin{definition}[Compact notation of profiles]
-  For a profile $p$, we introduce a shorthand notation that groups successive ones. That is, instead of writing $j$ consecutive ones, we simply write $\profileones{j}$.
-\end{definition}
-
-As a simple example, we rewrite $\profile{2,1,1,1,5,2,1,1,1,1,1,2,1}$ as 
-$\profile{2,\profileones{3},5,2,\profileones{5},2,\profileones{1}}$.
+Unfortunately, the recurrence relation in equation (\ref{eq:p2-profile-optimal-exp-run-time-def-simplified}) does not significantly simplify the original problem. However, we were able to deduce a closed form that can be used for special cases.
 
 \begin{theorem}
   \label{theo:simple-profiles-exp-runtime-for-p2-hlf}
@@ -91,7 +102,7 @@ $\profile{2,\profileones{3},5,2,\profileones{5},2,\profileones{1}}$.
   (i.e. at most the first and one other entry of the profile are different from 1).
   Then it holds that
   \begin{equation*}
-    \profile{n_1,\profileones{j-2},n_j,\profileones{r-j}} = 
+    \E{\profile{n_1,\profileones{j-2},n_j,\profileones{r-j}}} = 
     r + \frac{A_0(n_1-2)}{2^{n_1-1}} + \frac{A_{j-1}(n_j-2)}{2^{n_j+j-2}},
   \end{equation*}
   % Then we can compute 
@@ -148,7 +159,7 @@ Note that there are closed expressions for $A_i(n)$ for $i\leq 5$ (and possibly 
 We can now proof theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf}.
 
 \begin{proof}[Proof of theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf}]
-  We prove theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf} by complete induction. The base case $\profile{\profileones{r}} = r$ is clear because in this case we can always schedule exactly one task. Since there are $r$ tasks in total, this results in an expected run time of $r$ (each task is expected to be exponentially distributed with expectation 1).
+  We prove theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf} by complete induction. The base case $\E{\profile{\profileones{r}}} = r$ is clear because in this case we can always schedule exactly one task. Since there are $r$ tasks in total, this results in an expected run time of $r$ (each task is expected to be exponentially distributed with expectation 1).
 
   We now consider the special cases where \emph{all elements but one} in the profile are 1. That is, we consider the profile, whose elements are all 1, exctept the element at position $j$, which will be $n$. That is, we examine
   \begin{equation*}
@@ -157,12 +168,12 @@ We can now proof theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf}.
   We can rewrite this using the definition and afterwards apply the induction hypothesis:
 
   \begin{eqnarray*}
-    \profile{\profileones{j-1},n,\profileones{r-j}}.
+    \E{\profile{\profileones{j-1},n,\profileones{r-j}}}
     & = & 
     \frac{1}{2} + \frac{1}{2} \cdot 
     \left( 
-      \profile{\profileones{j-2},n,\profileones{r-j}} + 
-      \profile{\profileones{j-1},n-1,\profileones{r-j}}
+      \E{\profile{\profileones{j-2},n,\profileones{r-j}}} + 
+      \E{\profile{\profileones{j-1},n-1,\profileones{r-j}}}
     \right) = \\
     & = & 
     \frac{1}{2} + \frac{1}{2} \cdot 
@@ -197,9 +208,9 @@ We can now proof theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf}.
   We conclude the proof by deriving the expected run time for $\profile{m,\profileones{j-2},n,\profileones{r-j}}$. We do this by applying the definition and thereby reducing the problem to $\profile{\profileones{j-1},n,\profileones{r-j}}$:
 
   \begin{eqnarray*}
-    \profile{m,\profileones{j-2},n,\profileones{r-j}}
+    \E{\profile{m,\profileones{j-2},n,\profileones{r-j}}}
     & = & 
-    \frac{m-1}{2} + \profile{\profileones{j-1},n,\profileones{r-j}} = \\
+    \frac{m-1}{2} + \E{\profile{\profileones{j-1},n,\profileones{r-j}}} = \\
     & = &
     \frac{m-1}{2} + r + \frac{A_{j-1}(n-2)}{2^{n+j-2}} = \\
     & = &
@@ -213,10 +224,10 @@ We can now proof theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf}.
 
 Moritz Maaß has shown another property in \cite{MoritzMaasDiploma}, that we are able to generalize.
 
-\begin{theorem}[Intrees with exactly two leaves]
-  Let $l, k\in\naturals$, $a\in\naturals_0$ and $\profile{\profilerepeat{1}{l-k}, \profilerepeat{2}{k}, \profilerepeat{1}{a+1}}$. Then, it holds that
+\begin{theorem}[Intrees with exactly two leaves and intrees with same profiles]
+  Let $l, k\in\naturals$, $a\in\naturals_0$ and $\profile{\profilerepeat{1}{l-k}, \profilerepeat{2}{k}, \profilerepeat{1}{a+1}}$ be a profile. Then, it holds that
   \begin{eqnarray*}
-    \profile{\profilerepeat{1}{l-k}, \profilerepeat{2}{k}, \profilerepeat{1}{a+1}} 
+    \E{\profile{\profilerepeat{1}{l-k}, \profilerepeat{2}{k}, \profilerepeat{1}{a+1}}}
     = & &
     % the following is an incorrect simplification of Maple
     % a
@@ -236,6 +247,121 @@ Moritz Maaß has shown another property in \cite{MoritzMaasDiploma}, that we are
 \end{proof}
 
 Even if we were not able to deduce a more general formula that holds if more entries in the profile differ from 1, this might serve as a starting point for a more advanced proof.
+
+\todo{Tabelle, die einige Beispiele von Profiles zeigt und deren Erwartungswerte.}
+
+\section{Profile DAGs}
+\label{sec:p2-profile-dags}
+
+As seen in the previous chapter, a closed formula for $\E{\profile{n_1,\dots,n_r}}$ seems to be quite complex. This is why we may compute the expected runtime just with the recursive approach given in equation (\ref{eq:p2-profile-optimal-exp-run-time-def-simplified}).
+
+Of course, it is an interesting question how complex this computation is. Therefore, we consider the \emph{profile DAG}. The profile DAG is -- intuitively -- a coarsening of the original snapshot DAG. It is created the following way: We ``merge'' snapshots having the same profile, thereby decreasing the number of vertices in the DAG. Figure \ref{fig:p2-profile-dag-example-000111223-hlfdet} shows a snapshot DAG and its corresponding profile DAG.
+
+\begin{figure}[t]
+  \centering
+  \input{p2/profile_dag_of_000111223_hlfdet}
+  \caption{A snapshot DAG (HLF, two processors) and its corresponding profile DAG containing much less nodes than the original snaphsot DAG. \emph{Remark:} Snapshots with same profiles have the same expected run time and can thus be merged. }
+  \label{fig:p2-profile-dag-example-000111223-hlfdet}
+\end{figure}
+
+To be more mathematical: If the snapshot DAG is $(V_s, E_s)$, then the profile DAG can be expressed as $(V_p, E_p)$. These are defined as follows:
+\begin{eqnarray*}
+  V_p &=& \left\{ \text{PROFILE}(v) \mid v \in V_s \right\} \\
+  E_p &=& \left\{ \left(\text{PROFILE}(v_1), \text{PROFILE}(v_2) \right) \mid (v_1, v_2)\in E_s\right\}
+\end{eqnarray*}
+
+The function $\text{PROFILE}$ takes a snapshot as input and returns the profile corresponding the the snapshot's intree. Note that $\text{PROFILE}$ then is a homomorphism between the snapthot and the profile DAG.\todo{Stimmt das?}
+
+If we compute the expected run time via the profiles (as equation (\ref{eq:p2-profile-optimal-exp-run-time-def-simplified}) suggests), we only need to compute the profiles arising in the profile DAG. We can cache intermediate results, so we do not need to compute the runtime of any profile twice.
+
+Thus, it is an important question how big these profile DAGs can get. To tackle this question, we examine for a profile $P=\profile{n_1,\dots,n_r}$ how many profiles of a certain length exist as successors of this profile.
+
+We inspect the following example: Consider the profile $\profile{4,3,5,1}$. Its successing profiles of length 4 are
+\begin{equation*}
+  \profile{3, 3, 5, 1},
+  \profile{2, 3, 5, 1},
+  \profile{1, 3, 5, 1},
+  \profile{1, 2, 5, 1},
+  \profile{1, 1, 5, 1},
+  \profile{1, 1, 4, 1},
+  \profile{1, 1, 3, 1},
+  \profile{1, 1, 2, 1} \text{ and }
+  \profile{1, 1, 1, 1}.
+\end{equation*}
+
+We recognize that the first item in the succesing profiles has to be at most 4 (since the \emph{original} first entry was exactly 4). Moreover, the second entry can only be less then 3 (\emph{original} second entry: 3) if the first entry is 1. Similarily, the third entry in a successing profile can only be less then 5 (original third entry: 5) if the first and the second entry are 1.
+
+More general: In a successing profile, the entry at a certain position can only be less than the original entry at this position if all entries \emph{up to that position} are already 1.
+
+\begin{definition}[Successing profiles]
+Let $P=\profile{n_1,\dots,n_r}$ be a profile of lenght $r$. The set of successing profiles of length $j$ of original profile $P$ is
+\begin{equation*}
+  S^p_{j}
+  :=
+  \left\{ 
+    \profile{m_{r-j+1},\dots,m_{r}}
+    \mid
+    \exists p \in \left\{ r-j+1,\dots,r \right\}.\,
+    \bigwedge_{i=1}^{p-1} m_i = 1 \ \wedge m_p < n_p
+  \right\}.
+\end{equation*}
+
+The set of \emph{all} successing profiles clearly is then
+\begin{equation*}
+  S^P
+  :=
+  \bigcup_{j=1}^r S^P_j.
+\end{equation*}
+\end{definition}
+
+The size of the profile DAG (starting at a certain profile $P$) is then clearly denoted by the size of $S^P$.
+
+\begin{theorem}[Size of profile DAG]
+  Let $P=\profile{n_1,\dots,n_r}$ be a profile. Then, 
+  \begin{equation*}
+    \left| S^P \right| = 
+    \sum _{j=1}^{r} j \cdot n_j 
+    -0.5r^2 + 1.5 r.
+  \end{equation*}
+\end{theorem}
+
+\begin{proof}
+  If $P=\profile{n_1,\dots,n_r}$ is a profile, then the size of the set $S^P_j$ is
+  \begin{equation*}
+    1+ \sum_{i=j}^{r-1} (n_i-1).
+  \end{equation*}
+  
+  In a successing profile, the entry at position $p$ can take exactly the values $1, 2, 3, \dots, n_p-1$ (where $n_p$ is th entry at positon $p$ in profile $P$). This yields the term $(n_i-1)$. Moreover, we stated that the entry at position $p$ can only be smaller if \emph{all previous entries} are 1. Thus, we can simply sum um the terms for the different positions, yielding the above sum.
+
+  We now sum up over the different \emph{lengths} (ranging from 1 to $r$) of the successor profiles, and afterwards apply well-known summation rules and formulae for triangular numbers:
+  \begin{eqnarray*}
+    \left| S^P \right| & = & \sum_{j=1}^{r} \left( 1+ \sum_{i=j}^{r-1} (n_i-1) \right) \\
+    &=& \sum_{j=1}^{r} 1 + \sum_{j=1}^{r} \left( \sum_{i=j}^{r-1} n_i \right) - \sum_{j=1}^{r}\sum_{i=j}^{r-1} 1 \\
+    &=&r - \sum_{j=1}^{r}(r-j) + \sum_{j=1}^{r} \left( \sum_{i=j}^{r-1} n_i \right) \\
+    &=&r - \frac{r^2-r}{2} + \sum_{j=2}^{r-1} \left( \sum_{i=j}^{r-1} n_i \right) \\
+    &=&\sum _{j=1}^{r} \left( \sum _{i=j}^{r-1}n_{{i}} \right) + -0.5r^2 + 1.5 r
+  \end{eqnarray*}
+
+  It remains to be shown that $\sum _{j=1}^{r} \left( \sum _{i=j}^{r-1}n_{{i}} \right) = \sum_{j=1}^{r}(j-1)\cdot n_j$. This can be seen by considering the following:
+  \begin{eqnarray*}
+    \setlength{\arraycolsep}{2pt}
+    \begin{array}{cccccccccccccccc}
+      \displaystyle
+      \sum_{j=2}^{r-1} \left( \sum _{i=j}^{r-1}n_{{i}} \right) &=&
+         n_1 & + & n_2 & + & n_3 & + & n_4 & + & \dots & + & n_{r-2} & + & n_{r-1}  & + \\
+      & &    &   & n_2 & + & n_3 & + & n_4 & + & \dots & + & n_{r-2} & + & n_{r-1}  & + \\
+      & &    &   &     &   & n_3 & + & n_4 & + & \dots & + & n_{r-2} & + & n_{r-1}  & + \\
+      & &    &   &     &   &     & + & n_4 & + & \dots & + & n_{r-2} & + & n_{r-1}  & + \\
+      & &    &   &     &   &     &  &  &  & \ddots &  &  &  & \vdots  & + \\
+      & &    &   &     &   &     &   &     &   &   &   &  n_{r-2}  & +  & n_{r-1}  & +  \\
+      & &    &   &     &   &     &   &     &   &   &   &    &   & n_{r-1}  &   \\
+      \\
+      &=& n_1 &+& 2 n_2 & + & 3 n_3 &+& 4 n_4 &+& \dots & + & (r-2)\cdot n_{r-2} &+& (r-1)\cdot n_{r-1} & \\
+    \end{array}
+  \end{eqnarray*}
+  This shows that $\left|S^P\right| = \sum _{j=1}^{r-1} j \cdot n_j + 
+    -0.5r^2 + 1.5 r$.
+\end{proof}
 
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"
