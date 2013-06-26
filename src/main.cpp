@@ -309,11 +309,18 @@ void generate_stats(const po::variables_map& vm,
         ){
     for(unsigned int i= 0; i<s.size(); ++i){
         if(find(best.begin(), best.end(), s[i]) != best.end()){
-            cout << "* ";
+            cout << "*";
         }
         else{
-            cout << "  ";
+            cout << " ";
         }
+        if(s[i]->is_hlf()){
+            cout << "H";
+        }
+        else{
+            cout << " ";
+        }
+        cout << " ";
         cout << s[i]->markedstring() << ":\t";
         cout << s[i]->expected_runtime();
 #if MYFLOAT==GNUMP_RATIONAL

@@ -41,6 +41,7 @@ class Snapshot {
         // we cache the result of expected_runtime
         mutable myfloat cache_expected_runtime;
         mutable map<unsigned int, myfloat> cache_expected_runtime_for_n_procs;
+        mutable bool cache_is_hlf;
 
         // TODO: combine successors and successor_probs into 1 vector!
         vector<Snapshot*> successors;
@@ -142,6 +143,8 @@ class Snapshot {
         myfloat expected_runtime() const;
 
         myfloat expected_time_for_n_processors(unsigned int p) const;
+
+        bool is_hlf() const;
 
         bool operator== (const Snapshot& s) const ;
         friend ostream& operator<<(ostream& os, const Snapshot& s);

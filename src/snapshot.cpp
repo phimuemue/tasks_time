@@ -364,6 +364,47 @@ myfloat Snapshot::expected_runtime() const {
     return cache_expected_runtime = result;
 }
 
+bool Snapshot::is_hlf() const {
+    if(intree.count_tasks()==1){
+        return true;
+    }
+    vector<task_id> leaves;
+    intree.get_leaves(leaves);
+    vector<unsigned int> leaf_levels;
+    for(auto t : leaves){
+        leaf_levels.push_back(intree.get_level(t));
+    }
+    sort(leaf_levels.begin(), leaf_levels.end(), greater<task_id>());
+    vector<unsigned int> m_levels;
+    for(auto t : marked){
+        m_levels.push_back(intree.get_level(t));
+    }
+    sort(m_levels.begin(), m_levels.end(), greater<task_id>());
+    // cout << *this << endl;
+    // cout << "Leaf levels: ";
+    // for(auto t : leaf_levels){
+    //     cout << t << ", ";
+    // }
+    // cout << endl;
+    // cout << "mark levels: ";
+    // for(auto t : m_levels){
+    //     cout << t << ", ";
+    // }
+    // cout << endl;
+    // cout << endl;
+    for(unsigned int i=0; i<m_levels.size(); ++i){
+        if(m_levels[i]<leaf_levels[i]){
+            return false;
+        }
+    }
+    for(auto it : successors){
+        if(!it->is_hlf()){
+            return false;
+        }
+    }
+    return true;
+}
+
 myfloat Snapshot::expected_time_for_n_processors(unsigned int p) const {
     if(cache_expected_runtime_for_n_procs.find(p) != cache_expected_runtime_for_n_procs.end()){
         return cache_expected_runtime_for_n_procs[p];
