@@ -365,6 +365,9 @@ myfloat Snapshot::expected_runtime() const {
 }
 
 bool Snapshot::is_hlf() const {
+    if(cache_is_hlf.find(1) != cache_is_hlf.end()){
+        return cache_is_hlf[1];
+    }
     if(intree.count_tasks()==1){
         return true;
     }
@@ -380,29 +383,17 @@ bool Snapshot::is_hlf() const {
         m_levels.push_back(intree.get_level(t));
     }
     sort(m_levels.begin(), m_levels.end(), greater<task_id>());
-    // cout << *this << endl;
-    // cout << "Leaf levels: ";
-    // for(auto t : leaf_levels){
-    //     cout << t << ", ";
-    // }
-    // cout << endl;
-    // cout << "mark levels: ";
-    // for(auto t : m_levels){
-    //     cout << t << ", ";
-    // }
-    // cout << endl;
-    // cout << endl;
     for(unsigned int i=0; i<m_levels.size(); ++i){
         if(m_levels[i]<leaf_levels[i]){
-            return false;
+            return cache_is_hlf[1] = false;
         }
     }
     for(auto it : successors){
         if(!it->is_hlf()){
-            return false;
+            return cache_is_hlf[1] = false;
         }
     }
-    return true;
+    return cache_is_hlf[1] = true;
 }
 
 myfloat Snapshot::expected_time_for_n_processors(unsigned int p) const {

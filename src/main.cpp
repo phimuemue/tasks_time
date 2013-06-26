@@ -226,11 +226,11 @@ void create_snapshot_dags(const po::variables_map& vm,
         s[i] = Snapshot::find_snapshot_in_pool(Snapshot(t, initial_settings[i]));
     }
 #endif
-#if USE_CANONICAL_SNAPSHOT
     vector<pair<Snapshot*, myfloat>> p_s;
     for(auto it=s.begin(); it!=s.end(); ++it){
-        p_s.push_back(pair<Snapshot*, myfloat>(Snapshot::canonical_snapshot(**it),(myfloat)1/(myfloat)(s.size())));
+        p_s.push_back(pair<Snapshot*, myfloat>(*it,(myfloat)1/(myfloat)s.size()));
     }
+#if USE_CANONICAL_SNAPSHOT
     for(unsigned int i=0; i<p_s.size(); ++i){
         for(unsigned int j=i+1; j<p_s.size(); ++j){
             if(p_s[i].first == p_s[j].first){
@@ -239,13 +239,13 @@ void create_snapshot_dags(const po::variables_map& vm,
             }
         }
     }
+#endif
     s.clear();
     probs.clear();
     for(auto it=p_s.begin(); it!=p_s.end(); ++it){
         s.push_back(it->first);
         probs.push_back(it->second);
     }
-#endif
 #if USE_SIMPLE_OPENMP
 #pragma omp parallel for num_threads(initial_settings.size())
 #endif
@@ -322,7 +322,7 @@ void generate_stats(const po::variables_map& vm,
         }
         cout << " ";
         cout << s[i]->markedstring() << ":\t";
-        cout << s[i]->expected_runtime();
+        // cout << s[i]->expected_runtime();
 #if MYFLOAT==GNUMP_RATIONAL
         cout << "(" << s[i]->expected_runtime().get_d() << ")";
 #endif
