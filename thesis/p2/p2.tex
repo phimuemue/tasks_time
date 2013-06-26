@@ -459,6 +459,7 @@ It remains to explain how to choose $r$ in a way such that given the number of t
 We can now combine the lemmata to the following theorem:
 
 \begin{theorem}[Size of snapshot DAG]
+  \label{the:profile-dags-maximum-size-quadratic}
   For an intree with exactly $n$ tasks, the profile DAG has at most $\lfloor \frac{n}{2} \rfloor \cdot \lceil \frac{n}{2} \rceil +1$ nodes.
 \end{theorem}
 
@@ -483,6 +484,8 @@ We can now combine the lemmata to the following theorem:
   \end{eqnarray*}
   proving the claim.
 \end{proof}
+
+Theorem \ref{the:profile-dags-maximum-size-quadratic} shows in particular that the worst-case size of a profile DAG is quadratic in the number of tasks of the intree.
 
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"
