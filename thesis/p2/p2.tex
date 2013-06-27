@@ -485,7 +485,23 @@ We can now combine the lemmata to the following theorem:
   proving the claim.
 \end{proof}
 
-Theorem \ref{the:profile-dags-maximum-size-quadratic} shows in particular that the worst-case size of a profile DAG is quadratic in the number of tasks of the intree.
+Theorem \ref{the:profile-dags-maximum-size-quadratic} shows in particular that the worst-case size of a profile DAG is quadratic in the number of tasks of the intree. Additionally, we can use use the theorem to derive a simple, loose bound on the size of the original snapshot DAG resulting from a HLF schedule for two processors.
+
+\begin{corollary}[Upper bound for the size of the snapshot DAG]
+  The size of a snapshot DAG for an intree containing $n$ tasks is $O(n^4)$.
+\end{corollary}
+
+\begin{proof}
+  Each profile contains at most $n$ tasks (actually, \emph{all but on} profile contain less than $n$ tasks).
+
+  We recognize that there are less than $n^2$ snapshots resulting in the same profile $P$ containing $n$ tasks. This is clearly the case, because, if two processors are present, there are at most $\binom{n}{2} < n^2$ possibilities to choose the two tasks to be scheduled out of at most $n$ tasks.
+
+  \newcommand{\ceiln}{\left\lceil \frac{n}{2} \right\rceil}
+  \newcommand{\floorn}{\left\lfloor \frac{n}{2} \right\rfloor}
+  We now consider a worst case snapshot DAG, having -- according to theorem \ref{the:profile-dags-maximum-size-quadratic} -- size $\floorn \cdot \ceiln +1\leq \frac{n^2}{4}$. Since each of these profiles corresponds to less than $n^2$ snapshots, it directly follows that the number of nodes in the snapshot DAG is less than $\frac{n^2}{4}\cdot n^2=\frac{n^4}{4}\in O(n^4)$.
+\end{proof}
+
+The above bound is far from being tight. Still, it suffices to show that the size of a snapshot DAG can \emph{not} be exponential in the number of nodes.
 
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"
