@@ -184,13 +184,27 @@ def count_subtrees(it, pool={}):
     pool[hash(it)] = result
     return result
 
-for i in xrange(0,20):
-    print "Examining %d tasks:" % i
+for i in xrange(1,20):
+    print "Beginning with %d tasks:" % i
     curmax = 0
     tpool = {}
-    for c in generate_trees2(i):
-        tasks = subprocess.Popen(["../build/tasks_cs0", "-p3", "-s", "leaf", "--optimize", "--direct", "\""+" ".join([str(i) for i in c])+"\""], stdout=subprocess.PIPE)
-        print tasks
+    for tree in generate_trees2(i):
+        print tree
+        progs = [
+                    ("c0 o0", ["build/tasks_cs0", "-s", "leaf"]),
+                    ("c0 o1", ["build/tasks_cs0", "-s", "leaf", "--optimize"]),
+                    ("c1 o0", ["build/tasks_cs1", "-s", "leaf"]),
+                    ("c1 o1", ["build/tasks_cs1", "-s", "leaf", "--optimize"]),
+                ]
+        for prog in progs:
+            args = prog[1] + ["-p3", "--direct", "\""+" ".join([str(i) for i in tree])+"\""]
+            #print "./" + " ".join(args)
+            tasks = subprocess.Popen(args, stdout=subprocess.PIPE)
+            tasks.wait()
+            output = tasks.communicate()[0]
+            for line in output.splitlines():
+                if line.startswith("Total number of snaps:"):
+                    print prog[0] + ": " + line.split(":")[1].strip()
         # it = Intree(tmp)
         # if it not in tpool:
         #     val = count_subtrees(it, {})

@@ -47,7 +47,6 @@ class Snapshot {
         vector<Snapshot*> successors;
         vector<myfloat> successor_probs;
 
-        unsigned long count_snapshots_in_dag(map<const Snapshot*, bool>&) const;
 
     public:
         const vector<task_id> marked;
@@ -154,6 +153,7 @@ class Snapshot {
         static void clear_pool();
 
         unsigned long count_snapshots_in_dag() const ;
+        unsigned long count_snapshots_in_dag(map<const Snapshot*, bool>&) const;
 };
 
 #endif
