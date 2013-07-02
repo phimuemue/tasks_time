@@ -3,6 +3,7 @@ import sys
 from math import log
 from math import ceil
 import re
+import subprocess
 
 def generate_trees(M,N):
     for n in xrange(M,N+1):
@@ -183,17 +184,18 @@ def count_subtrees(it, pool={}):
     pool[hash(it)] = result
     return result
 
-print len(list(generate_trees2(12)))
-
-for i in xrange(14,20):
+for i in xrange(0,20):
+    print "Examining %d tasks:" % i
     curmax = 0
     tpool = {}
-    for tmp in generate_trees2(i):
-        it = Intree(tmp)
-        if it not in tpool:
-            val = count_subtrees(it, {})
-            tpool[it] = 1
-            if val >= curmax:
-                print it, count_subtrees(it, {})
-                curmax = val
-                sys.stdout.flush()
+    for c in generate_trees2(i):
+        tasks = subprocess.Popen(["../build/tasks_cs0", "-p3", "-s", "leaf", "--optimize", "--direct", "\""+" ".join([str(i) for i in c])+"\""], stdout=subprocess.PIPE)
+        print tasks
+        # it = Intree(tmp)
+        # if it not in tpool:
+        #     val = count_subtrees(it, {})
+        #     tpool[it] = 1
+        #     if val >= curmax:
+        #         print it, count_subtrees(it, {})
+        #         curmax = val
+        #       sys.stdout.flush()
