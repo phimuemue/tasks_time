@@ -26,6 +26,17 @@ def generate_trees(M,N):
             if good:
                 yield comb
 
+def generate_trees2(n):
+    def generate_trees2_int(n, t, minidx, maxidx):
+        if n==0:
+            yield []
+            return
+        for first in xrange(minidx, maxidx+1):
+            for comb in generate_trees2_int(n-1, t, first, maxidx+1):
+                yield [first] + comb
+    for i in generate_trees2_int(n, n, 0, 0):
+        yield i
+
 class Intree(object):
     """A collection of tasks forming a dependency intree.
     Only edges are stored, vertices are then obtained implicitly."""
@@ -172,10 +183,12 @@ def count_subtrees(it, pool={}):
     pool[hash(it)] = result
     return result
 
+print len(list(generate_trees2(12)))
+
 for i in xrange(14,20):
     curmax = 0
     tpool = {}
-    for tmp in generate_trees(i, i):
+    for tmp in generate_trees2(i):
         it = Intree(tmp)
         if it not in tpool:
             val = count_subtrees(it, {})
