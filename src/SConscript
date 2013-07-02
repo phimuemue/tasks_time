@@ -113,6 +113,8 @@ Help(vars.GenerateHelpText(env))
 
 # main program
 env.Command("info.cpp", "", create_version_info)
-targetname = "%d asdflkjlksdaf "%env["USE_CANONICAL_SNAPSHOT"]
+targetname = "tasks%s"%(
+                            ["_cs0", "_cs1"][int(env["USE_CANONICAL_SNAPSHOT"])]
+                        )
 print targetname
-mainprog = env.Program(target="tasks", source=Glob("*.cpp"))
+mainprog = env.Program(target=targetname, source=Glob("*.cpp"))
