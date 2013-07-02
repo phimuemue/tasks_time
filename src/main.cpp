@@ -411,6 +411,15 @@ int main(int argc, char** argv){
         cout << "Total expected run time: " << expected_runtime 
              << endl;
 
+        map<const Snapshot*, bool> map_for_total_count;
+        unsigned int snap_count;
+        for(Snapshot* it : s){
+            it->count_snapshots_in_dag(map_for_total_count);
+        }
+        snap_count = map_for_total_count.size();
+        cout << "Total number of snaps:   " << snap_count
+             << endl;
+
         // output stuff to files
         generate_output(vm, s, best, initial_settings);
 #if USE_CANONICAL_SNAPSHOT
