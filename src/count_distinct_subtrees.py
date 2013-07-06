@@ -27,6 +27,34 @@ def generate_trees(M,N):
             if good:
                 yield comb
 
+def generate_growing_seq_sum_n_m(n, m, maxval, depth=1):
+    if n<m:
+        return    
+    if n==m:
+        yield [1] * m
+        return
+    #print " "*depth, n, m, maxval
+    for i in xrange(1, min(n, maxval)+1):
+        for tmp in generate_growing_seq_sum_n_m(n-i, m-1, i, depth+1):
+            yield [i] + tmp
+
+a = 15
+b = 6
+
+for i in generate_growing_seq_sum_n_m(a, b, a):
+    print i
+exit()
+
+def generate_hashes_clever(n):
+    if n==1:
+        return "1"
+    result = "["
+    result = result + "]"
+    for i in xrange(1, n): # we can have 1,2,3,...,(n-1) precursors
+        for child_degrees in generate_trees2(i):
+            print [1+x for x in child_degrees]
+    return result
+
 def generate_trees2(n):
     def generate_trees2_int(n, t, minidx, maxidx):
         if n==0:
@@ -170,10 +198,9 @@ class Intree(object):
     def __eq__(self, other):
         return self.get_canonical() == other.get_canonical()
 
-def count_subtrees(it, pool={}):
-    if hash(it) in pool:
+def count_subtrees(it, pool):
+    if (it) in pool:
         return 0
-        return pool[hash(it)]
     result = 1
     for e in it.edges:
         if it.get_in_degree(e[0]) == 0:
@@ -181,35 +208,21 @@ def count_subtrees(it, pool={}):
             tmp_edges.remove(e)
             t = Intree(tmp_edges, True)
             result = result + count_subtrees(t, pool)
-    pool[hash(it)] = result
+    pool[(it)] = result
     return result
 
-for i in xrange(1,20):
-    print "Beginning with %d tasks:" % i
+
+tpool = {}
+for i in xrange(1,8):
+    print "Beginning with %d tasks:" % (i+1)
     curmax = 0
-    tpool = {}
-    for tree in generate_trees2(i):
-        print tree
-        progs = [
-                    ("c0 o0", ["build/tasks_cs0", "-s", "leaf"]),
-                    ("c0 o1", ["build/tasks_cs0", "-s", "leaf", "--optimize"]),
-                    ("c1 o0", ["build/tasks_cs1", "-s", "leaf"]),
-                    ("c1 o1", ["build/tasks_cs1", "-s", "leaf", "--optimize"]),
-                ]
-        for prog in progs:
-            args = prog[1] + ["-p3", "--direct", "\""+" ".join([str(i) for i in tree])+"\""]
-            #print "./" + " ".join(args)
-            tasks = subprocess.Popen(args, stdout=subprocess.PIPE)
-            tasks.wait()
-            output = tasks.communicate()[0]
-            for line in output.splitlines():
-                if line.startswith("Total number of snaps:"):
-                    print prog[0] + ": " + line.split(":")[1].strip()
-        # it = Intree(tmp)
-        # if it not in tpool:
-        #     val = count_subtrees(it, {})
-        #     tpool[it] = 1
-        #     if val >= curmax:
-        #         print it, count_subtrees(it, {})
-        #         curmax = val
-        #       sys.stdout.flush()
+    for tmp in generate_trees2(i):
+        it = Intree(tmp)
+        if it not in tpool:
+            # second arg necessary!!!
+            val = count_subtrees(it, {})
+            tpool[it] = val
+            if val >= curmax:
+                print it, val
+                curmax = val
+        sys.stdout.flush()
