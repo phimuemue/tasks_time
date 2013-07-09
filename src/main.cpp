@@ -302,34 +302,82 @@ void generate_output(const po::variables_map& vm,
     }
 }
 
+string get_processor_time_string(const Snapshot* s, unsigned int n){
+    // TODO: make it recognize the second argument
+    stringstream ss;
+    ss << "(";
+    ss << s->expected_time_for_n_processors(3) << "/";
+    ss << s->expected_time_for_n_processors(2) << "/";
+    ss << s->expected_time_for_n_processors(1);
+    ss << ")";
+    return ss.str();
+}
+
+string get_expected_runtime_string(const Snapshot* s){
+    stringstream ss;
+    ss << s->expected_runtime();
+    return ss.str();
+}
+
+string get_count_snaps_string(const Snapshot* s){
+    stringstream ss;
+    ss << "(";
+    ss << s->count_snapshots_in_dag();
+    ss << " snaps";
+    ss << ")";
+    return ss.str();
+}
+
 void generate_stats(const po::variables_map& vm,
         const vector<Snapshot*>& s,
         const vector<Snapshot*>& best,
         const vector<vector<task_id>>& initial_settings
         ){
+    vector<vector<string>> lines;
     for(unsigned int i= 0; i<s.size(); ++i){
+        lines.push_back(vector<string>());
+        //
+        vector<string>& line = lines.back();
         if(find(best.begin(), best.end(), s[i]) != best.end()){
-            cout << "*";
+            line.push_back(string("*"));
         }
         else{
-            cout << " ";
+            line.push_back(string(" "));
         }
         if(s[i]->is_hlf()){
-            cout << "H";
+            line.push_back(string("H"));
         }
         else{
-            cout << " ";
+            line.push_back(string(" "));
         }
-        cout << " ";
-        cout << s[i]->markedstring() << ":\t";
-        // cout << s[i]->expected_runtime();
+        line.push_back(" ");
+        line.push_back(s[i]->markedstring());
+        line.push_back("  ");
+        line.push_back(get_expected_runtime_string(s[i]));
+        line.push_back("  ");
 #if MYFLOAT==GNUMP_RATIONAL
-        cout << "(" << s[i]->expected_runtime().get_d() << ")";
+        // TODO: nice output of fractionals!
+        // cout << "(" << s[i]->expected_runtime().get_d() << ")";
+        // line.push_back(" ");
 #endif
-        cout << "\t(" << s[i]->expected_time_for_n_processors(3) << "/";
-        cout << s[i]->expected_time_for_n_processors(2) << "/";
-        cout << s[i]->expected_time_for_n_processors(1) << ")";
-        cout << "\t(" << s[i]->count_snapshots_in_dag() << " snaps)";
+        line.push_back(get_processor_time_string(s[i], 3));
+        line.push_back("  ");
+        line.push_back(get_count_snaps_string(s[i]));
+    }
+    vector<unsigned int> column_widths(lines[0].size());
+    for(auto line : lines){
+        for(unsigned int i=0; i<line.size(); ++i){
+            column_widths[i] = max(column_widths[i], (unsigned int)(line[i].size()));
+        }
+    }
+    for(auto line : lines){
+        assert(line.size() == column_widths.size());
+        for(unsigned int i=0; i<line.size(); ++i){
+            cout << line[i];
+            for(unsigned int l=0; l<column_widths[i]-line[i].size(); ++l){
+                cout << " ";
+            }
+        }
         cout << endl;
     }
 }
