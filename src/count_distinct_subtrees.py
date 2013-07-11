@@ -4,6 +4,8 @@ from math import log
 from math import ceil
 import re
 import subprocess
+import collections
+from collections import deque
 
 def generate_trees(M,N):
     for n in xrange(M,N+1):
@@ -38,22 +40,87 @@ def generate_growing_seq_sum_n_m(n, m, maxval, depth=1):
         for tmp in generate_growing_seq_sum_n_m(n-i, m-1, i, depth+1):
             yield [i] + tmp
 
-a = 15
-b = 6
-
-for i in generate_growing_seq_sum_n_m(a, b, a):
-    print i
-exit()
+def generate_hashes_clever2(n):
+    assert(n>0)
+    if n==1:
+        yield "[]"
+        return
+    if n==2:
+        yield "[[]]"
+        return
+    for i in xrange(1, n): # we can have 1,2,3,...,(n-1) precursors
+        for child_degrees in generate_growing_seq_sum_n_m(n-1, i, n-1):
+            degs = [0] * (n)
+            for v in child_degrees:
+                degs[v] = degs[v] + 1
+            children = []
+            for (p, x) in enumerate(degs):
+                if x > 0:
+                    new = list(generate_hashes_clever2(p))
+                    for xx in xrange(x):
+                        children.append(new)
+            children.reverse()
+            for comb in itertools.product(*children):
+                yield "[%s]"%("".join(comb))
+    return 
 
 def generate_hashes_clever(n):
+    assert(n>0)
     if n==1:
-        return "1"
-    result = "["
-    result = result + "]"
+        yield "[]"
+        return
+    if n==2:
+        yield "[[]]"
+        return
     for i in xrange(1, n): # we can have 1,2,3,...,(n-1) precursors
-        for child_degrees in generate_trees2(i):
-            print [1+x for x in child_degrees]
+        for child_degrees in generate_growing_seq_sum_n_m(n-1, i, n-1):
+            degs = [0] * (n)
+            for v in child_degrees:
+                degs[v] = degs[v] + 1
+            children = []
+            for (p, x) in enumerate(degs):
+                if x > 0:
+                    new = list(generate_hashes_clever(p))
+                    children.append(list(itertools.combinations_with_replacement(new, x)))
+            children.reverse()
+            for comb in itertools.product(*children):
+                tmp = ["".join(x) for x in comb]
+                yield "[%s]"%("".join(tmp))
+    return 
+
+def list_from_hash2(h, depth=0, start=0):
+    # print "Trying: ", h
+    result = []
+    counter = 0
+    dq = deque()
+    dq.append((0, 0, len(h)))
+    startidx = 1
+    sucnum = 0
+    while(len(dq) > 0):
+        parent, l, r = dq.popleft()
+        # print parent, l, r, h[l:r]
+        if sucnum>0:
+            result.append(parent)
+        for i in xrange(l+1, r-1):
+            c = h[i]
+            if c == "[":
+                if counter==depth:
+                    startidx = i
+                counter = counter + 1
+            if c == "]":
+                counter = counter - 1
+                if counter == 0:
+                    dq.append((sucnum, startidx, i+1))
+        sucnum = sucnum + 1
+    news = len(result)
     return result
+
+
+# for i in xrange(2,21):
+#     for i in generate_hashes_clever(i):
+#         print list_from_hash2(i)
+# 
+# exit()
 
 def generate_trees2(n):
     def generate_trees2_int(n, t, minidx, maxidx):
@@ -207,22 +274,19 @@ def count_subtrees(it, pool):
             tmp_edges = it.edges[:]
             tmp_edges.remove(e)
             t = Intree(tmp_edges, True)
+            pool[it] = 0
             result = result + count_subtrees(t, pool)
-    pool[(it)] = result
     return result
 
 
-tpool = {}
-for i in xrange(1,8):
-    print "Beginning with %d tasks:" % (i+1)
+for i in xrange(1,20):
+    print "Beginning with %d tasks:" % (i)
     curmax = 0
-    for tmp in generate_trees2(i):
-        it = Intree(tmp)
-        if it not in tpool:
-            # second arg necessary!!!
-            val = count_subtrees(it, {})
-            tpool[it] = val
-            if val >= curmax:
-                print it, val
-                curmax = val
+    for tmp in generate_hashes_clever2(i):
+        it = Intree(list_from_hash2(tmp))
+        # second arg necessary!!!
+        val = count_subtrees(it, {})
+        if val >= curmax:
+            print it, val
+            curmax = val
         sys.stdout.flush()
