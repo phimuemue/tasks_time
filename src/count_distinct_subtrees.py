@@ -277,7 +277,10 @@ def count_subtrees(it, pool):
             result = result + count_subtrees(t, pool)
     return result
 
-database = open("subtree_database_2_20.txt", "r")
+
+degree = int(sys.argv[1])
+print "Working with degree %d"%degree
+database = open("subtree_database_%d.txt"%degree, "r")
 
 for line in database:
     tree = line.strip()
