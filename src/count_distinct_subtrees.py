@@ -297,7 +297,7 @@ for line in database:
     tmp = Intree([int(x) for x in tree.split()])
     curparts = []
     for prog in progs:
-        args = prog[1] + ["-p3", "--direct", "\""+" ".join([str(i) for i in tree])+"\""]
+        args = prog[1] + ["-p3", "--direct", "\"%s\""%tree]
         tasks = subprocess.Popen(args, stdout=subprocess.PIPE)
         tasks.wait()
         output = tasks.communicate()[0]
