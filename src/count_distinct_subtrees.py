@@ -35,7 +35,6 @@ def generate_growing_seq_sum_n_m(n, m, maxval, depth=1):
     if n==m:
         yield [1] * m
         return
-    #print " "*depth, n, m, maxval
     for i in xrange(1, min(n, maxval)+1):
         for tmp in generate_growing_seq_sum_n_m(n-i, m-1, i, depth+1):
             yield [i] + tmp
@@ -278,15 +277,26 @@ def count_subtrees(it, pool):
             result = result + count_subtrees(t, pool)
     return result
 
+database = open("subtree_database_2_20.txt", "r")
 
-for i in xrange(1,20):
-    print "Beginning with %d tasks:" % (i)
-    curmax = 0
-    for tmp in generate_hashes_clever2(i):
-        it = Intree(list_from_hash2(tmp))
-        # second arg necessary!!!
-        val = count_subtrees(it, {})
-        if val >= curmax:
-            print it, val
-            curmax = val
-        sys.stdout.flush()
+for line in database:
+    tree = line.strip()
+    print tree
+    progs = [
+                # ("c0 o0", ["build/tasks_cs0", "-s", "leaf"]),
+                # ("c0 o1", ["build/tasks_cs0", "-s", "leaf", "--optimize"]),
+                ("c1 o0", ["build/tasks_cs1", "-s", "leaf"]),
+                ("c1 o1", ["build/tasks_cs1", "-s", "leaf", "--optimize"]),
+            ]
+    tmp = Intree([int(x) for x in tree.split()])
+    print count_subtrees(tmp, {})
+    for prog in progs:
+        args = prog[1] + ["-p3", "--direct", "\""+" ".join([str(i) for i in tree])+"\""]
+        #print "./" + " ".join(args)
+        tasks = subprocess.Popen(args, stdout=subprocess.PIPE)
+        tasks.wait()
+        output = tasks.communicate()[0]
+        for line in output.splitlines():
+            if line.startswith("Total number of snaps:"):
+                print prog[0] + ": " + line.split(":")[1].strip()
+
