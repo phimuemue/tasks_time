@@ -281,10 +281,13 @@ def count_subtrees(it, pool):
 degree = int(sys.argv[1])
 print "Working with degree %d"%degree
 database = open("subtree_database_%d.txt"%degree, "r")
+resultfile = open("counted_subtrees_%d.txt"%degree, "w")
+
+def myprint(a):
+    resultfile.write(str(a))
 
 for line in database:
     tree = line.strip()
-    print tree
     progs = [
                 # ("c0 o0", ["build/tasks_cs0", "-s", "leaf"]),
                 # ("c0 o1", ["build/tasks_cs0", "-s", "leaf", "--optimize"]),
@@ -292,14 +295,22 @@ for line in database:
                 ("c1 o1", ["build/tasks_cs1", "-s", "leaf", "--optimize"]),
             ]
     tmp = Intree([int(x) for x in tree.split()])
-    print count_subtrees(tmp, {})
+    curparts = []
     for prog in progs:
         args = prog[1] + ["-p3", "--direct", "\""+" ".join([str(i) for i in tree])+"\""]
-        #print "./" + " ".join(args)
         tasks = subprocess.Popen(args, stdout=subprocess.PIPE)
         tasks.wait()
         output = tasks.communicate()[0]
         for line in output.splitlines():
             if line.startswith("Total number of snaps:"):
-                print prog[0] + ": " + line.split(":")[1].strip()
+                curparts.append(line.split(":")[1].strip())
+    myprint (tree)
+    myprint (" | ")
+    myprint (count_subtrees(tmp, {}))
+    myprint (" | ")
+    myprint (curparts[0])
+    myprint (" | ")
+    myprint (curparts[1])
+    myprint ("\n")
 
+resultfile.close()
