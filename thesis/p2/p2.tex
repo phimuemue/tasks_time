@@ -485,6 +485,9 @@ We can now combine the lemmata to the following theorem:
   proving the claim.
 \end{proof}
 
+\section{Snapshot DAG}
+\label{sec:p2-snapshot-dag}
+
 Theorem \ref{the:profile-dags-maximum-size-quadratic} shows in particular that the worst-case size of a profile DAG is quadratic in the number of tasks of the intree. Additionally, we can use use the theorem to derive a simple, loose bound on the size of the original snapshot DAG resulting from a HLF schedule for two processors.
 
 \begin{corollary}[Upper bound for the size of the snapshot DAG]
@@ -502,6 +505,8 @@ Theorem \ref{the:profile-dags-maximum-size-quadratic} shows in particular that t
 \end{proof}
 
 The above bound is far from being tight. Still, it suffices to show that the size of a snapshot DAG can \emph{not} be exponential in the number of nodes.
+
+This, on the other hand, implies a poly-time algorithm that can be used to determine the expected run time for a given intree of tasks whose run times are exponentially distributed: We simply construct the whole snapshot DAG according to HLF (whose size is $O(n^4)$, i.e. polynomial) and compute the expected run time recursively for each snapshot.
 
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"

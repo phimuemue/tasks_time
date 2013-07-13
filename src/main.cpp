@@ -233,9 +233,19 @@ void create_snapshot_dags(const po::variables_map& vm,
 #if USE_CANONICAL_SNAPSHOT
     for(unsigned int i=0; i<p_s.size(); ++i){
         for(unsigned int j=i+1; j<p_s.size(); ++j){
-            if(*p_s[i].first == *p_s[j].first){
+            for(auto pp1 : p_s[i].first->marked){
+                cout << pp1 << " ";
+            }
+            cout << "vs. ";
+            for(auto pp1 : p_s[j].first->marked){
+                cout << pp1 << " ";
+            }
+            cout << endl;
+            if(p_s[i].first->marked == p_s[j].first->marked){
+                cout << "eliminated" << endl;
                 p_s[i].second += p_s[j].second;
                 p_s.erase(p_s.begin() + j);
+                j--;
             }
         }
     }
