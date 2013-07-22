@@ -123,11 +123,11 @@ int read_variables_map_from_args(int argc,
         ;
     po::options_description tikz_output_options("Tikz output", LINE_LENGTH);
     tikz_output_options.add_options()
-        ("tikz", po::value<string>()->implicit_value("default.tex"), 
+        ("tikz", po::value<string>()->implicit_value("default"), 
          "Generate raw TikZ-Output of snapshot(s) in file.")
-        ("tikzchainside", po::value<string>()->implicit_value("default_chain.tex"), 
+        ("tikzchainside", po::value<string>()->implicit_value("default_chain"), 
          "Generate condensed (longest chain/side nodes) TikZ-Output of snapshot(s) in file.")
-        ("tikzprofile", po::value<string>()->implicit_value("default_profile.tex"), 
+        ("tikzprofile", po::value<string>()->implicit_value("default_profile"), 
          "Generate profile graph TikZ-Output of snapshot(s) in file.")
         ("tikzhorizontal", po::value<bool>()->default_value(false)->zero_tokens(), 
          "Draw horizontal TikZ-DAG instead of vertical TikZ-DAG.")
@@ -275,10 +275,12 @@ void generate_output(const po::variables_map& vm,
     exporters["tikzprofile"] = unique_ptr<TikzExporter2>(new ProfileExporter());
     bool globaldrawme = true;
     for(auto& it : exporters){
+        string raw_filename;
         string filename;
         if(vm.count(it.first)){
             ofstream tikz_output;
-            filename = vm[it.first].as<string>();
+            raw_filename = vm[it.first].as<string>();
+            filename = raw_filename + ".tex";
             cout << "Writing " << it.first << " to " << filename << endl;
             tikz_output.open(filename);
             TikzExporter2& exporter = *it.second;
@@ -309,7 +311,7 @@ void generate_output(const po::variables_map& vm,
             if(!vm["tikznopdf"].as<bool>()){
                 cout << "Compiling to PDF." << endl;
                 TikzToPdf ttp;
-                ttp.convertTikzToPdf(filename, filename + ".pdf");
+                ttp.convertTikzToPdf(filename, raw_filename);
             }
         }
     }
