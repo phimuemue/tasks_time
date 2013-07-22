@@ -96,7 +96,8 @@ env = Environment(variables = vars,
                             "-DUSE_SIMPLE_OPENMP=${USE_SIMPLE_OPENMP}",
                             "-DUSE_CANONICAL_SNAPSHOT=${USE_CANONICAL_SNAPSHOT}",
                             ], 
-                  LIBS = ["boost_program_options",
+                  LIBS = [
+                          "boost_program_options",
                   ],
                   LINKFLAGS="-fopenmp",
                   build_dir = "build"

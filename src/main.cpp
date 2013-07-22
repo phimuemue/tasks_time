@@ -31,6 +31,8 @@
 #include "profileexporter.h"
 #include "dagviewexporter.h"
 
+#include "tikztopdf.h"
+
 #include "alltrees.h"
 
 using namespace std;
@@ -143,6 +145,10 @@ int read_variables_map_from_args(int argc,
          "Determines the sibling distance in the Snap-DAG.")
         ("tikzonlybest", po::value<bool>()->default_value(false)->zero_tokens(), 
          "Only show best schedule in TikZ output.")
+        ("tikzinteractive", po::value<bool>()->default_value(false)->zero_tokens(), 
+         "Only show selected schedules in TikZ output.")
+        ("tikznopdf", po::value<bool>()->default_value(false)->zero_tokens(), 
+         "Prevent TikZ compilation to PDF.")
         ;
     // input options
     po::options_description input_options("Input", LINE_LENGTH);
@@ -233,16 +239,7 @@ void create_snapshot_dags(const po::variables_map& vm,
 #if USE_CANONICAL_SNAPSHOT
     for(unsigned int i=0; i<p_s.size(); ++i){
         for(unsigned int j=i+1; j<p_s.size(); ++j){
-            for(auto pp1 : p_s[i].first->marked){
-                cout << pp1 << " ";
-            }
-            cout << "vs. ";
-            for(auto pp1 : p_s[j].first->marked){
-                cout << pp1 << " ";
-            }
-            cout << endl;
             if(p_s[i].first->marked == p_s[j].first->marked){
-                cout << "eliminated" << endl;
                 p_s[i].second += p_s[j].second;
                 p_s.erase(p_s.begin() + j);
                 j--;
@@ -276,10 +273,12 @@ void generate_output(const po::variables_map& vm,
     exporters["tikz"] = unique_ptr<TikzExporter2>(new TikzExporter2());
     exporters["tikzchainside"] = unique_ptr<TikzExporter2>(new ChainSideExporter());
     exporters["tikzprofile"] = unique_ptr<TikzExporter2>(new ProfileExporter());
+    bool globaldrawme = true;
     for(auto& it : exporters){
+        string filename;
         if(vm.count(it.first)){
             ofstream tikz_output;
-            string filename = vm[it.first].as<string>();
+            filename = vm[it.first].as<string>();
             cout << "Writing " << it.first << " to " << filename << endl;
             tikz_output.open(filename);
             TikzExporter2& exporter = *it.second;
@@ -292,9 +291,26 @@ void generate_output(const po::variables_map& vm,
             exporter.horizontal = vm["tikzhorizontal"].as<bool>();
             bool onlybest = vm["tikzonlybest"].as<bool>();
             for(Snapshot* it : (onlybest ? best : s)){
-                exporter.export_snapshot_dag(tikz_output, it);
+                if(globaldrawme){
+                    bool drawme = true;
+                    if (vm["tikzinteractive"].as<bool>()){
+                        cout << "Export " << it->markedstring() << " ['y': yes, 'n': no, 'N': all following no]?" << endl;
+                        string answer;
+                        cin >> answer;
+                        drawme = answer == "y";
+                        globaldrawme = answer != "N";
+                    }
+                    if (drawme){
+                        exporter.export_snapshot_dag(tikz_output, it);
+                    }
+                }
             }
             tikz_output.close();
+            if(!vm["tikznopdf"].as<bool>()){
+                cout << "Compiling to PDF." << endl;
+                TikzToPdf ttp;
+                ttp.convertTikzToPdf(filename, filename + ".pdf");
+            }
         }
     }
     // dagview export

@@ -316,7 +316,6 @@ void TikzExporter::export_snapshot_dag(ostream& output, const Snapshot* s) const
             true,
             1);
     output << "\\end{tikzpicture}" << endl;
-    output << endl;
     output << "%%% Local Variables:" << endl;
     output << "%%% TeX-master: \"thesis/thesis.tex\"" << endl;
     output << "%%% End: " << endl;

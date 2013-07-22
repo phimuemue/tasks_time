@@ -74,13 +74,14 @@ void TikzExporter2::export_snapshot_dag(ostream& output, const Snapshot* s) cons
     for(auto& it : levels){
         sort(it.second.begin(), it.second.end(),
                 [](const TikzNode* a, const TikzNode* b) -> bool {
-                map<task_id, task_id> iso;
-                tree_id ta, tb;
-                Intree::canonical_intree(
-                    a->snapshot->intree, a->snapshot->marked, iso, ta);
-                Intree::canonical_intree(
-                    b->snapshot->intree, b->snapshot->marked, iso, tb);
-                return ta < tb;
+                // map<task_id, task_id> iso;
+                // tree_id ta, tb;
+                // Intree::canonical_intree(
+                //     a->snapshot->intree, a->snapshot->marked, iso, ta);
+                // Intree::canonical_intree(
+                //     b->snapshot->intree, b->snapshot->marked, iso, tb);
+                // return ta < tb;
+                return a->snapshot->expected_runtime() < b->snapshot->expected_runtime();
                 }
             );
     }
@@ -150,13 +151,14 @@ void TikzExporter2::tikz_draw_node(const TikzNode* s,
         }
         sort(successor_probs_in_order.begin(), successor_probs_in_order.end(),
                 [](const pair<TikzNode*,myfloat>& a, const pair<TikzNode*,myfloat>& b) -> bool {
-                map<task_id, task_id> iso;
-                tree_id ta, tb;
-                Intree::canonical_intree(
-                    a.first->snapshot->intree, a.first->snapshot->marked, iso, ta);
-                Intree::canonical_intree(
-                    b.first->snapshot->intree, b.first->snapshot->marked, iso, tb);
-                return ta < tb;
+                // map<task_id, task_id> iso;
+                // tree_id ta, tb;
+                // Intree::canonical_intree(
+                //     a.first->snapshot->intree, a.first->snapshot->marked, iso, ta);
+                // Intree::canonical_intree(
+                //     b.first->snapshot->intree, b.first->snapshot->marked, iso, tb);
+                // return ta < tb;
+                return a.first->snapshot->expected_runtime() < b.first->snapshot->expected_runtime();
                 }
                 // The following does not coincide with levels
                 // [&](const pair<TikzNode*,myfloat>& a, const pair<TikzNode*,myfloat>& b) -> bool {
@@ -290,7 +292,6 @@ void TikzExporter2::export_snapshot_dag_begin(ostream& output, const Snapshot* s
 
 void TikzExporter2::export_snapshot_dag_end(ostream& output, const Snapshot* s) const{
     output << "\\end{tikzpicture}" << endl;
-    output << endl;
     output << "%%% Local Variables:" << endl;
     output << "%%% TeX-master: \"thesis/thesis.tex\"" << endl;
     output << "%%% End: " << endl;
