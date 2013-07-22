@@ -1,7 +1,9 @@
-\documentclass[a4paper]{report}
+\documentclass[a4paper, 11pt]{report}
 
 \input{packages}
 \input{commands_and_environments}
+
+\includeonly{p3/p3}
 
 \begin{document}
 
@@ -20,10 +22,10 @@ This is just a test chapter to see how we can draw the intrees and the snapshot 
 
 \section{The current TikZ-file}
 
-\input{../default.tex}
-%\input{../default_optimized.tex}
-%\input{../default_profile.tex}
-%\input{../default_chain.tex}
+\input{../default}
+\include{../default_optimized}
+\include{../default_profile}
+\include{../default_chain}
 
 
 % here, the document actually starts to get useful
@@ -32,6 +34,7 @@ This is just a test chapter to see how we can draw the intrees and the snapshot 
 
 \include{p2/p2}
 \include{p3/p3}
+\include{additional_algs/additional_algs}
 
 \bibliographystyle{plain}
 \bibliography{bib}

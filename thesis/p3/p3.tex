@@ -16,7 +16,7 @@ We first define some variants of run time. We consider the overall run time and 
 
 Note that we have that -- for three processors -- $T=T_1 + T_2 + T_3$. Since the expectation is a linear operator, we can conclude that $\E{T}=\E{T_1}+\E{T_2}+\E{T_3}$. It is our goal to minimize $\E{T}$. We will now inspect some properties concerning $T_1$, $T_2$ and $T_3$ concerning the three processor case.
 
-If we want to construct an optimal P3 schedule, we might be tempted to think that (at least) one of the two following criteria should be fulfilled:
+If we want to construct an optimal P3 schedule, we might be tempted to think that (at least) one of the two following criteria could be fulfilled:
 
 \begin{description}
 \item[P3L] For the optimal schedule, $\E{T_3}$ should be maximal (over all schedules).
@@ -80,9 +80,40 @@ However, after some investigation, we are tempted to conjecture the following.
 \label{sec:p3-size-of-snapshot-dag-first-attempts}
 
 Similar to the reasoning in section \ref{sec:p2-snapshot-dag}, we can research the size of a snapshot DAG for the P3 case. 
-We conducted an experiment and examined the size for snapshot DAGs of intrees containing up to 12 tasks. 
+We conducted an experiment and examined the size for snapshot DAGs of intrees containing up to 17 tasks. 
 We thereby examined as well the optimal DAG as the DAG arising from a scheduling strategy that can pick \emph{any} leaf.
 Since the size of the snapshot DAG for an intree with $n$ tasks is at most $n^3$ times as large as the number of subtrees of the original intree, we also computed the number of subtrees for each of these intrees.
+The results are summed up in table \ref{tab:num-subtrees-size-of-dags}\todo{Complete!}.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}[ht]{ccccc}
+    \multirow{2}{*}{Degree} & \multicolumn{2}{c}{Subtrees} & \multicolumn{2}{c}{Snapshot DAG} \\
+    & Max & Avg & Max & Avg \\
+    \hline
+    3 & 3 & 3.00 & 3 & 3.00  \\
+    4 & 5 & 4.25 & 5 & 4.25  \\
+    5 & 7 & 5.89 & 7 & 5.89  \\
+    6 & 11 & 8.10 & 11 & 8.05  \\
+    7 & 16 & 11.04 & 16 & 10.81  \\
+    8 & 24 &  15.10 & 22 & 14.37  \\
+    9 & 34 &  20.57 & 31 & 18.76  \\
+    10 & 54 &  28.08 & 41 & 24.16  \\
+    11 & 79 &  38.33 & 55 & 30.67  \\
+    12 & 119 & 52.41 & 71 & 38.41  \\
+    13 & 169 &  71.69 & 89 & 47.49  \\
+    14 & 269 &  98.19 & 113 & 58.05  \\
+    15 & 357 &  125.70 & 142 & 67.83  \\
+    16 & 594 &  171.29 & 184 & 80.55  \\
+    17 & 807 &  225.45 & 235 & 94.35  \\
+  \end{tabular}
+  \caption{Number of subtrees, size of the optimized snapshot DAG}
+  \label{tab:num-subtrees-size-of-dags}
+\end{table}
+
+As we can see in table \ref{tab:num-subtrees-size-of-dags}, the number of subtrees is (at least for $n\geq  9$ significantly larger than the number of snapshots in the snapshot DAG describing an optimal schedule.
+
+Another interesting fact is that there is no ``strict correlation'' between the number of subtrees and the number of snapshots in the optimal snapshot DAG. That is, there are certain DAGs that have more non-isomorphic subtrees than another DAG, yet -- on the other hand -- more snapshots in the optimal snapshot DAG. Moreover, intrees containing $n$ tasks and having the maximal number of subtrees are (at least for $8\leq n \leq 17$) are not the ones having the largest optimal snapshot DAG.
 
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"
