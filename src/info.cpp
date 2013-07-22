@@ -1,6 +1,6 @@
 #include "info.h"
 
-char builtby[] = "philipp";
+char builtby[] = "muellerp";
 char version[] = "0";
 char minor[] = "4";
 char build[] = "225";
