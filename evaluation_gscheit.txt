@@ -1,0 +1,659 @@
+
+Degree 0
+
+Degree 1
+New opt max: 7
+0 1 1 1 1 1
+Maximum raw trees
+0 1 1 1 1 1
+Maximum opt trees
+0 1 1 1 1 1
+Trees where both is optimal:
+0 1 1 1 1 1
+
+Degree 2
+New opt max: 2
+0
+Maximum raw trees
+0
+Maximum opt trees
+0
+Trees where both is optimal:
+0
+
+Degree 3
+New opt max: 3
+0 1
+0 0
+Maximum raw trees
+0 1
+0 0
+Maximum opt trees
+0 1
+0 0
+Trees where both is optimal:
+0 1
+0 0
+
+Degree 4
+New opt max: 4
+0 1 2
+0 1 1
+New opt max: 5
+0 0 1
+Maximum raw trees
+0 0 1
+Maximum opt trees
+0 0 1
+Trees where both is optimal:
+0 0 1
+
+Degree 5
+New opt max: 5
+0 1 2 3
+0 1 2 2
+New opt max: 6
+0 1 1 2
+0 0 1 2
+New opt max: 7
+0 0 1 3
+0 0 1 1
+0 0 0 1
+Maximum raw trees
+0 0 1 3
+0 0 1 1
+0 0 0 1
+Maximum opt trees
+0 0 1 3
+0 0 1 1
+0 0 0 1
+Trees where both is optimal:
+0 0 1 3
+0 0 1 1
+0 0 0 1
+
+Degree 6
+New opt max: 6
+0 1 2 3 4
+0 1 2 3 3
+New opt max: 7
+0 1 2 2 3
+0 1 1 2 3
+New opt max: 8
+0 1 1 2 4
+0 1 1 2 2
+0 1 1 1 2
+New opt max: 9
+0 0 1 2 3
+0 0 1 1 2
+0 0 1 3 4
+0 0 1 3 3
+New opt max: 11
+0 0 1 1 3
+Maximum raw trees
+0 0 1 1 3
+Maximum opt trees
+0 0 1 1 3
+Trees where both is optimal:
+0 0 1 1 3
+
+Degree 7
+New opt max: 7
+0 1 2 3 4 5
+0 1 2 3 4 4
+New opt max: 8
+0 1 2 3 3 4
+0 1 2 2 3 4
+New opt max: 9
+0 1 2 2 3 5
+0 1 2 2 3 3
+0 1 2 2 2 3
+New opt max: 10
+0 1 1 2 3 4
+0 1 1 2 2 3
+0 1 1 2 4 5
+0 1 1 2 4 4
+New opt max: 12
+0 1 1 2 2 4
+New opt max: 13
+0 0 1 2 2 3
+New opt max: 15
+0 0 1 1 2 3
+0 0 1 1 3 5
+New opt max: 16
+0 0 0 1 1 4
+Maximum raw trees
+0 0 0 1 1 4
+Maximum opt trees
+0 0 0 1 1 4
+Trees where both is optimal:
+0 0 0 1 1 4
+
+Degree 8
+New opt max: 8
+0 1 2 3 4 5 6
+0 1 2 3 4 5 5
+New opt max: 9
+0 1 2 3 4 4 5
+0 1 2 3 3 4 5
+New opt max: 10
+0 1 2 3 3 4 6
+0 1 2 3 3 4 4
+0 1 2 3 3 3 4
+New opt max: 11
+0 1 2 2 3 4 5
+0 1 2 2 3 3 4
+0 1 2 2 3 5 6
+0 1 2 2 3 5 5
+New opt max: 13
+0 1 2 2 3 3 5
+New opt max: 14
+0 1 1 2 3 3 4
+New opt max: 16
+0 1 1 2 2 3 4
+0 1 1 2 2 4 6
+New opt max: 17
+0 1 1 1 2 2 5
+0 0 1 2 2 3 6
+0 0 1 2 2 3 3
+New opt max: 18
+0 0 1 1 2 3 5
+0 0 1 2 3 3 5
+0 0 1 1 2 3 4
+New opt max: 21
+0 0 1 1 2 3 6
+0 0 1 1 3 3 5
+New opt max: 22
+0 0 0 1 1 2 4
+0 0 0 1 1 4 6
+Maximum raw trees
+0 0 0 1 1 2 4
+Maximum opt trees
+0 0 0 1 1 2 4
+0 0 0 1 1 4 6
+Trees where both is optimal:
+0 0 0 1 1 2 4
+
+Degree 9
+New opt max: 9
+0 1 2 3 4 5 6 7
+0 1 2 3 4 5 6 6
+New opt max: 10
+0 1 2 3 4 5 5 6
+0 1 2 3 4 4 5 6
+New opt max: 11
+0 1 2 3 4 4 5 7
+0 1 2 3 4 4 5 5
+0 1 2 3 4 4 4 5
+New opt max: 12
+0 1 2 3 3 4 5 6
+0 1 2 3 3 4 4 5
+0 1 2 3 3 4 6 7
+0 1 2 3 3 4 6 6
+New opt max: 14
+0 1 2 3 3 4 4 6
+New opt max: 15
+0 1 2 2 3 4 4 5
+New opt max: 17
+0 1 2 2 3 3 4 5
+0 1 2 2 3 3 5 7
+New opt max: 18
+0 1 2 2 2 3 3 6
+0 1 1 2 3 3 4 7
+0 1 1 2 3 3 4 4
+New opt max: 19
+0 1 1 2 2 3 4 6
+0 1 1 2 3 4 4 6
+0 1 1 2 2 3 4 5
+New opt max: 22
+0 1 1 2 2 3 4 7
+0 1 1 2 2 4 4 6
+New opt max: 23
+0 1 1 1 2 2 3 5
+0 1 1 1 2 2 5 7
+New opt max: 24
+0 0 1 2 2 3 4 6
+New opt max: 25
+0 0 1 2 2 3 3 6
+New opt max: 26
+0 0 1 1 2 3 5 6
+New opt max: 27
+0 0 1 1 2 3 4 6
+0 0 1 1 2 3 6 7
+New opt max: 29
+0 0 1 1 2 3 3 6
+New opt max: 31
+0 0 0 1 1 2 4 7
+Maximum raw trees
+0 0 0 1 1 2 4 7
+0 0 0 1 1 2 4 4
+0 0 0 1 1 1 2 4
+0 0 0 1 1 4 4 6
+Maximum opt trees
+0 0 0 1 1 2 4 7
+Trees where both is optimal:
+0 0 0 1 1 2 4 7
+
+Degree 10
+New opt max: 10
+0 1 2 3 4 5 6 7 8
+0 1 2 3 4 5 6 7 7
+New opt max: 11
+0 1 2 3 4 5 6 6 7
+0 1 2 3 4 5 5 6 7
+New opt max: 12
+0 1 2 3 4 5 5 6 8
+0 1 2 3 4 5 5 6 6
+0 1 2 3 4 5 5 5 6
+New opt max: 13
+0 1 2 3 4 4 5 6 7
+0 1 2 3 4 4 5 5 6
+0 1 2 3 4 4 5 7 8
+0 1 2 3 4 4 5 7 7
+New opt max: 15
+0 1 2 3 4 4 5 5 7
+New opt max: 16
+0 1 2 3 3 4 5 5 6
+New opt max: 18
+0 1 2 3 3 4 4 5 6
+0 1 2 3 3 4 4 6 8
+New opt max: 19
+0 1 2 3 3 3 4 4 7
+0 1 2 2 3 4 4 5 8
+0 1 2 2 3 4 4 5 5
+New opt max: 20
+0 1 2 2 3 3 4 5 7
+0 1 2 2 3 4 5 5 7
+0 1 2 2 3 3 4 5 6
+New opt max: 23
+0 1 2 2 3 3 4 5 8
+0 1 2 2 3 3 5 5 7
+New opt max: 24
+0 1 2 2 2 3 3 4 6
+0 1 2 2 2 3 3 6 8
+New opt max: 25
+0 1 1 2 3 3 4 5 7
+New opt max: 26
+0 1 1 2 3 3 4 4 7
+New opt max: 27
+0 1 1 2 2 3 4 6 7
+New opt max: 28
+0 1 1 2 2 3 4 5 7
+0 1 1 2 2 3 4 7 8
+New opt max: 30
+0 1 1 2 2 3 4 4 7
+New opt max: 32
+0 1 1 1 2 2 3 5 8
+New opt max: 34
+0 0 1 2 2 3 3 4 6
+0 0 1 1 2 3 4 5 6
+0 0 1 1 2 3 5 6 8
+New opt max: 36
+0 0 1 1 2 3 3 5 6
+0 0 1 1 2 3 4 6 8
+New opt max: 37
+0 0 1 1 2 3 3 4 6
+New opt max: 39
+0 0 1 1 2 3 3 6 8
+0 0 0 1 1 2 4 5 7
+New opt max: 40
+0 0 0 1 1 2 4 7 8
+New opt max: 41
+0 0 0 1 1 2 4 4 7
+0 0 0 0 1 1 2 5 8
+Maximum raw trees
+0 0 0 1 1 2 4 4 7
+Maximum opt trees
+0 0 0 1 1 2 4 4 7
+0 0 0 0 1 1 2 5 8
+Trees where both is optimal:
+0 0 0 1 1 2 4 4 7
+
+Degree 11
+New opt max: 11
+0 1 2 3 4 5 6 7 8 9
+0 1 2 3 4 5 6 7 8 8
+New opt max: 12
+0 1 2 3 4 5 6 7 7 8
+0 1 2 3 4 5 6 6 7 8
+New opt max: 13
+0 1 2 3 4 5 6 6 7 9
+0 1 2 3 4 5 6 6 7 7
+0 1 2 3 4 5 6 6 6 7
+New opt max: 14
+0 1 2 3 4 5 5 6 7 8
+0 1 2 3 4 5 5 6 6 7
+0 1 2 3 4 5 5 6 8 9
+0 1 2 3 4 5 5 6 8 8
+New opt max: 16
+0 1 2 3 4 5 5 6 6 8
+New opt max: 17
+0 1 2 3 4 4 5 6 6 7
+New opt max: 19
+0 1 2 3 4 4 5 5 6 7
+0 1 2 3 4 4 5 5 7 9
+New opt max: 20
+0 1 2 3 4 4 4 5 5 8
+0 1 2 3 3 4 5 5 6 9
+0 1 2 3 3 4 5 5 6 6
+New opt max: 21
+0 1 2 3 3 4 4 5 6 8
+0 1 2 3 3 4 5 6 6 8
+0 1 2 3 3 4 4 5 6 7
+New opt max: 24
+0 1 2 3 3 4 4 5 6 9
+0 1 2 3 3 4 4 6 6 8
+New opt max: 25
+0 1 2 3 3 3 4 4 5 7
+0 1 2 3 3 3 4 4 7 9
+New opt max: 26
+0 1 2 2 3 4 4 5 6 8
+New opt max: 27
+0 1 2 2 3 4 4 5 5 8
+New opt max: 28
+0 1 2 2 3 3 4 5 7 8
+New opt max: 29
+0 1 2 2 3 3 4 5 6 8
+0 1 2 2 3 3 4 5 8 9
+New opt max: 31
+0 1 2 2 3 3 4 5 5 8
+New opt max: 33
+0 1 2 2 2 3 3 4 6 9
+New opt max: 35
+0 1 1 2 3 3 4 4 5 7
+0 1 1 2 2 3 4 5 6 7
+0 1 1 2 2 3 4 6 7 9
+New opt max: 37
+0 1 1 2 2 3 4 4 6 7
+0 1 1 2 2 3 4 5 7 9
+New opt max: 38
+0 1 1 2 2 3 4 4 5 7
+New opt max: 40
+0 1 1 2 2 3 4 4 7 9
+0 1 1 1 2 2 3 5 6 8
+New opt max: 41
+0 1 1 1 2 2 3 5 8 9
+New opt max: 42
+0 1 1 1 2 2 3 5 5 8
+0 1 1 1 1 2 2 3 6 9
+0 0 1 2 2 3 3 4 6 8
+New opt max: 44
+0 0 1 2 2 2 3 3 4 7
+New opt max: 45
+0 0 1 2 2 3 3 4 6 9
+New opt max: 46
+0 0 1 1 2 3 4 5 6 9
+New opt max: 47
+0 0 1 1 2 3 3 4 5 6
+New opt max: 49
+0 0 1 1 2 3 3 5 6 9
+New opt max: 51
+0 0 1 1 2 3 3 4 6 9
+New opt max: 52
+0 0 0 1 1 2 4 5 7 9
+New opt max: 55
+0 0 0 1 1 2 4 4 7 9
+Maximum raw trees
+0 0 0 1 1 1 2 4 4 8
+Maximum opt trees
+0 0 0 1 1 2 4 4 7 9
+Trees where both is optimal:
+
+Degree 12
+New opt max: 34
+0 0 0 1 4 5 5 5 5 6 10
+New opt max: 46
+0 0 0 1 4 4 5 6 7 8 9
+New opt max: 47
+0 0 0 1 4 4 5 6 6 7 10
+New opt max: 49
+0 0 0 1 4 4 5 6 7 9 10
+New opt max: 50
+0 0 0 1 4 4 5 6 7 7 9
+New opt max: 55
+0 0 0 1 4 4 5 5 6 7 10
+New opt max: 57
+0 0 0 1 1 4 5 5 6 7 9
+New opt max: 61
+0 0 0 1 1 4 4 5 6 8 9
+0 0 0 1 1 4 5 6 6 8 10
+New opt max: 62
+0 0 0 1 1 4 4 5 6 7 9
+New opt max: 66
+0 0 0 1 1 4 4 5 6 9 10
+0 0 0 0 1 1 2 5 7 8 10
+New opt max: 68
+0 0 0 0 1 1 2 5 6 8 10
+New opt max: 71
+0 0 0 0 1 1 2 5 5 8 10
+Maximum raw trees
+0 0 0 1 1 1 2 4 4 5 8
+Maximum opt trees
+0 0 0 0 1 1 2 5 5 8 10
+Trees where both is optimal:
+
+Degree 13
+New opt max: 65
+0 0 1 1 1 2 3 3 4 5 6 7
+New opt max: 71
+0 0 1 1 1 2 3 4 6 7 8 10
+New opt max: 73
+0 0 1 1 1 2 3 4 4 6 7 11
+New opt max: 77
+0 0 1 1 1 2 3 4 6 7 10 11
+New opt max: 83
+0 0 1 1 1 2 3 3 4 6 7 11
+0 0 1 1 2 3 3 4 6 6 9 11
+New opt max: 84
+0 0 0 0 0 1 1 2 6 7 9 11
+New opt max: 87
+0 0 0 0 0 1 1 2 6 6 9 11
+0 0 0 0 1 1 2 5 5 7 8 11
+New opt max: 89
+0 0 0 0 1 1 2 5 5 6 8 11
+0 0 0 0 1 1 2 5 5 8 10 11
+0 0 0 1 1 2 4 4 5 7 10 11
+Maximum raw trees
+0 0 0 1 1 1 2 4 4 5 8 11
+0 0 0 1 1 1 2 4 4 5 8 8
+0 0 0 1 1 1 2 4 4 4 5 8
+0 0 0 1 1 1 2 4 4 8 8 10
+Maximum opt trees
+0 0 0 0 1 1 2 5 5 6 8 11
+0 0 0 0 1 1 2 5 5 8 10 11
+0 0 0 1 1 2 4 4 5 7 10 11
+Trees where both is optimal:
+
+Degree 14
+New opt max: 70
+0 0 1 2 2 3 4 4 4 6 6 10 12
+New opt max: 77
+0 0 1 2 2 2 3 4 5 7 7 10 12
+New opt max: 85
+0 0 1 2 2 2 3 4 7 7 8 9 12
+New opt max: 90
+0 0 1 2 2 3 3 4 5 6 7 8 10
+New opt max: 92
+0 0 1 2 2 2 3 3 4 7 9 10 12
+0 0 1 2 2 3 3 4 5 6 6 8 10
+New opt max: 94
+0 0 1 1 2 3 4 4 5 5 6 9 12
+New opt max: 98
+0 0 1 1 2 2 2 3 4 5 8 10 11
+New opt max: 99
+0 0 1 1 2 2 2 2 3 4 5 9 12
+New opt max: 101
+0 0 1 1 2 2 2 3 3 5 8 10 11
+New opt max: 102
+0 0 1 1 2 2 2 2 3 3 5 9 12
+New opt max: 103
+0 0 1 1 1 2 2 3 6 6 8 9 11
+New opt max: 104
+0 0 1 1 2 3 3 4 5 6 6 10 12
+New opt max: 106
+0 0 1 1 1 2 3 3 4 6 7 11 12
+0 0 0 0 1 1 2 5 6 7 8 11 12
+New opt max: 109
+0 0 0 0 1 1 2 5 5 6 7 8 12
+New opt max: 110
+0 0 0 0 1 1 2 5 5 7 8 11 12
+New opt max: 113
+0 0 0 0 1 1 2 5 5 6 8 11 12
+Maximum raw trees
+0 0 0 1 1 1 2 4 4 5 8 8 11
+Maximum opt trees
+0 0 0 0 1 1 2 5 5 6 8 11 12
+Trees where both is optimal:
+
+Degree 15
+New opt max: 64
+0 0 0 1 2 2 2 2 4 9 9 10 10 10
+0 0 0 1 2 4 5 6 6 6 7 8 9 11
+New opt max: 74
+0 0 0 1 2 4 5 5 6 6 6 7 9 10
+New opt max: 75
+0 0 0 1 2 2 4 5 6 7 7 7 10 11
+New opt max: 81
+0 0 0 1 2 2 4 5 7 7 7 8 9 10
+New opt max: 86
+0 0 0 1 2 4 5 5 6 6 6 7 9 13
+New opt max: 94
+0 0 0 1 2 2 4 5 7 7 7 8 9 13
+New opt max: 97
+0 0 0 1 2 2 4 4 5 7 8 9 10 11
+New opt max: 102
+0 0 0 1 2 2 4 4 5 7 8 8 9 10
+New opt max: 107
+0 0 0 1 2 2 4 4 5 6 7 8 11 13
+New opt max: 116
+0 0 0 1 2 2 4 4 5 7 8 9 10 13
+New opt max: 119
+0 0 0 1 2 2 4 4 5 7 7 9 10 13
+New opt max: 120
+0 0 0 1 1 2 2 2 4 5 6 9 12 13
+New opt max: 125
+0 0 0 1 1 2 2 2 4 4 5 6 9 13
+New opt max: 127
+0 0 0 1 1 1 2 2 4 5 7 9 11 12
+0 0 1 1 1 2 3 3 4 6 7 9 11 13
+0 0 1 1 1 2 3 3 4 6 7 8 11 13
+New opt max: 129
+0 0 1 1 1 2 3 3 4 6 7 11 12 13
+New opt max: 130
+0 0 1 1 1 2 3 3 4 6 7 7 11 13
+New opt max: 139
+0 0 1 1 2 2 2 2 3 4 5 9 11 12
+New opt max: 142
+0 0 1 1 2 2 2 2 3 3 5 9 11 12
+Maximum raw trees
+0 0 1 1 1 2 3 3 3 4 7 7 8 11
+Maximum opt trees
+0 0 1 1 2 2 2 2 3 3 5 9 11 12
+Trees where both is optimal:
+
+Degree 16
+New opt max: 111
+0 0 0 0 0 0 1 1 1 7 8 8 10 10 13
+New opt max: 124
+0 0 0 0 0 0 1 1 1 7 7 8 10 12 13
+New opt max: 127
+0 0 0 0 0 0 1 1 1 7 8 10 10 12 14
+New opt max: 136
+0 0 0 0 0 0 1 1 1 7 7 8 10 13 14
+New opt max: 141
+0 0 0 0 0 0 0 1 1 2 8 9 10 11 14
+New opt max: 142
+0 0 0 0 0 0 0 1 1 2 8 10 11 13 14
+New opt max: 144
+0 0 0 0 0 0 0 1 1 2 8 8 10 11 14
+New opt max: 155
+0 0 0 1 1 1 1 2 2 4 8 10 10 11 12
+New opt max: 165
+0 0 0 1 1 1 1 2 2 4 4 8 10 12 13
+New opt max: 172
+0 0 1 1 1 1 2 2 3 7 8 9 10 12 13
+New opt max: 175
+0 0 1 1 1 1 2 2 3 7 7 9 10 12 13
+0 0 1 1 1 1 1 2 2 3 8 9 10 11 14
+New opt max: 184
+0 0 1 1 1 1 1 2 2 3 8 8 10 11 14
+Maximum raw trees
+0 0 0 1 1 1 2 4 4 4 5 8 8 9 12
+Maximum opt trees
+0 0 1 1 1 1 1 2 2 3 8 8 10 11 14
+Trees where both is optimal:
+
+Degree 17
+New opt max: 80
+0 1 1 1 1 2 2 2 3 6 9 9 10 10 10 10
+New opt max: 138
+0 1 1 1 1 2 2 2 3 6 6 9 10 11 12 13
+New opt max: 140
+0 1 1 1 1 2 2 2 3 3 6 6 9 11 12 14
+New opt max: 153
+0 1 1 1 1 2 2 2 3 6 6 9 10 12 13 15
+New opt max: 155
+0 1 1 1 1 2 2 3 4 6 6 7 10 13 14 15
+0 1 1 1 1 2 2 3 4 6 6 7 10 10 13 15
+0 0 1 1 3 3 4 4 4 5 6 7 10 10 13 15
+New opt max: 157
+0 0 1 1 3 3 4 5 5 6 7 8 11 12 13 14
+New opt max: 159
+0 0 1 1 3 3 4 4 5 5 6 7 9 12 13 15
+New opt max: 165
+0 0 1 1 3 3 4 4 4 5 5 6 7 10 14 15
+New opt max: 173
+0 0 1 1 1 1 2 3 4 4 7 8 9 11 12 15
+New opt max: 185
+0 0 1 1 1 1 2 3 3 4 7 8 10 11 12 15
+New opt max: 190
+0 0 1 1 1 1 2 3 3 4 7 8 11 12 14 15
+New opt max: 194
+0 0 0 0 0 1 1 2 6 6 8 9 10 12 14 15
+New opt max: 198
+0 0 0 0 0 1 1 2 6 6 8 9 9 12 14 15
+New opt max: 200
+0 0 0 1 1 1 1 1 2 2 3 4 9 11 13 14
+New opt max: 201
+0 0 1 2 2 3 3 3 3 4 4 5 6 10 12 13
+New opt max: 211
+0 0 1 1 2 2 2 2 3 3 4 5 9 12 13 15
+New opt max: 217
+0 0 1 1 2 3 3 4 5 5 5 6 8 9 12 14
+New opt max: 222
+0 0 1 1 1 1 1 1 2 2 3 9 9 11 12 15
+New opt max: 228
+0 0 1 1 1 1 1 2 2 3 8 8 10 11 13 14
+New opt max: 231
+0 0 1 1 1 2 2 2 2 2 3 4 6 11 13 14
+New opt max: 235
+0 0 1 1 1 2 2 2 2 2 3 3 6 11 13 14
+Maximum raw trees
+0 0 0 1 1 1 2 2 4 4 4 5 7 9 9 14
+Maximum opt trees
+0 0 1 1 1 2 2 2 2 2 3 3 6 11 13 14
+Trees where both is optimal:
+
+Degree 18
+
+Degree 19
+Degree 0: mr 0 mo 0 ar 0.000000 ao 0.000000
+Degree 1: mr 7 mo 7 ar 7.000000 ao 7.000000
+Degree 2: mr 2 mo 2 ar 2.000000 ao 2.000000
+Degree 3: mr 3 mo 3 ar 3.000000 ao 3.000000
+Degree 4: mr 5 mo 5 ar 4.250000 ao 4.250000
+Degree 5: mr 7 mo 7 ar 5.888889 ao 5.888889
+Degree 6: mr 11 mo 11 ar 8.100000 ao 8.050000
+Degree 7: mr 16 mo 16 ar 11.041667 ao 10.812500
+Degree 8: mr 24 mo 22 ar 15.095652 ao 14.365217
+Degree 9: mr 34 mo 31 ar 20.566434 ao 18.758741
+Degree 10: mr 54 mo 41 ar 28.080668 ao 24.164117
+Degree 11: mr 79 mo 55 ar 38.328990 ao 30.665581
+Degree 12: mr 119 mo 71 ar 52.411037 ao 38.413974
+Degree 13: mr 169 mo 89 ar 71.688611 ao 47.494234
+Degree 14: mr 269 mo 113 ar 98.186971 ao 58.050193
+Degree 15: mr 357 mo 142 ar 125.697771 ao 67.827329
+Degree 16: mr 594 mo 184 ar 171.290928 ao 80.550591
+Degree 17: mr 850 mo 235 ar 240.392433 ao 96.668632
+Degree 18: mr 0 mo 0 ar 0.000000 ao 0.000000
+Degree 19: mr 0 mo 0 ar 0.000000 ao 0.000000
