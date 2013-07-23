@@ -1,0 +1,78 @@
+
+\chapter{Additional algorithms}
+\label{sec:additional-algs}
+
+\section{Enumerating all intrees with a certain number of nodes}
+\label{sec:enumerating-all-intrees}
+
+It is clear that the number of intrees with exactly $n$ nodes is exponential in $n$ \todo{proof}. However, for experimental purposes, it is convenient to have an algorithm that is capable of enumerating all these intrees. The main thing that should be kept in mind is that we do \emph{not} generate isomorphic intrees over and over again.
+
+We now show an algorithm to generate \emph{all} intrees with a certain number of nodes (called $n$) up to isomorphism. This algorithm is based on the following two facts: 
+
+\begin{itemize}
+  \item The overall root can have any amount of children between 1 and $n-1$. If it has only 1 child, the corresponding predecessor intree must contain exactly $n-1$ vertices. If it has exactly $n-1$ children, each predecessor intree contains exactly 1 vertex. All the cases in between admit several possibilities \todo{Worth stating exact stuff here?}.
+  \item If the overall root of the intree with $n$ verices has exactly $r$ predecessors (with $r \in \left\{ 1,2,\dots,n-1 \right\}$, as stated before), then the sum of the vertices with in the predecessor intrees is exactly $n-1$. Moreover, let us denote the predecessor intrees by $T_1,T_2,\dots,T_r$ and call $n_i$ the number of vertices in predecessor intree $T_i$ for all $i\in\left\{1,2,\dots,r \right\}$. Without loss of generality, we can assume $1 \leq n_1 \leq n_2 \leq n_3 \leq \dots \leq n_r$\todo{How many of these \emph{partitions} are there?}.
+\end{itemize}
+
+\newcommand{\treegeq}{\stackrel{T}{\geq}}
+
+We can exploit these two facts to construct a recursive algorithm which is described in algorithm \ref{alg:generate-intrees}. This algorithm enumerates all intrees with exactly $n$ vertices. It does so by traversing all tuples $(n_1,\dots,n_r)$ fulfilling
+\begin{equation*}
+  n_1 + n_2 + \dots + n_r = n-1 \quad \text{ and } \quad 1\leq n_1\leq n_2\leq\dots\leq n_r.
+\end{equation*}
+It then generates all combinations of predecessor intrees $(p_1,\dots,p_r)$ whose respective number of nodes are $n_1,\dots,n_r$. The algorithm thereby omits duplicate combinations. This can easily be acchieved by defining an order $\left(\treegeq\right)$ on intrees as follows ($t_1$ and $t_2$ being two intrees):
+
+\begin{equation}
+  \label{eq:definition-treegeq}
+  t_1 \treegeq t_2 \equiv (\text{$t_1$ has more vertices than $t_2$}) \vee \exists k \in \left\{ 1,2,\dots,r \right\}. \left( p_{1,k} \treegeq p_{2,k} \wedge \forall i<k. p_{1,i}=p_{2,i} \right)
+\end{equation}
+
+
+\begin{algorithm}
+  \begin{algorithmic}
+    \Procedure{GenerateIntrees}{$n$} \Comment{Returns the set of all intrees with exactly $n$ vertices}
+      \If{$n=1$} 
+        \State \textbf{return} $\left\{ \tikz{\fill(0,0) circle (0.1cm);} \right\}$ \Comment{Base case: Intree with just 1 vertex}
+      \EndIf
+      \State $R \gets \left\{  \right\}$ \Comment{Variable for result}
+      \For{$(n_1,\dots,n_r)
+            \in 
+            \left\{ (n_1,\dots,n_r) \in \naturals^r \mid 
+              1 \leq r < n \wedge
+              1 \leq n_1 \leq n_2 \leq \dots \leq n_r
+            \right\}$}
+        \State $P \gets$ (\Call{GenerateIntrees}{$n_1$},\dots,\Call{GenerateIntrees}{$n_r$}) \Comment{Predecessor intrees}
+        \For{$(p_1,\dots,p_r) \in P[1] \times P[2] \times \dots \times P[r]$}
+          \If{$p_1 \treegeq p_2 \treegeq \dots \treegeq p_r$} \Comment{No duplicates}
+          \State $R \gets R \cup \Call{CombinePredecessorIntrees}{p_1,\dots,p_r}$
+          \EndIf
+        \EndFor
+      \EndFor
+      \State \textbf{return} $R$
+    \EndProcedure
+    \Statex
+    \Procedure{CombinePredecessorIntrees}{$p_1,\dots,p_r$}
+    \State \textbf{return} $\left\{
+      \tikz[baseline=(current bounding box.center)]{
+        \fill (-0.5,0)circle(0.1cm);
+        \node(root) at (-0.5,0){};
+        \node[circle](1) at (-2,1) {$p_1$};
+        \node[circle](2) at (-1,1) {$p_2$};
+        \node[circle](p) at (0,1) {...};
+        \node[circle](r) at (1,1) {$p_r$};
+        \draw[-] (1) -- (root);
+        \draw[-] (2) -- (root);
+        \draw[-] (r) -- (root);
+      }
+      \right\} $
+      \Comment{New root with predecessor intrees $p_1,\dots,p_r$}
+    \EndProcedure
+  \end{algorithmic}
+  \caption{Generating all intrees up to isomorphism}
+  \label{alg:generate-intrees}
+\end{algorithm}
+
+
+%%% Local Variables:
+%%% TeX-master: "../thesis.tex"
+%%% End: 
