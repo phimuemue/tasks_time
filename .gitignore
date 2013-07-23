@@ -6,7 +6,6 @@
 *.out
 *.aux
 *.auxlock
-*.pdf
 *.dpth
 *.ps
 *.dblite
