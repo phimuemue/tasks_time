@@ -13,7 +13,7 @@ for d in degrees:
     counter = 0
     max_raw_trees = []
     max_dag_trees = []
-    for f in glob.glob("subtree_database/subtree_database_%d.txt*.result"%d):
+    for f in glob.glob("subtree_database/subtree_database_%d.txt*.unopt.result"%d):
         curfile = open(f, "r")
         for line in curfile:
             counter = counter + 1
