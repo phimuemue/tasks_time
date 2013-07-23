@@ -302,16 +302,13 @@ for line in database:
         tasks = subprocess.Popen(args, stdout=subprocess.PIPE)
         tasks.wait()
         output = tasks.communicate()[0]
-        print tree
         for line in output.splitlines():
-            print line
             #if line.startswith("Total number of snaps:"):
             if line.startswith("*"):
                 #curparts.append(line.split(":")[1].strip())
                 curparts.append(line.split("(")[2].split()[0])
             if line.startswith("Total number"):
                 total = line.split(":")[1].strip()
-        print ""
     myprint (tree)
     myprint (" | ")
     myprint (count_subtrees(tmp, {}))
