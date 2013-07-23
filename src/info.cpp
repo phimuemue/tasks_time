@@ -1,10 +1,10 @@
 #include "info.h"
 
-char builtby[] = "muellerp";
+char builtby[] = "philipp";
 char version[] = "0";
 char minor[] = "4";
-char build[] = "225";
-char date[] = "2013/07/22 10:12:40";
+char build[] = "226";
+char date[] = "2013/07/22 12:19:36";
 
 using namespace std;
 

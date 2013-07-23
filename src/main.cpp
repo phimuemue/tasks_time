@@ -131,7 +131,7 @@ int read_variables_map_from_args(int argc,
          "Generate profile graph TikZ-Output of snapshot(s) in file.")
         ("tikzhorizontal", po::value<bool>()->default_value(false)->zero_tokens(), 
          "Draw horizontal TikZ-DAG instead of vertical TikZ-DAG.")
-        ("tikzlimit", po::value<unsigned int>()->default_value(0), 
+        ("tikzlimit", po::value<unsigned int>()->default_value(1), 
          "Only show snapshots with a certain amount of tasks in TikZ.")
         ("tikzexp", po::value<bool>()->default_value(true), 
          "Draw expected values in TikZ.")

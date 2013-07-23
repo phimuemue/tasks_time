@@ -230,6 +230,9 @@ void TikzExporter2::tikz_string_dag_compact_internal(const TikzNode* s,
             }
             output << "\\\\" << endl << "};" << endl;
             output << "\\end{scope}" << endl;
+            if(task_count_limit==0){
+                return;
+            }
         }
         // connect (we have to draw probabilities seperately!)
         for(unsigned int l=1; l<s->snapshot->intree.count_tasks()+1-task_count_limit; ++l){
