@@ -6,9 +6,7 @@
 
 \todo{Prove that same profiles have same runtime.}
 
-If one considers the problem of scheduling an intree onto two processors, it becomes clear that HLF is optimal (\todo{Proof.}). \todo{Is the following correct:} Moreover, we can conclude that we can compute the optimal expected finish time in polynomial time.
-
-This section shows how the original problem of an intree DAG can be mapped onto another, more compact structure.
+If one considers the problem of scheduling an intree onto two processors, it becomes clear that HLF is optimal (\todo{Proof.}). Moreover, we can conclude that we can compute the optimal expected finish time in polynomial time. This chapter provides a proof for this claim that mainly relies on so-called \emph{profiles}. In this context, a profile is another structure that describes (some characteristics of) an intree in a compressed form.
 
 \subsection{Profiles of Intrees}
 \label{sec:p2-simple-method-runtime-profiles-for-intrees}
@@ -17,10 +15,7 @@ If we consider the trees in figure \ref{fig:p2-four-intrees-with-same-profile-6-
 
 \begin{figure}[ht]
   \centering
-  \input{p2/000111223_profile}\hspace{0.5cm}
-  \input{p2/000111122_profile}\hspace{0.5cm}
-  \input{p2/000111111_profile}\hspace{0.5cm}
-  \input{p2/000111222_profile}
+  \includegraphics{p2/four_profiles_631.pdf}  
   \caption{Four intrees with the same profile ($\profile{6,3,1}$). All of them have expected run time of $49/8$ if scheduled with HLF on two processors.}
   \label{fig:p2-four-intrees-with-same-profile-6-3-1}
 \end{figure}
@@ -47,7 +42,7 @@ For two processors and HLF-scheduling, we can easily conclude the successors of 
 
 \begin{figure}[ht]
   \centering
-  \input{p2/profiles_5421_suc_4421}
+  \includegraphics{p2/hlf_succs_same_profile.pdf}
   \caption{Intree with profile $\profile{5,4,2,1}$. \emph{All} possible HLF-successors of the original intree have profile $\profile{4,4,2,1}$.}
   \label{fig:p2-profiles-successors-of-5421-always-same}
 \end{figure}
@@ -61,35 +56,67 @@ The last example we want to give here is $\profile{1,1,1,3,1}$. In this case, th
 \section{Expected runtime for two processor HLF using profiles}
 \label{sec:p2-profiles-hlf-exp-runtime}
 
-We now use the profile notation to denote the expected run time (i.e. we say $\E{\profile{6,3,1}} = \frac{49}{8}$ --- see figure \ref{fig:p2-four-intrees-with-same-profile-6-3-1}).
+We now use the profile notation to denote the expected run time (i.e. we say $\E{\profile{6,3,1}} = \frac{49}{8}$ --- see figure \ref{fig:p2-four-intrees-with-same-profile-6-3-1}). For this expectancy, we 
 
 \subsection{A recursive definition}
 \label{sec:p2-profile-exp-run-time-rec-def}
 
-Exploiting profile notation, we can define the following recursive formula that can be used to compute the optimal expected run time:
+Exploiting profile notation, we can define the recursive formulae that can be used to compute the optimal expected run time. Before we do so, we introduce an abbreviation to obtain a ``slice'' (i.e. a continuous sub-sequence) of a profile.
+
+\newcommand{\profileconcat}{.}
+\begin{definition}[Slice of a profile]
+  Let $P=\profile{n_1,n_2,\dots,n_{r-1},n_r}$ be a profile of length $r$. Then for $i,j\in\left\{ 1,2,\dots,r \right\}$ with $i<j$, we define $P[i:j]=\profile{n_i,n_{i+1},\dots,n_{j-1},n_j}$ (which is then of length $j-i+1$).
+
+  We denote concatenation of profiles $P_1$ and $P_2$ by $P_1 \profileconcat P_2$.
+\end{definition}
+
+This definition, for example, gives $\profile{3,6,2,7,1,8}[2:4] = \profile{6,3,7}$ and $\profile{1,2,3}\profileconcat\profile{4,5,6}=\profile{1,2,3,4,5,6}$.
+We now continue with the recursive formulae aforementioned. If $P=\profile{n_1}\profileconcat P'$ is a profile, then we can compute:
 
 \begin{equation}
   \label{eq:p2-profile-optimal-exp-run-time}
-  \E{\profile{n_1, \dots, n_r}} =
+  \E{P} =
+  \E{\profile{n_1} \profileconcat P'} =
   \begin{cases}
-    r, & \text{ if } n_1 = n_2 = \dots = n_r = 1 \\
-    \frac{n_1-1}{2} + \E{\profile{1, n_2, n_3, \dots, n_r}} , & \text{ if } n_r\geq 2 \\
-    \frac{1}{2} + \frac{1}{2} \cdot \left( \E{\profile{n_2, \dots, n_r}} + \E{SUC(\profile{n_1,\dots,n_r})} \right) ,& \text{ otherwise }
+    r, & \text{ if } P = \profile{\profileones r} \\
+    \frac{n_1-1}{2} + \E{P'} , & \text{ if } n_1\geq 2 \\
+    \frac{1}{2} + \frac{1}{2} \cdot \left( \E{P'} + \E{SUC(P)} \right) ,& \text{ otherwise } 
   \end{cases},
 \end{equation}
+% This was the original
+% \begin{equation}
+%   \label{eq:p2-profile-optimal-exp-run-time}
+%   \E{\profile{n_1, \dots, n_r}} =
+%   \begin{cases}
+%     r, & \text{ if } n_1 = \dots = n_r = 1 \\
+%     \frac{n_1-1}{2} + \E{\profile{1, n_2, n_3, \dots, n_r}} , & \text{ if } n_r\geq 2 \\
+%     \frac{1}{2} + \frac{1}{2} \cdot \left( \E{\profile{n_2, \dots, n_r}} + \E{SUC(\profile{n_1,\dots,n_r})} \right) ,& \text{ otherwise } 
+%   \end{cases},
+% \end{equation}
 where $SUC(\profile{n_1,\dots,n_r}) = \profile{n_1, n_2, n_3,\dots,n_{j-1},n_j-1,n_{j+1},\dots,n_r}$ such that $j$ is the minimum index such that $n_j>1$.
 
 If we consider the second case of equation (\ref{eq:p2-profile-optimal-exp-run-time}), we see that we can simplify it to the following:
 
 \begin{equation}
   \label{eq:p2-profile-optimal-exp-run-time-def-simplified}
-  \E{\profile{n_1, \dots, n_r}} =
+  \E{P} =
+  \E{\profile{n_1} \profileconcat P'} =
   \begin{cases}
-    r, & \text{ if } n_1 = n_2 = \dots = n_r = 1 \\
-    \frac{n_1}{2} + \frac{1}{2} \cdot \left( \E{\profile{n_2, \dots, n_r}} + \E{SUC(\profile{1,n_2,\dots,n_r})} \right) ,& \text{ otherwise }
+    r, & \text{ if } P= \profile{\profileones{r}} \\
+    \frac{n_1}{2} + \frac{1}{2} \cdot \left( \E{P'} + \E{SUC\left(\profile{1}\profileconcat P'\right)} \right) ,& \text{ otherwise } \\
   \end{cases},
 \end{equation}
-with $SUC$ as defined before.
+% This was original
+% \begin{equation}
+%   \label{eq:p2-profile-optimal-exp-run-time-def-simplified}
+%   \E{\profile{n_1, \dots, n_r}} =
+%   \begin{cases}
+%     r, & \text{ if } n_1 = n_2 = \dots = n_r = 1 \\
+%     \frac{n_1}{2} + \frac{1}{2} \cdot \left( \E{\profile{n_2, \dots, n_r}} + \E{SUC(\profile{1,n_2,\dots,n_r})} \right) ,& \text{ otherwise } \\
+%     %\frac{\displaystyle n_1 + \E{\profile{n_2, \dots, n_r}} + \E{SUC(\profile{1,n_2,\dots,n_r})} }{\displaystyle2} ,& \text{ otherwise }
+%   \end{cases},
+% \end{equation}
+with $SUC$ as defined before. \todo{Figures for explanation}
 
 \subsection{Solving the recurrence for special cases}
 \label{sec:p2-profile-exp-runtime-closed-form-spec-cases}
@@ -261,7 +288,7 @@ Of course, it is an interesting question how complex this computation is. Theref
 
 \begin{figure}[t]
   \centering
-  \input{p2/profile_dag_of_000111223_hlfdet}
+  \includegraphics{p2/profile_dag_of_000111223_hlfdet.pdf}
   \caption{A snapshot DAG (HLF, two processors) and its corresponding profile DAG containing much less nodes than the original snaphsot DAG. \emph{Remark:} Snapshots with same profiles have the same expected run time and can thus be merged. }
   \label{fig:p2-profile-dag-example-000111223-hlfdet}
 \end{figure}
@@ -279,19 +306,19 @@ If we compute the expected run time via the profiles (as equation (\ref{eq:p2-pr
 Thus, it is an important question how big these profile DAGs can get. To tackle this question, we examine for a profile $P=\profile{n_1,\dots,n_r}$ how many profiles of a certain length exist as successors of this profile.
 
 We inspect the following example: Consider the profile $\profile{4,3,5,1}$. Its successing profiles of length 4 are
-\begin{equation*}
-  \profile{3, 3, 5, 1},
-  \profile{2, 3, 5, 1},
-  \profile{1, 3, 5, 1},
-  \profile{1, 2, 5, 1},
-  \profile{1, 1, 5, 1},
-  \profile{1, 1, 4, 1},
-  \profile{1, 1, 3, 1},
-  \profile{1, 1, 2, 1} \text{ and }
-  \profile{1, 1, 1, 1}.
-\end{equation*}
+\begin{center}
+  \begin{tabular}{l}
+    $\profile{3, 3, 5, 1}, \profile{2, 3, 5, 1}, \profile{1, 3, 5, 1},$ \\
+    $\profile{1, 2, 5, 1}, \profile{1, 1, 5, 1},$ \\
+    $\profile{1, 1, 4, 1},
+    \profile{1, 1, 3, 1},
+    \profile{1, 1, 2, 1} \text{ and }
+    \profile{1, 1, 1, 1}$.
+  \end{tabular}
+\end{center}
 
 We recognize that the first item in the succesing profiles has to be at most 4 (since the \emph{original} first entry was exactly 4). Moreover, the second entry can only be less then 3 (\emph{original} second entry: 3) if the first entry is 1. Similarily, the third entry in a successing profile can only be less then 5 (original third entry: 5) if the first and the second entry are 1.
+We illustrated this by putting the corresponding profiles into several lines in the description above.
 
 More general: In a successing profile, the entry at a certain position can only be less than the original entry at this position if all entries \emph{up to that position} are already 1.
 
@@ -371,11 +398,14 @@ Now that we know the size of the profile DAG, this imposes the question how many
 
 \begin{lemma}
   \label{lem:profile-dags-form-of-maximum-profile}
-  For an intree with $n$ nodes and $r$ levels (i.e. an intree having a profile with $r$ entries), the maximum size of the profile DAG is reached if the profile is of the form $\profile{\profileones{r-2},n-r+1,1}$.
+  For an intree with $n$ nodes and $r$ levels (i.e. an intree having a profile with $r$ entries), the maximum size of the profile DAG is reached if the profile is of the form
+  \begin{equation*}
+    \profile{\profileones{r-2},n-r+1,1}.
+  \end{equation*}
 \end{lemma}
 
 \begin{proof}
-  We compute the number of nodes in the profile DAG for the profile $P^*= \profile{\profileones{r-2},n-r+1,1}$. According to lemma  \ref{lem:profile-dags-exact-size}, it is exactly
+  We compute the number of nodes in the profile DAG resulting from an intree with profile $P^*= \profile{\profileones{r-2},n-r+1,1}$. According to lemma  \ref{lem:profile-dags-exact-size}, it is exactly
   \begin{equation*}
     \sum_{j=1}^{r-2} j\cdot 1 + (r-1)\cdot(n-r+1) = \frac{(r-1)\cdot(r-2)}{2} + (r-1)\cdot(n-r+1).
   \end{equation*}
@@ -458,13 +488,13 @@ It remains to explain how to choose $r$ in a way such that given the number of t
 
 We can now combine the lemmata to the following theorem:
 
-\begin{theorem}[Size of profile DAG]
+\begin{theorem}[Maximum size of profile DAG]
   \label{the:profile-dags-maximum-size-quadratic}
   For an intree with exactly $n$ tasks, the profile DAG has at most $\lfloor \frac{n}{2} \rfloor \cdot \lceil \frac{n}{2} \rceil +1$ nodes.
 \end{theorem}
 
 \begin{proof}
-  Lemma \ref{lemma:worst-case-profile-structure} gives us that the wors-case profile is $P^*=\profile{ \profileones{ \left\lfloor\frac{n}{2} \right\rfloor - 1}, \left\lceil \frac{n}{2} \right\rceil, 1 }$, which we use to compute the number of nodes in the corresponding worst-case profile DAG according to lemma \ref{lem:profile-dags-exact-size}:
+  Lemma \ref{lemma:worst-case-profile-structure} gives us that the worst-case profile is $P^*=\profile{ \profileones{ \left\lfloor\frac{n}{2} \right\rfloor - 1}, \left\lceil \frac{n}{2} \right\rceil, 1 }$, which we use to compute the number of nodes in the corresponding worst-case profile DAG according to lemma \ref{lem:profile-dags-exact-size}:
   \renewcommand{\r}{\left(\left\lfloor\frac{n}{2}\right\rfloor + 1\right)}
   \begin{equation*}
     \frac{(\r-2)\cdot(\r-1)}{2} + 
@@ -490,8 +520,8 @@ We can now combine the lemmata to the following theorem:
 
 Theorem \ref{the:profile-dags-maximum-size-quadratic} shows in particular that the worst-case size of a profile DAG is quadratic in the number of tasks of the intree. Additionally, we can use use the theorem to derive a simple, loose bound on the size of the original snapshot DAG resulting from a HLF schedule for two processors.
 
-\begin{corollary}[Upper bound for the size of the snapshot DAG]
-  The size of a snapshot DAG for an intree containing $n$ tasks is $O(n^4)$.
+\begin{corollary}[Upper bound for the size of the snapshot DAG for P2]
+  The size of a snapshot DAG for an intree containing $n$ tasks and resulting from HLF scheduling for two processors is $O(n^4)$.
 \end{corollary}
 
 \begin{proof}

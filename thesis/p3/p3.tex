@@ -31,8 +31,18 @@ From this we can conclude that it may be advantageous in some cases to accept a 
 
 \begin{figure}[ht]
   \centering
-  \input{p3/p3l_suboptimal}
-  \caption{An intree whose optimal schedule is expected to keep three processors busy for roughly 0.77777 time steps, while a suboptimal schedule is expected to keep three processors busy for roughly 0.851852 time steps.\todo{See figure \ref{fig:p3-p1s-suboptimal-example}!}}
+  \begin{subfigure}{.45\linewidth}
+    \centering
+    \includegraphics{p3/keep_3_busy/three_busy_opt.pdf}
+    \caption{Optimal schedule. Keeps three processors busy for $7/9\approx 0.78$ time steps.}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\linewidth}
+    \centering
+    \includegraphics{p3/keep_3_busy/three_busy_subopt.pdf}
+    \caption{This suboptimal schedule keeps three processors busy for expectedly $0.851852$ time steps.}
+  \end{subfigure}
+  \caption{An intree that shows that an optimal P3 schedule needs not keep busy three processors as long as possible. Snapshots with fewer than 6 tasks omitted since they have at most two tasks to be schedlued can be (optimally) processed via ordinary HLF. \todo{See figure \ref{fig:p3-p1s-suboptimal-example}!}}
   \label{fig:p3-p3l-suboptimal-example}
 \end{figure}
 
@@ -63,8 +73,8 @@ That is, we have seen examples that the following holds.
 
   Let $I$ be an intree and $S$ be the set of all schedules. Let $s^*$ be the optimal schedule, which has associated the optimal run time $T^*$, with $T_1^*, T_2^*, T_3^*$ being its parts.
   \begin{itemize}
-  \item It may be the case that $\exists s\in S.\  T_3^s \geq T_3^*$.
-  \item It may be the case that $\exists s\in S.\  T_1^s \leq T_1^*$.
+  \item It may be the case that there is a schedule $s\in S$ such that $T_3^s \geq T_3^*$.
+  \item It may be the case that there is a schedule $s\in S$ such that $T_1^s \leq T_1^*$.
   \end{itemize}
 \end{corollary}
 
@@ -73,39 +83,55 @@ That is, it is not necessarily the case that $T_3$ is maximal for the optimal sc
 However, after some investigation, we are tempted to conjecture the following.
 
 \begin{conjecture}
-  Let $I$, $T^s, T_1^s, T_2^s, T_3^s$ and $S$ be as defined above. Let $s^*$ be the optimal schedule for $I$ associated with the respective times $T_1^*, T_2^*, T_3^*$. Then, there is no $s\in S$ such that $T^s > T^* \wedge T_1^s \leq T_1^* \wedge T_3^s \geq T_3^*$.
+  Let $I$, $T^s, T_1^s, T_2^s, T_3^s$ and $S$ be as defined above. Let $s^*$ be the optimal schedule for $I$ associated with the respective times $T_1^*, T_2^*, T_3^*$. Then, there is no schedule $s\in S$ such that
+  \begin{equation*}
+    T^s > T^* \wedge T_1^s \leq T_1^* \wedge T_3^s \geq T_3^*.
+  \end{equation*}
 \end{conjecture}
+
+\clearpage{}
 
 \section{Size of the snapshot DAG}
 \label{sec:p3-size-of-snapshot-dag-first-attempts}
 
 Similar to the reasoning in section \ref{sec:p2-snapshot-dag}, we can research the size of a snapshot DAG for the P3 case. 
 We conducted an experiment and examined the size for snapshot DAGs of intrees containing up to 17 tasks. 
-We thereby examined as well the optimal DAG as the DAG arising from a scheduling strategy that can pick \emph{any} leaf.
+Therefore, we generated all intrees (up to isomorphism) with a certain number of tasks (see section \ref{sec:enumerating-all-intrees} for an algorithm).
+Then we computed the following for each intree:
+\begin{itemize}
+\item Number of distinct (i.e. non-isomorphic) subtrees.
+\item Number of snapshots that can be constructed using the LEAF scheduling strategy (i.e. ``try-everything'' scheduling).
+\item The size of the \emph{optimal} snapshot DAG.
+\end{itemize}
+
+We do so because of the following: It is easily possible to construct an optimal schedule if we take the possible snapshot DAGs of the LEAF scheduler and only leave the choices that yield the best expected run time.
+
 Since the size of the snapshot DAG for an intree with $n$ tasks is at most $n^3$ times as large as the number of subtrees of the original intree, we also computed the number of subtrees for each of these intrees.
+That is, we can compare the number of intrees to the number of snapshots to be considered.
+
 The results are summed up in table \ref{tab:num-subtrees-size-of-dags}\todo{Complete!}.
 
 \begin{table}[ht]
   \centering
-  \begin{tabular}[ht]{ccccc}
-    \multirow{2}{*}{Degree} & \multicolumn{2}{c}{Subtrees} & \multicolumn{2}{c}{Snapshot DAG} \\
-    & Max & Avg & Max & Avg \\
+  \begin{tabular}[ht]{ccccccc}
+    \multirow{2}{*}{Degree} & \multicolumn{2}{c}{Subtrees} & \multicolumn{2}{c}{Snapshots} & \multicolumn{2}{c}{``Optimal DAG''} \\
+    & Max & Avg & Max & Avg & Max & Avg \\
     \hline
-    3 & 3 & 3.00 & 3 & 3.00  \\
-    4 & 5 & 4.25 & 5 & 4.25  \\
-    5 & 7 & 5.89 & 7 & 5.89  \\
-    6 & 11 & 8.10 & 11 & 8.05  \\
-    7 & 16 & 11.04 & 16 & 10.81  \\
-    8 & 24 &  15.10 & 22 & 14.37  \\
-    9 & 34 &  20.57 & 31 & 18.76  \\
-    10 & 54 &  28.08 & 41 & 24.16  \\
-    11 & 79 &  38.33 & 55 & 30.67  \\
-    12 & 119 & 52.41 & 71 & 38.41  \\
-    13 & 169 &  71.69 & 89 & 47.49  \\
-    14 & 269 &  98.19 & 113 & 58.05  \\
-    15 & 357 &  125.70 & 142 & 67.83  \\
-    16 & 594 &  171.29 & 184 & 80.55  \\
-    17 & 807 &  225.45 & 235 & 94.35  \\
+    3 & 3 & 3.00 & 3 & 3.00 & 3 & 3.00  \\
+    4 & 5 & 4.25 & 5 & 4.25 & 5 & 4.25  \\
+    5 & 7 & 5.89 & 7 & 5.89 & 7 & 5.89  \\
+    6 & 11 & 8.10 & 11 & 8.25 & 11 & 8.05  \\
+    7 & 16 & 11.04 & 19 & 11.75 & 16 & 10.81  \\
+    8 & 24 &  15.10 & 34 & 17.39 & 22 & 14.37  \\
+    9 & 34 &  20.57 & 63 & 26.53 & 31 & 18.76  \\
+    10 & 54 &  28.08 & 119 & 41.85 & 41 & 24.16  \\
+    11 & 79 &  38.33 & 230 & 67.48 & 55 & 30.67  \\
+    12 & 119 & 52.41 & 437 & 112.68 & 71 & 38.41  \\
+    13 & 169 &  71.69 & 812 & 184.95 & 89 & 47.49  \\
+    14 & 269 &  98.19 & 1510 & 304.41 & 113 & 58.05  \\
+    % 15 & 357 &  125.70 & 142 & 67.83  \\
+    % 16 & 594 &  171.29 & 184 & 80.55  \\
+    % 17 & 850 &  240.39 & 235 & 96.67  \\
   \end{tabular}
   \caption{Number of subtrees, size of the optimized snapshot DAG}
   \label{tab:num-subtrees-size-of-dags}
@@ -113,8 +139,41 @@ The results are summed up in table \ref{tab:num-subtrees-size-of-dags}\todo{Comp
 
 As we can see in table \ref{tab:num-subtrees-size-of-dags}, the number of subtrees is (at least for $n\geq  9$ significantly larger than the number of snapshots in the snapshot DAG describing an optimal schedule.
 
-Another interesting fact is that there is no ``strict correlation'' between the number of subtrees and the number of snapshots in the optimal snapshot DAG. That is, there are certain DAGs that have more non-isomorphic subtrees than another DAG, yet -- on the other hand -- more snapshots in the optimal snapshot DAG. Moreover, intrees containing $n$ tasks and having the maximal number of subtrees are (at least for $8\leq n \leq 17$) are not the ones having the largest optimal snapshot DAG.
+Another interesting fact is that there is no ``strict correlation'' between the number of subtrees and the number of snapshots in the optimal snapshot DAG. That is, there are certain DAGs that have more non-isomorphic subtrees than another DAG, yet -- on the other hand -- more snapshots in the optimal snapshot DAG. As an example, consider the intrees $T_1$ described by 00011111 and $T_2$ described by 00001234: $T_1$ has 19 subtrees and its optimal snapshot DAG contains 13 snapshots, while $T_2$ has only 15 subtrees, but an optimal snapshot DAG containing 14 snapshots.
 
+Moreover, intrees containing $n$ tasks and having the maximal number of subtrees are (at least for $8\leq n \leq 17$) are not the ones having the largest optimal snapshot DAG.
+
+To determine the maximum size of the optimal snapshot DAG for the P3 case, it might be useful to investigate whether the trees that have a large snapshot DAG can be constructed according to a specific pattern. The intrees resulting in snapshot DAGs of maximum size are depicted in figure \ref{fig:intrees-maximum-snapshot-dag-size-p3}. The intrees in this figure seem to behave quite chaotic and we were not able to deduce any pattern according to which they could be generated for general $n$.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[scale=1.4]{p3/max_unoptimized.pdf}
+  \caption{These are the intrees for which the a brute-force algorithm has to generate maximally many snapshots to generate the optimal schedule (maximal compared to all other intrees with the same number $n$ of vertices). We show $2\leq n \leq 14$.}
+  \label{fig:intrees-maximum-unoptimized-p3}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[scale=1.4]{p3/max_snapshot_dag.pdf}
+  \caption{These intrees result in \emph{optimal} snapshot DAGs that are larger than all other optimal snapshot DAGs resulting from intrees having the same number of tasks $n$ ($2 \leq n \leq 17$ shown). There seems to be no simple pattern according to which these trees are constructed.}
+  \label{fig:intrees-maximum-snapshot-dag-size-p3}
+\end{figure}
+
+\section{Special classes of intrees}
+\label{sec:p3-dag-size-special-class-of-intrees}
+
+If we consider trees. whose sequence description is of the form $(0, 0, 1, 1, 3, 3, 5, 5, 7,7, 9,9,\dots)$, that have an even number of nodes, then the optimal snapshot DAGs have $\binom{n}{1}+\binom{n}{2}+\binom{n}{3}$ snapshots. \todo{Make this conjecture and nice!}
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{lcc}
+    Class & No. snaps & Opt. size \\
+    $(0,0,1,1,3,3,5,5,\dots)$ & & $\binom{n/2}{1}+\binom{n/2}{2}+\binom{n/2}{3}$ \\
+    $(0,0,0,1,1,1,4,4,4,7,7,7,\dots)$ & & $((n/3)^3 + 2*(n/3))/3$
+  \end{tabular}
+  \caption{Classes and their DAG sizes}
+  \label{tab:special-classes-dag-sizes}
+\end{table}
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"
 %%% End: 
