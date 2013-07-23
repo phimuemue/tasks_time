@@ -281,7 +281,7 @@ def count_subtrees(it, pool):
 filename = (sys.argv[1])
 print "Working with filename %s"%filename
 database = open(sys.argv[1], "r")
-resultfile = open(filename+".result", "w")
+resultfile = open(filename+".unopt.result", "w")
 
 def myprint(a):
     resultfile.write(str(a))
@@ -291,26 +291,33 @@ for line in database:
     progs = [
                 # ("c0 o0", ["build/tasks_cs0", "-s", "leaf"]),
                 # ("c0 o1", ["build/tasks_cs0", "-s", "leaf", "--optimize"]),
-                # ("c1 o0", ["build/tasks_cs1", "-s", "leaf"]),
-                ("c1 o1", ["build/tasks_cs1", "-s", "leaf", "--optimize"]),
+                ("c1 o0", ["build/tasks_cs1", "-s", "leaf"]),
+                # ("c1 o1", ["build/tasks_cs1", "-s", "leaf", "--optimize"]),
             ]
     tmp = Intree([int(x) for x in tree.split()])
     curparts = []
+    total = ""
     for prog in progs:
         args = prog[1] + ["-p3", "--direct", "\"%s\""%tree]
         tasks = subprocess.Popen(args, stdout=subprocess.PIPE)
         tasks.wait()
         output = tasks.communicate()[0]
+        print tree
         for line in output.splitlines():
+            print line
             #if line.startswith("Total number of snaps:"):
             if line.startswith("*"):
                 #curparts.append(line.split(":")[1].strip())
                 curparts.append(line.split("(")[2].split()[0])
+            if line.startswith("Total number"):
+                total = line.split(":")[1].strip()
+        print ""
     myprint (tree)
     myprint (" | ")
     myprint (count_subtrees(tmp, {}))
     myprint (" | ")
     myprint (" | ".join(curparts))
+    myprint (" | %s"%total)
     myprint ("\n")
 
 resultfile.close()
