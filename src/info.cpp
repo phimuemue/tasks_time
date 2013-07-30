@@ -4,7 +4,7 @@ char builtby[] = "philipp";
 char version[] = "0";
 char minor[] = "4";
 char build[] = "226";
-char date[] = "2013/07/22 12:19:36";
+char date[] = "2013/07/23 17:12:32";
 
 using namespace std;
 
