@@ -137,7 +137,7 @@ The results are summed up in table \ref{tab:num-subtrees-size-of-dags}\todo{Comp
   \label{tab:num-subtrees-size-of-dags}
 \end{table}
 
-As we can see in table \ref{tab:num-subtrees-size-of-dags}, the number of subtrees is (at least for $n\geq  9$ significantly larger than the number of snapshots in the snapshot DAG describing an optimal schedule.
+As we can see in table \ref{tab:num-subtrees-size-of-dags}, the number of subtrees is (at least for $n\geq  9$) significantly larger than the number of snapshots in the snapshot DAG describing an optimal schedule.
 
 Another interesting fact is that there is no ``strict correlation'' between the number of subtrees and the number of snapshots in the optimal snapshot DAG. That is, there are certain DAGs that have more non-isomorphic subtrees than another DAG, yet -- on the other hand -- more snapshots in the optimal snapshot DAG. As an example, consider the intrees $T_1$ described by 00011111 and $T_2$ described by 00001234: $T_1$ has 19 subtrees and its optimal snapshot DAG contains 13 snapshots, while $T_2$ has only 15 subtrees, but an optimal snapshot DAG containing 14 snapshots.
 
@@ -175,25 +175,392 @@ If we consider trees. whose sequence description is of the form $(0, 0, 1, 1, 3,
   \label{tab:special-classes-dag-sizes}
 \end{table}
 
+\section{Degenerate intrees}
+\label{sec:p3-degenerate-intrees}
+
+\todo{Definitions: intree, level, suc, adding tasks to trees etc.}
+
+\subsection{Degenerate binary trees}
+\label{sec:p3-degenerate-trees-binary}
+
+We researched degenerate binary trees, i.e. trees whose sequence has the structure
+\begin{equation*}
+  \left( 0,0,a_0,a_1,a_2,a_3,a_4,\dots,a_n \right),
+\end{equation*}
+for $n$ the total number of tasks within the intree. The values $a_i$ can be recursively defined as follows:
+\begin{equation*}
+  a_k =
+  \begin{cases}
+    1, & \text{if } k\leq 1 \\
+    a_{k-1}, & \text{if } k>1 \text{ is odd} \\
+    a_{k-1}+2, & \text{if } k>1 \text{ is even}
+  \end{cases}
+\end{equation*}
+
+That is, degenerate binary trees have sequences of the form $(0,0,1,1,3,3,5,5,7,7,9,\dots)$.
+
+We now examine how many snapshots are considered if we compute the optimal P3 schedule by considering \emph{all} possibilities and afterwards discarding the bad ones. The results are summed up in table \ref{tab:p3-degenerate-binary-trees-no-snapshots}. We clearly observe that the number of snapshots grows exponentially (at least within the range for $n$ under consideration). A simple pattern that can be observed from table \ref{tab:p3-degenerate-binary-trees-no-snapshots} is that (at least for $n\leq 26$) that the number of snapshots for a degenerate binary tree with $n$ tasks is greater than twice the number of snapshots for a degenerate binary tree with $n-2$ tasks. If $S(n)$ denotes the number of snapshots for a degenerate binary tree, we can formulate $S(n)>S(n-2)$, which we can (by induction) convert to $S(n) > \sqrt 2 ^ n$.
+
+\begin{table}[t]
+  \centering
+  \begin{tabular}[ht]{lcc}
+    \multirow{2}{*}{$n$} & \multicolumn{2}{c}{Snapshots} \\
+     & Overall & HLF \\
+    \hline
+    3  &  3       & 3   \\
+    4  &  5       & 5   \\
+    5  &  7       & 7   \\
+    6  &  11      & 11  \\
+    7  &  17      & 14  \\
+    8  &  28      & 21  \\
+    9  &  48      & 25  \\
+    10 &  85      & 36  \\
+    11 &  150     & 41  \\
+    12 &  276     & 57  \\
+    13 &  477     & 63  \\
+    14 &  884     & 85  \\
+    15 &  1477    & 92  \\
+    16 &  2717    & 121 \\
+    17 &  4398    & 129 \\
+    18 &  7991    & 166 \\
+    19 &  12600   & 175 \\
+    20 &  22594   & 221 \\
+    21 &  34883   & 231 \\
+    22 &  61774   & 287 \\
+    23 &  93775   & 298 \\
+    24 &  164187  & 365 \\
+    25 &  245852  & 377 \\
+    26 &  426089  & 456 \\
+  \end{tabular}
+  \caption{Number of snapshots for degenerate binary trees in the P3 case. The first column, $n$, denotes the number of tasks.\todo{Make as broad as the whole page.}}
+  \label{tab:p3-degenerate-binary-trees-no-snapshots}
+\end{table}
+
+Interestingly, degenerate binary intrees, while having a possibly huge amount of snapshots, are probably optimally scheduled by HLF. You can compare the number of HLF snapshots to the number of overal snapshots by looking at table \ref{tab:p3-degenerate-binary-trees-no-snapshots}.
+
+\begin{lemma}
+  \label{lem:p3-adding-tasks-level-keep-scheduled-same-inequality}
+  Let $I$ be a degenerate intree and $x, y$ two (not necessarily distinct) ready tasks within this intree. Let $z_1, z_2$ be two new tasks that will be added to this intree with $level(z_1) > level(z_2)$ in a manner such that $I_1:=I\cup\left\{ z_1 \right\}$ and $I_2:=I\cup\left\{ z_2 \right\}$ are still degenerate intrees. Moreover, the tasks $z_1$ and $z_2$ shall be added in such a way that neither $x$ nor $y$ is a successor of $z_1$ resp. $z_2$ (i.e. $x,y$ stay ready in $I_1$ resp. $I_2$). 
+  
+  By $T^*_{t_1,t_2,t_3}(I)$ we denote the optimal expected run time that can be acchieved if we \emph{initially} schedule all tasks from the set $\left\{ t_1,t_2,t_3 \right\}$. \todo{Notation auslagern.} Note that this notation does not necessarily require that we actually have three tasks (e.g. if $t_1=t_2$).
+  
+  Then, if $x,y$ and $z_1$ resp. $z_2$ are used as initial tasks, we have the following for the best acchievable expected run times (for respective initial tasks):
+  \begin{equation}
+    \label{eq:lemma-p3-adding-tasks-level-keep-scheduled-same-inequality}
+    T^{*}_{x,y,z_1}\left(I\cup\left\{ z_1 \right\}\right) > T^{*}_{x,y,z_2}\left( I\cup\left\{ z_2 \right\} \right)
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  We prove the claim by induction on the number of nodes:
+  
+  The induction basis is the case where we have degenerate intrees with 3 tasks\footnote{We start by 3 tasks since these trees are the only ones that allow adding $z_1$ and $z_2$ at different levels such that both $x$ and $y$ stay ready. For an intree with two tasks, the claim can be seen by simply examining that $T(0,0)<T(0,1)$\todo{Improve this footnote.}.} (all of them are depicted in figure \ref{fig:p3-lemma-adding-intrees-induction-start} (only the black nodes)).
+  
+  \begin{figure}[t]
+    \centering
+    \begin{tikzpicture}[scale=0.25]
+      \newcommand{\treeone}{
+        \fill(0,0) circle (0.4);
+        \fill(0,1) circle (0.4);
+        \fill(0,2) circle (0.4);
+        \draw(0,0) -- (0,1);
+        \draw(0,1) -- (0,2);
+      }
+      \newcommand{\treetwo}{
+        \fill(0,0) circle (0.4);
+        \fill(-.50,1) circle (0.4);
+        \fill(.50,1) circle (0.4);
+        \draw(0,0) -- (0.5,1);
+        \draw(0,0) -- (-.5,1);
+      }
+      \newcommand{\treethree}{
+        \fill(0,0) circle (0.4);
+        \fill(0,1) circle (0.4);
+        \draw(0,0) -- (0,1);
+      }
+      % \begin{scope}
+      %   \treeone;
+      % \end{scope}
+      % \begin{scope}[xshift=9cm]
+      %   \treetwo;
+      % \end{scope}
+
+      \begin{scope}[yshift=-5cm, xshift=-20.5cm]
+        \begin{scope}
+          \treethree;
+          \draw(0,1) -- (0,2);
+          \draw[fill=white](0,2) circle (0.4);
+          \node at (0,-2) {3};
+        \end{scope}
+        \node at (2.5,-2) {$>$};
+        \begin{scope}[xshift=5cm]
+          \treethree;
+          \draw(0,0) -- (1,1);
+          \draw[fill=white](1,1) circle (0.4);
+          \node at (0,-2) {2.5};
+        \end{scope}
+      \end{scope}
+
+      \begin{scope}[yshift=-5cm, xshift=-3.5cm]
+        \begin{scope}
+          \treeone;
+          \draw(0,2) -- (0,3);
+          \draw[fill=white](0,3) circle (0.4);
+          \node at (0,-2) {4};
+        \end{scope}
+        \node at (2.5,-2) {$>$};
+        \begin{scope}[xshift=5cm]
+          \treeone;
+          \draw(0,1) -- (1,2);
+          \draw[fill=white](1,2) circle (0.4);
+          \node at (0,-2) {3.5};
+        \end{scope}
+        \node at (8,-2) {$>$};
+        \begin{scope}[xshift=11cm]
+          \treeone;
+          \draw(0,0) -- (1,1);
+          \draw[fill=white](1,1) circle (0.4);
+          \node at (0,-2) {3.25};
+        \end{scope}
+        % \node at (4,-1.5) {$4 > 3.5 > 3.25$};
+      \end{scope}
+
+      \begin{scope}[yshift=-5cm, xshift=20cm]
+        \begin{scope}[xshift=0cm]
+          \treetwo;
+          \draw(-.5,1) -- (-.5,2);
+          \draw[fill=white](-.5,2) circle (0.4);
+          \node at (0,-2) {3.25};
+        \end{scope}
+        \node at (2.5,-2) {$>$};
+        \begin{scope}[xshift=5cm]
+          \treetwo;
+          \draw(0,0) -- (1.5,1);
+          \draw[fill=white](1.5,1) circle (0.4);
+          \node at (0,-2) {2.83};
+        \end{scope}
+      \end{scope}
+      
+    \end{tikzpicture}
+    \caption{Adding new tasks to degenerate intrees with less than four nodes such that the resulting intrees are still degenerate. The original (2- resp. 3-node) intrees are drawn black, the newly added tasks are drawn white. Below each intree, we see the corresponding optimal expected run time. The lower the level of the newly added task, the lower the expected run time. This serves as basis for the induction proof for lemma \ref{lem:p3-adding-tasks-level-keep-scheduled-same-inequality}.}
+    \label{fig:p3-lemma-adding-intrees-induction-start}
+  \end{figure}
+
+  If we add two tasks $z_1$ and $z_2$ with $level(z_1)>level(z_2)$ in a way such that the original ready tasks stay ready and the resulting intrees stay degenerate, we obtain the intrees depicted in figure \ref{fig:p3-lemma-adding-intrees-induction-start} (trees \emph{including} the white nodes). By simply computing the expected optimal run times, we can confirm our claim for intrees with 3 nodes.
+
+  We now do the induction step by considering an intree with $n$ tasks. 
+  Let $x,y$ be ready tasks and $z_1$ and $z_2$ to be added with $level(z_1) > level(z_2)$ such that the resulting intrees are degenerate.
+  We can now compare the two runs that can occur if $x,y,z_1$ resp. $x,y,z_2$ are initially scheduled. 
+  Therefore, we consider what happens in $I_1$ resp. $I_2$ if either $x$, $y$ or $z_1/z_2$ finishes first:
+
+  \begin{itemize}
+  \item If $z_1$ resp. $z_2$ is the first task to finish, the resulting intree is exactly $I$. Thus, the remaining run times for these cases are identical if the next task chosen is the same in both trees. We denote the task that may be chosen additionally to $x$ and $y$ by $z'$. If it is the case that only $x$ and $y$ can be scheduled, we set $z'=x$ to simplify notation. The corresponding run time for the resulting intree is then $T^*_{x,y,z'}$
+
+  \item If $x$ is the first task to finish, then the resulting intrees are 
+    \begin{equation*}
+      I^x_{1}=I_1\setminus\left\{ x \right\} \quad \text{ resp. } \quad I^x_{2}=I_2\setminus\left\{ x \right\}.
+    \end{equation*}
+
+    By $x'$ we denote the task that is scheduled next in the optimal schedule for intree $I_1^x$. 
+    If there are only two ready tasks left in $I_1^x$, we set $x'=y$. The expected optimal runtime for $I_1^x$ in this situaion is then given by $T_{x',y,z_1}^*(I_1^x)$.
+
+    We now examine whether $x'$ is also ready in the intree $I_2$:
+    \begin{itemize}
+    \item If $x'$ is the direct successor of $x$, then $x$ must have been the \emph{single topmost task} and the \emph{single predecessor} of $x'$ (since $I_1^x$ is a degenerate tree). However, since we assumed that $level(z_2)<level(z_1)$ and $z_1$ can not be a predecessor of $x'$ (since $x'$ is ready), it can not be the case that $z_2$ blocks $x'$ in $I_2^x$.
+
+      % Moreover, since $x'$ is ready in $I_1^x$, the task $z_1$ can not be a predecessor of $x'$. Since $level(z_2)<level(z_1)$ and since $I_1^x$ and $I_2^x$ are both degenerate intrees, $z_2$ can not block $x'$.\todo{Genauer ausführen. Evtl. auslagern.}
+    \item If $x'$ is not the direct successor of $x$, $x'$ must be on a lower level then $x$ (because we are dealing with a degenerate intree). We assumed that we added $z_2$ in a manner such that $I_2=I\cup\left\{ z_2 \right\}$ is a degenerate subtree. Thus, $z_2$ could not have been added with $x'$ as its successor. Thus, $x'$ is not blocked by $z_2$ in $I_2$.
+    \end{itemize}
+    We observed that for $I_2^x$, the task $x'$ must be ready.
+    
+    The intrees $I^x_{1}$ and $I^x_{2}$ have exactly $n$ tasks -- and they have a common subtree, namely
+    \begin{equation*}
+      I^x := I^x_{1}\setminus\left\{ z_1 \right\}=I^x_{2}\setminus\left\{ z_2 \right\}.
+    \end{equation*}
+
+    
+    We can now apply the induction hypothesis for the intree $I^x$, since this intree contains only $n-1$ tasks: We have an intree with $n-1$ tasks (namely $I^x$) and two tasks $z_1$ and $z_2$ with $level(z_1)>level(z_2)$, $I^x_1 = I^x\cup\left\{ z_1 \right\}$ and $I^x_2 = I^x\cup\left\{ z_2 \right\}$, implying that $T^*_{x',y,z_1}(I^x_1)>T^*_{x',y,z_2}(I^x_{2})$.
+  \item If $y$ is the first task to finish, we argue similar to the $x$ case, thereby considering $I^y_{1},I^y_{2}$ and $I^y$ which are all defined analogously. This finally yields the following inequality: $T^*_{x,y',z_1}(I^y_{1}) > T^*_{x,y',z_2}(I^y_{2})$.
+  \end{itemize}
+
+  The above considerations are illustrated in figure 
+\ref{fig:p3-adding-tasks-level-keep-scheduled-same-inequality}.\todo{Figure anpassen!}
+  
+  \begin{figure}[t]
+    \centering
+    \newcommand{\drawx}{
+      \node[draw=black,circle] at (.9,3) {$x$};
+    }
+    \newcommand{\drawxx}{
+      \node[draw=black,circle] at (.7,2) {$x'$};
+    }
+    \newcommand{\drawy}{
+      \node[draw=black,circle] at (-1.5,4) {$y$};
+    }
+    \newcommand{\drawyy}{
+      \node[draw=black,circle] at (-1.5,3) {$y'$};
+    }
+    \newcommand{\rawtriangle}{
+      \draw
+      [dotted, very thick,
+      %fill=white!90!black, 
+      rounded corners]
+      (0,0) -- (3,2) -- (3.5,8) -- (-3.5,8) -- (-3,2) -- cycle;
+    }
+    \newcommand{\treetriangle}{
+      \rawtriangle;
+      \drawx;
+      \drawy;
+    }
+    \newcommand{\abstand}{7.5cm}
+    \begin{tikzpicture}[scale=.4]
+      \begin{scope}[xshift=-\abstand]
+        \treetriangle
+        \node[draw=black,circle] at (0,6.5) {$z_1$};
+      \end{scope}
+      \begin{scope}[xshift=\abstand]
+        \treetriangle
+        \node[draw=black,circle] at (1,5) {$z_2$};
+      \end{scope}
+      
+      \begin{scope}[xshift=-2*\abstand, yshift=-9cm]
+        \rawtriangle
+        \node[draw=black,circle] at (0,6.5) {$z_1$};
+        \drawxx;
+        \drawy;
+      \end{scope}
+
+      \begin{scope}[xshift=-\abstand, yshift=-9cm]
+        \rawtriangle
+        \node[draw=black,circle] at (0,6.5) {$z_1$};
+        \drawx;
+        \drawyy;
+      \end{scope}
+
+      \begin{scope}[xshift=0, yshift=-9cm]
+        \treetriangle
+        \node[draw=black,circle] at (.3,5.5) {$z'$};
+      \end{scope}
+      
+      \begin{scope}[xshift=\abstand, yshift=-9cm]
+        \rawtriangle
+        \node[draw=black,circle] at (1,5) {$z_2$};
+        \drawxx;
+        \drawy;
+      \end{scope}
+
+      \begin{scope}[xshift=2*\abstand, yshift=-9cm]
+        \rawtriangle
+        \node[draw=black,circle] at (1,5) {$z_2$};
+        \drawx;
+        \drawyy;
+      \end{scope}
+      
+      \draw[thick,->](-\abstand,0) -- +(0,-.8);
+      \draw[thick,->](-\abstand-2cm,1) -- +(-\abstand+4cm,-1.6);
+      \draw[thick,->](-\abstand+2cm,1) -- +(\abstand-4cm,-1.6);
+
+      \begin{scope}[xshift=2*\abstand]
+        \draw[thick,->](-\abstand,0) -- +(0,-.8);
+        \draw[thick,->](-\abstand-2cm,1) -- +(-\abstand+4cm,-1.6);
+        \draw[thick,->](-\abstand+2cm,1) -- +(\abstand-4cm,-1.6);
+      \end{scope}
+      
+      % legend      
+      \draw[decoration=brace,decorate=true](-11,8.25) --node[above]{$I_1$} +(7,0);
+      \draw[decoration=brace,decorate=true](  4,8.25) --node[above]{$I_2$} +(7,0);
+      \draw[decoration={brace,mirror},decorate=true](  -18,-9.5) --node[below, yshift=-.2cm]{$I'_{1,x}$} +(6,0);
+      \draw[decoration={brace,mirror},decorate=true](-10.5,-9.5) --node[below, yshift=-.2cm]{$I'_{1,y}I$} +(6,0);
+      \draw[decoration={brace,mirror},decorate=true](   -3,-9.5) --node[below, yshift=-.2cm]{$I$} +(6,0);
+      \draw[decoration={brace,mirror},decorate=true](  4.5,-9.5) --node[below, yshift=-.2cm]{$I'_{2,x}$} +(6,0);
+      \draw[decoration={brace,mirror},decorate=true](   12,-9.5) --node[below, yshift=-.2cm]{$I'_{2,y}$} +(6,0);
+    \end{tikzpicture}
+
+    \caption{Proof sketch for lemma \ref{lem:p3-adding-tasks-level-keep-scheduled-same-inequality}. By induction hypothesis, we have that $T^*_{x',y,z_1}(I'_{1,x}) > T^*_{x',y,z_2}(I'_{2,x})$ and $T^*_{x,y',z_1}(I'_{1,y}) > T^*_{x,y',z_2}(I'_{2,y})$, from which we deduce $T^*_{x,y,z_1}(I_1) > T^*_{x,y,z_2}(I_2)$.\todo{Auf degenerate trees anpassen!}}
+    \label{fig:p3-adding-tasks-level-keep-scheduled-same-inequality}
+  \end{figure}
+  
+  Now we argue that the run times for $I_1$ and $I_2$ can be computed as follows:
+  \begin{align*}
+    T^*_{x,y,z_1}(I_1) & = 
+      \frac{1}{3} + 
+      \frac{1}{3}\cdot \left( 
+        T_{x,y,z'}^*(I) + 
+        T^*_{x',y,z_1}(I^x_{1}) +
+        T^*_{x,y',z_1}(I^y_{1}) 
+      \right)
+      \\
+    T^*_{x,y,z_2}(I_2) & = 
+      \frac{1}{3} + 
+      \frac{1}{3}\cdot \left( 
+        T_{x,y,z'}^*(I) + 
+        T^*_{x',y,z_2}(I^x_{2}) +
+        T^*_{x,y',z_2}(I^y_{2}) 
+      \right)
+  \end{align*}
+
+  We will now use the aforementioned inequalities $T^*_{x',y,z_1}(I^x_{1}) > T^*_{x',y,z_2}(I^x_{2})$ and $T^*_{x,y',z_1}(I^y_{1}) > T^*_{x,y',z_2}(I^y_{2})$:
+\begin{align*}
+    T^*_{x,y,z_1}(I_1) & = 
+      \frac{1}{3} + 
+      \frac{1}{3}\cdot \left( 
+        T_{x,y,z'}^*(I) + 
+        T^*_{x',y,z_1}(I^x_{1}) +
+        T^*_{x,y',z_1}(I^y_{1}) 
+      \right)
+      > 
+      \\
+      & >
+      \frac{1}{3} + 
+      \frac{1}{3}\cdot \left( 
+        T_{x,y,z'}^*(I) + 
+        T^*_{x',y,z_2}(I^x_{2}) +
+        T^*_{x,y',z_2}(I^y_{2}) 
+      \right) 
+      = T^*_{x,y,z_2}(I_2).
+  \end{align*}
+
+  This proves our claim.    
+\end{proof}
+
+\paragraph{Application of lemma \ref{lem:p3-adding-tasks-level-keep-scheduled-same-inequality}}
+
+We presented lemma \ref{lem:p3-adding-tasks-level-keep-scheduled-same-inequality} in a way that involved adding tasks to a certain intree, because this related well to our proof technique. In practice, we can use it to compare two degenerate intrees with $n$ nodes and that have a common subtree containing $n-1$ nodes.
+
+We can now derive the following theorem.
+
+\begin{theorem}
+  Degenerate intrees are optimally scheduled by HLF.
+\end{theorem}
+
+\begin{proof}
+  Consider a degenerate intree with $n=3$ tasks. It is trivially clear that for P3, a HLF schedule is optimal for this intree (see figure \ref{fig:p3-lemma-adding-intrees-induction-start} to see what these intrees look like).
+  
+  Consider now a degenerate tree $I$ with $n$ nodes and assume that we know that for all degenerate trees with $n-1$ nodes HLF is optimal for three processors. If we choose three topmost tasks $x,y,z$ of $I$, we can argue as follows: If $x$ is the task that finishes first, for the resulting subtree $I\setminus \left\{ x \right\}$, we can be sure that we can choose the next task such that we adhere to HLF, thus choosing the optimal solution for $I\setminus\left\{ x \right\}$ (by induction hypothesis). The same holds for $y$ and $z$.
+  
+  We now consider a non-HLF schedule for $I$ and compare it to the HLF schedule described before.
+  Let $x',y',z'$ be the tasks to be chosen. We can -- without loss of generality -- assume $level(x')\leq level(x)$, $level(y')\leq level(y')$, $level(z')\leq level(z)$. If $x'$ is the first task to finish, we consider the degenerate intree $I\setminus\left\{ x' \right\}$. Since $I \setminus \left\{ x' \right\}$ is a degenerate intree with $n-1$ tasks, it would be optimal to use HLF. However, using HLF may or may not be possible depending on our previous choices of $y'$ and $z'$. That is, the optimum for $I\setminus\left\{ x' \right\}$ \emph{might} be acchieved. From this we can conclude that the optimal expected run time is at least $T_{HLF}\left( I\setminus\left\{ x' \right\} \right)$, where $T_{HLF}$ denotes the run time for HLF.
+
+  Now we compare the run time for $I\setminus\left\{ x' \right\}$ to the optimal run time for $I \setminus\left\{ x \right\}$, which is exactly given by $T_{HLF}\left( I \setminus\left\{ x \right\} \right)$. We recognize that $I\setminus\left\{ x' \right\}$ and $I\setminus\left\{ x \right\}$ have a common subtree, namely $I\setminus\left\{ x,x' \right\}$ with $n-2$ tasks.
+\end{proof}
+
 \section{Conjectures}
 \label{sec:p3-conjectures}
-
-\begin{conjecture}
-  Let $T$ be an intree. Let $z_1, z_2$ be two new tasks that will be added to this intree with $level(z_1) > level(z_2)$. Then, $T^*\left(T\cup\left\{ z_1 \right\}\right) > T^*\left( T\cup\left\{ z_2 \right\} \right)$.
-\end{conjecture}
-
-\begin{conjecture}
-  Let $T$ be an intree and $x, y$ two ready tasks within this intree. Let $z_1, z_2$ be two new tasks that will be added to this intree with $level(z_1) > level(z_2)$. 
-  Then, if $x,y$ and $z_1$ resp. $z_2$ are used as initial tasks, we have the following for the best acchievable expected run times (for respective initial tasks):
-  $T^{*}_{x,y,z_1}\left(T\cup\left\{ z_1 \right\}\right) > T^{*}_{x,y,z_2}\left( T\cup\left\{ z_2 \right\} \right)$.
-\end{conjecture}
 
 \begin{conjecture}
   Degenerate trees are optimally scheduled by HLF.
 \end{conjecture}
 
+\begin{conjecture}[Very likely]
+  For each snapshot resulting from an optimal schedule, at least one top-most task is scheduled.
+\end{conjecture}
+
+\begin{conjecture}[Weak one]
+  For each snapshot resulting from an optimal schedule, at least two top-most tasks are scheduled.
+\end{conjecture}
+
 \begin{conjecture}
-  Let $T$ be an intree. For each snapshot resulting from an optimal schedule, at least \emph{two} top-most tasks have to be scheduled.
+  If for an intree only non-top tasks are scheduled, you can exchange one of the non-top tasks with a top-tasks and obtain a better run time.
 \end{conjecture}
 
 %%% Local Variables:
