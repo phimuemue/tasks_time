@@ -1,13 +1,15 @@
 \chapter{Theoretical foundations}
 \label{chap:theoretical-foundations}
 
-\section{Some probability}
+\section{Probability theory}
 \label{sec:some-probability}
 
 As we will see later, we will often be using probability distributions (in particular continuous probability distributions).
 
 \subsection{Exponential distribution}
 \label{sec:exponential-distribution}
+
+The well-known exponential distribution is the central distribution we are dealing with in this text. All definitions and theorems within this subsection are along the lines of \cite{schickinger2001diskrete}.
 
 \begin{definition}
   A continuous random variable is \emph{exponentially distributed} with parameter $\lambda$ if it has density 
@@ -32,6 +34,35 @@ Note that the above definition also determines the distribution function $F$ of 
 \end{equation*}
 
 \begin{theorem}
+  Let $X$ be an exponentially distributed random variable. Then, the expectancy of $X$ is $\E{X} = \frac 1 \lambda$.
+\end{theorem}
+
+\begin{proof}
+  We can compute the expectancy for $X$ as follows:
+  \begin{eqnarray*}
+    \E{X} 
+    &=& \int_{-\infty}^\infty x\cdot f(x)\, dx = \\
+    &=& \int_{0}^\infty x\cdot \lambda e^{-\lambda x}\, dx \\
+    &=& \left[ - \frac{e^{-\lambda x}\cdot \left( \lambda x + 1 \right)}{\lambda} \right]_{0}^\infty \\
+    &=& \frac{1}{\lambda}
+  \end{eqnarray*}
+\end{proof}
+
+\begin{theorem}[Scalability]
+  Let $X$ be an exponentially distributed random variable with parameter $\lambda$ and let $a\in \mathbb{R}^+$. Then, the random variable $aX$ is exponentially distributed with parameter $\frac{\lambda}{a}$.
+\end{theorem}
+
+\begin{proof}
+  We compute the probability that the random variable $aX$ is less than $x$:
+  \begin{eqnarray*}
+    \p{aX \leq x} 
+    &=& \p{X \leq \frac{x}{a}} = \\
+    &=& 1 - e^{-\frac{\lambda}{a} \cdot x}
+  \end{eqnarray*}
+  This result is equivalent to the density function of an exponentially distributed random variable with parameter $\frac{\lambda}{a}$.
+\end{proof}
+
+\begin{theorem}
   Let $X_1,\dots,X_n$ be exponentially-distributed random variables with respective parameters $\lambda_1,\dots,\lambda_n$. Then, the ranvom variable $Z:=\min_{i\in\left\{ 1,\dots,n \right\}} \left\{ X_i \right\}$ is exponentially distributed with parameter $\lambda=\lambda_1+\dots+\lambda_n$.
 \end{theorem}
 
@@ -49,7 +80,32 @@ Note that the above definition also determines the distribution function $F$ of 
   from which we can conclude that $\min\left\{ X_1,X_2 \right\}$ is exponentially distributed with parameter $\lambda_1 + \lambda_2$. By induction, we obtain our claim.
 \end{proof}
 
-\todo{Memorylessness!}
+\begin{definition}[Memorylessness]
+  A random variable $X$ is called \emph{memoryless} if
+  \begin{equation*}
+    \p{X>t+s \mid X>s} = \p{X > t}
+  \end{equation*}
+\end{definition}
+
+\begin{theorem}
+  \label{sec:exponential-memoryless}
+  Let $X$ be an exponentially distributed random variable with parameter $\lambda$. Then, $X$ is memoryless.
+\end{theorem}
+
+\begin{proof}
+  We start by using the definition of conditional probability and rewrite until we arrive at our goal:
+  \begin{eqnarray*}
+    \p{X>t+s \mid X>s} &=& \frac{\p{X>t+s \wedge X>s}}{\p{X>s}} = \\
+    &=& \frac{\p{X>t+s}}{\p{X>s}} = \\
+    &=& \frac{e^{-\lambda \cdot(t+s)}}{e^{-\lambda s}} = \\
+    &=& e^{-\lambda t} = \\
+    &=& \p{X>t}
+  \end{eqnarray*}
+\end{proof}
+
+This is a very advantageous property that can be exploited in our considerations to follow.
+
+\emph{Remark:} It can even be shown that any memoryless continuous random variable is exponentially distributed, but theorem \ref{sec:exponential-memoryless} is sufficient for our needs.
 
 \subsection{Uniform distribution}
 \label{sec:uniform-distribution}
@@ -93,6 +149,26 @@ The density of a uniform random variable is thus given by
   \end{equation*}
   because all random variables $X_1$ through $X_n$ behave the same. Thus we can deduce equation (\ref{eq:probability-that-cont-random-variable-is-smallest-out-of-iid-is-one-over-n}).
 \end{proof}
+
+\section{Graph theory}
+\label{sec:foundations-graph-theory}
+
+As we will see later, we will constantly deal with \emph{intrees} or \emph{rooted trees}. In this section we develop simple notation for such trees. For a more detailed introduction on what trees are, see e.g. \cite{diestel2005graph}.
+
+\begin{definition}[Intree]
+  Let $I'$ be a undirected tree. Let $v$ be a vertex within $I'$. Let $I$ be the directed version of $I'$ in such a way that all edges are directed towards vertex $v$. Then we call $I$ an intree or a rooted tree with root $v$.
+
+  If there is an edge $(t_1, t_2)$ in $I$, we call $t_1$ a (direct) predecessor of $t_2$ and $t_2$ a (direct) successor of $t_1$. If there is a path from $t_1$ to $t_2$, we simply speak of predecessor and successor.
+\end{definition}
+
+\begin{definition}[Level]
+  Let $I$ be an intree. Let $v$ be a vertex within $I$. We define $level(v)$ be number of edges along the (unique) path from $v$ to the root.
+\end{definition}
+
+We can draw such intrees in a very straightforward manner: We draw the root at the bottom and its direct predecessors one level above. For each predecessor, we inductively repeat this procedure to obtain a ``top-to-bottom-description'' of the tree.
+
+\todo{Figure!}
+\todo{Anzahl der rooted trees angeben.}
 
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"

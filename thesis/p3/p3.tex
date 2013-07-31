@@ -114,7 +114,7 @@ The results are summed up in table \ref{tab:num-subtrees-size-of-dags}\todo{Comp
 \begin{table}[ht]
   \centering
   \begin{tabular}[ht]{ccccccc}
-    \multirow{2}{*}{Degree} & \multicolumn{2}{c}{Subtrees} & \multicolumn{2}{c}{Snapshots} & \multicolumn{2}{c}{``Optimal DAG''} \\
+    \multirow{2}{*}{Tasks} & \multicolumn{2}{c}{Subtrees} & \multicolumn{2}{c}{Snapshots} & \multicolumn{2}{c}{``Optimal DAG''} \\
     & Max & Avg & Max & Avg & Max & Avg \\
     \hline
     3 & 3 & 3.00 & 3 & 3.00 & 3 & 3.00  \\
@@ -133,7 +133,7 @@ The results are summed up in table \ref{tab:num-subtrees-size-of-dags}\todo{Comp
     % 16 & 594 &  171.29 & 184 & 80.55  \\
     % 17 & 850 &  240.39 & 235 & 96.67  \\
   \end{tabular}
-  \caption{Number of subtrees, size of the optimized snapshot DAG}
+  \caption{Number of subtrees, size of the optimized snapshot DAG depending on the number of tasks. ``Subtrees'' denotes the number of distinct subtrees. ``Snapshots'' shows the number of distinct snapshots that have to be examined if we try all possible schedules. The column ``Optimal DAG'' shows the size of the snapshot DAG describing the optimal schedule.}
   \label{tab:num-subtrees-size-of-dags}
 \end{table}
 
@@ -159,21 +159,21 @@ To determine the maximum size of the optimal snapshot DAG for the P3 case, it mi
   \label{fig:intrees-maximum-snapshot-dag-size-p3}
 \end{figure}
 
-\section{Special classes of intrees}
-\label{sec:p3-dag-size-special-class-of-intrees}
+% \section{Special classes of intrees}
+% \label{sec:p3-dag-size-special-class-of-intrees}
 
-If we consider trees. whose sequence description is of the form $(0, 0, 1, 1, 3, 3, 5, 5, 7,7, 9,9,\dots)$, that have an even number of nodes, then the optimal snapshot DAGs have $\binom{n}{1}+\binom{n}{2}+\binom{n}{3}$ snapshots. \todo{Make this conjecture and nice!}
+% If we consider trees. whose sequence description is of the form $(0, 0, 1, 1, 3, 3, 5, 5, 7,7, 9,9,\dots)$, that have an even number of nodes, then the optimal snapshot DAGs have $\binom{n}{1}+\binom{n}{2}+\binom{n}{3}$ snapshots. \todo{Make this conjecture and nice!}
 
-\begin{table}[ht]
-  \centering
-  \begin{tabular}{lcc}
-    Class & No. snaps & Opt. size \\
-    $(0,0,1,1,3,3,5,5,\dots)$ & & $\binom{n/2}{1}+\binom{n/2}{2}+\binom{n/2}{3}$ \\
-    $(0,0,0,1,1,1,4,4,4,7,7,7,\dots)$ & & $((n/3)^3 + 2*(n/3))/3$
-  \end{tabular}
-  \caption{Classes and their DAG sizes}
-  \label{tab:special-classes-dag-sizes}
-\end{table}
+% \begin{table}[ht]
+%   \centering
+%   \begin{tabular}{lcc}
+%     Class & No. snaps & Opt. size \\
+%     $(0,0,1,1,3,3,5,5,\dots)$ & & $\binom{n/2}{1}+\binom{n/2}{2}+\binom{n/2}{3}$ \\
+%     $(0,0,0,1,1,1,4,4,4,7,7,7,\dots)$ & & $((n/3)^3 + 2*(n/3))/3$
+%   \end{tabular}
+%   \caption{Classes and their DAG sizes}
+%   \label{tab:special-classes-dag-sizes}
+% \end{table}
 
 \section{Degenerate intrees}
 \label{sec:p3-degenerate-intrees}
@@ -203,9 +203,9 @@ We now examine how many snapshots are considered if we compute the optimal P3 sc
 
 \begin{table}[t]
   \centering
-  \begin{tabular}[ht]{lcc}
-    \multirow{2}{*}{$n$} & \multicolumn{2}{c}{Snapshots} \\
-     & Overall & HLF \\
+  \begin{tabular}[ht]{ccc}
+    \multirow{2}{*}{Tasks} & \multicolumn{2}{c}{Snapshots} \\
+    & Overall & HLF \\
     \hline
     3  &  3       & 3   \\
     4  &  5       & 5   \\
@@ -215,6 +215,11 @@ We now examine how many snapshots are considered if we compute the optimal P3 sc
     8  &  28      & 21  \\
     9  &  48      & 25  \\
     10 &  85      & 36  \\
+  \end{tabular}
+  \begin{tabular}[ht]{ccc}
+    \multirow{2}{*}{Tasks} & \multicolumn{2}{c}{Snapshots} \\
+    & Overall & HLF \\
+    \hline
     11 &  150     & 41  \\
     12 &  276     & 57  \\
     13 &  477     & 63  \\
@@ -223,6 +228,11 @@ We now examine how many snapshots are considered if we compute the optimal P3 sc
     16 &  2717    & 121 \\
     17 &  4398    & 129 \\
     18 &  7991    & 166 \\
+  \end{tabular}
+  \begin{tabular}[ht]{ccc}
+    \multirow{2}{*}{Tasks} & \multicolumn{2}{c}{Snapshots} \\
+    & Overall & HLF \\
+    \hline
     19 &  12600   & 175 \\
     20 &  22594   & 221 \\
     21 &  34883   & 231 \\
@@ -232,7 +242,7 @@ We now examine how many snapshots are considered if we compute the optimal P3 sc
     25 &  245852  & 377 \\
     26 &  426089  & 456 \\
   \end{tabular}
-  \caption{Number of snapshots for degenerate binary trees in the P3 case. The first column, $n$, denotes the number of tasks.\todo{Make as broad as the whole page.}}
+  \caption{Number of snapshots for degenerate binary trees in the P3 case. The first column depending on the number of tasks. ``Overall'' denotes the number of distinct snapshots that are explored if all possible schedulings are tried. ``HLF'' denotes the number of distinct snapshots for HLF.}
   \label{tab:p3-degenerate-binary-trees-no-snapshots}
 \end{table}
 
