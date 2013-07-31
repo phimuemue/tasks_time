@@ -26,11 +26,11 @@ void SpecialCaseLeafscheduler::get_next_tasks(const Intree& t,
     {
         Leafscheduler::get_next_tasks(t, marked, target);
     }
-    if(t.is_degenerate_tree()){
-        cout << "YES ";
-    }
-    else{
-        cout << "NO! ";
-    }
-    cout << t << endl;
+    // if(t.is_degenerate_tree()){
+    //     cout << "YES ";
+    // }
+    // else{
+    //     cout << "NO! ";
+    // }
+    // cout << t << endl;
 }
