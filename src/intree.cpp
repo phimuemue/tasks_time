@@ -318,6 +318,18 @@ bool Intree::is_chain() const {
     return chains.size() == 1;
 }
 
+bool Intree::is_degenerate_tree() const {
+    // store - for each level - the one task that may have predecessors
+    map<unsigned int, task_id> cont;
+    for(const auto& it : edges){
+        if(cont.find(get_level(it.second)) != cont.end() && cont[get_level(it.second)] != it.second){
+            return false;
+        }
+        cont[get_level(it.second)] = it.second;
+    }
+    return true;
+}
+
 bool Intree::same_chain(const task_id t1, const task_id t2) const {
     vector<task_id> ch1;
     vector<task_id> ch2;

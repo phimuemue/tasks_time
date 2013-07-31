@@ -22,6 +22,7 @@
 #include "hlfnfcscheduler.h"
 #include "hlfdeterministicscheduler.h"
 #include "hlfrandomscheduler.h"
+#include "specialcaseleafscheduler.h"
 
 // exporters
 #include "exporter.h"
@@ -46,6 +47,8 @@ map<string, Scheduler*> schedulers =
 {
     // "all possibilities" scheduler
     {"leaf", new Leafscheduler()}, 
+    // leaf scheduler with known special cases
+    {"scleaf", new SpecialCaseLeafscheduler()}, 
     // HLF schedulers (variants)
     {"hlf", new HLFscheduler()},
     {"hlfnfc", new HLFNFCscheduler()},
@@ -53,7 +56,7 @@ map<string, Scheduler*> schedulers =
     {"hlfrand", new HLFRandomScheduler()},
 };
 // TODO: can we solve this more elegant?
-#define SCHEDULERS_AVAILABLE "leaf, hlf, hlfnfc, hlfdet, hlfrand"
+#define SCHEDULERS_AVAILABLE "leaf, scleaf, hlf, hlfnfc, hlfdet, hlfrand"
 
 void randomEdges(int n, vector<pair<Task,Task>>& target){
     mt19937 rng;
