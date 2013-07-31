@@ -180,7 +180,7 @@ If we consider trees. whose sequence description is of the form $(0, 0, 1, 1, 3,
 
 \todo{Definitions: intree, level, suc, adding tasks to trees etc.}
 
-\subsection{Degenerate binary trees}
+\subsection{Intro: Degenerate binary trees}
 \label{sec:p3-degenerate-trees-binary}
 
 We researched degenerate binary trees, i.e. trees whose sequence has the structure
@@ -237,6 +237,11 @@ We now examine how many snapshots are considered if we compute the optimal P3 sc
 \end{table}
 
 Interestingly, degenerate binary intrees, while having a possibly huge amount of snapshots, are probably optimally scheduled by HLF. You can compare the number of HLF snapshots to the number of overal snapshots by looking at table \ref{tab:p3-degenerate-binary-trees-no-snapshots}.
+
+We generalize this fact in the next section.
+
+\subsection{HLF is optimal for degenerate intrees}
+\label{sec:p3-degenerate-intrees-hlf-optimal}
 
 \begin{lemma}
   \label{lem:p3-adding-tasks-level-keep-scheduled-same-inequality}
@@ -469,14 +474,14 @@ Interestingly, degenerate binary intrees, while having a possibly huge amount of
       % legend      
       \draw[decoration=brace,decorate=true](-11,8.25) --node[above]{$I_1$} +(7,0);
       \draw[decoration=brace,decorate=true](  4,8.25) --node[above]{$I_2$} +(7,0);
-      \draw[decoration={brace,mirror},decorate=true](  -18,-9.5) --node[below, yshift=-.2cm]{$I'_{1,x}$} +(6,0);
-      \draw[decoration={brace,mirror},decorate=true](-10.5,-9.5) --node[below, yshift=-.2cm]{$I'_{1,y}I$} +(6,0);
+      \draw[decoration={brace,mirror},decorate=true](  -18,-9.5) --node[below, yshift=-.2cm]{$I^x_{1}$} +(6,0);
+      \draw[decoration={brace,mirror},decorate=true](-10.5,-9.5) --node[below, yshift=-.2cm]{$I^y_{1}I$} +(6,0);
       \draw[decoration={brace,mirror},decorate=true](   -3,-9.5) --node[below, yshift=-.2cm]{$I$} +(6,0);
-      \draw[decoration={brace,mirror},decorate=true](  4.5,-9.5) --node[below, yshift=-.2cm]{$I'_{2,x}$} +(6,0);
-      \draw[decoration={brace,mirror},decorate=true](   12,-9.5) --node[below, yshift=-.2cm]{$I'_{2,y}$} +(6,0);
+      \draw[decoration={brace,mirror},decorate=true](  4.5,-9.5) --node[below, yshift=-.2cm]{$I^x_{2}$} +(6,0);
+      \draw[decoration={brace,mirror},decorate=true](   12,-9.5) --node[below, yshift=-.2cm]{$I^y_{2}$} +(6,0);
     \end{tikzpicture}
 
-    \caption{Proof sketch for lemma \ref{lem:p3-adding-tasks-level-keep-scheduled-same-inequality}. By induction hypothesis, we have that $T^*_{x',y,z_1}(I'_{1,x}) > T^*_{x',y,z_2}(I'_{2,x})$ and $T^*_{x,y',z_1}(I'_{1,y}) > T^*_{x,y',z_2}(I'_{2,y})$, from which we deduce $T^*_{x,y,z_1}(I_1) > T^*_{x,y,z_2}(I_2)$.\todo{Auf degenerate trees anpassen!}}
+    \caption{Proof sketch for lemma \ref{lem:p3-adding-tasks-level-keep-scheduled-same-inequality}. By induction hypothesis, we have that $T^*_{x',y,z_1}(I^x_{1}) > T^*_{x',y,z_2}(I^x_{2})$ and $T^*_{x,y',z_1}(I^y_{1}) > T^*_{x,y',z_2}(I^y_{2})$, from which we deduce $T^*_{x,y,z_1}(I_1) > T^*_{x,y,z_2}(I_2)$. Note that $z_2$ can not block $x'$ or $y'$ since $z_1$ didn't block any of the two and we required that adding $z_1$ resp. $z_2$ still results a degenerate tree.}
     \label{fig:p3-adding-tasks-level-keep-scheduled-same-inequality}
   \end{figure}
   
@@ -536,22 +541,80 @@ We can now derive the following theorem.
 \begin{proof}
   Consider a degenerate intree with $n=3$ tasks. It is trivially clear that for P3, a HLF schedule is optimal for this intree (see figure \ref{fig:p3-lemma-adding-intrees-induction-start} to see what these intrees look like).
   
-  Consider now a degenerate tree $I$ with $n$ nodes and assume that we know that for all degenerate trees with $n-1$ nodes HLF is optimal for three processors. If we choose three topmost tasks $x,y,z$ of $I$, we can argue as follows: If $x$ is the task that finishes first, for the resulting subtree $I\setminus \left\{ x \right\}$, we can be sure that we can choose the next task such that we adhere to HLF, thus choosing the optimal solution for $I\setminus\left\{ x \right\}$ (by induction hypothesis). The same holds for $y$ and $z$.
+  Consider now a degenerate tree $I$ with $n$ nodes and assume that we know that for all degenerate trees with $n-1$ nodes HLF is optimal for three processors. If $I$ has two or less topmost tasks, it is obvious that we have to use HLF (since we can use at most two processors and HLF is known to be optimal for two processors \todo{Referenz und Beweis in P2-Kapitel}).
+
+  Thus, we only have to focus on the case where $I$ has at laast three ready tasks.
+
+  If we choose three topmost tasks $x,y,z$ of $I$, we can argue as follows: If $x$ is the task that finishes first, for the resulting subtree $I\setminus \left\{ x \right\}$, we can be sure that we can choose the next task such that we adhere to HLF, thus choosing the optimal solution for $I\setminus\left\{ x \right\}$ (by induction hypothesis). The same holds if $y$ or $z$ finishes first.
   
   We now consider a non-HLF schedule for $I$ and compare it to the HLF schedule described before.
   Let $x',y',z'$ be the tasks to be chosen. We can -- without loss of generality -- assume $level(x')\leq level(x)$, $level(y')\leq level(y')$, $level(z')\leq level(z)$. If $x'$ is the first task to finish, we consider the degenerate intree $I\setminus\left\{ x' \right\}$. Since $I \setminus \left\{ x' \right\}$ is a degenerate intree with $n-1$ tasks, it would be optimal to use HLF. However, using HLF may or may not be possible depending on our previous choices of $y'$ and $z'$. That is, the optimum for $I\setminus\left\{ x' \right\}$ \emph{might} be acchieved. From this we can conclude that the optimal expected run time is at least $T_{HLF}\left( I\setminus\left\{ x' \right\} \right)$, where $T_{HLF}$ denotes the run time for HLF.
 
   Now we compare the run time for $I\setminus\left\{ x' \right\}$ to the optimal run time for $I \setminus\left\{ x \right\}$, which is exactly given by $T_{HLF}\left( I \setminus\left\{ x \right\} \right)$. We recognize that $I\setminus\left\{ x' \right\}$ and $I\setminus\left\{ x \right\}$ have a common subtree, namely $I\setminus\left\{ x,x' \right\}$ with $n-2$ tasks.
-  Moreover, we know that for both $I\setminus\left\{ x \right\}$ and $I\setminus\left\{ x' \right\}$ HLF is optimal (because of our induction hypothesis).
-  Thus, we can apply lemma \ref{lem:p3-adding-tasks-level-keep-scheduled-same-inequality} and deduce that 
+  
+  Moreover, we know that for both $I\setminus\left\{ x \right\}$ and $I\setminus\left\{ x' \right\}$ HLF is optimal (because of our induction hypothesis) and that for $I\setminus\left\{ x \right\}$ and $I\setminus\left\{ x' \right\}$ both $y$ and $z$ must be in the optimal (i.e. HLF) schedule since $y$ and $z$ are two of the three topmost tasks. At last, we have $level(x) \geq level(x')$.
+  Thus, we can apply lemma \ref{lem:p3-adding-tasks-level-keep-scheduled-same-inequality} for the degenerate tree $I\setminus \{x,x'\}$ with tasks $y$ and $z$ and deduce that
+  \begin{equation*}
+    T_{x',y,z}(I\setminus\{x\}) 
+    \leq 
+    \underbrace{T_{x,y,z}(I\setminus\{x'\})}_{\text{Optimal for $I\setminus \{x'\}$}}.
+  \end{equation*}
+  Equality follows if $x$ and $x'$ are on the same level.
+
+  As stated before, for the intree $I\setminus\{x'\}$, the schedule chosen \emph{might} not be a HLF-one. In this case, the schedule performs even worse than $T_{x,y,z}(I\setminus\{ x'  \})$, since the optimal schedule would choose $x,y,z$ as scheduled tasks. This means that
+  \begin{equation*}
+    T_{x,y,z}(I\setminus\{x'\})
+    \leq
+    T_{x'',y',z'}(I\setminus\{x'\}),
+  \end{equation*}
+  where $x''$ is the task chosen by the non-HLF schedule, finally implying that
+  \begin{equation*}
+    T_{HLF}(I\setminus\{x\})
+    \leq
+    T_{x'',y',z'}(I\setminus\{x'\}),
+  \end{equation*}
+  because the HLF schedule is at least as good as the schedule that starts out with tasks $x',y,z$.
+  We argue similar for tasks $y$ and $y'$ resp. $z$ and $z'$ and finally obtain the following:
+
+  \begin{eqnarray*}
+    T_{x',y,z}(I\setminus\{x\})
+    & \leq &
+    T_{x'',y',z'}(I\setminus\{x'\}) \\
+    T_{x,y',z}(I\setminus\{y\})
+    & \leq &
+    T_{x',y'',z'}(I\setminus\{x'\}) \\
+    T_{x,y,z'}(I\setminus\{z\})
+    & \leq &
+    T_{x',y',z''}(I\setminus\{x'\}) \\
+  \end{eqnarray*}
+  Combining the above inequalities yields that
+  \begin{eqnarray*}
+    %T_{HLF}(I) = 
+    T_{x,y,z}(I) 
+    & \leq & 
+    \frac{1}{3} + \frac{1}{3} \cdot 
+    \left( 
+      T_{x',y,z}(I\setminus\{x\}) +
+      T_{x,y',z}(I\setminus\{y\}) +
+      T_{x,y,z'}(I\setminus\{z\})
+    \right) 
+    \leq \\
+    & \leq &
+    \frac{1}{3} + \frac{1}{3} \cdot 
+    \left( 
+      T_{x'',y',z'}(I\setminus\{x'\}) +
+      T_{x',y'',z'}(I\setminus\{y'\}) +
+      T_{x',y',z''}(I\setminus\{z'\})
+    \right) \leq \\
+    & \leq &
+    T_{x',y',z'}(I)
+  \end{eqnarray*}
+
+  This finally shows that a HLF schedule is at least as good as an arbitrary other task, meaning that HLF is optimal for three processors on degenerate trees.
 \end{proof}
 
 \section{Conjectures}
 \label{sec:p3-conjectures}
-
-\begin{conjecture}
-  Degenerate trees are optimally scheduled by HLF.
-\end{conjecture}
 
 \begin{conjecture}[Very likely]
   For each snapshot resulting from an optimal schedule, at least one top-most task is scheduled.
