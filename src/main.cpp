@@ -213,6 +213,13 @@ Intree generate_tree(po::variables_map vm){
         int num_threads = (vm.count("random") ? vm["random"].as<int>() : NUM_THREADS_DEFAULT);
         randomEdges(num_threads, edges);
     }
+    // write to file for later reuse
+    ofstream output;
+    output.open(".last.intree");
+    for(auto& x : edges){
+        output << x.second.get_id() << " ";
+    }   
+    output.close();
     return Intree(edges);
 }
 

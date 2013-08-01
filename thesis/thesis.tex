@@ -3,24 +3,25 @@
 \input{packages}
 \input{commands_and_environments}
 
-%\includeonly{theory/theory}
+\includeonly{p3/p3}
 
 \begin{document}
 
 % first of all: testing current trees
-\chapter{Drawing trees}
-\label{chap:drawing-trees}
+\section{Current questions}
+\label{chap:current-questions}
 
-This is just a test chapter to see how we can draw the intrees and the snapshot DAGs.
-\newsavebox{\nodebox}
-
-\section{P2: A whole intree-DAG and its condensed counterpart}
+\begin{itemize}
+\item Are chain collections optimally scheduled by HLF?
+\item P3: Is it possible, that there are -- at one level of the optimal snapshot DAG -- multiple snapshots containing the same intree, but a different set of scheduled tasks?
+\item For each snapshot resulting from an optimal schedule, at least one top-most task is scheduled?
+\item For each snapshot resulting from an optimal schedule, at least two top-most tasks are scheduled?
+\item If for an intree only non-top tasks are scheduled, you can exchange one of the non-top tasks with a top-tasks and obtain a better run time?
+\end{itemize}
 
 %\input{../0011123669hlf.tex}
 
 %\input{examples/p2/001112566_with_condensed.tex}
-
-\section{The current TikZ-file}
 
 %\input{../maxtrees}
 %\input{../default}
