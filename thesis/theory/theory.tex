@@ -243,14 +243,26 @@ However, we are mostly interested in the \emph{structure} of the tree, which is 
   \label{fig:intrees-introductory-explanation}
 \end{figure}
 
+\paragraph{Extension to in-forests}
+
+It is worth mentioning that there is a straightforward extension of intrees to in-forests for our scenario. In-forests are graphs whose components are all intrees. To convert an in-forest to an intree, we simply add an auxiliary new root and connect all roots of the intrees within the in-forest to the new root. This way, we clearly obtain a new intree.\todo{Evtl. später nochmal ansprechen!}
+
 \begin{definition}[Level]
   Let $I$ be an intree. Let $v$ be a vertex within $I$. We define $level(v)$ be number of edges along the (unique) path from $v$ to the root.
 \end{definition}
 
 The concept of levels is illustrated in figure \ref{fig:intrees-introductory-explanation}.
 
+To manipulate intrees, we define some non-standard notation that is, however, very convenient and should be easily understandable.
+
+\begin{definition}[Removal of leaves]
+  Let $I$ be an intree. Let $v$ be a vertex of $I$. We call $v$ a \emph{leaf} if $v$ has no predecessors.
+  
+  Let now $x$ be a leaf of $I$.
+  By $I\setminus\left\{ x \right\}$ we denote the intree that is obtained if we remove $x$ and the outgoing edge of $x$ from $I$.
+\end{definition}
+
 \todo{Anzahl der rooted trees angeben.}
-\todo{Forest!}
 
 \section{Schedules}
 \label{sec:introduction-schedules}
@@ -259,27 +271,22 @@ We have seen in section \ref{sec:foundations-graph-theory} how we can interpret 
 
 \paragraph{Random task times} \todo{Sollte das wo anders rein?}
 
-We now assume that we do not know the processing time for a certain task in advance. We instead assume that we can model the task time for each task within the intree by an exponentially distributed random variable as defined in section \ref{sec:exponential-distribution}. We furthermore assume that all tasks are exponentially distributed with the \emph{same} parameter $\lambda$. Note that we can assume -- according to theorem \ref{thm:expoenential-distr-scalability} -- $\lambda=1$.\todo{More explanation}
-
-We now assume that we have a certain amount $p$ of identical processors, and we want to process all tasks in an intree (of course in a valid order) such that the overall processing time is minimized. I.e. we want to mimimize the point of time, where the root's processing is done.
+We now assume that we do not know the processing time for a certain task in advance. We instead assume that we can model the task time for each task within the intree by an exponentially distributed random variable as defined in section \ref{sec:exponential-distribution}. We furthermore assume that all tasks are exponentially distributed with the \emph{same} parameter $\lambda$. Note that we can assume, according to theorem \ref{thm:expoenential-distr-scalability}, that all tasks have parameter $\lambda=1$.\todo{More explanation}
 
 We assume that one single task can be processed by one processor exclusively, i.e. it is not possible to save time by ``splitting'' one single task over several processors. That, moreover, means that there might be idle processors if we have more ready tasks than processors. \todo{Define ready tasks!}
 
 We furthermore work with non-preemtive scheduling, i.e. once a task is processor is assigned a task, this task has to be processed \emph{completely} before the processor can be used for anything else.
 
-\section{Computing the expected run time of a schedule}
-\label{sec:introduction-compute-expected-time-schedule}
+Assuming that we have a certain amount $p$ of identical processors, we can process all tasks in an intree (of course in a valid order). Naturally, We have to do this step by step. 
 
-\todo{Snapshot definieren!}
-
-If we want to process a whole intree of tasks, we have to do so step by step, of course. That is, we assign some tasks to processors, wait until the first task finishes, assign a new task (if available) to the now idle processor, and continue with the subtree obtained by removing the finished task. That is, in each point of time, we know the current intree containing all tasks not yet finished and all tasks currently being processed. We therefore introduce the notation of \emph{snapshots}.
+That is, we assign some (at most $p$) tasks to processors, wait until the first task finishes, assign a new task (if available) to the now idle processor, and continue with the subtree obtained by removing the finished task. That is, in each point of time, we know the current intree containing all tasks not yet finished and all tasks currently being processed. We therefore introduce the notation of \emph{snapshots}.
 
 \begin{definition}[Snapshot]
   Let $I$ be an intree and let $S$ be a schedule.
   A \emph{snapshot} of $S$ a 2-tuple containing
   \begin{itemize}
-  \item The current subtree $I'\subseteq I$ describing which tasks are not finished.
-  \item A set $X$ holding the tasks that are currently being processed.
+  \item the current subtree $I'\subseteq I$ describing which tasks are not finished,
+  \item a set $X$ holding the tasks that are currently being processed.
   \end{itemize}
 \end{definition}
 
@@ -314,6 +321,22 @@ While the above definition is well suited for theoretical considerations, we -- 
   \label{fig:intro-snapshot-graphical-representation}
 \end{figure}
 
+Consider now a snapshot, i.e. the current intree and a set of currently scheduled tasks. At this point, there are several possibilities:
+
+\begin{itemize}
+\item Any of the currently scheduled tasks may be the first task to finish.
+\item If a certain task finishes, the corresponding processor gets idle and can be assigned new work. That is, we may be able to choose a new task\footnote{It may be the case that we are not able if all leaves are already scheduled. In this case, the processor has to stay idle.\todo{Passt das?}} and assign it to the newly free processor.
+\end{itemize}
+
+That is, we have ambiguities here. The first of them (which task finishes first) can not be influenced in our scenario. The second, however, leaves us free choice. Depending on which task we choose next, we might get a better or worse overall run time.
+
+One desirable goal is to always choose the next task to be scheduled in such a way that the overall expected run time is minimal. We will now see how we can compute the expected run time for a schedule.
+
+\section{Computing the expected run time of a schedule}
+\label{sec:introduction-compute-expected-time-schedule}
+
+\todo{Snapshot definieren!}
+
 If we are speaking of a schedule, we can think of it as a directed acyclic graph, where each vertex represents one single snapshot. The edges between the snapshots then represent transitions that indicate that a certain task has finished. We can naturally assign the edges weights that represent the corresponding probability that a task has finished.\todo{Dag definieren? Oder Verweis auf irgendwen?}
 
 Computing the expected run time for a given schedule (more precisely for the whole processing of an intree according to a certain schedule) can be easily acchieved via a recursive formula that can be explained as follows:
@@ -344,7 +367,7 @@ Computing the expected run time for a given schedule (more precisely for the who
 
 \emph{Remark:} The fact that we can compute the expected run time recursively follows from the fact that exponentially distributed random variables are memoryless (see theorem \ref{thm:exponential-memoryless}): If one task finishes, the remaining tree can be considered \emph{as if} we just started the scheduled tasks. Thus, we are in the same situation as before, except that we have one task less.\todo{Verbessern.}
 
-As an example, consider the tree in figure \ref{fig:intro-computing-expected-runtime}. The topmost snapshots are the ones whose expected run times we are interested in. The run times of the snapshots in the second line are already computed. Using these, we can compute the overal expected run time.
+As an example, consider the tree in figure \ref{fig:intro-computing-expected-runtime}. The topmost snapshots describe the first step of schedules for three resp. four processors on the same intree. We are the corresponding expected run times. We can assume that the run times of the snapshots in the second line are already computed (recursively). Using these, we can compute the overal expected run time using theorem (\ref{eqn:intro-recursive-formula-for-run-time}) as described in figures \ref{fig:intro-recursive-formula-run-time-example-three-procs} and \ref{fig:intro-recursive-formula-run-time-example-four-procs}.
 
 \begin{figure}[tt]
   \centering
@@ -467,6 +490,7 @@ As an example, consider the tree in figure \ref{fig:intro-computing-expected-run
       \right)
       = 6.21811$.
     }
+    \label{fig:intro-recursive-formula-run-time-example-three-procs}
   \end{subfigure}
   \quad
   \begin{subfigure}{.45\textwidth}
@@ -617,10 +641,30 @@ As an example, consider the tree in figure \ref{fig:intro-computing-expected-run
       = 6.20264
       $
     }
+    \label{fig:intro-recursive-formula-run-time-example-four-procs}
   \end{subfigure}
   \caption{Computing the expected run time according to equation (\ref{eqn:intro-recursive-formula-for-run-time}) for three resp. four processors on the same intree. Each box represents a single snapshot.}
   \label{fig:intro-computing-expected-runtime}
 \end{figure}
+
+\section{A first glance at schedules}
+\label{sec:intro-first-glance-schedules}
+
+We now move on to describing basic insights about schedules. Foremost, we make the following -- quite simple -- observation: If two intrees $I_1$ and $I_2$ are isomorphic\todo{Definition?}, then for each schedule $S_1$ for $I_1$, there is a schedule $S_2$ for $I_2$ that has exactly the same run time. We see this by examining the bijective function $f:I_1 \mapsto I_2$ and for $S_2$ scheduling exactly the task $f(t_1)$ if $S_1$ would choose $t_1$. \todo{Figure, die komplette schedules von 2 isomorphen Bäumen zeigt!}
+
+The second observation is that we can make the snapshot DAG more compact by avoiding snapshots that are -- essentially -- duplicates.
+
+\begin{definition}[Equivalent snapshot]
+  Let $S=(I, X)$ be a snapshot with intree $I$ and a set $X$ of currently scheduled tasks. The snapshot $S'=(I', X')$ is called \emph{equivalent} to $S$ if there is a bijective mapping $f:I \mapsto I'$ such that both of the following hold:
+  \begin{itemize}
+  \item The mapping $f$ is an isomorphism between $I$ and $I'$.
+  \item The sets of scheduled tasks also correspond under this isomorhpsim, i.e. 
+    $X' = \left\{ f(x) \mid x\in X \right\}$.
+  \end{itemize}
+\end{definition}
+
+\todo{Figure für equiv. snaps rein!}
+\todo{Algorithmus, der equiv. snaps / bzw. canonical snaps berechnet zeigen.}
 
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"
