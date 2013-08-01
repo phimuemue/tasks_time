@@ -6,35 +6,26 @@
 \renewcommand{\leveltopIIIIII}{-15cm + \leveltopIIIII}
 \renewcommand{\leveltopIIIIIII}{-15cm + \leveltopIIIIII}
 \renewcommand{\leveltopIIIIIIII}{-15cm + \leveltopIIIIIII}
-\renewcommand{\leveltopIIIIIIIII}{-15cm + \leveltopIIIIIIII}
-\renewcommand{\leveltopIIIIIIIIII}{-15cm + \leveltopIIIIIIIII}
-\renewcommand{\leveltopIIIIIIIIIII}{-15cm + \leveltopIIIIIIIIII}
 \begin{tikzpicture}[scale=.2, anchor=south]
 \begin{scope}[yshift=\leveltopI cm]
 \matrix (line1)[column sep=1cm] {
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8226f40){
+\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x9aecbd8){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid2) at (1.5,4.5){};
-\node[circle, scale=0.75, fill] (tid7) at (0.75,6){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid9) at (0.75,7.5){};
-\draw[](tid7) -- (tid9);
-\node[circle, scale=0.75, fill, task_scheduled] (tid10) at (2.25,6){};
-\draw[](tid2) -- (tid7);
-\draw[](tid2) -- (tid10);
-\node[circle, scale=0.75, fill] (tid3) at (3.75,4.5){};
-\node[circle, scale=0.75, fill] (tid5) at (3.75,6){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid6) at (3.75,7.5){};
-\draw[](tid5) -- (tid6);
-\draw[](tid3) -- (tid5);
-\draw[](tid1) -- (tid2);
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, task_scheduled] (tid3) at (0.75,4.5){};
+\node[circle, scale=0.75, fill] (tid4) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, task_scheduled] (tid7) at (2.25,6){};
+\draw[](tid4) -- (tid7);
 \draw[](tid1) -- (tid3);
-\node[circle, scale=0.75, fill] (tid4) at (5.25,3){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid8) at (5.25,4.5){};
-\draw[](tid4) -- (tid8);
+\draw[](tid1) -- (tid4);
+\node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
+\node[circle, scale=0.75, fill] (tid5) at (5.25,3){};
+\node[circle, scale=0.75, fill, task_scheduled] (tid6) at (5.25,4.5){};
+\draw[](tid5) -- (tid6);
 \draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid4);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid5);
 \end{tikzpicture}
 };
  & 

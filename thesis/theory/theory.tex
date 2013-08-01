@@ -34,6 +34,7 @@ Note that the above definition also determines the distribution function $F$ of 
 \end{equation*}
 
 \begin{theorem}
+  \label{thm:exponential-distribution-expectancy}
   Let $X$ be an exponentially distributed random variable. Then, the expectancy of $X$ is $\E{X} = \frac 1 \lambda$.
 \end{theorem}
 
@@ -49,20 +50,22 @@ Note that the above definition also determines the distribution function $F$ of 
 \end{proof}
 
 \begin{theorem}[Scalability]
+  \label{thm:expoenential-distr-scalability}
   Let $X$ be an exponentially distributed random variable with parameter $\lambda$ and let $a\in \mathbb{R}^+$. Then, the random variable $aX$ is exponentially distributed with parameter $\frac{\lambda}{a}$.
 \end{theorem}
 
 \begin{proof}
   We compute the probability that the random variable $aX$ is less than $x$:
-  \begin{eqnarray*}
+  \begin{equation*}
     \p{aX \leq x} 
-    &=& \p{X \leq \frac{x}{a}} = \\
-    &=& 1 - e^{-\frac{\lambda}{a} \cdot x}
-  \end{eqnarray*}
+    = \p{X \leq \frac{x}{a}}
+    = 1 - e^{-\frac{\lambda}{a} \cdot x}
+  \end{equation*}
   This result is equivalent to the density function of an exponentially distributed random variable with parameter $\frac{\lambda}{a}$.
 \end{proof}
 
 \begin{theorem}
+  \label{thm:minimum-of-exponential-distribution-is-exponential}
   Let $X_1,\dots,X_n$ be exponentially-distributed random variables with respective parameters $\lambda_1,\dots,\lambda_n$. Then, the ranvom variable $Z:=\min_{i\in\left\{ 1,\dots,n \right\}} \left\{ X_i \right\}$ is exponentially distributed with parameter $\lambda=\lambda_1+\dots+\lambda_n$.
 \end{theorem}
 
@@ -88,7 +91,7 @@ Note that the above definition also determines the distribution function $F$ of 
 \end{definition}
 
 \begin{theorem}
-  \label{sec:exponential-memoryless}
+  \label{thm:exponential-memoryless}
   Let $X$ be an exponentially distributed random variable with parameter $\lambda$. Then, $X$ is memoryless.
 \end{theorem}
 
@@ -105,7 +108,7 @@ Note that the above definition also determines the distribution function $F$ of 
 
 This is a very advantageous property that can be exploited in our considerations to follow.
 
-\emph{Remark:} It can even be shown that any memoryless continuous random variable is exponentially distributed, but theorem \ref{sec:exponential-memoryless} is sufficient for our needs.
+\emph{Remark:} It can even be shown that any memoryless continuous random variable is exponentially distributed, but theorem \ref{thm:exponential-memoryless} is sufficient for our needs.
 
 \subsection{Uniform distribution}
 \label{sec:uniform-distribution}
@@ -150,7 +153,7 @@ The density of a uniform random variable is thus given by
   because all random variables $X_1$ through $X_n$ behave the same. Thus we can deduce equation (\ref{eq:probability-that-cont-random-variable-is-smallest-out-of-iid-is-one-over-n}).
 \end{proof}
 
-\section{Graph theory}
+\section{Intrees}
 \label{sec:foundations-graph-theory}
 
 As we will see later, we will constantly deal with \emph{intrees}. In this section we develop simple notation for such trees. We assume that the reader is familiar with the concept of undirected trees and develop our notation on top of the one for undirected trees. For a more detailed introduction on what trees are, see e.g. \cite{diestel2005graph}.
@@ -247,6 +250,377 @@ However, we are mostly interested in the \emph{structure} of the tree, which is 
 The concept of levels is illustrated in figure \ref{fig:intrees-introductory-explanation}.
 
 \todo{Anzahl der rooted trees angeben.}
+\todo{Forest!}
+
+\section{Schedules}
+\label{sec:introduction-schedules}
+
+We have seen in section \ref{sec:foundations-graph-theory} how we can interpret an intree as a collection of tasks that have certain dependencies among each other (each task is directly required for \emph{at most} one other task). 
+
+\paragraph{Random task times} \todo{Sollte das wo anders rein?}
+
+We now assume that we do not know the processing time for a certain task in advance. We instead assume that we can model the task time for each task within the intree by an exponentially distributed random variable as defined in section \ref{sec:exponential-distribution}. We furthermore assume that all tasks are exponentially distributed with the \emph{same} parameter $\lambda$. Note that we can assume -- according to theorem \ref{thm:expoenential-distr-scalability} -- $\lambda=1$.\todo{More explanation}
+
+We now assume that we have a certain amount $p$ of identical processors, and we want to process all tasks in an intree (of course in a valid order) such that the overall processing time is minimized. I.e. we want to mimimize the point of time, where the root's processing is done.
+
+We assume that one single task can be processed by one processor exclusively, i.e. it is not possible to save time by ``splitting'' one single task over several processors. That, moreover, means that there might be idle processors if we have more ready tasks than processors. \todo{Define ready tasks!}
+
+We furthermore work with non-preemtive scheduling, i.e. once a task is processor is assigned a task, this task has to be processed \emph{completely} before the processor can be used for anything else.
+
+\section{Computing the expected run time of a schedule}
+\label{sec:introduction-compute-expected-time-schedule}
+
+\todo{Snapshot definieren!}
+
+If we want to process a whole intree of tasks, we have to do so step by step, of course. That is, we assign some tasks to processors, wait until the first task finishes, assign a new task (if available) to the now idle processor, and continue with the subtree obtained by removing the finished task. That is, in each point of time, we know the current intree containing all tasks not yet finished and all tasks currently being processed. We therefore introduce the notation of \emph{snapshots}.
+
+\begin{definition}[Snapshot]
+  Let $I$ be an intree and let $S$ be a schedule.
+  A \emph{snapshot} of $S$ a 2-tuple containing
+  \begin{itemize}
+  \item The current subtree $I'\subseteq I$ describing which tasks are not finished.
+  \item A set $X$ holding the tasks that are currently being processed.
+  \end{itemize}
+\end{definition}
+
+While the above definition is well suited for theoretical considerations, we -- most of the time -- are satisfied with a concise graphical representation, that will look as shown in figure \ref{fig:intro-snapshot-graphical-representation}.
+
+\begin{figure}[t]
+  \centering
+  \begin{tikzpicture}[scale=.2, anchor=south]
+    \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
+    \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+    \node[circle, scale=0.75, fill] (tid3) at (0.75,4.5){};
+    \node[circle, scale=0.75, fill] (tid4) at (2.25,4.5){};
+    \node[circle, scale=0.75, fill, task_scheduled] (tid7) at (2.25,6){};
+    \draw[](tid4) -- (tid7);
+    \draw[](tid1) -- (tid3);
+    \draw[](tid1) -- (tid4);
+    \node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
+    \node[circle, scale=0.75, fill] (tid5) at (5.25,3){};
+    \node[circle, scale=0.75, fill, task_scheduled] (tid6) at (5.25,4.5){};
+    \draw[](tid5) -- (tid6);
+    \draw[](tid0) -- (tid1);
+    \draw[](tid0) -- (tid2);
+    \draw[](tid0) -- (tid5);
+    % arrows for scheduled tasks
+    \draw(tid7) +(1,0)[<-, thick] ..controls+(4,0) and +(0,1).. (15,3);
+    \draw(tid6) +(1,0)[<-, thick] ..controls+(2,0) and +(0,1).. (15,3) 
+    node[below]{scheduled tasks};
+    % brace for whole intree
+    \draw[decorate, decoration=brace](-1,1) --node[left, xshift=-.1cm]{current intree} +(0,7);
+  \end{tikzpicture}
+  \caption{A snapshot is determined by its intree and a collection of currently scheduled tasks.}
+  \label{fig:intro-snapshot-graphical-representation}
+\end{figure}
+
+If we are speaking of a schedule, we can think of it as a directed acyclic graph, where each vertex represents one single snapshot. The edges between the snapshots then represent transitions that indicate that a certain task has finished. We can naturally assign the edges weights that represent the corresponding probability that a task has finished.\todo{Dag definieren? Oder Verweis auf irgendwen?}
+
+Computing the expected run time for a given schedule (more precisely for the whole processing of an intree according to a certain schedule) can be easily acchieved via a recursive formula that can be explained as follows:
+
+\begin{itemize}
+\item If the current intree $I$ consists of exactly one task (the root), then we simply have to process this single task. Since one task has expected run time $\frac{1}{\lambda}=1$ (remember: we assumed w.l.o.g $\lambda=1$), we know that the expected run time for $I$ is 1.
+\item If the current intree consists of more than 1 task, there may be up to $p$ tasks scheduled. Let us assume that there are $r\leq p$ tasks scheduled and denote the set of these tasks by $X=\{x_1,x_2,\dots,x_r\}$. According to theorem (\ref{eq:probability-that-cont-random-variable-is-smallest-out-of-iid-is-one-over-n}), the probability that task $x_i$ ($i\in\left\{ 1,2,\dots,r \right\}$) is the \emph{first} task to finish is $\frac{1}{r}$. The expected run time for $x_i$ is $\frac{1}{n}$ (by theorems \ref{thm:minimum-of-exponential-distribution-is-exponential} and \ref{thm:exponential-distribution-expectancy}).
+
+  If task $x_i$ finishes, the remaining intree is $I\setminus\left\{ x_i \right\}$ \todo{Define setminus for trees!}, with -- due to non-preemtive scheduling -- at least tasks $\left\{ x_1,x_2,\dots,x_r \right\} \setminus \left\{ x_i \right\}$ scheduled. By $X_i$ we denote the set of tasks that are scheduled in the next step ($\left\{ x_1,x_2,\dots,x_r \right\} \setminus \left\{ x_i \right\} \subseteq X'$). The expected run time for $I\setminus\left\{ x_i \right\}$ can then be computed recursively.
+
+  This means: If $x_i$ is the first task to finish, the expected run time is given by
+  \begin{equation*}
+    \frac{1}{r} + T_{X_i}(I\setminus\left\{ x_i \right\}),
+  \end{equation*}
+  where $T_{X_i}(I\setminus\left\{ x_i \right\})$ denotes the expected run time for the intree $I\setminus\left\{ x_i \right\}$ if the tasks within $X_i$ are scheduled.
+
+  Since each one of the tasks $x_1,x_2,\dots,x_r$ can be the first task to finish, we can compute the overal run time by \todo{Bedingte Wahrscheinlichkeitssumme einführen}
+  \begin{eqnarray}
+    \nonumber
+    T_X(I) 
+    &=& 
+    \sum_{i=1}^r \frac{1}{r} \cdot \left( \frac{1}{r} + T_{X_i}\left( I\setminus\left\{ x_i \right\} \right) \right) = \\
+    \label{eqn:intro-recursive-formula-for-run-time}
+    &=&     
+    \frac{1}{r} + \frac{1}{r} \cdot \sum_{i=1}^r T_{X_i}\left( I\setminus\left\{ x_i \right\} \right).
+  \end{eqnarray}
+\end{itemize}
+
+\emph{Remark:} The fact that we can compute the expected run time recursively follows from the fact that exponentially distributed random variables are memoryless (see theorem \ref{thm:exponential-memoryless}): If one task finishes, the remaining tree can be considered \emph{as if} we just started the scheduled tasks. Thus, we are in the same situation as before, except that we have one task less.\todo{Verbessern.}
+
+As an example, consider the tree in figure \ref{fig:intro-computing-expected-runtime}. The topmost snapshots are the ones whose expected run times we are interested in. The run times of the snapshots in the second line are already computed. Using these, we can compute the overal expected run time.
+
+\begin{figure}[tt]
+  \centering
+  \begin{subfigure}{.45\textwidth}
+    \renewcommand{\leveltopI}{-15cm + \leveltop}
+    \renewcommand{\leveltopII}{-15cm + \leveltopI}
+    \renewcommand{\leveltopIII}{-15cm + \leveltopII}
+    \centering
+    \begin{tikzpicture}[scale=.2, anchor=south]
+      \begin{scope}[yshift=\leveltopI cm]
+        \matrix (line1)[column sep=.5cm] {
+          \node[draw=black, rectangle split,  rectangle split parts=2] (sn0x834df78){
+            \begin{tikzpicture}[scale=.2]
+              \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
+              \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid2) at (0.75,4.5){};
+              \node[circle, scale=0.75, fill] (tid4) at (3,4.5){};
+              \node[circle, scale=0.75, fill] (tid5) at (2.25,6){};
+              \node[circle, scale=0.75, fill] (tid7) at (2.25,7.5){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid8) at (2.25,9){};
+              \draw[](tid7) -- (tid8);
+              \draw[](tid5) -- (tid7);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid6) at (3.75,6){};
+              \draw[](tid4) -- (tid5);
+              \draw[](tid4) -- (tid6);
+              \draw[](tid1) -- (tid2);
+              \draw[](tid1) -- (tid4);
+              \node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
+              \draw[](tid0) -- (tid1);
+              \draw[](tid0) -- (tid3);
+            \end{tikzpicture}
+            \nodepart{two}
+            \footnotesize{6.21811}
+          };
+          & 
+          \\
+        };
+      \end{scope}
+      \begin{scope}[yshift=\leveltopII cm]
+        \matrix (line2)[column sep=.5cm] {
+          \node[draw=black, rectangle split,  rectangle split parts=2] (sn0x834f4d0){
+            \begin{tikzpicture}[scale=.2]
+              \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
+              \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid2) at (0.75,4.5){};
+              \node[circle, scale=0.75, fill] (tid4) at (3,4.5){};
+              \node[circle, scale=0.75, fill] (tid5) at (2.25,6){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid7) at (2.25,7.5){};
+              \draw[](tid5) -- (tid7);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid6) at (3.75,6){};
+              \draw[](tid4) -- (tid5);
+              \draw[](tid4) -- (tid6);
+              \draw[](tid1) -- (tid2);
+              \draw[](tid1) -- (tid4);
+              \node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
+              \draw[](tid0) -- (tid1);
+              \draw[](tid0) -- (tid3);
+            \end{tikzpicture}
+            \nodepart{two}
+            \footnotesize{5.41204}
+          };
+          & 
+          \node[draw=black, rectangle split,  rectangle split parts=2] (sn0x834ec08){
+            \begin{tikzpicture}[scale=.2]
+              \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+              \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid2) at (0.75,4.5){};
+              \node[circle, scale=0.75, fill] (tid4) at (2.25,4.5){};
+              \node[circle, scale=0.75, fill] (tid5) at (2.25,6){};
+              \node[circle, scale=0.75, fill] (tid7) at (2.25,7.5){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid8) at (2.25,9){};
+              \draw[](tid7) -- (tid8);
+              \draw[](tid5) -- (tid7);
+              \draw[](tid4) -- (tid5);
+              \draw[](tid1) -- (tid2);
+              \draw[](tid1) -- (tid4);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid3) at (3.75,3){};
+              \draw[](tid0) -- (tid1);
+              \draw[](tid0) -- (tid3);
+            \end{tikzpicture}
+            \nodepart{two}
+            \footnotesize{6.09066}
+          };
+          & 
+          \node[draw=black, rectangle split,  rectangle split parts=2] (sn0x834f908){
+            \begin{tikzpicture}[scale=.2]
+              \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+              \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+              \node[circle, scale=0.75, fill] (tid4) at (1.5,4.5){};
+              \node[circle, scale=0.75, fill] (tid5) at (0.75,6){};
+              \node[circle, scale=0.75, fill] (tid7) at (0.75,7.5){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid8) at (0.75,9){};
+              \draw[](tid7) -- (tid8);
+              \draw[](tid5) -- (tid7);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid6) at (2.25,6){};
+              \draw[](tid4) -- (tid5);
+              \draw[](tid4) -- (tid6);
+              \draw[](tid1) -- (tid4);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid3) at (3.75,3){};
+              \draw[](tid0) -- (tid1);
+              \draw[](tid0) -- (tid3);
+            \end{tikzpicture}
+            \nodepart{two}
+            \footnotesize{6.15162}
+          };
+          & 
+          \\
+        };
+      \end{scope}
+      \draw (sn0x834df78.south) -- (sn0x834f4d0.north);
+      \draw (sn0x834df78.south) -- (sn0x834ec08.north);
+      \draw (sn0x834df78.south) -- (sn0x834f908.north);
+    \end{tikzpicture}
+    \caption{Three processors. 
+      Transition probabilities are $\frac{1}{3}$ each.
+      Then, we can compute $
+      \frac{1}{3}+\frac{1}{3}\cdot
+      \left( 
+        5.41204 + 6.09066 + 6.15162
+      \right)
+      = 6.21811$.
+    }
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \renewcommand{\leveltopI}{-15cm + \leveltop}
+    \renewcommand{\leveltopII}{-15cm + \leveltopI}
+    \renewcommand{\leveltopIII}{-15cm + \leveltopII}
+    \renewcommand{\leveltopIIII}{-15cm + \leveltopIII}
+    \renewcommand{\leveltopIIIII}{-15cm + \leveltopIIII}
+    \renewcommand{\leveltopIIIIII}{-15cm + \leveltopIIIII}
+    \renewcommand{\leveltopIIIIIII}{-15cm + \leveltopIIIIII}
+    \renewcommand{\leveltopIIIIIIII}{-15cm + \leveltopIIIIIII}
+    \renewcommand{\leveltopIIIIIIIII}{-15cm + \leveltopIIIIIIII}
+    \begin{tikzpicture}[scale=.2, anchor=south]
+      \begin{scope}[yshift=\leveltopI cm]
+        \matrix (line1)[column sep=.5cm] {
+          \node[draw=black, rectangle split,  rectangle split parts=2] (sn0x9500f78){
+            \begin{tikzpicture}[scale=.2]
+              \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
+              \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid2) at (0.75,4.5){};
+              \node[circle, scale=0.75, fill] (tid4) at (3,4.5){};
+              \node[circle, scale=0.75, fill] (tid5) at (2.25,6){};
+              \node[circle, scale=0.75, fill] (tid7) at (2.25,7.5){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid8) at (2.25,9){};
+              \draw[](tid7) -- (tid8);
+              \draw[](tid5) -- (tid7);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid6) at (3.75,6){};
+              \draw[](tid4) -- (tid5);
+              \draw[](tid4) -- (tid6);
+              \draw[](tid1) -- (tid2);
+              \draw[](tid1) -- (tid4);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid3) at (5.25,3){};
+              \draw[](tid0) -- (tid1);
+              \draw[](tid0) -- (tid3);
+            \end{tikzpicture}
+            \nodepart{two}
+            \footnotesize{6.20264}
+          };
+          & 
+          \\
+        };
+      \end{scope}
+      \begin{scope}[yshift=\leveltopII cm]
+        \matrix (line2)[column sep=.5cm] {
+          \node[draw=black, rectangle split,  rectangle split parts=2] (sn0x9502500){
+            \begin{tikzpicture}[scale=.2]
+              \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
+              \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid2) at (0.75,4.5){};
+              \node[circle, scale=0.75, fill] (tid4) at (3,4.5){};
+              \node[circle, scale=0.75, fill] (tid5) at (2.25,6){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid7) at (2.25,7.5){};
+              \draw[](tid5) -- (tid7);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid6) at (3.75,6){};
+              \draw[](tid4) -- (tid5);
+              \draw[](tid4) -- (tid6);
+              \draw[](tid1) -- (tid2);
+              \draw[](tid1) -- (tid4);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid3) at (5.25,3){};
+              \draw[](tid0) -- (tid1);
+              \draw[](tid0) -- (tid3);
+            \end{tikzpicture}
+            \nodepart{two}
+            \footnotesize{5.39005}
+          };
+          & 
+          \node[draw=black, rectangle split,  rectangle split parts=2] (sn0x9501c08){
+            \begin{tikzpicture}[scale=.2]
+              \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+              \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid2) at (0.75,4.5){};
+              \node[circle, scale=0.75, fill] (tid4) at (2.25,4.5){};
+              \node[circle, scale=0.75, fill] (tid5) at (2.25,6){};
+              \node[circle, scale=0.75, fill] (tid7) at (2.25,7.5){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid8) at (2.25,9){};
+              \draw[](tid7) -- (tid8);
+              \draw[](tid5) -- (tid7);
+              \draw[](tid4) -- (tid5);
+              \draw[](tid1) -- (tid2);
+              \draw[](tid1) -- (tid4);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid3) at (3.75,3){};
+              \draw[](tid0) -- (tid1);
+              \draw[](tid0) -- (tid3);
+            \end{tikzpicture}
+            \nodepart{two}
+            \footnotesize{6.09066}
+          };
+          & 
+          \node[draw=black, rectangle split,  rectangle split parts=2] (sn0x95028b8){
+            \begin{tikzpicture}[scale=.2]
+              \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+              \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+              \node[circle, scale=0.75, fill] (tid4) at (1.5,4.5){};
+              \node[circle, scale=0.75, fill] (tid5) at (0.75,6){};
+              \node[circle, scale=0.75, fill] (tid7) at (0.75,7.5){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid8) at (0.75,9){};
+              \draw[](tid7) -- (tid8);
+              \draw[](tid5) -- (tid7);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid6) at (2.25,6){};
+              \draw[](tid4) -- (tid5);
+              \draw[](tid4) -- (tid6);
+              \draw[](tid1) -- (tid4);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid3) at (3.75,3){};
+              \draw[](tid0) -- (tid1);
+              \draw[](tid0) -- (tid3);
+            \end{tikzpicture}
+            \nodepart{two}
+            \footnotesize{6.15162}
+          };
+          & 
+          \node[draw=black, rectangle split,  rectangle split parts=2] (sn0x9502a20){
+            \begin{tikzpicture}[scale=.2]
+              \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+              \node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid2) at (0.75,4.5){};
+              \node[circle, scale=0.75, fill] (tid4) at (3,4.5){};
+              \node[circle, scale=0.75, fill] (tid5) at (2.25,6){};
+              \node[circle, scale=0.75, fill] (tid7) at (2.25,7.5){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid8) at (2.25,9){};
+              \draw[](tid7) -- (tid8);
+              \draw[](tid5) -- (tid7);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid6) at (3.75,6){};
+              \draw[](tid4) -- (tid5);
+              \draw[](tid4) -- (tid6);
+              \draw[](tid1) -- (tid2);
+              \draw[](tid1) -- (tid4);
+              \draw[](tid0) -- (tid1);
+            \end{tikzpicture}
+            \nodepart{two}
+            \footnotesize{6.17824}
+          };
+          & 
+          \\
+        };
+      \end{scope}
+      \draw (sn0x9500f78.south) -- (sn0x9502500.north);
+      \draw (sn0x9500f78.south) -- (sn0x9501c08.north);
+      \draw (sn0x9500f78.south) -- (sn0x95028b8.north);
+      \draw (sn0x9500f78.south) -- (sn0x9502a20.north);
+    \end{tikzpicture}
+    \caption{Four processors. Transition probabilities between snapshots are $\frac{1}{4}$ each, so we can compute the overal expected run time by 
+      $
+      \frac{1}{4} + \frac{1}{4}\cdot 
+      \left( 
+        5.39005 + 6.09066 + 6.15162 + 6.17824
+      \right)
+      = 6.20264
+      $
+    }
+  \end{subfigure}
+  \caption{Computing the expected run time according to equation (\ref{eqn:intro-recursive-formula-for-run-time}) for three resp. four processors on the same intree. Each box represents a single snapshot.}
+  \label{fig:intro-computing-expected-runtime}
+\end{figure}
 
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"
