@@ -19,7 +19,7 @@ class TikzExporter : public Exporter {
                 const task_id t,
                 const map<task_id, vector<task_id>>& rt,
                 const unsigned int depth,
-                const float leftoffset) const;
+                const float leftoffset) const = 0;
         void export_single_snaphot(ostream& output, const Snapshot* s) const;
         void tikz_draw_node(const Snapshot* s,
                 const Snapshot* orig,

@@ -22,36 +22,6 @@ unsigned int TikzExporter::get_subtree_width(const task_id tid,
     return result;
 }
 
-void TikzExporter::export_single_snapshot_internal(ostream& output,
-        const Snapshot& s,
-        const task_id t,
-        const map<task_id, vector<task_id>>& rt,
-        const unsigned int depth,
-        const float leftoffset) const{
-    const float mywidth = 1.5f;
-    const float myheight = 1.5f;
-    const vector<task_id>& marked = s.marked;
-    output << "\\node[";
-    output << "circle, scale=0.75, fill";
-    if(marked.size() == 0 || find(marked.begin(), marked.end(), t) != marked.end()){
-        output << ", task_scheduled";
-    }
-    float complete_width=get_subtree_width(t, rt);
-    output << "] (tid" << t << ") at (" 
-        << mywidth * (leftoffset + 0.5f * complete_width) 
-        << "," << myheight * depth << "){};" << endl;
-    float cur_leftoffset = leftoffset;
-    // draw "children"
-    for(auto it = rt.at(t).begin(); it!=rt.at(t).end(); ++it){
-        export_single_snapshot_internal(output, s, *it, rt, depth + 1, cur_leftoffset);
-        cur_leftoffset += get_subtree_width(*it, rt);
-    }
-    // draw arrows from children
-    for(auto it = rt.at(t).begin(); it!=rt.at(t).end(); ++it){
-        output << "\\draw[](tid" << t << ") -- (tid" << *it << ");" << endl;
-    }
-}
-
 void TikzExporter::export_single_snaphot(ostream& output, const Snapshot* s) const{
     map<task_id, vector<task_id>> rt;
     s->intree.get_reverse_tree(rt);

@@ -132,6 +132,8 @@ int read_variables_map_from_args(int argc,
          "Generate condensed (longest chain/side nodes) TikZ-Output of snapshot(s) in file.")
         ("tikzprofile", po::value<string>()->implicit_value("default_profile"), 
          "Generate profile graph TikZ-Output of snapshot(s) in file.")
+        ("tikzlabel", po::value<bool>()->default_value(false)->zero_tokens(), 
+         "Print task numbers.")
         ("tikzhorizontal", po::value<bool>()->default_value(false)->zero_tokens(), 
          "Draw horizontal TikZ-DAG instead of vertical TikZ-DAG.")
         ("tikzlimit", po::value<unsigned int>()->default_value(1), 
@@ -294,6 +296,7 @@ void generate_output(const po::variables_map& vm,
             exporter.level_distance = vm["tikzld"].as<float>();
             exporter.sibling_distance = vm["tikzsd"].as<float>();
             exporter.horizontal = vm["tikzhorizontal"].as<bool>();
+            exporter.show_labels = vm["tikzlabel"].as<bool>();
             bool onlybest = vm["tikzonlybest"].as<bool>();
             for(Snapshot* it : (onlybest ? best : s)){
                 if(globaldrawme){

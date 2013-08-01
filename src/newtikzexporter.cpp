@@ -181,6 +181,40 @@ void TikzExporter2::tikz_draw_node(const TikzNode* s,
     output << "};" << endl;
 }
 
+void TikzExporter2::export_single_snapshot_internal(ostream& output,
+        const Snapshot& s,
+        const task_id t,
+        const map<task_id, vector<task_id>>& rt,
+        const unsigned int depth,
+        const float leftoffset) const{
+    const float mywidth = 1.5f;
+    const float myheight = 1.5f;
+    const vector<task_id>& marked = s.marked;
+    output << "\\node[";
+    output << "circle, scale=0.75, fill";
+    if(marked.size() == 0 || find(marked.begin(), marked.end(), t) != marked.end()){
+        output << ", task_scheduled";
+    }
+    float complete_width=get_subtree_width(t, rt);
+    output << "] (tid" << t << ") at (" 
+        << mywidth * (leftoffset + 0.5f * complete_width) 
+        << "," << myheight * depth << "){";
+    if(show_labels){
+        output << "\\scriptsize{" << t << "}";
+    }
+    output << "};" << endl;
+    float cur_leftoffset = leftoffset;
+    // draw "children"
+    for(auto it = rt.at(t).begin(); it!=rt.at(t).end(); ++it){
+        export_single_snapshot_internal(output, s, *it, rt, depth + 1, cur_leftoffset);
+        cur_leftoffset += get_subtree_width(*it, rt);
+    }
+    // draw arrows from children
+    for(auto it = rt.at(t).begin(); it!=rt.at(t).end(); ++it){
+        output << "\\draw[](tid" << t << ") -- (tid" << *it << ");" << endl;
+    }
+}
+
 void TikzExporter2::tikz_string_dag_compact_internal(const TikzNode* s,
         ostream& output,
         map<const TikzNode*, TikzNode*>& tikz_representants,

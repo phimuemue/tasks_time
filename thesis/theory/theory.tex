@@ -236,7 +236,7 @@ However, we are mostly interested in the \emph{structure} of the tree, which is 
       \draw[dashed] (0, 7.1) -- +(10, 0) node[below left, yshift=-.125cm]{Level 3};
       \draw[      ] (0, 8.6)    +(10, 0) node[below left, yshift=-.125cm]{Level 4};
     \end{tikzpicture}
-    \caption{Unlabelled without arrows, edges are implicitly towards the root.}
+    \caption{Unlabelled version without arrows, edges are implicitly directed towards the root.}
     \label{fig:intree-example-structure-version}
   \end{subfigure}
   \caption{Graphical representation of an intree with 5 levels (numbered 0 to 4). All edges are implicitly directed towards the root, which is drawn at the bottom of the tree. Most of the time, the \emph{structure} of the tree is enough, so we will omit vertex names most of the time.}
@@ -326,6 +326,8 @@ Consider now a snapshot, i.e. the current intree and a set of currently schedule
 \begin{itemize}
 \item Any of the currently scheduled tasks may be the first task to finish.
 \item If a certain task finishes, the corresponding processor gets idle and can be assigned new work. That is, we may be able to choose a new task\footnote{It may be the case that we are not able if all leaves are already scheduled. In this case, the processor has to stay idle.\todo{Passt das?}} and assign it to the newly free processor.
+
+  Note that we could -- in principle -- easily choose a certain task with some probability and another task with another probability, thus introducing more possibilities.
 \end{itemize}
 
 That is, we have ambiguities here. The first of them (which task finishes first) can not be influenced in our scenario. The second, however, leaves us free choice. Depending on which task we choose next, we might get a better or worse overall run time.
@@ -334,8 +336,6 @@ One desirable goal is to always choose the next task to be scheduled in such a w
 
 \section{Computing the expected run time of a schedule}
 \label{sec:introduction-compute-expected-time-schedule}
-
-\todo{Snapshot definieren!}
 
 If we are speaking of a schedule, we can think of it as a directed acyclic graph, where each vertex represents one single snapshot. The edges between the snapshots then represent transitions that indicate that a certain task has finished. We can naturally assign the edges weights that represent the corresponding probability that a task has finished.\todo{Dag definieren? Oder Verweis auf irgendwen?}
 
@@ -660,10 +660,250 @@ The second observation is that we can make the snapshot DAG more compact by avoi
   \item The mapping $f$ is an isomorphism between $I$ and $I'$.
   \item The sets of scheduled tasks also correspond under this isomorhpsim, i.e. 
     $X' = \left\{ f(x) \mid x\in X \right\}$.
+  \item The mapping $f$ maps the root of $I$ onto the root of $I'$.
   \end{itemize}
+
+  If $S$ and $S'$ are not equivalent, we call them \emph{distinct}.
 \end{definition}
 
-\todo{Figure für equiv. snaps rein!}
+\begin{figure}[tt]
+  \centering
+  \renewcommand{\leveltopI}{-10cm + \leveltop}
+  \renewcommand{\leveltopII}{-10cm + \leveltopI}
+  \begin{subfigure}{\textwidth}
+    \centering{}
+    \begin{tikzpicture}[scale=.35, anchor=south]
+      \node[text width=4cm](info) at (14,-10){Each transition shown has a probability of $\frac{1}{6}$.};
+      \draw[->, dashed] (info) ..controls+(0,-2)and+(+2,0).. +(-5,-5);
+      \draw[->, dashed] (info) ..controls+(0,-2)and+(+2,0).. +(-11,-5);
+      \tikzstyle{task_scheduled}=[fill=white, draw]
+      \begin{scope}[yshift=\leveltopI cm]
+        \matrix (line1)[column sep=0.25cm] {
+          \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x9bc9928){
+            \begin{tikzpicture}[scale=.35]
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid0) at (3.75,1.5){\scriptsize{0}};
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid1) at (1.5,3){\scriptsize{1}};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid4) at (0.75,4.5){\scriptsize{4}};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid6) at (2.25,4.5){\scriptsize{6}};
+              \draw[](tid1) -- (tid4);
+              \draw[](tid1) -- (tid6);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid2) at (3.75,3){\scriptsize{2}};
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid3) at (5.25,3){\scriptsize{3}};
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid5) at (6.75,3){\scriptsize{5}};
+              \draw[](tid0) -- (tid1);
+              \draw[](tid0) -- (tid2);
+              \draw[](tid0) -- (tid3);
+              \draw[](tid0) -- (tid5);
+            \end{tikzpicture}
+          };
+          & 
+          \\
+        };
+      \end{scope}
+      \begin{scope}[yshift=\leveltopII cm]
+        \matrix (line2)[column sep=0.25cm] {
+          \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x9bcb370){
+            \begin{tikzpicture}[scale=.35]
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid0) at (3,1.5){\scriptsize{0}};
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid1) at (0.75,3){\scriptsize{1}};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid6) at (0.75,4.5){\scriptsize{6}};
+              \draw[](tid1) -- (tid6);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid2) at (2.25,3){\scriptsize{2}};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid3) at (3.75,3){\scriptsize{3}};
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid5) at (5.25,3){\scriptsize{5}};
+              \draw[](tid0) -- (tid1);
+              \draw[](tid0) -- (tid2);
+              \draw[](tid0) -- (tid3);
+              \draw[](tid0) -- (tid5);
+            \end{tikzpicture}
+          };
+          & 
+          \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x9bd1828){
+            \begin{tikzpicture}[scale=.35]
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid0) at (3,1.5){\scriptsize{0}};
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid1) at (0.75,3){\scriptsize{1}};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid6) at (0.75,4.5){\scriptsize{6}};
+              \draw[](tid1) -- (tid6);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid2) at (2.25,3){\scriptsize{2}};
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid3) at (3.75,3){\scriptsize{3}};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid5) at (5.25,3){\scriptsize{5}};
+              \draw[](tid0) -- (tid1);
+              \draw[](tid0) -- (tid2);
+              \draw[](tid0) -- (tid3);
+              \draw[](tid0) -- (tid5);
+            \end{tikzpicture}
+          };
+          & 
+          \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x9bd0f28){
+            \begin{tikzpicture}[scale=.35]
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid0) at (3,1.5){\scriptsize{0}};
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid1) at (0.75,3){\scriptsize{1}};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid4) at (0.75,4.5){\scriptsize{4}};
+              \draw[](tid1) -- (tid4);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid2) at (2.25,3){\scriptsize{2}};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid3) at (3.75,3){\scriptsize{3}};
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid5) at (5.25,3){\scriptsize{5}};
+              \draw[](tid0) -- (tid1);
+              \draw[](tid0) -- (tid2);
+              \draw[](tid0) -- (tid3);
+              \draw[](tid0) -- (tid5);
+            \end{tikzpicture}
+          };
+          & 
+          \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x9bd2140){
+            \begin{tikzpicture}[scale=.35]
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid0) at (3,1.5){\scriptsize{0}};
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid1) at (0.75,3){\scriptsize{1}};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid4) at (0.75,4.5){\scriptsize{4}};
+              \draw[](tid1) -- (tid4);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid2) at (2.25,3){\scriptsize{2}};
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid3) at (3.75,3){\scriptsize{3}};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid5) at (5.25,3){\scriptsize{5}};
+              \draw[](tid0) -- (tid1);
+              \draw[](tid0) -- (tid2);
+              \draw[](tid0) -- (tid3);
+              \draw[](tid0) -- (tid5);
+            \end{tikzpicture}
+          };
+          & 
+          \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x9bc7440){
+            \begin{tikzpicture}[scale=.35]
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid0) at (3,1.5){\scriptsize{0}};
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid1) at (1.5,3){\scriptsize{1}};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid4) at (0.75,4.5){\scriptsize{4}};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid6) at (2.25,4.5){\scriptsize{6}};
+              \draw[](tid1) -- (tid4);
+              \draw[](tid1) -- (tid6);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid3) at (3.75,3){\scriptsize{3}};
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid5) at (5.25,3){\scriptsize{5}};
+              \draw[](tid0) -- (tid1);
+              \draw[](tid0) -- (tid3);
+              \draw[](tid0) -- (tid5);
+            \end{tikzpicture}
+          };
+          & 
+          \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x9bd1530){
+            \begin{tikzpicture}[scale=.35]
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid0) at (3,1.5){\scriptsize{0}};
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid1) at (1.5,3){\scriptsize{1}};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid4) at (0.75,4.5){\scriptsize{4}};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid6) at (2.25,4.5){\scriptsize{6}};
+              \draw[](tid1) -- (tid4);
+              \draw[](tid1) -- (tid6);
+              \node[circle, scale=0.75, fill=white!80!black, draw=black] (tid3) at (3.75,3){\scriptsize{3}};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid5) at (5.25,3){\scriptsize{5}};
+              \draw[](tid0) -- (tid1);
+              \draw[](tid0) -- (tid3);
+              \draw[](tid0) -- (tid5);
+            \end{tikzpicture}
+          };
+          & 
+          \\
+        };
+      \end{scope}
+      \draw (sn0x9bc9928.south) -- (sn0x9bc7440.north);
+      \draw (sn0x9bc9928.south) -- (sn0x9bd1530.north);
+      \draw (sn0x9bc9928.south) -- (sn0x9bcb370.north);
+      \draw (sn0x9bc9928.south) -- (sn0x9bd1828.north);
+      \draw (sn0x9bc9928.south) -- (sn0x9bd0f28.north);
+      \draw (sn0x9bc9928.south) -- (sn0x9bd2140.north);
+      \begin{scope}[yshift=-3cm]
+        \draw[decorate,decoration={brace,mirror}] (-22,-17)
+        --node[below, yshift=-.1cm]{Task 4 finished first} +(14.1,0);
+        \draw[decorate,decoration={brace,mirror}] (-7.4,-17)
+        --node[below, yshift=-.1cm]{Task 6 finished first} +(14.1,0);
+        \draw[decorate,decoration={brace,mirror}] (7.2,-17)
+        --node[below, yshift=-.1cm]{Task 2 finished first} +(14.1,0);
+        % equivalences
+        \draw[decorate,decoration={brace,mirror}] (-22,-19)
+        --node[below, yshift=-.1cm]{4 equivalent tasks} +(28.5,0);
+        \draw[decorate,decoration={brace,mirror}] (7.2,-19)
+        --node[below, yshift=-.1cm]{2 equivalent tasks} +(14.1,0);
+      \end{scope}
+    \end{tikzpicture}
+    \caption{Schedule DAG showing all possible snapshots. Tasks currently scheduled are drawn white. Other tasks are drawn gray.}
+  \end{subfigure}
+  \begin{subfigure}{\textwidth}
+    \renewcommand{\leveltopII}{-8cm + \leveltopI}
+    \centering{}
+    \begin{tikzpicture}[scale=.35, anchor=south]
+      \begin{scope}[yshift=\leveltopI cm]
+        \matrix (line1)[column sep=0.25cm] {
+          \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x9bc9928){
+            \begin{tikzpicture}[scale=.35]
+              \node[circle, scale=0.75, fill, draw=black] (tid0) at (3.75,1.5){};
+              \node[circle, scale=0.75, fill, draw=black] (tid1) at (1.5,3){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid4) at (0.75,4.5){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid6) at (2.25,4.5){};
+              \draw[](tid1) -- (tid4);
+              \draw[](tid1) -- (tid6);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid2) at (3.75,3){};
+              \node[circle, scale=0.75, fill, draw=black] (tid3) at (5.25,3){};
+              \node[circle, scale=0.75, fill, draw=black] (tid5) at (6.75,3){};
+              \draw[](tid0) -- (tid1);
+              \draw[](tid0) -- (tid2);
+              \draw[](tid0) -- (tid3);
+              \draw[](tid0) -- (tid5);
+            \end{tikzpicture}
+          };
+          & 
+          \\
+        };
+      \end{scope}
+      \begin{scope}[yshift=\leveltopII cm]
+        \matrix (line2)[column sep=0.25cm] {
+          \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x9bd2140){
+            \begin{tikzpicture}[scale=.35]
+              \node[circle, scale=0.75, fill, draw=black] (tid0) at (3,1.5){};
+              \node[circle, scale=0.75, fill, draw=black] (tid1) at (0.75,3){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid4) at (0.75,4.5){};
+              \draw[](tid1) -- (tid4);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid2) at (2.25,3){};
+              \node[circle, scale=0.75, fill, draw=black] (tid3) at (3.75,3){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid5) at (5.25,3){};
+              \draw[](tid0) -- (tid1);
+              \draw[](tid0) -- (tid2);
+              \draw[](tid0) -- (tid3);
+              \draw[](tid0) -- (tid5);
+            \end{tikzpicture}
+          };
+          & 
+          \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x9bc7440){
+            \begin{tikzpicture}[scale=.35]
+              \node[circle, scale=0.75, fill, draw=black] (tid0) at (3,1.5){};
+              \node[circle, scale=0.75, fill, draw=black] (tid1) at (1.5,3){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid4) at (0.75,4.5){};
+              \node[circle, scale=0.75, fill, task_scheduled] (tid6) at (2.25,4.5){};
+              \draw[](tid1) -- (tid4);
+              \draw[](tid1) -- (tid6);
+              \node[circle, scale=0.75, fill, task_scheduled] (tid3) at (3.75,3){};
+              \node[circle, scale=0.75, fill, draw=black] (tid5) at (5.25,3){};
+              \draw[](tid0) -- (tid1);
+              \draw[](tid0) -- (tid3);
+              \draw[](tid0) -- (tid5);
+            \end{tikzpicture}
+          };
+          & 
+          \\
+        };
+      \end{scope}
+      \draw[] (sn0x9bc9928.south) --node[right,yshift=.2cm]{$\frac{2}{6}$} (sn0x9bc7440.north);
+      \draw[] (sn0x9bc9928.south) --node[left,yshift=.2cm]{$\frac{4}{6}$} (sn0x9bd2140.north);
+    \end{tikzpicture}
+    \caption{Condensed DAG with distinct snapshots only.}
+  \end{subfigure}
+  \caption{Equivalent snapshots can be eliminated. Note that this changes the probabilities along the edges. To obtain the new probabilities, we sum up the probabilities all edges that are merged into the corresponding edge.}
+  \label{fig:intro-equivalent-snapshots-elimination}
+\end{figure}
+
+Figure \ref{fig:intro-equivalent-snapshots-elimination} shows an example where we would originally have to deal with six snapshots, but can reduce this to two snapshots only by excluding equivalent snapshots. This transformation (treating equivalent snapshots as one single snapshot) requires us to adjust the probabilities in the snapshot DAG. This can be done straightforward by summing up all probabilities along the edges that are merged into one single edge.
+
+From now on, if not stated otherwise, we restrict ourselves to snapshot DAGs\todo{Bereits definiert?} that contain only distinct snapshots.
+
+\paragraph{Excluding equivalent snapshots in practice}
+
+It is a notable fact that we can determine in polynomial time (w.r.t. the number of nodes) whether two snapshots are equivalent. This computation involves a check whether the two corresponding intrees are isomorphic. While it seems to be quite hard to check isomorphism for general graphs (\todo{unbedingt Referenz!}), it is feasible for intrees.
+
 \todo{Algorithmus, der equiv. snaps / bzw. canonical snaps berechnet zeigen.}
 
 %%% Local Variables:

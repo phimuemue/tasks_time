@@ -24,6 +24,12 @@ class TikzExporter2 : public TikzExporter {
         // routines to draw one single snapshot properly are in TikzExporter
 
         // routines to draw DAG of snaps
+        virtual void export_single_snapshot_internal(ostream& output,
+                const Snapshot& s,
+                const task_id t,
+                const map<task_id, vector<task_id>>& rt,
+                const unsigned int depth,
+                const float leftoffset) const;
         void generate_tikz_nodes(const Snapshot* s,
                 const Snapshot* orig,
                 map<const Snapshot*, TikzNode*>& target) const ;
@@ -66,6 +72,7 @@ class TikzExporter2 : public TikzExporter {
         float level_distance;
         float sibling_distance;
         bool horizontal;
+        bool show_labels = false;
 
         TikzExporter2(bool se=true,
                 bool sp=true,

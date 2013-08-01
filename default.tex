@@ -5,30 +5,24 @@
 \renewcommand{\leveltopIIIII}{-10cm + \leveltopIIII}
 \renewcommand{\leveltopIIIIII}{-10cm + \leveltopIIIII}
 \renewcommand{\leveltopIIIIIII}{-10cm + \leveltopIIIIII}
-\renewcommand{\leveltopIIIIIIII}{-10cm + \leveltopIIIIIII}
-\renewcommand{\leveltopIIIIIIIII}{-10cm + \leveltopIIIIIIII}
 \begin{tikzpicture}[scale=.2, anchor=south]
 \begin{scope}[yshift=\leveltopI cm]
 \matrix (line1)[column sep=0.25cm] {
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ebbc88){
+\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8c2d290){
 \begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (3,3){};
-\node[circle, scale=0.75, fill] (tid2) at (1.5,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid3) at (0.75,6){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (2.25,6){};
-\draw[](tid2) -- (tid3);
-\draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill, task_scheduled] (tid4) at (3.75,4.5){};
-\node[circle, scale=0.75, fill] (tid8) at (5.25,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid8);
-\node[circle, scale=0.75, fill] (tid6) at (6.75,3){};
-\node[circle, scale=0.75, fill] (tid7) at (8.25,3){};
+\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (0.75,4.5){};
+\node[circle, scale=0.75, fill, task_scheduled] (tid6) at (2.25,4.5){};
+\draw[](tid1) -- (tid5);
+\draw[](tid1) -- (tid6);
+\node[circle, scale=0.75, fill, task_scheduled] (tid2) at (3.75,3){};
+\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
+\node[circle, scale=0.75, fill] (tid4) at (6.75,3){};
 \draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\draw[](tid0) -- (tid4);
 \end{tikzpicture}
 };
  & 
@@ -37,500 +31,43 @@
 \end{scope}
 \begin{scope}[yshift=\leveltopII cm]
 \matrix (line2)[column sep=0.25cm] {
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ebc930){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid2) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (0.75,6){};
-\draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill, task_scheduled] (tid4) at (2.25,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid8) at (3.75,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid8);
-\node[circle, scale=0.75, fill] (tid6) at (5.25,3){};
-\node[circle, scale=0.75, fill] (tid7) at (6.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ebc790){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid2) at (1.5,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid3) at (0.75,6){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (2.25,6){};
-\draw[](tid2) -- (tid3);
-\draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill, task_scheduled] (tid8) at (3.75,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid1) -- (tid8);
-\node[circle, scale=0.75, fill] (tid6) at (5.25,3){};
-\node[circle, scale=0.75, fill] (tid7) at (6.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\\
-};
-\end{scope}
-\begin{scope}[yshift=\leveltopIII cm]
-\matrix (line3)[column sep=0.25cm] {
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ebccd0){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid2) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid4) at (2.25,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid8) at (3.75,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid8);
-\node[circle, scale=0.75, fill] (tid6) at (5.25,3){};
-\node[circle, scale=0.75, fill] (tid7) at (6.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ebcc38){
+\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8c2e5b0){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill] (tid2) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (0.75,6){};
-\draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill, task_scheduled] (tid8) at (2.25,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid1) -- (tid8);
-\node[circle, scale=0.75, fill, task_scheduled] (tid6) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,3){};
+\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (0.75,4.5){};
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill, task_scheduled] (tid2) at (2.25,3){};
+\node[circle, scale=0.75, fill, task_scheduled] (tid3) at (3.75,3){};
+\node[circle, scale=0.75, fill] (tid4) at (5.25,3){};
 \draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
+\draw[](tid0) -- (tid4);
 \end{tikzpicture}
 };
  & 
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ec03b0){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill] (tid2) at (1.5,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid3) at (0.75,6){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (2.25,6){};
-\draw[](tid2) -- (tid3);
-\draw[](tid2) -- (tid5);
-\draw[](tid1) -- (tid2);
-\node[circle, scale=0.75, fill, task_scheduled] (tid6) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\\
-};
-\end{scope}
-\begin{scope}[yshift=\leveltopIIII cm]
-\matrix (line4)[column sep=0.25cm] {
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ebcea8){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid2) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid8) at (2.25,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid1) -- (tid8);
-\node[circle, scale=0.75, fill, task_scheduled] (tid6) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ebfa78){
+\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8c2e250){
 \begin{tikzpicture}[scale=.2]
 \node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
 \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
 \node[circle, scale=0.75, fill, task_scheduled] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid8) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (2.25,4.5){};
 \draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid8);
-\node[circle, scale=0.75, fill, task_scheduled] (tid6) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,3){};
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill, task_scheduled] (tid2) at (3.75,3){};
+\node[circle, scale=0.75, fill] (tid3) at (5.25,3){};
 \draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ebd3d8){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
-\node[circle, scale=0.75, fill] (tid2) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (0.75,6){};
-\draw[](tid2) -- (tid5);
-\draw[](tid1) -- (tid2);
-\node[circle, scale=0.75, fill, task_scheduled] (tid6) at (2.25,3){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid7) at (3.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ebd130){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill] (tid2) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (0.75,6){};
-\draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill, task_scheduled] (tid8) at (2.25,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid1) -- (tid8);
-\node[circle, scale=0.75, fill, task_scheduled] (tid7) at (3.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ec0598){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill] (tid2) at (1.5,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid3) at (0.75,6){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (2.25,6){};
-\draw[](tid2) -- (tid3);
-\draw[](tid2) -- (tid5);
-\draw[](tid1) -- (tid2);
-\node[circle, scale=0.75, fill, task_scheduled] (tid7) at (3.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid7);
+\draw[](tid0) -- (tid2);
+\draw[](tid0) -- (tid3);
 \end{tikzpicture}
 };
  & 
 \\
 };
 \end{scope}
-\draw (sn0x8ebbc88.south) -- (sn0x8ebc930.north);
-\draw (sn0x8ebbc88.south) -- (sn0x8ebc790.north);
-\draw (sn0x8ebc930.south) -- (sn0x8ebcc38.north);
-\draw (sn0x8ebc930.south) -- (sn0x8ebccd0.north);
-\draw (sn0x8ebc790.south) -- (sn0x8ebcc38.north);
-\draw (sn0x8ebc790.south) -- (sn0x8ec03b0.north);
-\draw (sn0x8ebccd0.south) -- (sn0x8ebfa78.north);
-\draw (sn0x8ebcc38.south) -- (sn0x8ebcea8.north);
-\draw (sn0x8ebcc38.south) -- (sn0x8ebd130.north);
-\draw (sn0x8ebcc38.south) -- (sn0x8ebd3d8.north);
-\draw (sn0x8ec03b0.south) -- (sn0x8ebd3d8.north);
-\draw (sn0x8ec03b0.south) -- (sn0x8ec0598.north);
-\end{tikzpicture}
-%%% Local Variables:
-%%% TeX-master: "thesis/thesis.tex"
-%%% End: 
-\renewcommand{\leveltopI}{-10cm + \leveltop}
-\renewcommand{\leveltopII}{-10cm + \leveltopI}
-\renewcommand{\leveltopIII}{-10cm + \leveltopII}
-\renewcommand{\leveltopIIII}{-10cm + \leveltopIII}
-\renewcommand{\leveltopIIIII}{-10cm + \leveltopIIII}
-\renewcommand{\leveltopIIIIII}{-10cm + \leveltopIIIII}
-\renewcommand{\leveltopIIIIIII}{-10cm + \leveltopIIIIII}
-\renewcommand{\leveltopIIIIIIII}{-10cm + \leveltopIIIIIII}
-\renewcommand{\leveltopIIIIIIIII}{-10cm + \leveltopIIIIIIII}
-\begin{tikzpicture}[scale=.2, anchor=south]
-\begin{scope}[yshift=\leveltopI cm]
-\matrix (line1)[column sep=0.25cm] {
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ebb8e8){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (3,3){};
-\node[circle, scale=0.75, fill] (tid2) at (1.5,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid3) at (0.75,6){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (2.25,6){};
-\draw[](tid2) -- (tid3);
-\draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill] (tid4) at (3.75,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid8) at (5.25,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid8);
-\node[circle, scale=0.75, fill] (tid6) at (6.75,3){};
-\node[circle, scale=0.75, fill] (tid7) at (8.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\\
-};
-\end{scope}
-\begin{scope}[yshift=\leveltopII cm]
-\matrix (line2)[column sep=0.25cm] {
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ebc930){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid2) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (0.75,6){};
-\draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill, task_scheduled] (tid4) at (2.25,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid8) at (3.75,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid8);
-\node[circle, scale=0.75, fill] (tid6) at (5.25,3){};
-\node[circle, scale=0.75, fill] (tid7) at (6.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ec0de8){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill] (tid2) at (1.5,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid3) at (0.75,6){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (2.25,6){};
-\draw[](tid2) -- (tid3);
-\draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill, task_scheduled] (tid4) at (3.75,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid1) -- (tid4);
-\node[circle, scale=0.75, fill] (tid6) at (5.25,3){};
-\node[circle, scale=0.75, fill] (tid7) at (6.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\\
-};
-\end{scope}
-\begin{scope}[yshift=\leveltopIII cm]
-\matrix (line3)[column sep=0.25cm] {
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ebccd0){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid2) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid4) at (2.25,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid8) at (3.75,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid8);
-\node[circle, scale=0.75, fill] (tid6) at (5.25,3){};
-\node[circle, scale=0.75, fill] (tid7) at (6.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ebcc38){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill] (tid2) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (0.75,6){};
-\draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill, task_scheduled] (tid8) at (2.25,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid1) -- (tid8);
-\node[circle, scale=0.75, fill, task_scheduled] (tid6) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ec0fa0){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill] (tid2) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (0.75,6){};
-\draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill, task_scheduled] (tid4) at (2.25,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid1) -- (tid4);
-\node[circle, scale=0.75, fill, task_scheduled] (tid6) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ec03b0){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill] (tid2) at (1.5,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid3) at (0.75,6){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (2.25,6){};
-\draw[](tid2) -- (tid3);
-\draw[](tid2) -- (tid5);
-\draw[](tid1) -- (tid2);
-\node[circle, scale=0.75, fill, task_scheduled] (tid6) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\\
-};
-\end{scope}
-\begin{scope}[yshift=\leveltopIIII cm]
-\matrix (line4)[column sep=0.25cm] {
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ebcea8){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid2) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid8) at (2.25,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid1) -- (tid8);
-\node[circle, scale=0.75, fill, task_scheduled] (tid6) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ebfa78){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid4) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid8) at (2.25,4.5){};
-\draw[](tid1) -- (tid4);
-\draw[](tid1) -- (tid8);
-\node[circle, scale=0.75, fill, task_scheduled] (tid6) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ec11b8){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (3,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid2) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid4) at (2.25,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid1) -- (tid4);
-\node[circle, scale=0.75, fill, task_scheduled] (tid6) at (3.75,3){};
-\node[circle, scale=0.75, fill] (tid7) at (5.25,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ebd3d8){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
-\node[circle, scale=0.75, fill] (tid2) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (0.75,6){};
-\draw[](tid2) -- (tid5);
-\draw[](tid1) -- (tid2);
-\node[circle, scale=0.75, fill, task_scheduled] (tid6) at (2.25,3){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid7) at (3.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid6);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ebd130){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill] (tid2) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (0.75,6){};
-\draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill, task_scheduled] (tid8) at (2.25,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid1) -- (tid8);
-\node[circle, scale=0.75, fill, task_scheduled] (tid7) at (3.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ec1470){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill] (tid2) at (0.75,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (0.75,6){};
-\draw[](tid2) -- (tid5);
-\node[circle, scale=0.75, fill, task_scheduled] (tid4) at (2.25,4.5){};
-\draw[](tid1) -- (tid2);
-\draw[](tid1) -- (tid4);
-\node[circle, scale=0.75, fill, task_scheduled] (tid7) at (3.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\node[draw=black, rectangle split,  rectangle split parts=1] (sn0x8ec0598){
-\begin{tikzpicture}[scale=.2]
-\node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
-\node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
-\node[circle, scale=0.75, fill] (tid2) at (1.5,4.5){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid3) at (0.75,6){};
-\node[circle, scale=0.75, fill, task_scheduled] (tid5) at (2.25,6){};
-\draw[](tid2) -- (tid3);
-\draw[](tid2) -- (tid5);
-\draw[](tid1) -- (tid2);
-\node[circle, scale=0.75, fill, task_scheduled] (tid7) at (3.75,3){};
-\draw[](tid0) -- (tid1);
-\draw[](tid0) -- (tid7);
-\end{tikzpicture}
-};
- & 
-\\
-};
-\end{scope}
-\draw (sn0x8ebb8e8.south) -- (sn0x8ebc930.north);
-\draw (sn0x8ebb8e8.south) -- (sn0x8ec0de8.north);
-\draw (sn0x8ebc930.south) -- (sn0x8ebcc38.north);
-\draw (sn0x8ebc930.south) -- (sn0x8ebccd0.north);
-\draw (sn0x8ec0de8.south) -- (sn0x8ec0fa0.north);
-\draw (sn0x8ec0de8.south) -- (sn0x8ec03b0.north);
-\draw (sn0x8ebccd0.south) -- (sn0x8ebfa78.north);
-\draw (sn0x8ebcc38.south) -- (sn0x8ebcea8.north);
-\draw (sn0x8ebcc38.south) -- (sn0x8ebd130.north);
-\draw (sn0x8ebcc38.south) -- (sn0x8ebd3d8.north);
-\draw (sn0x8ec0fa0.south) -- (sn0x8ebd3d8.north);
-\draw (sn0x8ec0fa0.south) -- (sn0x8ec11b8.north);
-\draw (sn0x8ec0fa0.south) -- (sn0x8ec1470.north);
-\draw (sn0x8ec03b0.south) -- (sn0x8ebd3d8.north);
-\draw (sn0x8ec03b0.south) -- (sn0x8ec0598.north);
+\draw (sn0x8c2d290.south) -- (sn0x8c2e250.north);
+\draw (sn0x8c2d290.south) -- (sn0x8c2e5b0.north);
 \end{tikzpicture}
 %%% Local Variables:
 %%% TeX-master: "thesis/thesis.tex"
