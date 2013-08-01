@@ -153,7 +153,7 @@ The density of a uniform random variable is thus given by
 \section{Graph theory}
 \label{sec:foundations-graph-theory}
 
-As we will see later, we will constantly deal with \emph{intrees} or \emph{rooted trees}. In this section we develop simple notation for such trees. For a more detailed introduction on what trees are, see e.g. \cite{diestel2005graph}.
+As we will see later, we will constantly deal with \emph{intrees}. In this section we develop simple notation for such trees. We assume that the reader is familiar with the concept of undirected trees and develop our notation on top of the one for undirected trees. For a more detailed introduction on what trees are, see e.g. \cite{diestel2005graph}.
 
 \begin{definition}[Intree]
   Let $I'$ be a undirected tree. Let $v$ be a vertex within $I'$. Let $I$ be the directed version of $I'$ in such a way that all edges are directed towards vertex $v$. Then we call $I$ an intree or a rooted tree with root $v$.
@@ -161,13 +161,91 @@ As we will see later, we will constantly deal with \emph{intrees} or \emph{roote
   If there is an edge $(t_1, t_2)$ in $I$, we call $t_1$ a (direct) predecessor of $t_2$ and $t_2$ a (direct) successor of $t_1$. If there is a path from $t_1$ to $t_2$, we simply speak of predecessor and successor.
 \end{definition}
 
+Throughout this book, if not stated otherwise, we use the terms intree and tree interchangeably, because we are dealing only with intrees.
+
+Those intrees can naturally be used to describe dependencies between different tasks, as long as each task is the requirement for at most one other tas. Each vertex in an intree then represents a task and if $t_1$ is a direct (direct) predecessor of $t_2$, this means that the task associated with $t_1$ must be executed before the task associated with $t_2$.
+
+We can draw such intrees in a very straightforward manner: We draw the root at the bottom and its direct predecessors one level above. For each predecessor, we inductively repeat this procedure to obtain a ``top-to-bottom-description'' of the tree.
+
+Figure \ref{fig:intree-example-task-names-directed-edges} shows an intree, where tasks 8 is a requirement for task 6, which itself is -- like task 7, 8 and (indirectly) task 10 -- a requirement for task 3. This figure also illustrates the fact that -- in an intree -- each task is a direct requirement for \emph{at most} one other task.
+
+However, we are mostly interested in the \emph{structure} of the tree, which is why we most of the time omit the labellings of the vertices (i.e. we omit the task names) and rely on a \emph{unlabelled} representation as shown in figure \ref{fig:intree-example-structure-version}.
+
+\begin{figure}[t]
+  \centering
+  \begin{subfigure}{.45\textwidth}
+    \centering{}
+    \begin{tikzpicture}[scale=.6, anchor=south]
+      \node[circle, scale=0.9, draw] (tid0) at (3,1.5){0};
+      \node[circle, scale=0.9, draw] (tid1) at (2.25,3){1};
+      \node[circle, scale=0.9, draw] (tid2) at (1.5,4.5){3};
+      \node[circle, scale=0.9, draw] (tid7) at (0.15,6){6};
+      \node[circle, scale=0.9, draw] (tid9) at (0.15,7.5){9};
+      \draw[<-, thick](tid7) -- (tid9);
+      \node[circle, scale=0.9, draw] (tid10) at (1.5,6){7};
+      \draw[<-, thick](tid2) -- (tid7);
+      \draw[<-, thick](tid2) -- (tid10);
+      \node[circle, scale=0.9, draw] (tid3) at (3.9,4.5){4};
+      \node[circle, scale=0.9, draw] (tid5) at (2.85,6){8};
+      \node[circle, scale=0.9, draw] (tid6) at (2.85,7.5){\small 10};
+      \draw[<-, thick](tid5) -- (tid6);
+      \draw[<-, thick](tid2) -- (tid5);
+      \draw[<-, thick](tid1) -- (tid2);
+      \draw[<-, thick](tid1) -- (tid3);
+      \node[circle, scale=0.9, draw] (tid4) at (5.25,3){2};
+      \node[circle, scale=0.9, draw] (tid8) at (5.25,4.5){5};
+      \draw[<-, thick](tid4) -- (tid8);
+      \draw[<-, thick](tid0) -- (tid1);
+      \draw[<-, thick](tid0) -- (tid4);
+    \end{tikzpicture}
+    \caption{Labelled version with vertex labels and edges drawn as arrows.}
+    \label{fig:intree-example-task-names-directed-edges}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\textwidth}
+    \centering{}
+    \begin{tikzpicture}[scale=.6, anchor=south]
+      \node[circle, scale=0.9, fill] (tid0) at (3,1.5){};
+      \node[circle, scale=0.9, fill] (tid1) at (2.25,3){};
+      \node[circle, scale=0.9, fill] (tid2) at (1.5,4.5){};
+      \node[circle, scale=0.9, fill] (tid7) at (0.15,6){};
+      \node[circle, scale=0.9, fill] (tid9) at (0.15,7.5){};
+      \draw[](tid7) -- (tid9);
+      \node[circle, scale=0.9, fill] (tid10) at (1.5,6){};
+      \draw[](tid2) -- (tid7);
+      \draw[](tid2) -- (tid10);
+      \node[circle, scale=0.9, fill] (tid3) at (3.9,4.5){};
+      \node[circle, scale=0.9, fill] (tid5) at (2.85,6){};
+      \node[circle, scale=0.9, fill] (tid6) at (2.85,7.5){};
+      \draw[](tid5) -- (tid6);
+      \draw[](tid2) -- (tid5);
+      \draw[](tid1) -- (tid2);
+      \draw[](tid1) -- (tid3);
+      \node[circle, scale=0.9, fill] (tid4) at (5.25,3){};
+      \node[circle, scale=0.9, fill] (tid8) at (5.25,4.5){};
+      \draw[](tid4) -- (tid8);
+      \draw[](tid0) -- (tid1);
+      \draw[](tid0) -- (tid4);
+      % level separators
+      \draw[dashed] (0, 2.6) -- +(10, 0) node[below left, yshift=-.125cm]{Level 0};
+      \draw[dashed] (0, 4.1) -- +(10, 0) node[below left, yshift=-.125cm]{Level 1};
+      \draw[dashed] (0, 5.6) -- +(10, 0) node[below left, yshift=-.125cm]{Level 2};
+      \draw[dashed] (0, 7.1) -- +(10, 0) node[below left, yshift=-.125cm]{Level 3};
+      \draw[      ] (0, 8.6)    +(10, 0) node[below left, yshift=-.125cm]{Level 4};
+    \end{tikzpicture}
+    \caption{Unlabelled without arrows, edges are implicitly towards the root.}
+    \label{fig:intree-example-structure-version}
+  \end{subfigure}
+  \caption{Graphical representation of an intree with 5 levels (numbered 0 to 4). All edges are implicitly directed towards the root, which is drawn at the bottom of the tree. Most of the time, the \emph{structure} of the tree is enough, so we will omit vertex names most of the time.}
+  \label{fig:intrees-introductory-explanation}
+\end{figure}
+
 \begin{definition}[Level]
   Let $I$ be an intree. Let $v$ be a vertex within $I$. We define $level(v)$ be number of edges along the (unique) path from $v$ to the root.
 \end{definition}
 
-We can draw such intrees in a very straightforward manner: We draw the root at the bottom and its direct predecessors one level above. For each predecessor, we inductively repeat this procedure to obtain a ``top-to-bottom-description'' of the tree.
+The concept of levels is illustrated in figure \ref{fig:intrees-introductory-explanation}.
 
-\todo{Figure!}
 \todo{Anzahl der rooted trees angeben.}
 
 %%% Local Variables:
