@@ -384,7 +384,17 @@ We generalize this fact in the next section.
     \item If $x'$ is the direct successor of $x$, then $x$ must have been the \emph{single topmost task} and the \emph{single predecessor} of $x'$ (since $I_1^x$ is a degenerate tree). However, since we assumed that $level(z_2)<level(z_1)$ and $z_1$ can not be a predecessor of $x'$ (since $x'$ is ready), it can not be the case that $z_2$ blocks $x'$ in $I_2^x$.
 
       % Moreover, since $x'$ is ready in $I_1^x$, the task $z_1$ can not be a predecessor of $x'$. Since $level(z_2)<level(z_1)$ and since $I_1^x$ and $I_2^x$ are both degenerate intrees, $z_2$ can not block $x'$.\todo{Genauer ausführen. Evtl. auslagern.}
-    \item If $x'$ is not the direct successor of $x$, $x'$ must be on a lower level then $x$ (because we are dealing with a degenerate intree). We assumed that we added $z_2$ in a manner such that $I_2=I\cup\left\{ z_2 \right\}$ is a degenerate subtree. Thus, $z_2$ could not have been added with $x'$ as its successor. Thus, $x'$ is not blocked by $z_2$ in $I_2$.
+    \item If $x'$ is not the direct successor of $x$, we recognize the fact that $x'$ must reside on a certain level with in the degenerate intree. 
+
+      If $x'$ is \emph{not} in the topmost level, it can not be blocked by $z_2$ because we assumed that $z_2$ is added in a way such that $I\sup\{z_2\}$ is still a degenerate intree.
+
+      Otherwise (if $x'$ is a topmost task \todo{topmost definieren!}), we still have two subcases:
+      \begin{itemize}
+      \item If there are other tasks at the same level as $x'$ (i.e. at the topmost level), then we can -- without loss of generality\footnote{Because of isomorphism.} -- assume that $z_2$ was added to another task on the same level as $x'$.
+      \item If $x'$ was the \emph{only} topmost task, then it \emph{might} be the case that $z_2$ was chosen in a way such that it is the direct predecessor of $x'$. In this case, we can argue that $level(z_1) > level(z_2)$ and, thus, know that $z_2$ can not block $x'$, because $x'$ is a topmost task.
+      \end{itemize}
+
+$x'$ must be on a lower level then $x$ (because we are dealing with a degenerate intree). We assumed that we added $z_2$ in a manner such that $I_2=I\cup\left\{ z_2 \right\}$ is a degenerate subtree. Thus, $z_2$ could not have been added with $x'$ as its successor. Thus, $x'$ is not blocked by $z_2$ in $I_2$.
     \end{itemize}
     We observed that for $I_2^x$, the task $x'$ must be ready.
     
