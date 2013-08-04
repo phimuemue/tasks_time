@@ -285,13 +285,14 @@ resultfile = open(filename+".unopt.result", "w")
 
 def myprint(a):
     resultfile.write(str(a))
+    resultfile.flush()
 
 for line in database:
     tree = line.strip()
     progs = [
                 # ("c0 o0", ["build/tasks_cs0", "-s", "leaf"]),
                 # ("c0 o1", ["build/tasks_cs0", "-s", "leaf", "--optimize"]),
-                ("c1 o0", ["build/tasks_cs1", "-s", "leaf"]),
+                # ("c1 o0", ["build/tasks_cs1", "-s", "leaf"]),
                 # ("c1 o1", ["build/tasks_cs1", "-s", "leaf", "--optimize"]),
             ]
     tmp = Intree([int(x) for x in tree.split()])

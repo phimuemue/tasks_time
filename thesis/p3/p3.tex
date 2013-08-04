@@ -180,6 +180,8 @@ To determine the maximum size of the optimal snapshot DAG for the P3 case, it mi
 
 \todo{Definitions: intree, level, suc, adding tasks to trees etc.}
 
+We now focus one one particular class on intrees, namely \emph{degenerate intrees}. A degenerate intree is an intree that consists of one longest chain from the bottom to one leaf, and all other tasks are direct predecessors to one of the tasks within this longest chain.\todo{Figure zeigen.}
+
 \subsection{Intro: Degenerate binary trees}
 \label{sec:p3-degenerate-trees-binary}
 
@@ -188,6 +190,7 @@ We researched degenerate binary trees, i.e. trees whose sequence has the structu
   \left( 0,0,a_0,a_1,a_2,a_3,a_4,\dots,a_n \right),
 \end{equation*}
 for $n$ the total number of tasks within the intree. The values $a_i$ can be recursively defined as follows:
+\todo{Sequence-Notation einführen}
 \begin{equation*}
   a_k =
   \begin{cases}
@@ -200,6 +203,26 @@ for $n$ the total number of tasks within the intree. The values $a_i$ can be rec
 That is, degenerate binary trees have sequences of the form $(0,0,1,1,3,3,5,5,7,7,9,\dots)$.
 
 We now examine how many snapshots are considered if we compute the optimal P3 schedule by considering \emph{all} possibilities and afterwards discarding the bad ones. The results are summed up in table \ref{tab:p3-degenerate-binary-trees-no-snapshots}. We clearly observe that the number of snapshots grows exponentially (at least within the range for $n$ under consideration). A simple pattern that can be observed from table \ref{tab:p3-degenerate-binary-trees-no-snapshots} is that (at least for $n\leq 26$) that the number of snapshots for a degenerate binary tree with $n$ tasks is greater than twice the number of snapshots for a degenerate binary tree with $n-2$ tasks. If $S(n)$ denotes the number of snapshots for a degenerate binary tree, we can formulate $S(n)>S(n-2)$, which we can (by induction) convert to $S(n) > \sqrt 2 ^ n$.
+
+This can be illustrated by the fact that degenerate binary intrees are fully determined by their profile (please see section \ref{sec:p2-profiles} for the definition of profiles). A degenerate binary tree has a profile of the form
+\begin{equation*}
+  \profile{a,2,2,2,2,\dots,2,1},
+\end{equation*}
+where $a$ is either $1$ or $2$. Assume the length of the profile (i.e. the height of the degenerate binary tree) is exactly $l$. Then, we have $2\cdot(l-2)+1+a = 2l-1+a$ tasks in total. Assume for now that $a=2$ (i.e. we are dealing with a complete degenerate binary tree) and $l>2$.
+
+A subtree of a this degenerate binary intree having height $l'$ has a profile of the form
+\begin{equation*}
+  \profile{a_0,a_1,a_2,\dots,a_{l'-2},1},
+\end{equation*}
+where $1\leq a_0\leq a$ and $1\leq a_i \leq 2$ for all $i\in\left\{ 1,2,\dots,l-2 \right\}$. Using basic combinatorics, we can tell that there must be
+\begin{equation*}
+  \sum_{l'=0}^{l-1} 2^{l'} = 2^{l} -1
+\end{equation*}
+distinct subtrees if $a=2$ for profile length (resp. intree depth) $l$.
+
+If $a=1$ and we have a profile length of $l$, we cann argue that there must be as many subtrees as for the profile without the first item (then of length $l-1$) plus the number of profiles of length exactly $l-1$ with one additional 1 prepended. These are exactly $2^{l-2}$.
+
+This, in total leads to our desired bound for $S(n)$.\todo{Genauer machen.}
 
 \begin{table}[t]
   \centering
@@ -377,11 +400,11 @@ We generalize this fact in the next section.
     \end{equation*}
 
     By $x'$ we denote the task that is scheduled next in the optimal schedule for intree $I_1^x$. 
-    If there are only two ready tasks left in $I_1^x$, we set $x'=y$. The expected optimal runtime for $I_1^x$ in this situaion is then given by $T_{x',y,z_1}^*(I_1^x)$.
+    If there are only two ready tasks left in $I_1^x$ (which then must be $y$ and $z_1$), we set $x'=y$. The expected optimal runtime for $I_1^x$ in this situaion is then given by $T_{x',y,z_1}^*(I_1^x)$.
 
     We now examine whether $x'$ is also ready in the intree $I_2$:
     \begin{itemize}
-    \item If $x'$ is the direct successor of $x$, then $x$ must have been the \emph{single topmost task} and the \emph{single predecessor} of $x'$ (since $I_1^x$ is a degenerate tree). However, since we assumed that $level(z_2)<level(z_1)$ and $z_1$ can not be a predecessor of $x'$ (since $x'$ is ready), it can not be the case that $z_2$ blocks $x'$ in $I_2^x$.
+    \item If $x'$ is the direct successor of $x$, then $x$ must have been the \emph{single topmost task} and the \emph{single predecessor} of $x'$ (since $I_1^x$ is a degenerate tree). However, since we assumed that $level(z_2)<level(z_1)$ and $z_1$ can not be a predecessor of $x'$ (since $x'$ is ready in $I_1$), it can not be the case that $z_2$ blocks $x'$ in $I_2^x$.
 
       % Moreover, since $x'$ is ready in $I_1^x$, the task $z_1$ can not be a predecessor of $x'$. Since $level(z_2)<level(z_1)$ and since $I_1^x$ and $I_2^x$ are both degenerate intrees, $z_2$ can not block $x'$.\todo{Genauer ausführen. Evtl. auslagern.}
     \item If $x'$ is not the direct successor of $x$, we recognize the fact that $x'$ must reside on a certain level with in the degenerate intree. 
@@ -407,6 +430,8 @@ $x'$ must be on a lower level then $x$ (because we are dealing with a degenerate
     We can now apply the induction hypothesis for the intree $I^x$, since this intree contains only $n-1$ tasks: We have an intree with $n-1$ tasks (namely $I^x$) and two tasks $z_1$ and $z_2$ with $level(z_1)>level(z_2)$, $I^x_1 = I^x\cup\left\{ z_1 \right\}$ and $I^x_2 = I^x\cup\left\{ z_2 \right\}$, implying that $T^*_{x',y,z_1}(I^x_1)>T^*_{x',y,z_2}(I^x_{2})$.
   \item If $y$ is the first task to finish, we argue similar to the $x$ case, thereby considering $I^y_{1},I^y_{2}$ and $I^y$ which are all defined analogously. This finally yields the following inequality: $T^*_{x,y',z_1}(I^y_{1}) > T^*_{x,y',z_2}(I^y_{2})$.
   \end{itemize}
+
+  \todo{Fall für $x=y$ abdecken!}
 
   The above considerations are illustrated in figure 
 \ref{fig:p3-adding-tasks-level-keep-scheduled-same-inequality}.\todo{Figure anpassen!}
@@ -495,7 +520,7 @@ $x'$ must be on a lower level then $x$ (because we are dealing with a degenerate
       \draw[decoration=brace,decorate=true](-11,8.25) --node[above]{$I_1$} +(7,0);
       \draw[decoration=brace,decorate=true](  4,8.25) --node[above]{$I_2$} +(7,0);
       \draw[decoration={brace,mirror},decorate=true](  -18,-9.5) --node[below, yshift=-.2cm]{$I^x_{1}$} +(6,0);
-      \draw[decoration={brace,mirror},decorate=true](-10.5,-9.5) --node[below, yshift=-.2cm]{$I^y_{1}I$} +(6,0);
+      \draw[decoration={brace,mirror},decorate=true](-10.5,-9.5) --node[below, yshift=-.2cm]{$I^y_{1}$} +(6,0);
       \draw[decoration={brace,mirror},decorate=true](   -3,-9.5) --node[below, yshift=-.2cm]{$I$} +(6,0);
       \draw[decoration={brace,mirror},decorate=true](  4.5,-9.5) --node[below, yshift=-.2cm]{$I^x_{2}$} +(6,0);
       \draw[decoration={brace,mirror},decorate=true](   12,-9.5) --node[below, yshift=-.2cm]{$I^y_{2}$} +(6,0);
@@ -567,8 +592,8 @@ We can now derive the following theorem.
 
   If we choose three topmost tasks $x,y,z$ of $I$, we can argue as follows: If $x$ is the task that finishes first, for the resulting subtree $I\setminus \left\{ x \right\}$, we can be sure that we can choose the next task such that we adhere to HLF, thus choosing the optimal solution for $I\setminus\left\{ x \right\}$ (by induction hypothesis). The same holds if $y$ or $z$ finishes first.
   
-  We now consider a non-HLF schedule for $I$ and compare it to the HLF schedule described before.
-  Let $x',y',z'$ be the tasks to be chosen. We can -- without loss of generality -- assume $level(x')\leq level(x)$, $level(y')\leq level(y')$, $level(z')\leq level(z)$. If $x'$ is the first task to finish, we consider the degenerate intree $I\setminus\left\{ x' \right\}$. Since $I \setminus \left\{ x' \right\}$ is a degenerate intree with $n-1$ tasks, it would be optimal to use HLF. However, using HLF may or may not be possible depending on our previous choices of $y'$ and $z'$. That is, the optimum for $I\setminus\left\{ x' \right\}$ \emph{might} be acchieved. From this we can conclude that the optimal expected run time is at least $T_{HLF}\left( I\setminus\left\{ x' \right\} \right)$, where $T_{HLF}$ denotes the run time for HLF.
+  We now consider a \todo{(possibly?) }non-HLF schedule for $I$ and compare it to the HLF schedule described before.
+  Let $x',y',z'$ be the tasks to be chosen such that at least $x\neq x'$ or $y\neq y'$ or $z\neq z'$. We can -- without loss of generality -- assume $level(x')\leq level(x)$, $level(y')\leq level(y')$, $level(z')\leq level(z)$. If $x'$ is the first task to finish, we consider the degenerate intree $I\setminus\left\{ x' \right\}$. Since $I \setminus \left\{ x' \right\}$ is a degenerate intree with $n-1$ tasks, it would be optimal to use HLF. However, using HLF may or may not be possible depending on our previous choices of $y'$ and $z'$. That is, the optimum for $I\setminus\left\{ x' \right\}$ \emph{might} be acchieved if we chose $y'$ and $z'$ accordingly. From this we can conclude that the optimal expected run time is at least $T_{HLF}\left( I\setminus\left\{ x' \right\} \right)$, where $T_{HLF}$ denotes the run time for HLF (which we know, by induction, is optimal).
 
   Now we compare the run time for $I\setminus\left\{ x' \right\}$ to the optimal run time for $I \setminus\left\{ x \right\}$, which is exactly given by $T_{HLF}\left( I \setminus\left\{ x \right\} \right)$. We recognize that $I\setminus\left\{ x' \right\}$ and $I\setminus\left\{ x \right\}$ have a common subtree, namely $I\setminus\left\{ x,x' \right\}$ with $n-2$ tasks.
   
@@ -607,6 +632,7 @@ We can now derive the following theorem.
     & \leq &
     T_{x',y',z''}(I\setminus\{x'\}) \\
   \end{eqnarray*}
+  Note that if e.g. $x=x'$, the above three equations are still satisfied.
   Combining the above inequalities yields that
   \begin{eqnarray*}
     %T_{HLF}(I) = 
@@ -633,8 +659,97 @@ We can now derive the following theorem.
   This finally shows that a HLF schedule is at least as good as an arbitrary other task, meaning that HLF is optimal for three processors on degenerate trees.
 \end{proof}
 
+\section{Parallel chains}
+\label{sec:p3-parallel-chains}
+
+We will now consider another class of intrees that can be shown to have HLF as optimal schedules.
+
+\begin{definition}[Parallel chain]
+  Let $I$ be an intree. We call $I$ a \emph{parallel chain}, if each task except the root has at most one predecessor. The root may have arbitrarily many predecessors.
+\end{definition}
+
+\todo{Figure von einer parallel chain.}
+
+\begin{lemma}
+  \label{lem:parallel-chains-chain-switching-higher-is-worse}
+  Let $I$ be a parallel chain with three ready tasks $x,y,z$. Such that $level(x)>level(y)$. Let $x'$ resp. $y'$ be two new nodes that are added as predecessors of $x$ resp. $y$. Then, $T_{x',y,z}(I\cup\left\{ x' \right\}) > T_{x,y',z}(I\cup\left\{ y' \right\})$. \todo{T-Notation mit Index mal anständig definieren!}
+\end{lemma}
+
+\begin{proof}
+  We consider the parallel chain $I\cup\left\{ x' \right\}$ and its optimal schedule. We then construct a schedule for $I\cup\left\{ y' \right\}$ whose run time is less than the optimal run time for $I\cup\left\{ x' \right\}$.
+  
+  We observe that in $I\cup\left\{ x' \right\}$ either $x'$, $y$ or $z$ finishes first. For each of these cases we now show that we can construct a corresponding schedule in $I\cup\left\{ y' \right\}$ such that the corresponding run time in $I\cup\left\{ y' \right\}$ is at most the one in $I\cup\left\{ x' \right\}$.
+
+  \begin{itemize}
+  \item If $x'$ finishes first in $I\cup\left\{ x' \right\}$, then obtain the same intree like if $y'$ finishes first in $I\cup\left\{ y' \right\}$. Thus, we can assume the two resulting schedules to have the same run time.
+  \item If $z$ finishes first, we can argue by induction since the trees
+    \begin{equation*}
+      I\cup\left\{ x' \right\}\setminus\left\{ z \right\}
+      \quad
+      \text{ and }
+      \quad 
+      I\cup\left\{ y' \right\}\setminus\left\{ z \right\}
+    \end{equation*}
+    both have $n-1$ tasks and can be obtained by attaching $x'$ resp. $y'$ to the parallel chain $I\setminus\left\{ z \right\}$. We then know -- by induction -- that $T_{x',y,z}(I\cup\left\{ x' \right\}\setminus\left\{ z \right\}) > T_{x,y',z}(I\cup\left\{ y' \right\}\setminus\left\{ z \right\})$.
+  \item It remains to explain what to do if $y$ finishes in $I\cup\left\{ x' \right\}$ compared to if $x$ finishes first in $I\cup\left\{ y' \right\}$.
+    
+    The two respective intrees then are
+    \begin{equation*}
+      I\cup\left\{ x' \right\}\setminus\left\{ y \right\} 
+      \quad
+      \text{ and }
+      \quad
+      I\cup\left\{ y' \right\}\setminus\left\{ x \right\}.
+    \end{equation*}
+    
+    By induction, we know that
+    \begin{equation*}
+      T_{x', z}(I\cup\left\{ x' \right\}\setminus\left\{ y \right\})
+      >
+    \end{equation*}
+  \end{itemize}
+\end{proof}
+
+\begin{lemma}
+  \label{lem:parallel-chains-adding-tasks-level-comparison}
+  Let $I$ be a parallel chain and $x, y$ two (not necessarily distinct) redy tasks within $I$. Let $z_1$ and $z_2$ be two new tasks to be added to $I$ with $level(z_1) > level(z_2)$ and $I_1=I\cup\left\{ z_1 \right\}, I_2=I\cup\left\{ z_2 \right\}$.
+  
+  Then, $T_{x,y,z_1}(I_1) > T_{x,y,z_2}(I_2)$, where $T_{a,b,c}{I}$ denotes the optimal run time that can be acchieved if $a,b,c$ are chosen as initially scheduled tasks.
+\end{lemma}
+
+\begin{proof}
+  The proof is very similar to the one for lemma \ref{lem:p3-adding-tasks-level-keep-scheduled-same-inequality}. We start by examining small chain trees (with four or less tasks --- see figure \ref{fig:p3-lemma-adding-intrees-induction-start}) and confirm our claim by simply examining the execution times.
+  
+  We now consider a parallel chain $I$ with $n$ tasks, and tasks $x,y$ and $z_1, z_2$ as specified in the requirements for lemma \ref{lem:parallel-chains-adding-tasks-level-comparison}. We now compare the run times $T_{x,y,z_1}(I_1)$ and $T_{x,y,z_2}(I_2)$, where $I_1=I\cup\left\{ z_1 \right\}$ and $I_2=I\cup\left\{z_2  \right\}$.
+
+  We do a case distinction on which task is to finish first (and compare the situation for $I_1$ and $I_2$):
+  \begin{itemize}
+  \item If $z_1$ resp. $z_2$ is the first task to finish, we can argue that the run time for the resulting trees can be the same if we choose -- coming from $I_2$ -- the same task that optimally would be chosen coming from $I_1$ (if coming from $I_1$ takes no task at all, we can also do so for $I_2$). 
+  \item If $x$ is the first task to finish, we denote by $x'$ the task that would be optimally chosen if we come from $I_1$. We now distinguish:\todo{Was, wenn kein $x'$ gewählt werden kann?}
+    \begin{itemize}
+    \item If $x'$  is the direct successor of $x$, then $x'$ can only be blocked by $z_2$ if $x'$ is the root. In this case, however, $x'$ would have been blocked by $z_1$ which leads to a contradiction since $x'$ is ready.
+
+      So, we can assume that $x'$ is \emph{not} the root. Thus, we can argue that $x'$ \emph{must} be the end of some chain in $I_1\setminus\left\{ x \right\}$, and can not be blocked by $z_2$. So, $x'$ is ready in $I_2\setminus\left\{ x \right\}$ as well.
+    \item If $x'$ is not the direct successor of $x$, then $x'$ can not be the root and $x'$ can be blocked by $z_2$ in $I_2$.
+      \begin{itemize}
+      \item If $x'$ is \emph{not} blocked by $z_2$, then it is ready in $I_2$.
+      \item If $x'$ is exactly the successor of $z_2$, then we 
+      \end{itemize}
+
+    \end{itemize}
+
+  \end{itemize}
+
+\end{proof}
+
 \section{Conjectures}
 \label{sec:p3-conjectures}
+
+During our research, we recognized some patterns that we are tempted to transform into some conjectures. We were, however, not yet able to prove or disprove them. This section shows the most important ones that could easily be used to decrease the number of snapshots that have to be examined if we want to compute the optimal snapshot by exhaustive search.
+
+\begin{conjecture}
+  Parallel chains are optimally scheduled by HLF.
+\end{conjecture}
 
 \begin{conjecture}[Very likely]
   For each snapshot resulting from an optimal schedule, at least one top-most task is scheduled.
@@ -647,6 +762,13 @@ We can now derive the following theorem.
 \begin{conjecture}
   If for an intree only non-top tasks are scheduled, you can exchange one of the non-top tasks with a top-tasks and obtain a better run time.
 \end{conjecture}
+
+The main problems we faced when we tried to prove the above conjectures can be summarized as follows:
+\begin{itemize}
+\item The particular intree structure is not necessarily maintained over the induction step --- and if so, many case distinctions may be required.
+\item Comparing different intrees seems to be quite cumbersome, especially if we do not know which tasks are scheduled.
+\end{itemize}
+
 
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"
