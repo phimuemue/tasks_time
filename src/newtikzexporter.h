@@ -72,7 +72,7 @@ class TikzExporter2 : public TikzExporter {
         float level_distance;
         float sibling_distance;
         bool horizontal;
-        bool show_labels = false;
+        bool show_labels;
 
         TikzExporter2(bool se=true,
                 bool sp=true,
