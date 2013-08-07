@@ -91,6 +91,30 @@ However, after some investigation, we are tempted to conjecture the following.
 
 \clearpage{}
 
+\section{Disproving another approach}
+\label{sec:disproving-hlf-no-free-chain}
+
+We can consider all paths from the root of a tree to all its leaves. We might be tempted to think, that it should be the foremost goal to exploit parallelism as good as possible and that this might be acchieved by choosing the currently scheduled tasks in a manner such that as few paths as possible are completely free. That is, we choose the leafs in a way so that the ends of as many different paths as possible are scheduled. This strategy was inspired by looking at the counterexamples against HLF depicted in figures \ref{fig:hlf-001112}, \ref{fig:hlf-vs-opt-0012346688}, \ref{fig:hlf-vs-opt-0012446788} and \ref{fig:hlf-vs-opt-00123455799}. We observe for these intrees that the optimal schedules has no as few free chains as possible.
+
+However, there are examples where this strategy does not yield optimal results. Consider e.g. the tree $(0,0,0,1,1,1,2,2,3)$. 
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \input{p3/hlfnfc_not_optimal/000111223_hlfnfc}
+    \caption{HLF schedule while choosing tasks such that there are as few free paths as possible -- overall run time of 5.20199.}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \input{p3/hlfnfc_not_optimal/000111223_opt}
+    \caption{Optimal schedule (run time 5.20028) has three free paths at the beginning.}
+  \end{subfigure}
+  \caption{HLF with no free paths is not necessarily optimal.\todo{PDFs draus bauen, dann sollte es auch anständig aligniert sein.}}
+  \label{fig:hlfnfc-is-not-optimal}
+\end{figure}
+
 \section{Size of the snapshot DAG}
 \label{sec:p3-size-of-snapshot-dag-first-attempts}
 
