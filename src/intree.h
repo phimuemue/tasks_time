@@ -10,6 +10,8 @@
 #include<functional>
 #include<algorithm>
 #include<assert.h>
+#include<sstream>
+#include<string>
 #include<boost/dynamic_bitset.hpp>
 
 #include "task.h"
@@ -24,10 +26,44 @@ class Intree {
     private:
         map<task_id, task_id> edges;
         map<task_id, Task> taskmap;
+        class Outtree {
+            public:
+                task_id id;
+                bool marked;
+                std::vector<Outtree*> predecessors;
+                Outtree(task_id i, bool m);
+                Outtree(const Intree& i, const vector<task_id>& marked);
+                Outtree(const Outtree& ot);
+                ~Outtree();
+                void canonicalize();
+                Intree toIntree(map<task_id, task_id>& isomorphism) const;
+                string getCompressedString() const;
+        };
+        friend inline bool operator<(const Intree::Outtree& a, const Intree::Outtree& b){
+            // cout << "Comparing " << a.id << " vs. " << b.id << endl;
+            return a.getCompressedString() > b.getCompressedString();
+            if (a.predecessors.size() > b.predecessors.size()){
+                return true;
+            }
+            for(unsigned int i=0; i<min(a.predecessors.size(), b.predecessors.size()); ++i){
+                if (a.predecessors[i] < b.predecessors[i]){
+                    return true;
+                }
+            }
+            if (a.marked==1 && b.marked==0){
+                return true;
+            }
+            return false;
+        };
     public:
         Intree();
         Intree(const Intree& t);
+        Intree(const vector<pair<task_id, task_id>>& edges);
         Intree(const vector<pair<Task, Task>>& edges);
+        static Intree canonical_intree2(const Intree& _t, 
+                const vector<task_id>& _preferred,
+                map<task_id, task_id>& isomorphism,
+                tree_id& out);
         static Intree canonical_intree(const Intree& t, 
                 const vector<task_id>& preferred,
                 map<task_id, task_id>& isomorphism, 
