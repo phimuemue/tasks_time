@@ -12,6 +12,15 @@ Intree::Intree(const Intree& t){
     }
 }
 
+Intree::Intree(const vector<pair<task_id, task_id>>& edges){
+    for(auto it=edges.begin(); it!=edges.end(); ++it){
+        this->edges[it->first] = it->second;
+        taskmap[it->first] = Task(it->first);
+        taskmap[it->second] = Task(it->second);
+    }
+    taskmap[0] = Task(0);
+}
+
 Intree::Intree(const vector<pair<Task, Task>>& edges){
     for(auto it=edges.begin(); it!=edges.end(); ++it){
         this->edges[it->first.get_id()] = it->second.get_id();
@@ -21,7 +30,118 @@ Intree::Intree(const vector<pair<Task, Task>>& edges){
     taskmap[0] = Task(0);
 }
 
+Intree::Outtree::Outtree(task_id i, bool m) :
+    id(i),
+    marked(m)
+{
+}
+
+Intree::Outtree::Outtree(const Outtree& ot) :
+    id(ot.id),
+    marked(ot.marked),
+    predecessors(ot.predecessors)
+{
+}
+
+Intree::Outtree::Outtree(const Intree& i, const vector<task_id>& marked) :
+    id(0)
+    {
+    map<task_id, Outtree*> outtrees;
+    outtrees[0] = this;
+    for(const auto& edge : i.edges){
+        outtrees[edge.first] = new Outtree(edge.first, find(marked.begin(), marked.end(), edge.first)!=marked.end());
+        outtrees[edge.second]->predecessors.push_back(outtrees[edge.first]);
+    }
+}
+
+Intree::Outtree::~Outtree(){
+    for(Outtree* o : predecessors){
+        delete o;
+    }
+}
+
+string Intree::Outtree::getCompressedString() const{
+    stringstream ss;
+    vector<string> predecessor_strings;
+    for(const auto it : predecessors){
+        predecessor_strings.push_back(it->getCompressedString());
+    }
+    sort(predecessor_strings.begin(), predecessor_strings.end());
+    ss << "[";
+    for(const auto it : predecessor_strings){
+        ss << it;
+    }
+    if(predecessor_strings.size() == 0){
+        if(marked){
+            ss << "0";
+        }
+        else{
+            ss << "1";
+        }
+    }
+    ss << "]";
+    return ss.str();
+}
+
+void Intree::Outtree::canonicalize(){
+    // cout << "Canonicalizing " << id << endl;
+    // cout << id << " before: ";
+    // for(auto& it : predecessors){
+    //     cout << it->id << " ";
+    // }
+    // cout << endl;
+    for(Outtree* neighbor : predecessors){
+        neighbor->canonicalize();
+    }
+    sort(predecessors.begin(), predecessors.end(),
+            [](const Outtree* a, const Outtree* b) -> bool {
+                return *a < *b;
+            }
+        );
+    // cout << id << " after: ";
+    // for(auto& it : predecessors){
+    //     cout << it->id << " ";
+    // }
+    // cout << endl;
+}
+
+Intree Intree::Outtree::toIntree(map<task_id, task_id>& isomorphism) const{
+    vector<pair<task_id, task_id>> edges;
+    queue<const Outtree*> q;
+    q.push(this);
+    task_id counter = 0;
+    while(!q.empty()){
+        const Outtree* current = q.front();
+        q.pop();
+        for(Outtree* neighbor : current->predecessors){
+            ++counter;
+            isomorphism[neighbor->id] = counter;
+            neighbor->id = counter;
+            // cout << "Edge " << neighbor->id << " " << current->id << endl;
+            edges.push_back(pair<task_id, task_id>(neighbor->id, current->id));
+            q.push(neighbor);
+        }
+    }
+    return Intree(edges);
+}
+
 Intree Intree::canonical_intree(const Intree& _t, 
+        const vector<task_id>& _preferred,
+        map<task_id, task_id>& isomorphism,
+        tree_id& out){
+    Outtree ot(_t, _preferred);
+    ot.canonicalize();
+    Intree result = ot.toIntree(isomorphism);
+    // cout << "Isomorphism:" << endl;
+    // for(auto it : isomorphism){
+    //     cout << it.first << " -> " << it.second << endl;
+    // }
+    // cout << ot.getCompressedString() << endl;
+    result.get_raw_tree_id(out);
+    return result;
+}
+
+Intree Intree::canonical_intree2(const Intree& _t, 
         const vector<task_id>& _preferred,
         map<task_id, task_id>& isomorphism,
         tree_id& out){

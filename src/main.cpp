@@ -237,7 +237,10 @@ void create_snapshot_dags(const po::variables_map& vm,
     s = vector<Snapshot*>(initial_settings.size());
 #if USE_CANONICAL_SNAPSHOT
     for(unsigned int i= 0; i<initial_settings.size(); ++i){
+        cout << "Transforming:" << endl;
+        cout << Snapshot(t, initial_settings[i]) << endl;
         s[i] = Snapshot::canonical_snapshot(Snapshot(t, initial_settings[i]));
+        cout << *s[i] << endl;
     }
 #else
     for(unsigned int i= 0; i<initial_settings.size(); ++i){
@@ -251,7 +254,7 @@ void create_snapshot_dags(const po::variables_map& vm,
 #if USE_CANONICAL_SNAPSHOT
     for(unsigned int i=0; i<p_s.size(); ++i){
         for(unsigned int j=i+1; j<p_s.size(); ++j){
-            if(p_s[i].first->marked == p_s[j].first->marked){
+            if(p_s[i].first->intree == p_s[j].first->intree && p_s[i].first->marked == p_s[j].first->marked){
                 p_s[i].second += p_s[j].second;
                 p_s.erase(p_s.begin() + j);
                 j--;
@@ -449,6 +452,9 @@ int main(int argc, char** argv){
                      isomorphism, tid) 
              << endl;
         
+        cout << "NORMALIZED:  \t"
+             << Intree::canonical_intree2(t, vector<task_id>(), isomorphism, tid) << endl;
+
         // compute snapshot dags
         vector<vector<task_id>> initial_settings;
         vector<Snapshot*> s;
