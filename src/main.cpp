@@ -237,10 +237,7 @@ void create_snapshot_dags(const po::variables_map& vm,
     s = vector<Snapshot*>(initial_settings.size());
 #if USE_CANONICAL_SNAPSHOT
     for(unsigned int i= 0; i<initial_settings.size(); ++i){
-        cout << "Transforming:" << endl;
-        cout << Snapshot(t, initial_settings[i]) << endl;
         s[i] = Snapshot::canonical_snapshot(Snapshot(t, initial_settings[i]));
-        cout << *s[i] << endl;
     }
 #else
     for(unsigned int i= 0; i<initial_settings.size(); ++i){
