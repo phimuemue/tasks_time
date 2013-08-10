@@ -254,7 +254,7 @@ void create_snapshot_dags(const po::variables_map& vm,
 #if USE_CANONICAL_SNAPSHOT
     for(unsigned int i=0; i<p_s.size(); ++i){
         for(unsigned int j=i+1; j<p_s.size(); ++j){
-            if(p_s[i].first->marked == p_s[j].first->marked){
+            if(p_s[i].first->intree == p_s[j].first->intree && p_s[i].first->marked == p_s[j].first->marked){
                 p_s[i].second += p_s[j].second;
                 p_s.erase(p_s.begin() + j);
                 j--;
