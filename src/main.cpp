@@ -449,9 +449,6 @@ int main(int argc, char** argv){
                      isomorphism, tid) 
              << endl;
         
-        cout << "NORMALIZED:  \t"
-             << Intree::canonical_intree2(t, vector<task_id>(), isomorphism, tid) << endl;
-
         // compute snapshot dags
         vector<vector<task_id>> initial_settings;
         vector<Snapshot*> s;
