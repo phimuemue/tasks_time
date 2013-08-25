@@ -3,13 +3,10 @@
 Intree::Intree(){
 }
 
-Intree::Intree(const Intree& t){
-    for(auto it = t.taskmap.begin(); it!=t.taskmap.end(); ++it){
-        taskmap[it->first] = it->second;
-    }
-    for(auto it = t.edges.begin(); it != t.edges.end(); ++it){
-        edges[it->first] = it->second;
-    }
+Intree::Intree(const Intree& t) :
+    edges(t.edges),
+    taskmap(t.taskmap)
+{
 }
 
 Intree::Intree(const vector<pair<task_id, task_id>>& edges){

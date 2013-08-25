@@ -3,6 +3,7 @@
 
 #include<utility>
 #include<vector>
+#include<limits>
 
 #if USE_SIMPLE_OPENMP
 #include<omp.h>
@@ -39,7 +40,7 @@ typedef int task_id;
 typedef std::vector<unsigned char> tree_id;
 typedef std::pair<tree_id, std::vector<task_id>> snapshot_id;
 
-#define NOTASK (-1)
+#define NOTASK (std::numeric_limits<task_id>::max())
 
 enum Distribution {
     Exponential, // needs 1 parameter
