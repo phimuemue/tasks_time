@@ -193,11 +193,11 @@ Snapshot* Snapshot::canonical_snapshot(
     }
     isomorphism.clear();
     tid.clear();
-    Intree::canonical_intree(
-            Snapshot::pool[representant].find(find_key)->second->intree,
-            newmarked,
-            isomorphism,
-            tid);
+    // Intree::canonical_intree(
+    //         Snapshot::pool[representant].find(find_key)->second->intree,
+    //         newmarked,
+    //         isomorphism,
+    //         tid);
     return Snapshot::pool[representant].find(find_key)->second;
 }
 
