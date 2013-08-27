@@ -70,39 +70,9 @@ Intree::Outtree::~Outtree(){
 
 string Intree::Outtree::getCompressedString() const{
     return compressedString;
-    if(compressedString.size() > 0){
-        return compressedString;
-    }
-    stringstream ss;
-    vector<string> predecessor_strings;
-    for(const auto it : predecessors){
-        predecessor_strings.push_back(it->getCompressedString());
-    }
-    sort(predecessor_strings.begin(), predecessor_strings.end());
-    ss << "[";
-    for(const auto it : predecessor_strings){
-        ss << it;
-    }
-    if(predecessor_strings.size() == 0){
-        if(marked){
-            ss << "0";
-        }
-        else{
-            ss << "1";
-        }
-    }
-    ss << "]";
-    compressedString = ss.str();
-    return ss.str();
 }
 
 void Intree::Outtree::canonicalize(){
-    // cout << "Canonicalizing " << id << endl;
-    // cout << id << " before: ";
-    // for(auto& it : predecessors){
-    //     cout << it->id << " ";
-    // }
-    // cout << endl;
     for(Outtree* neighbor : predecessors){
         neighbor->canonicalize();
     }
@@ -112,10 +82,6 @@ void Intree::Outtree::canonicalize(){
             }
         );
     if(compressedString.size() == 0){
-        compressedString += "[";
-        for(auto a : predecessors){
-            compressedString += a->getCompressedString();
-        }
         if(predecessors.size() == 0){
             if(marked){
                 compressedString += "0";
@@ -124,15 +90,14 @@ void Intree::Outtree::canonicalize(){
                 compressedString += "1";
             }
         }
-        compressedString += "]";
+        else{
+            compressedString += "[";
+            for(auto a : predecessors){
+                compressedString += a->getCompressedString();
+            }
+            compressedString += "]";
+        }
     }
-    // assert(getCompressedString() == tmpstring);
-    //
-    // cout << id << " after: ";
-    // for(auto& it : predecessors){
-    //     cout << it->id << " ";
-    // }
-    // cout << endl;
 }
 
 Intree Intree::Outtree::toIntree(map<task_id, task_id>& isomorphism) const{
