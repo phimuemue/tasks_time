@@ -58,7 +58,8 @@ Intree::Outtree::Outtree(const Outtree& ot) :
 Intree::Outtree::Outtree(const Intree& i, const vector<task_id>& marked) :
     id(0)
 {
-    map<task_id, Outtree*> outtrees;
+    // map<task_id, Outtree*> outtrees;
+    vector<Outtree*> outtrees(i.count_tasks() + 1);
     outtrees[0] = this;
     for(task_id edge = 1; edge < i.edges.size(); ++edge){
         if(i.edges[edge] != NOTASK){
@@ -107,6 +108,7 @@ void Intree::Outtree::canonicalize(){
 }
 
 Intree Intree::Outtree::toIntree(map<task_id, task_id>& isomorphism) const {
+#if 0
     vector<pair<task_id, task_id>> edges;
     queue<const Outtree*> q;
     q.push(this);
@@ -120,10 +122,31 @@ Intree Intree::Outtree::toIntree(map<task_id, task_id>& isomorphism) const {
             neighbor->id = counter;
             // cout << "Edge " << neighbor->id << " " << current->id << endl;
             edges.push_back(pair<task_id, task_id>(neighbor->id, current->id));
+            assert(edges.size() == neighbor->id);
             q.push(neighbor);
         }
     }
     return Intree(edges);
+#else
+    Intree result;
+    result.edges.push_back(NOTASK);
+    queue<const Outtree*> q;
+    q.push(this);
+    task_id counter = 0;
+    while(!q.empty()){
+        const Outtree* current = q.front();
+        q.pop();
+        for(Outtree* neighbor : current->predecessors){
+            ++counter;
+            isomorphism[neighbor->id] = counter;
+            neighbor->id = counter;
+            // cout << "Edge " << neighbor->id << " " << current->id << endl;
+            result.edges.push_back(current->id);
+            q.push(neighbor);
+        }
+    }
+    return result;
+#endif
 }
 
 Intree Intree::canonical_intree(const Intree& _t, 
@@ -544,6 +567,15 @@ void Intree::get_profile(vector<unsigned int>& target) const {
 }
 
 void Intree::get_raw_tree_id(tree_id& target){
+    // the following can be used to swith between one
+    // (I think) quite correct solution and a 
+    // (I think) quite correct but more efficient solution
+#if 1
+    target.push_back(NOTASK);
+    for(task_id it = 1; it < edges.size(); ++it){
+        target.push_back(edges[it]);
+    }
+#else
     task_id max_id = 0;
     for(task_id it = 1; it<edges.size(); ++it){
         if(edges[it] != NOTASK){
@@ -553,9 +585,11 @@ void Intree::get_raw_tree_id(tree_id& target){
     for(unsigned int i=0; i<max_id+1u; ++i){
         target.push_back(NOTASK);
     }
+    target.push_back(NOTASK);
     for(task_id it = 1; it < edges.size(); ++it){
         target[it] = edges[it];
     }
+#endif
 }
     
 void Intree::get_reverse_tree(map<task_id, vector<task_id>>& rt) const{

@@ -130,8 +130,7 @@ Snapshot* Snapshot::canonical_snapshot(
     tree_id tid;
     Intree tmp = Intree::canonical_intree(t, m, isomorphism, tid);
 
-    // adjust m properly (i.e. always "lowest possible task" 
-    // for 'iso-snap')
+    // adjust m properly (i.e. always "lowest possible task" for 'iso-snap')
     transform(m.begin(), m.end(), m.begin(),
         [&](const task_id a) -> task_id {
             return isomorphism[a];
@@ -191,13 +190,6 @@ Snapshot* Snapshot::canonical_snapshot(
         Snapshot::pool[representant][find_key] 
             = new Snapshot(tmp, newmarked);
     }
-    isomorphism.clear();
-    tid.clear();
-    // Intree::canonical_intree(
-    //         Snapshot::pool[representant].find(find_key)->second->intree,
-    //         newmarked,
-    //         isomorphism,
-    //         tid);
     return Snapshot::pool[representant].find(find_key)->second;
 }
 
@@ -235,8 +227,7 @@ void Snapshot::get_successors(const Scheduler& scheduler,
     if(intree.count_tasks()==1)
         return;
     vector<myfloat> finish_probs;
-    Probability_Computer().compute_finish_probs(intree, marked,
-        finish_probs);
+    Probability_Computer().compute_finish_probs(intree, marked, finish_probs);
     assert(finish_probs.size()==marked.size());
     // then, for each finished threads, compute all possible successors
     auto finish_prob_it = finish_probs.begin();
@@ -260,7 +251,6 @@ void Snapshot::get_successors(const Scheduler& scheduler,
                             [it](const task_id& a){
                             return a==*it;
                             }), newmarked.end());
-                // TODO: Is this needed?
                 if(raw_sucs[i].first != NOTASK)
                     newmarked.push_back(raw_sucs[i].first);
                 sort(newmarked.begin(), newmarked.end());
