@@ -12,12 +12,14 @@ Intree::Intree(const Intree& t) :
 {
 }
 
-Intree::Intree(const vector<pair<task_id, task_id>>& edges){
-    for(auto it=edges.begin(); it!=edges.end(); ++it){
-        this->edges[it->first] = it->second;
+Intree::Intree(const vector<pair<task_id, task_id>>& edges):
+    edges(edges.size() + 1, NOTASK)
+{
+    for(auto it : edges){
+        this->edges[it.first] = it.second;
 #if USE_TASKMAP
-        taskmap[it->first] = Task(it->first);
-        taskmap[it->second] = Task(it->second);
+        taskmap[it.first] = Task(it.first);
+        taskmap[it.second] = Task(it.second);
 #endif
     }
 #if USE_TASKMAP
@@ -25,12 +27,14 @@ Intree::Intree(const vector<pair<task_id, task_id>>& edges){
 #endif
 }
 
-Intree::Intree(const vector<pair<Task, Task>>& edges){
-    for(auto it=edges.begin(); it!=edges.end(); ++it){
-        this->edges[it->first.get_id()] = it->second.get_id();
+Intree::Intree(const vector<pair<Task, Task>>& edges) :
+    edges(edges.size() + 1, NOTASK)
+{
+    for(auto it : edges){
+        this->edges[it.first.get_id()] = it.second.get_id();
 #if USE_TASKMAP
-        taskmap[it->first.get_id()] = it->first;
-        taskmap[it->second.get_id()] = it->second;
+        taskmap[it.first.get_id()] = it.first;
+        taskmap[it.second.get_id()] = it.second;
 #endif
     }
 #if USE_TASKMAP
@@ -53,12 +57,14 @@ Intree::Outtree::Outtree(const Outtree& ot) :
 
 Intree::Outtree::Outtree(const Intree& i, const vector<task_id>& marked) :
     id(0)
-    {
+{
     map<task_id, Outtree*> outtrees;
     outtrees[0] = this;
-    for(const auto& edge : i.edges){
-        outtrees[edge.first] = new Outtree(edge.first, find(marked.begin(), marked.end(), edge.first)!=marked.end());
-        outtrees[edge.second]->predecessors.push_back(outtrees[edge.first]);
+    for(task_id edge = 1; edge < i.edges.size(); ++edge){
+        if(i.edges[edge] != NOTASK){
+            outtrees[edge] = new Outtree(edge, find(marked.begin(), marked.end(), edge)!=marked.end());
+            outtrees[i.edges[edge]]->predecessors.push_back(outtrees[edge]);
+        }
     }
 }
 
@@ -100,7 +106,7 @@ void Intree::Outtree::canonicalize(){
     }
 }
 
-Intree Intree::Outtree::toIntree(map<task_id, task_id>& isomorphism) const{
+Intree Intree::Outtree::toIntree(map<task_id, task_id>& isomorphism) const {
     vector<pair<task_id, task_id>> edges;
     queue<const Outtree*> q;
     q.push(this);
@@ -144,8 +150,8 @@ Intree Intree::canonical_intree2(const Intree& _t,
     vector<task_id> preferred(_preferred);
     map<task_id, task_id> inner_iso_rev;
     inner_iso_rev[0] = 0;
-    for(auto it=t.edges.begin(); it!=t.edges.end(); ++it){
-        inner_iso_rev[it->first] = it->first;
+    for(task_id it = 1; it<t.edges.size(); ++it){
+        inner_iso_rev[it] = it;
     }
     // make leaves minimal
     vector<task_id> leaves;
@@ -158,8 +164,8 @@ Intree Intree::canonical_intree2(const Intree& _t,
         }
     );
     task_id max_tid = 0;
-    for(auto it=t.edges.begin(); it!=t.edges.end(); ++it){
-        max_tid = max(max_tid, it->first);
+    for(task_id it = 1; it<t.edges.size(); ++it){
+        max_tid = max(max_tid, it);
     }
     max_tid++;
     for(auto it=leaves.begin(); it!=leaves.end(); ++it){
@@ -182,8 +188,8 @@ Intree Intree::canonical_intree2(const Intree& _t,
     }
     vector<vector<task_id>> tasks_by_level(t.edges.size() + 1);
     // store tasks grouped by level
-    for(auto it=t.edges.begin(); it!=t.edges.end(); ++it){
-        tasks_by_level[t.get_level(it->first)].push_back(it->first);
+    for(task_id it = 1; it<t.edges.size(); ++it){
+        tasks_by_level[t.get_level(it)].push_back(it);
     }
     tasks_by_level[0].push_back(0); // 0 is not present in edges
     // traverse tasks levelwise (high to low) and comput canonical names
@@ -284,8 +290,8 @@ Intree Intree::canonical_intree2(const Intree& _t,
         consecutive_num++;
     }
     vector<pair<Task, Task>> edges;
-    for(auto it=_t.edges.begin(); it!=_t.edges.end(); ++it){
-        edges.push_back(pair<Task,Task>(Task(isomorphism[it->first]),Task(isomorphism[it->second])));
+    for(task_id it=1; it < _t.edges.size(); ++it){
+        edges.push_back(pair<Task,Task>(Task(isomorphism[it]),Task(isomorphism[_t.edges[it]])));
     }
     // TODO: Expand to more than 64 bits!
     out.clear();
@@ -296,7 +302,13 @@ Intree Intree::canonical_intree2(const Intree& _t,
 }
 
 unsigned int Intree::count_tasks() const{
-    return edges.size() + 1;
+    unsigned int result = 1;
+    for(task_id it = 1; it < edges.size(); ++it){
+        if (edges[it]!=NOTASK){
+            result++;
+        }
+    }
+    return result;
 }
 
 int Intree::get_in_degree(const Task& t) const {
@@ -305,15 +317,15 @@ int Intree::get_in_degree(const Task& t) const {
 
 int Intree::get_in_degree(const task_id t) const {
     int result = 0;
-    for(auto it = edges.begin(); it != edges.end(); ++it){
-        if(t == it->second)
+    for(task_id it = 1; it<edges.size(); ++it){
+        if(t == edges[it])
             result++;
     }
     return result;
 }
 
 bool Intree::contains_task(task_id tid) const{
-    return (edges.find(tid) != edges.end()) || (tid == 0);
+    return tid<edges.size() && edges[tid]!=NOTASK;
 }
 
 #if USE_TASKMAP
@@ -328,8 +340,10 @@ const Task& Intree::get_task_by_id(const task_id tid) const {
 
 void Intree::get_tasks(set<task_id>& result) const {
     result.insert(0);
-    for(auto it=edges.begin(); it!=edges.end(); ++it){
-        result.insert(it->first);
+    for(task_id it = 1; it<edges.size(); ++it){
+        if(edges[it]!=NOTASK){
+            result.insert(it);
+        }
     }
 }
 
@@ -343,7 +357,7 @@ void Intree::rename_leaf(task_id original, task_id now){
 #endif
     // stuff in edges
     auto tmp2 = edges[original];
-    edges.erase(edges.find(original));
+    edges[original] = NOTASK;
     edges[now] = tmp2;
 }
 
@@ -362,17 +376,17 @@ void Intree::get_predecessors(const Task& t, vector<task_id>& target) const{
 }
 
 void Intree::get_predecessors(const task_id t, vector<task_id>& target) const{
-    for(auto it=edges.begin(); it!=edges.end(); ++it){
-        if(it->second==t){
-            target.push_back(it->first);
+    for(task_id it = 1; it < edges.size(); ++it){
+        if(edges[it]==t){
+            target.push_back(it);
         }
     }
 }
 
 void Intree::get_leaves(vector<task_id>& target) const{
-    for(auto it=edges.begin(); it!=edges.end(); ++it){
-        if (get_in_degree(it->first) == 0){
-            target.push_back(it->first);
+    for(task_id it = 1; it < edges.size(); ++it){
+        if (get_in_degree(it) == 0){
+            target.push_back(it);
         }
     }
 }
@@ -409,16 +423,19 @@ void Intree::remove_task(task_id t){
     auto todel = taskmap.find(t);
     taskmap.erase(todel);
 #endif
-    vector<pair<task_id, task_id>> tmp;
-    for(auto it = edges.begin(); it != edges.end(); ++it){
-        if(!((it->first == t) || (it->second == t))){
-            tmp.push_back(*it);
-        }
-    }
-    edges.clear();
-    for(auto it = tmp.begin(); it != tmp.end(); ++it){
-        edges[it->first] = it->second;
-    }
+    edges[t] = NOTASK;
+    // vector<pair<task_id, task_id>> tmp;
+    // for(task_id it = 1; it < edges.size(); ++it){
+    //     if(!((it == t) || (edges[it] == t))){
+    //         cout << "Adding " << it << " - " << edges[it] << endl;
+    //         tmp.push_back(pair<task_id, task_id>(it, edges[it]));
+    //     }
+    // }
+    // edges.clear();
+    // for(auto it = tmp.begin(); it != tmp.end(); ++it){
+    //     edges[it->first] = it->second;
+    // }
+    // edges[0] = NOTASK;
 }
 
 pair<Task, Task> Intree::get_edge_from(const Task& t) const {
@@ -426,9 +443,9 @@ pair<Task, Task> Intree::get_edge_from(const Task& t) const {
 }
 
 pair<Task, Task> Intree::get_edge_from(const task_id t) const {
-    for(auto it = edges.begin(); it != edges.end(); ++it){
-        if(t == it->first){
-            return *it;
+    for(task_id it = 1; it < edges.size(); ++it){
+        if(t == it){
+            return pair<Task, Task>(Task(it), Task(edges[it]));
         }
     }
     cout << "Attempted to get edge from non-existent task (" << t << " from " << *this << ")." << endl;
@@ -445,11 +462,11 @@ bool Intree::is_chain() const {
 bool Intree::is_degenerate_tree() const {
     // store - for each level - the one task that may have predecessors
     map<unsigned int, task_id> cont;
-    for(const auto& it : edges){
-        if(cont.find(get_level(it.second)) != cont.end() && cont[get_level(it.second)] != it.second){
+    for(task_id it = 1; it < edges.size(); ++it){
+        if(cont.find(get_level(edges[it])) != cont.end() && cont[get_level(edges[it])] != edges[it]){
             return false;
         }
-        cont[get_level(it.second)] = it.second;
+        cont[get_level(edges[it])] = edges[it];
     }
     return true;
 }
@@ -490,10 +507,10 @@ void Intree::get_chain(const task_id t, vector<task_id>& target) const {
 }
 
 void Intree::get_chains(vector<vector<task_id>>& target) const {
-    for(auto it = edges.begin(); it != edges.end(); ++it){
-        if(get_in_degree(it->first) == 0){
-            vector<int> nv;
-            get_chain(it->first, nv);
+    for(task_id it = 1; it < edges.size(); ++it){
+        if(get_in_degree(it) == 0){
+            vector<task_id> nv;
+            get_chain(it, nv);
             target.push_back(nv);
         }
     }
@@ -519,20 +536,25 @@ void Intree::get_profile(vector<unsigned int>& target) const {
     for(unsigned int i=0; i<longest_chain_length(); ++i){
         target.push_back(0);
     }
-    for(auto it : edges){
-        target[get_level(it.first)]++;
+    for(task_id it = 1; it < edges.size(); ++it){
+        target[get_level(it)]++;
     }
     assert(target[0]==0);
     target[0] = 1;
 }
 
 void Intree::get_raw_tree_id(tree_id& target){
-    task_id max_id = (max_element(edges.begin(), edges.end())->first);
-    for(unsigned int i=0; i<max_id+1u; ++i){
-        target.push_back((task_id)-1);
+    task_id max_id = 0;
+    for(task_id it = 1; it<edges.size(); ++it){
+        if(edges[it] != NOTASK){
+            max_id = it;
+        }
     }
-    for(const pair<task_id, task_id>& it : edges){
-        target[it.first] = it.second;
+    for(unsigned int i=0; i<max_id+1u; ++i){
+        target.push_back(NOTASK);
+    }
+    for(task_id it = 1; it < edges.size(); ++it){
+        target[it] = edges[it];
     }
 }
     
@@ -543,12 +565,12 @@ void Intree::get_reverse_tree(map<task_id, vector<task_id>>& rt) const{
     while (q.size() > 0){
         task_id current = q.front();
         q.pop();
-        for(auto it = edges.begin(); it!=edges.end(); ++it){
-            if(it->second == current){
-                q.push(it->first);
-                rt[it->second].push_back(it->first);
-                if(rt.find(it->first) == rt.end()){
-                    rt[it->first] = vector<task_id>();
+        for(task_id it = 1; it<edges.size(); ++it){
+            if(edges[it] == current){
+                q.push(it);
+                rt[edges[it]].push_back(it);
+                if(rt.find(it) == rt.end()){
+                    rt[it] = vector<task_id>();
                 }
             }
         }
@@ -571,7 +593,7 @@ ostream& operator<<(ostream& os, const Intree& t){
         os << "[0]";
         return os;
     }
-    vector<vector<int>> chains;
+    vector<vector<task_id>> chains;
     t.get_chains(chains);
     for(auto i1 = chains.begin(); i1 != chains.end(); ++i1){
         os << "[";

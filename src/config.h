@@ -36,7 +36,7 @@ typedef boost::rational<unsigned long long> myfloat;
 typedef mpq_class myfloat;
 #endif 
 
-typedef int task_id;
+typedef unsigned int task_id;
 typedef std::vector<unsigned char> tree_id;
 typedef std::pair<tree_id, std::vector<task_id>> snapshot_id;
 

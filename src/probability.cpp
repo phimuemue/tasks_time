@@ -53,8 +53,10 @@ void Probability_Computer::simplify_isomorphisms_simple(const Intree& intree, co
     // if we are here, we can simplify!
     for (unsigned i1 = 0; i1 < marked.size(); ++i1){
         for (unsigned i2 = i1 + 1; i2 < marked.size(); ++i2){
-            if(intree.edges.find(marked[i1])->second == 
-                    intree.edges.find(marked[i2])->second){
+            if(marked[i1] < intree.edges.size() &&
+                    marked[i2] < intree.edges.size() &&
+                    intree.edges[marked[i1]] == intree.edges[marked[i2]])
+            {
 #pragma omp critical
                 {
                     target[i1] += target[i2];

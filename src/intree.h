@@ -24,7 +24,7 @@ class Intree {
     friend class Probability_Computer;
     friend class Snapshot;
     private:
-        map<task_id, task_id> edges;
+        std::vector<task_id> edges;
 #if USE_TASKMAP
         map<task_id, Task> taskmap;
 #endif
