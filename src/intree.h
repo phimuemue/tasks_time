@@ -29,6 +29,8 @@ class Intree {
         map<task_id, Task> taskmap;
 #endif
         class Outtree {
+            private:
+                mutable string compressedString;
             public:
                 task_id id;
                 bool marked;

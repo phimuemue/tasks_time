@@ -69,6 +69,10 @@ Intree::Outtree::~Outtree(){
 }
 
 string Intree::Outtree::getCompressedString() const{
+    return compressedString;
+    if(compressedString.size() > 0){
+        return compressedString;
+    }
     stringstream ss;
     vector<string> predecessor_strings;
     for(const auto it : predecessors){
@@ -88,6 +92,7 @@ string Intree::Outtree::getCompressedString() const{
         }
     }
     ss << "]";
+    compressedString = ss.str();
     return ss.str();
 }
 
@@ -103,9 +108,26 @@ void Intree::Outtree::canonicalize(){
     }
     sort(predecessors.begin(), predecessors.end(),
             [](const Outtree* a, const Outtree* b) -> bool {
-                return *a < *b;
+                return *b < *a;
             }
         );
+    if(compressedString.size() == 0){
+        compressedString += "[";
+        for(auto a : predecessors){
+            compressedString += a->getCompressedString();
+        }
+        if(predecessors.size() == 0){
+            if(marked){
+                compressedString += "0";
+            }
+            else{
+                compressedString += "1";
+            }
+        }
+        compressedString += "]";
+    }
+    // assert(getCompressedString() == tmpstring);
+    //
     // cout << id << " after: ";
     // for(auto& it : predecessors){
     //     cout << it->id << " ";
@@ -133,7 +155,7 @@ Intree Intree::Outtree::toIntree(map<task_id, task_id>& isomorphism) const{
     return Intree(edges);
 }
 
-Intree Intree::canonical_intree2(const Intree& _t, 
+Intree Intree::canonical_intree(const Intree& _t, 
         const vector<task_id>& _preferred,
         map<task_id, task_id>& isomorphism,
         tree_id& out){
@@ -149,7 +171,7 @@ Intree Intree::canonical_intree2(const Intree& _t,
     return result;
 }
 
-Intree Intree::canonical_intree(const Intree& _t, 
+Intree Intree::canonical_intree2(const Intree& _t, 
         const vector<task_id>& _preferred,
         map<task_id, task_id>& isomorphism,
         tree_id& out){
