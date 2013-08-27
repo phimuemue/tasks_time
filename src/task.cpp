@@ -74,7 +74,7 @@ bool Task::operator==(const Task& t) const {
     return t.id == id;
 }
 
-bool operator==(const int& i, const Task& t){
+bool operator==(const task_id& i, const Task& t){
     return t.id == i;
 }
 

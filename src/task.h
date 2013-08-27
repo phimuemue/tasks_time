@@ -52,7 +52,7 @@ public:
     bool operator==(const Task& t) const;
     bool operator>(const Task& t) const;
     bool operator<(const Task& t) const;
-    friend bool operator==(const int& i, const Task& t);
+    friend bool operator==(const task_id& i, const Task& t);
 
     friend ostream& operator<<(ostream& os, const Task& t);
 };
