@@ -16,6 +16,7 @@ class Probability_Computer{
     public:
         void compute_finish_probs(const Intree& intree, const vector<task_id>& marked, vector<myfloat>& target) const;
         void expected_runtime_of_min_task(const Intree& intree, const vector<task_id>& marked) const;
+myfloat get_expected_remaining_time(const Intree& t, const task_id tid);
 };
 
 #endif

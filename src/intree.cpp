@@ -4,27 +4,38 @@ Intree::Intree(){
 }
 
 Intree::Intree(const Intree& t) :
-    edges(t.edges),
+    edges(t.edges)
+#if USE_TASKMAP
+    ,
     taskmap(t.taskmap)
+#endif
 {
 }
 
 Intree::Intree(const vector<pair<task_id, task_id>>& edges){
     for(auto it=edges.begin(); it!=edges.end(); ++it){
         this->edges[it->first] = it->second;
+#if USE_TASKMAP
         taskmap[it->first] = Task(it->first);
         taskmap[it->second] = Task(it->second);
+#endif
     }
+#if USE_TASKMAP
     taskmap[0] = Task(0);
+#endif
 }
 
 Intree::Intree(const vector<pair<Task, Task>>& edges){
     for(auto it=edges.begin(); it!=edges.end(); ++it){
         this->edges[it->first.get_id()] = it->second.get_id();
+#if USE_TASKMAP
         taskmap[it->first.get_id()] = it->first;
         taskmap[it->second.get_id()] = it->second;
+#endif
     }
+#if USE_TASKMAP
     taskmap[0] = Task(0);
+#endif
 }
 
 Intree::Outtree::Outtree(task_id i, bool m) :
@@ -182,11 +193,12 @@ Intree Intree::canonical_intree(const Intree& _t,
     for(auto it=preferred.begin(); it!=preferred.end(); ++it){
         marked_count[*it] = 1;
     }
-    vector<vector<task_id>> tasks_by_level(t.taskmap.size());
+    vector<vector<task_id>> tasks_by_level(t.edges.size() + 1);
     // store tasks grouped by level
-    for(auto it=t.taskmap.begin(); it!=t.taskmap.end(); ++it){
+    for(auto it=t.edges.begin(); it!=t.edges.end(); ++it){
         tasks_by_level[t.get_level(it->first)].push_back(it->first);
     }
+    tasks_by_level[0].push_back(0); // 0 is not present in edges
     // traverse tasks levelwise (high to low) and comput canonical names
     map<task_id, vector<task_id>> all_predecessors;
     map<task_id, vector<unsigned short>> canonical_names;
@@ -314,39 +326,45 @@ int Intree::get_in_degree(const task_id t) const {
 }
 
 bool Intree::contains_task(task_id tid) const{
-    return taskmap.find(tid) != taskmap.end();
+    return (edges.find(tid) != edges.end()) || (tid == 0);
 }
 
+#if USE_TASKMAP
 const Task& Intree::get_task_by_id(const task_id tid) const {
-    if(taskmap.find(tid) == taskmap.end()){
+    if(edges.find(tid) == edges.end()){
         cout << "Attempted to get_task_by_id of non-existent task." << endl;
         throw 1;
     }
     return taskmap.find(tid)->second;
 }
+#endif
 
 void Intree::get_tasks(set<task_id>& result) const {
-    for(auto it=taskmap.begin(); it!=taskmap.end(); ++it){
+    result.insert(0);
+    for(auto it=edges.begin(); it!=edges.end(); ++it){
         result.insert(it->first);
     }
 }
 
 void Intree::rename_leaf(task_id original, task_id now){
-    assert(!contains_task(now));
+#if USE_TASKMAP
     assert(taskmap.find(original)!=taskmap.end());
     // stuff in taskmap
     auto tmp = taskmap[original];
     taskmap.erase(taskmap.find(original));
     taskmap[now] = tmp;
+#endif
     // stuff in edges
     auto tmp2 = edges[original];
     edges.erase(edges.find(original));
     edges[now] = tmp2;
 }
 
+#if USE_TASKMAP
 Distribution Intree::get_task_distribution(const task_id t) const {
     return taskmap.find(t)->second.get_distribution();
 }
+#endif
 
 int Intree::get_level(const Task& t) const{
     return get_level(t.get_id());
@@ -399,9 +417,11 @@ void Intree::remove_task(task_id t){
         cout << *this << " - " << t << endl;
         throw 1;
     }
+#if USE_TASKMAP
     // remove from taskmap
     auto todel = taskmap.find(t);
     taskmap.erase(todel);
+#endif
     vector<pair<task_id, task_id>> tmp;
     for(auto it = edges.begin(); it != edges.end(); ++it){
         if(!((it->first == t) || (it->second == t))){

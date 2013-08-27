@@ -1,6 +1,21 @@
 #include "probability.h"
 
+myfloat Probability_Computer::get_expected_remaining_time(
+        const Intree& t, 
+        const task_id tid
+        )
+{
+#if USE_TASKMAP
+    return t.get_task_by_id(tid).get_expected_remaining_time();
+#else
+    return 1;
+#endif
+}
+
 Probability_Computer::Distribution_Setting Probability_Computer::distros_same(const Intree& intree, const vector<task_id>& marked) const {
+#if !USE_TASKMAP
+    return Same_Distributions;
+#else
     bool all_distros_same = true;
     Distribution first = intree.get_task_distribution(marked[0]);
     for(auto it = marked.begin(); it!=marked.end(); ++it){
@@ -31,6 +46,7 @@ Probability_Computer::Distribution_Setting Probability_Computer::distros_same(co
             break;
     }
     return Same_Distributions;
+#endif
 }
 
 void Probability_Computer::simplify_isomorphisms_simple(const Intree& intree, const vector<task_id>& marked, vector<myfloat>& target) const{
@@ -50,6 +66,13 @@ void Probability_Computer::simplify_isomorphisms_simple(const Intree& intree, co
 }
 
 void Probability_Computer::compute_finish_probs(const Intree& intree, const vector<task_id>& marked, vector<myfloat>& target) const {
+#if !USE_TASKMAP
+    // this is the easy case
+    myfloat prob = ((myfloat)1)/((myfloat)marked.size());
+    for(unsigned int i=0; i<marked.size(); ++i){
+        target.push_back(prob);
+    }
+#else
     // TODO: Implement this for all kinds of random variables
     Distribution first = intree.get_task_distribution(marked[0]);
     if (distros_same(intree, marked) == Same_Distributions || 
@@ -104,4 +127,5 @@ void Probability_Computer::compute_finish_probs(const Intree& intree, const vect
         cout << "Not possible to compute finish_probs." << endl;
         throw 1;
     }
+#endif
 }

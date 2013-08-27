@@ -25,7 +25,9 @@ class Intree {
     friend class Snapshot;
     private:
         map<task_id, task_id> edges;
+#if USE_TASKMAP
         map<task_id, Task> taskmap;
+#endif
         class Outtree {
             public:
                 task_id id;

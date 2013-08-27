@@ -346,7 +346,7 @@ myfloat Snapshot::expected_runtime() const {
         return cache_expected_runtime;
     }
     if (successors.size() == 0){
-        return intree.get_task_by_id(0).get_expected_remaining_time();
+        return Probability_Computer().get_expected_remaining_time(intree, 0);
     }
     assert(successor_probs.size() == successors.size());
     // TODO: compute expected minimum runtime of marked 

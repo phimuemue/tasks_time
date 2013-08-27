@@ -77,7 +77,8 @@ vars.Add(EnumVariable("MYFLOAT", "Datatype for rational numbers:\n"
             allowed_values=("0", "1", "2", "3", "4")))
 vars.Add(EnumVariable("USE_SIMPLE_OPENMP", "Simple multithreading for computing topmost successors. Currently only working for value 0.", 0,
             allowed_values=("0", "1")))
-vars.Add(EnumVariable("USE_CANONICAL_SNAPSHOT", "Use flyweight pattern to reduce amout of memory used at the price of (possibly only slightly) higher computation time.", 1,
+vars.Add(EnumVariable("USE_CANONICAL_SNAPSHOT", "Only consider non-isomorphic snapshots", 1, allowed_values=("0", "1")))
+vars.Add(EnumVariable("USE_TASKMAP", "Set to 1 if tasks in one tree behave different.", 0,
             allowed_values=("0", "1")))
 
 # we use C++11 (mainly to simplify some writing in C++)
@@ -95,6 +96,7 @@ env = Environment(variables = vars,
                             "-DMYFLOAT=${MYFLOAT}",
                             "-DUSE_SIMPLE_OPENMP=${USE_SIMPLE_OPENMP}",
                             "-DUSE_CANONICAL_SNAPSHOT=${USE_CANONICAL_SNAPSHOT}",
+                            "-DUSE_TASKMAP=${USE_TASKMAP}",
                             ], 
                   LIBS = [
                           "boost_program_options",
