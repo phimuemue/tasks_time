@@ -292,6 +292,10 @@ void generate_output(const po::variables_map& vm,
         if(vm.count(it.first)){
             ofstream tikz_output;
             raw_filename = vm[it.first].as<string>();
+            // convert spaces to underscores
+            transform(raw_filename.begin(), raw_filename.end(), raw_filename.begin(), 
+                    [](char& a) -> char {if (a==' ') return '_'; return a;}
+                    );
             filename = raw_filename + ".tex";
             cout << "Writing " << it.first << " to " << filename << endl;
             tikz_output.open(filename);
