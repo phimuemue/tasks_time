@@ -340,6 +340,9 @@ int Intree::get_in_degree(const Task& t) const {
 
 int Intree::get_in_degree(const task_id t) const {
     int result = 0;
+    // one might be tempted to start at task_id it = t+1,
+    // but for some reason, this seemed to be slower in some cases
+    // and not much faster in other ones
     for(task_id it = 1; it<edges.size(); ++it){
         if(t == edges[it])
             result++;
@@ -411,6 +414,17 @@ void Intree::get_leaves(vector<task_id>& target) const{
         if (get_in_degree(it) == 0){
             target.push_back(it);
         }
+    }
+}
+
+void Intree::get_leaves(set<task_id>& target) const{
+    for(task_id it = 1; it < edges.size(); ++it){
+        if (get_in_degree(it) == 0 && edges[it] != NOTASK){
+            target.insert(it);
+        }
+    }
+    if(count_tasks()==1){
+        target.insert(0);
     }
 }
 
