@@ -23,6 +23,7 @@
 #include "hlfdeterministicscheduler.h"
 #include "hlfrandomscheduler.h"
 #include "specialcaseleafscheduler.h"
+#include "topmostsurescheduler.h"
 
 // exporters
 #include "exporter.h"
@@ -47,6 +48,8 @@ map<string, Scheduler*> schedulers =
 {
     // "all possibilities" scheduler
     {"leaf", new Leafscheduler()}, 
+    // leaf scheduler that schedules as many topmost tasks as possible
+    {"tms", new TopMostSureScheduler()},
     // leaf scheduler with known special cases
     {"scleaf", new SpecialCaseLeafscheduler()}, 
     // HLF schedulers (variants)
@@ -69,6 +72,39 @@ void randomEdges(int n, vector<pair<Task,Task>>& target){
         target.push_back(pair<Task,Task>(Task(i+1),Task(a)));
     }   
     output.close();
+}
+
+void randomEdgesPerLevel(string levelstring, vector<pair<Task,Task>>& target){
+    mt19937 rng;
+    rng.seed(time(NULL));
+    istringstream iss(levelstring);
+    vector<string> raw_tokens;
+    copy(istream_iterator<string>(iss),
+            istream_iterator<string>(),
+            back_inserter<vector<string>>(raw_tokens));
+    vector<vector<unsigned int>> tasks_per_level(raw_tokens.size() + 1);
+    unsigned int counter = 0;
+    tasks_per_level[0].push_back(0);
+    for(unsigned int i=0; i<raw_tokens.size(); ++i){
+        task_id tmp;
+        stringstream tmps(raw_tokens[i]);
+        tmps >> tmp;
+        for(unsigned int n=0; n<tmp; ++n){
+            tasks_per_level[i+1].push_back(++counter);
+        }
+    }
+    for(unsigned int level = 1; level < tasks_per_level.size(); ++level){
+        auto it = tasks_per_level[level];
+        auto prev = tasks_per_level[level-1];
+        for(auto it2 : it){
+            target.push_back(pair<Task, Task>(
+                            Task(it2),
+                            Task(prev[rng()%(prev.size())])
+                        ));
+            cout << it2 << " ";
+        }
+        cout << endl;
+    }
 }
 
 void tree_from_string(string raw, vector<pair<Task,Task>>& target){
@@ -164,8 +200,9 @@ int read_variables_map_from_args(int argc,
         ("input", po::value<string>(), 
          "Name of input file.")
         ("random", po::value<int>(), 
-         "Number of tasks in a random graph. Only used "
-         "if no input file is given.");
+         "Number of tasks in a random graph. Only used if no input file is given.")
+        ("randp", po::value<string>(), 
+         "Specify the number of tasks level wise. Bottom level is implicitly 0.");
     // configurational things
     po::options_description config_options("Config", LINE_LENGTH);
     config_options.add_options()
@@ -208,6 +245,9 @@ Intree generate_tree(po::variables_map vm){
     }
     else if(vm.count("input")){
         read_raw_tree_from_file(vm["input"].as<string>(), edges);
+    }
+    else if(vm.count("randp")){
+        randomEdgesPerLevel(vm["randp"].as<string>(), edges);
     }
     else{
         int num_threads = (vm.count("random") ? vm["random"].as<int>() : NUM_THREADS_DEFAULT);
@@ -394,6 +434,12 @@ void generate_stats(const po::variables_map& vm,
         }
         else{
             line.push_back(string(" "));
+        }
+        if(s[i]->is_hlf_first()){
+            line.push_back(string(" "));
+        }
+        else {
+            line.push_back(string("!"));
         }
         line.push_back(" ");
         line.push_back(s[i]->markedstring());

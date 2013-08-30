@@ -386,6 +386,33 @@ bool Snapshot::is_hlf() const {
     return cache_is_hlf[1] = true;
 }
 
+bool Snapshot::is_hlf_first() const {
+    if(cache_is_hlf_first.find(1) != cache_is_hlf_first.end()){
+        return cache_is_hlf_first[1];
+    }
+    if(intree.count_tasks()==1){
+        return true;
+    }
+    vector<task_id> leaves;
+    intree.get_leaves(leaves);
+    vector<unsigned int> leaf_levels;
+    for(auto t : leaves){
+        leaf_levels.push_back(intree.get_level(t));
+    }
+    sort(leaf_levels.begin(), leaf_levels.end(), greater<task_id>());
+    vector<unsigned int> m_levels;
+    for(auto t : marked){
+        m_levels.push_back(intree.get_level(t));
+    }
+    sort(m_levels.begin(), m_levels.end(), greater<task_id>());
+    for(unsigned int i=0; i<m_levels.size(); ++i){
+        if(m_levels[i]<leaf_levels[i]){
+            return cache_is_hlf_first[1] = false;
+        }
+    }
+    return cache_is_hlf_first[1] = true;
+}
+
 myfloat Snapshot::expected_time_for_n_processors(unsigned int p) const {
     if(cache_expected_runtime_for_n_procs.find(p) != cache_expected_runtime_for_n_procs.end()){
         return cache_expected_runtime_for_n_procs[p];
