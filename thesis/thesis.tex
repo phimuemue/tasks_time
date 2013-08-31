@@ -24,8 +24,8 @@
 \section{Other TODOs}
 
 \begin{itemize}
+\item Improve tree generation method so only trees with four or more leaves are output.
 \item Appendix containing all tree sequences for which optimal schedule is strictly non-HLF.
-\item Improve tree generation method by excluding trees that end with a chain (i.e. that are of the format $(0, 1, 2, 3, \dots)$). This should save some time since we avoid recomputing (basically) all trees with less nodes.
 \item Improve program by using arrays instead of maps (only for canonical snapshots). \done{Works for canonical snapshots, ``normal ones'' broken.} \todo{Correct it!}
 \end{itemize}
 
@@ -41,11 +41,12 @@
 
 % here, the document actually starts to get useful
 \include{theory/theory}
-\include{first/first}
 
 \include{p2/p2}
 \include{p3/p3}
 \include{additional_algs/additional_algs}
+
+\include{first/first}
 
 \bibliographystyle{alpha}
 \bibliography{bib}

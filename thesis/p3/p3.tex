@@ -778,6 +778,10 @@ We will now consider another class of intrees that can be shown to have HLF as o
 
 During our research, we recognized some patterns that we are tempted to transform into some conjectures. We were, however, not yet able to prove or disprove them. This section shows the most important ones that could easily be used to decrease the number of snapshots that have to be examined if we want to compute the optimal snapshot by exhaustive search.
 
+\begin{definition}[Topmost task]
+  We say that a task is \emph{topmost} if its level is greater or equal than the levels of any other task in the intree. 
+\end{definition}
+
 \begin{conjecture}
   Parallel chains are optimally scheduled by HLF.
 \end{conjecture}
@@ -786,9 +790,17 @@ During our research, we recognized some patterns that we are tempted to transfor
   For each snapshot resulting from an optimal schedule, at least one top-most task is scheduled.
 \end{conjecture}
 
-\begin{conjecture}[Weak one]
-  For each snapshot resulting from an optimal schedule, at least two top-most tasks are scheduled.
+\begin{conjecture}
+  An optimal schedule always schedules as many topmost tasks as possible.
 \end{conjecture}
+
+\begin{conjecture}[Weak one]
+  For each snapshot resulting from an optimal schedule, at least two top-most tasks are scheduled -- if there are two or more topmost tasks.
+\end{conjecture}
+
+\begin{theorem}
+  There are intrees for which the optimal schedule has to pick the topmost task, but the other two tasks are \emph{both} on a lower level than another, unscheduled task. It is $(0, 0, 1, 2, 3, 4, 4, 5, 5, 8, 10, 11, 12)$ and $(0, 0, 1, 2, 2, 3, 3, 6, 8, 9, 10, 11, 12)$.
+\end{theorem}
 
 \begin{conjecture}
   If for an intree only non-top tasks are scheduled, you can exchange one of the non-top tasks with a top-tasks and obtain a better run time.
