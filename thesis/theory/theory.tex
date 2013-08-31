@@ -192,7 +192,29 @@ We introduce intuitive (but non-standard) notation for modifying an intree by ad
   If the successor $t$ of $v$ is clear from the context, we sometimes simply write $I\cup\left\{ v \right\}$ instead of $I\cup\left\{ (v,t) \right\}$.
 \end{definition}
 
-\todo{Anzahl der rooted trees angeben.}
+\todo{Anzahl der rooted trees angeben?}
+
+\paragraph{Describing intrees}
+
+We conclude this short introduction on intrees with an intuitive way of describing intrees. Most readers are probably acquainted with a visual description of intrees such the one in figure \ref{fig:intree-example-task-names-directed-edges}. For textual representations (and even more important: for use in command line), we rely on another representation. 
+
+\begin{itemize}
+\item We number the tasks (resp. vertices), beginning with 0 in
+  ascending order.
+\item We always assign the intree's root the number 0.
+\item We iterate through all the tasks \emph{beginning at 1} in ascending order, and write up only their \emph{successor}.
+\end{itemize}
+
+Consider the intree in figure \ref{fig:intree-example-task-names-directed-edges}: It has the edges
+\begin{equation*}
+  (1,0), (2,0), (3,1), (4,1), (5,2), (6,3), (7,3), (8,3), (9,6), (10, 8).
+\end{equation*}
+Carrying out the procedure given above yields the sequence
+\begin{equation*}
+  (0, 0, 1, 1, 1, 3, 3, 3, 6, 8).
+\end{equation*}
+
+Note that since the root carries number 0, we can start iterating at 1. Moreover, this representation enforces that the first number in such a sequence describing an intree is always 0. This, of course, introduces some redundancy, but, on the other hand, enables us to describe the tree consisting of only a root: It is denoted by an empty sequence: $()$.
 
 \subsection{Interpretation as dependency graphs}
 \label{sec:intrees-interpreted-as-dependency-graphs}
@@ -210,9 +232,9 @@ Those intrees can naturally be used to describe dependencies between different t
 
 We can draw such intrees in a very straightforward manner: We draw the root at the bottom and its direct predecessors one level above. For each predecessor, we inductively repeat this procedure to obtain a ``top-to-bottom-description'' of the tree.
 
-Figure \ref{fig:intree-example-task-names-directed-edges} shows an intree, where tasks 8 is a requirement for task 6, which itself is -- like task 7, 8 and (indirectly) task 10 -- a requirement for task 3. This figure also illustrates the fact that -- in an intree -- each task is a direct requirement for \emph{at most} one other task.
+Figure \ref{fig:intree-example-task-names-directed-edges} shows an intree (the one given by the sequence $(0,0,1,1,2,3,3,3,6,8)$), where tasks 8 is a requirement for task 6, which itself is -- like task 7, 8 and (indirectly) task 10 -- a requirement for task 3. This figure also illustrates the fact that -- in an intree -- each task is a direct requirement for \emph{at most} one other task.
 
-However, we are mostly interested in the \emph{structure} of the tree, which is why we most of the time omit the labellings of the vertices (i.e. we omit the task names) and rely on a \emph{unlabelled} representation as shown in figure \ref{fig:intree-example-structure-version}.
+However, we are mostly interested in the \emph{structure} of the tree, which is why we most of the time omit the labellings of the vertices (i.e. we omit the task names) and rely on a \emph{unlabelled} representation as shown in figure \ref{fig:intree-example-structure-version}. 
 
 \begin{figure}[t]
   \centering
@@ -279,7 +301,7 @@ However, we are mostly interested in the \emph{structure} of the tree, which is 
     \caption{Unlabelled version without arrows, edges are implicitly directed towards the root.}
     \label{fig:intree-example-structure-version}
   \end{subfigure}
-  \caption{Graphical representation of an intree with 5 levels (numbered 0 to 4). All edges are implicitly directed towards the root, which is drawn at the bottom of the tree. Most of the time, the \emph{structure} of the tree is enough, so we will omit vertex names most of the time.}
+  \caption{Graphical representation of an intree ($(0,0,1,1,2,3,3,3,6,8)$) with 5 levels (numbered 0 to 4). All edges are implicitly directed towards the root, which is drawn at the bottom of the tree. Most of the time, the \emph{structure} of the tree is enough, so we will omit vertex names most of the time.}
   \label{fig:intrees-introductory-explanation}
 \end{figure}
 
@@ -290,6 +312,8 @@ The mathematical concept behind unlabelled trees can be described by the notion 
 \end{definition}
 
 \emph{Remark:} The above definition of isomorphisms is somwhat non-standard in the sense that usually isomorphisms are defined for undirected trees. For this work, we restrict ourselves onto our definition (except where explicitly stated otherwise).
+
+As an example for isomorphic intrees, consider $(0,0,1,1,2,3,3,3,6,8)$, $(0,1,2,3,0,5,1,2,2,9)$ and $(0,1,0,3,3,4,4,7,4,9)$.
 
 \subsection{Extension to in-forests}
 \label{sec:intrees-extension-to-forests}
@@ -303,7 +327,7 @@ To manipulate intrees, we define some non-standard notation that is, however, ve
 
 We will now combine the knowledge from sections \ref{sec:some-probability} and \ref{sec:foundations-graph-theory} and introduce the structure we will be working on. 
 
-\subsection{Computational model \todo{Better title.}}
+\subsection{Computational setting \todo{Better title.}}
 \label{sec:schedules-problem-setting}
 
 We now describe our assumptions concerning the tasks to be processed and our machines.
@@ -955,11 +979,13 @@ It can be easily seen that we essentially compute the same thing twice if we car
 
 From now on, if not stated otherwise, we restrict ourselves to snapshot DAGs\todo{Bereits definiert?} that contain only distinct snapshots.
 
-\paragraph{Excluding equivalent snapshots in practice}
+\paragraph{Excluding equivalent snapshots in practice} \todo{Sollte das vielleicht eher in den Algorithmenteil?}
 
-It is a notable fact that we can determine in polynomial time (w.r.t. the number of nodes) whether two snapshots are equivalent. This computation involves a check whether the two corresponding intrees are isomorphic. While it seems to be quite hard to check isomorphism for general graphs (\todo{unbedingt Referenz!}), it is feasible for intrees.
+It is a notable fact that we can determine in polynomial time (w.r.t. the number of nodes) whether two snapshots are equivalent. This computation involves foremost a check whether the two corresponding intrees are isomorphic. 
 
-While there currently is no known algorithm that checks isomorphism in polynomial time for general graphs (see \cite{arora2009computational}), there is a simple algorithm for isomorphism of intrees. The idea behind this algorithm is to recursively sort the predecessors of a task according to the number of their respective predecessors. An early description of this algorithm can be found e.g. in \cite{aho1974design}. We can easily adapt this isomorphism check to our needs in the sense that we can construct an algorithm that constructs a ``canonical snapshot'', and all equivalent snapshots are converted to exactly this canonical snapshot.
+%While it seems to be quite hard to check isomorphism for general graphs (\todo{unbedingt Referenz!}), it is feasible for intrees.
+
+While there currently is no known algorithm that checks isomorphism in polynomial time \emph{for general graphs} (see \cite{arora2009computational}), there is a simple algorithm for isomorphism of intrees. The idea behind this algorithm is to recursively sort the predecessors of a task according to the number of their respective predecessors. An early description of this algorithm can be found e.g. in \cite{aho1974design}. We can easily adapt this isomorphism check to our needs in the sense that we can construct an algorithm that constructs a ``canonical snapshot'', and all equivalent snapshots are converted to exactly this canonical snapshot.
 
 One thing to keep in mind is that we have to explicitly take care of the currently scheduled tasks.
 
