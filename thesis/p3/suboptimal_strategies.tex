@@ -1,0 +1,311 @@
+\chapter{Suboptimal strategies for P3}
+\label{chap:p3-suboptimal}
+
+In this section, we take a look at some strategies and use them for scheduling with three processors. We will do so very exemplarily and inspect counterexamples for the respective strategies.
+
+\todo{Introductory text}
+
+\section{HLF}
+\label{sec:hlf-p3-suboptimal}
+
+This section showcases some situations, where HLF is not optimal for three processors. We will consider several phenomena that can occur if we use HLF with three processors.
+
+\subsection{HLF does not behave the same for intrees with same profile}
+\label{sec:p3-suboptimal-hlf-same-profiles-different-run-times}
+
+In the two-processor case it is known that trees with the same level profile (see section \ref{sec:p2-profiles}) have the same run time. This is not the case for three processors \todo{Erklären, warum der Beweis nicht mehr hinhaut!} Figure \ref{fig:hlf-001112} shows an intree, where HLF can choose at some points, and different choices result in different runtimes.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{.45\linewidth}
+    \centering
+    \includegraphics{p3/hlf_not_optimal/001112_hlf_subopt.pdf}
+    \caption{Suboptimal HLF run}
+  \end{subfigure}
+  \begin{subfigure}{.45\linewidth}
+    \centering
+    \includegraphics{p3/hlf_not_optimal/001112_hlf_opt.pdf}
+    \caption{Optimal HLF run. This is also the overal optimal schedule.}
+    \label{fig:hlf-001112-optimal-version}
+  \end{subfigure}
+  \caption{HLF on $(0,0,1,1,1,2)$. Different runs of HLF do not necessarily produce the same result.}
+  \label{fig:hlf-001112}
+\end{figure}
+
+Because HLF can produce different run times depending which task it has chosen, it is clear that HLF in its raw form can not be optimal. The following section reveals even more.
+
+\subsection{Examples where HLF is strictly suboptimal}
+\label{sec:p3-suboptimal-hlf-strictly-suboptimal}
+
+The example from figure \ref{fig:hlf-001112-optimal-version} shows the optimal run. We observe that this run is a specific instance of HLF, because at each point of time, always tasks with the highest level numbers are chosen.
+
+However, there are intrees, where \emph{no} HLF-run is optimal. Figures \ref{fig:hlf-vs-opt-0012346688}, \ref{fig:hlf-vs-opt-0012446788} and \ref{fig:hlf-vs-opt-00123455799} show some examples for which this is exactly the case.
+
+\todo{Explizit auf ambiguity bei HLF hinweisen, und auch dass es klassen von Graphen gibt, die keine HLF-Ambiguity zulassen.}
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{.45\linewidth}
+    \centering
+    \includegraphics{p3/hlf_not_optimal/0012346688_subopt.pdf}
+    \caption{HLF -- suboptimal}
+  \end{subfigure}
+  \begin{subfigure}{.45\linewidth}
+    \centering
+    \includegraphics{p3/hlf_not_optimal/0012346688_opt.pdf}
+    \caption{Optimal run is non-HLF}
+  \end{subfigure}
+  \caption{HLF vs. optimal solution for $(0,0,1,2,3,4,6,6,8,8)$}
+  \label{fig:hlf-vs-opt-0012346688}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{.45\linewidth}
+    \centering
+    \includegraphics{p3/hlf_not_optimal/0012446788_subopt.pdf}
+    \caption{HLF -- suboptimal}
+  \end{subfigure}
+  \begin{subfigure}{.45\linewidth}
+    \centering
+    \includegraphics{p3/hlf_not_optimal/0012446788_opt.pdf}
+    \caption{Optimal run is non-HLF}
+  \end{subfigure}
+  \caption{HLF vs. optimal solution for $(0,0,1,2,4,4,6,7,8,8)$ (taken from Ernst Mayr)}
+  \label{fig:hlf-vs-opt-0012446788}
+\end{figure}
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{.45\linewidth}
+    \centering
+    \includegraphics{p3/hlf_not_optimal/00123455799_subopt.pdf}
+    \caption{HLF -- suboptimal}
+  \end{subfigure}
+  \begin{subfigure}{.45\linewidth}
+    \centering
+    \includegraphics{p3/hlf_not_optimal/00123455799_opt.pdf}
+    \caption{Optimal run is non-HLF}
+  \end{subfigure}
+  \caption{HLF vs. optimal solution for $(0,0,1,2,3,4,5,5,7,9,9)$ (taken from Chandy/Reynolds)}
+  \label{fig:hlf-vs-opt-00123455799}
+\end{figure}
+
+\clearpage{}
+
+\section{Maximizing 3-processor-time, minimizing 1-processor time}
+\label{sec:p3-disproving-long-p3-and-short-p1-time}
+
+If we have three processors in total, we can split the total run time into three parts: The time where all three processors are processing tasks, the time where one processor is idle and two are working, and the time where only one processor is working.
+
+%We first define some variants of run time. We consider the overall run time and the time where -- within a schedule of an intree -- exactly $p$ processors are working (i.e. where exactly $p$ tasks are scheduled).
+
+\begin{definition}[Run time and its variants]
+  We denote by $T$ the expected run time for a schedule associated with an intree. 
+
+  Moreover, we call the time where exactly $p$ taks are scheduled by $T_p$.
+\end{definition}
+
+Note that $T$ actually describes an \emph{expected value}. Because of the linearity of expectation, we have that -- for three processors -- $T=T_1 + T_2 + T_3$. If we want to construct an optimal schedule for three processors, we might be tempted to think that (at least) one of the two following criteria should be fulfilled for the optimal schedule:
+
+\begin{description}
+\item[P3L] For the optimal schedule, $T_3$ should be maximal (over all schedules), i.e. we should exploit three processors as long as possible (in the expectation).
+\item[P1S] For the optimal schedule, $T_1$ should be minimal (over all schedules), i.e. we should try to keep the expected time for which only one processor is working as short as possible.
+\end{description}
+
+Surprisingly, \emph{both} of them are wrong (at least if considered separately).
+
+\subsection{Maximizing $T_3$}
+\label{sec:p3-disproving-long-p3}
+
+Figure \ref{fig:p3-p3l-suboptimal-example} shows an example, where the optimal schedule keeps three processors busy for expected 0.77777 time steps, while a suboptimal schedule keeps three processors busy for a longer expected time, namely about 0.851852 time steps.
+
+From this we can conclude that it may be advantageous in some cases to accept a shorter time with three busy processors, thereby possibly also decreasing the time where only one processor is busy.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{.45\linewidth}
+    \centering
+    \includegraphics{p3/keep_3_busy/three_busy_opt.pdf}
+    \caption{Optimal schedule. Keeps three processors busy for $7/9\approx 0.78$ time steps ($(T_3, T_2, T_1)=(7/9, 31/24, 37/12)$).}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\linewidth}
+    \centering
+    \includegraphics{p3/keep_3_busy/three_busy_subopt.pdf}
+    \caption{This suboptimal schedule keeps three processors busy for expectedly $0.851852$ time steps ($(T_3, T_2, T_1)=(23/27,10/9,29/9)$).}
+  \end{subfigure}
+  \caption{An intree that shows that an optimal P3 schedule needs not keep busy three processors as long as possible. Snapshots with fewer than 6 tasks omitted since they have at most two tasks to be schedlued can be (optimally) processed via ordinary HLF. \todo{See figure \ref{fig:p3-p1s-suboptimal-example}!}}
+  \label{fig:p3-p3l-suboptimal-example}
+\end{figure}
+
+\subsection{Minimizing $T_1$}
+\label{sec:p3-disproving-short-p1}
+
+The ``other direction'', i.e. minimizing the time where only one processor is busy, still is suboptimal.
+Figure \ref{fig:p3-p1s-suboptimal-example} shows an intree with the property that the optimal schedule has an expected timespan of roughly 2.59259, within which only one processor is busy. On the other hand, a suboptimal schedule has a timespan of roughly 2.55555 within which only one processor is busy.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{.45\linewidth}
+    \centering
+    \includegraphics{p3/keep_1_unbusy/one_unbusy_opt.pdf}
+    \caption{Optimal schedule. For expectedly $70/27\approx 2.59$ time steps, only one processor is busy $(T_3, T_2, T_1)=(23/27, 25/27, 70/27)$.}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\linewidth}
+    \centering
+    \includegraphics{p3/keep_1_unbusy/one_unbusy_subopt.pdf}
+    \caption{This suboptimal schedule has an approximated timespan of $23/9\approx 2.55$ time steps, where only one processor is working ($(T_3, T_2, T_1)=(7/9,19/18,23/9)$).}
+  \end{subfigure}
+  \caption{An intree where the expected time with only one processor being busy is longer within the optimal schedule ($\approx 2.59259$) than within a suboptimal schedule ($\approx 2.555555$).\todo{Write expected times which only one busy processor in subfigures.} \todo{Convert to fractions.}\todo{Which one is optimal? Subfigures!}}
+  \label{fig:p3-p1s-suboptimal-example}
+\end{figure}
+
+This shows that it can be useful to accept a longer time with only one processor busy, probably acchieving a longer time span where three processors are busy.
+
+\subsection{Maximizing $T_3$ \emph{or} minimizing $T_1$}
+\label{sec:p3-suboptimality-maximizing-t3-and-minimizing-t1}
+
+It can also be shown that even combining the two arguments -- in the sense that P3L \emph{or} P1S should be fulfilled for the optimal schedule -- is not correct. This can be observed by examining the intree $(0, 0, 1, 1, 2, 3, 3, 3)$. Figure \ref{fig:p3l-p1s-combo-suboptimal} shows this example.
+
+\begin{figure}[ht]
+  \centering
+  \input{p3/p3l_p1s_suboptimal.tex}
+  \caption{A combination of P3L and P1S is not an optimality criterion for an optimal schedule.\todo{Subfigures.}}
+  \label{fig:p3l-p1s-combo-suboptimal}
+\end{figure}
+
+\begin{corollary}
+  Let $T^s$ denote the overall run time of a schedule $s$ and $T_1^s$, $T_2^s$ and $T_3^s$ be the times where exactly three, two and one tasks are scheduled within this schedule, respectively.
+
+  Let $I$ be an intree and $S$ be the set of all schedules. Let $s^*$ be the optimal schedule, which has associated the optimal run time $T^*$, with $T_1^*, T_2^*, T_3^*$ being its parts.
+  \begin{itemize}
+  \item It may be the case that there is a schedule $s\in S$ such that $T_3^s \geq T_3^*$.
+  \item It may be the case that there is a schedule $s\in S$ such that $T_1^s \leq T_1^*$.
+  \end{itemize}
+\end{corollary}
+
+That is, it is not necessarily the case that $T_3$ is maximal for the optimal schedule, nor is it necessarily the case that $T_1$ is minimal for the optimal schedule.
+
+However, after some investigation, we are tempted to conjecture the following.
+
+\begin{conjecture}
+  Let $I$, $T^s, T_1^s, T_2^s, T_3^s$ and $S$ be as defined above. Let $s^*$ be the optimal schedule for $I$ associated with the respective times $T_1^*, T_2^*, T_3^*$. Then, there is no schedule $s\in S$ such that
+  \begin{equation*}
+    T^s > T^* \wedge T_1^s \leq T_1^* \wedge T_3^s \geq T_3^*.
+  \end{equation*}
+\end{conjecture}
+
+Even if this conjecture turns out to be true, it seems complex to transform this knowledge into a scheduling strategy that does something more significantly efficient than ``explore everything, and choose the best'', because $T_3, T_2$ and $T_1$ are not that easy to compute.
+
+\clearpage{}
+
+\section{``No free chains''}
+\label{sec:disproving-hlf-no-free-chain}
+
+We can consider all paths from the root of a tree to all its leaves. We might be tempted to think, that it should be the foremost goal to exploit parallelism as good as possible and that this might be acchieved by choosing the currently scheduled tasks in a manner such that as few paths as possible are completely free. That is, we choose the leafs in a way so that the ends of as many different paths as possible are scheduled. This strategy was inspired by looking at the counterexamples against HLF depicted in figures \ref{fig:hlf-001112}, \ref{fig:hlf-vs-opt-0012346688}, \ref{fig:hlf-vs-opt-0012446788} and \ref{fig:hlf-vs-opt-00123455799}. We observe for these intrees that the optimal schedules has no as few free chains as possible.
+
+However, there are examples where this strategy does not yield optimal results. Consider e.g. the tree $(0,0,0,1,1,1,2,2,3)$. 
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \includegraphics{p3/hlfnfc_not_optimal/000111223_hlfnfc.pdf}
+    \caption{HLF schedule while choosing tasks such that there are as few free paths as possible -- overall run time of 5.20199.}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \includegraphics{p3/hlfnfc_not_optimal/000111223_opt.pdf}
+    \caption{Optimal schedule (run time 5.20028) has three free paths at the beginning.}
+  \end{subfigure}
+  \caption{HLF with no free paths is not necessarily optimal.}
+  \label{fig:hlfnfc-is-not-optimal}
+\end{figure}
+
+\section{``2-HLF plus 1''}
+\label{sec:disproving-2hlf-plus-1}
+
+We examined all intrees with up to 14 tasks, especially the cases where HLF is not optimal. Thereby, we obsered that in all cases where three tasks could be scheduled, the optimal solution scheduled two tasks, that could be chosen by HLF for two processors and only the third task \emph{might} be a task that would not have been chosen by HLF (see figures \ref{fig:hlf-vs-opt-0012346688}, \ref{fig:hlf-vs-opt-0012446788} and \ref{fig:hlf-vs-opt-00123455799} as particular instances of those). Thus, we examined whether an optimal scheduling strategy for three processors has always \emph{at most one} task that is non-HLF. Interestingly, there is an intree with 15 tasks, whose optimal schedule starts out by choosing the single topmost task and \emph{two} non-HLF tasks. This intree ($(0,0,1,2,2,3,3,6,8,9,10,11,12,13)$) is shown in figure \ref{fig:2-hlf-plus-one-not-optimal}. Another tree showing this fact is e.g. $(0, 0, 1, 2, 3, 4, 4, 5, 5, 8, 10, 11, 12)$.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \includegraphics{p3/2hlf_suboptimal/001223368910111213_opt.pdf}
+    \caption{Optimal schedule picking \emph{two} non-HLF tasks.}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \includegraphics{p3/2hlf_suboptimal/001223368910111213_subopt.pdf}
+    \caption{HLF-Schedule}
+  \end{subfigure}
+  \caption{Intree $(0,0,1,2,2,3,3,6,8,9,10,11,12,13)$ requires the optimal schedule to start out by choosing two non-HLF tasks.}
+  \label{fig:2-hlf-plus-one-not-optimal}
+\end{figure}
+
+\section{Only highest or lowest leaves}
+\label{sec:disproving-only-highest-or-lowest-leaves}
+
+So far, we have seen several scenarios where HLF was not optimal. The trees seen so far where HLF was not optimal resulted in schedules that picked only combinations highest leaves and lowest leaves possible. However, this is not a criterion for an optimal schedule, as we can observe by scheduling the 14-tasks-intree $(0,0,0,2,3,4,5,7,7,9,10,10,12)$, which is shown in figure \ref{fig:only-high-or-low-not-optimal}.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \includegraphics{p3/only_high_or_low/0002345779101012_opt.pdf}
+    \caption{Optimal schedule picking \emph{two} non-HLF tasks.}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \includegraphics{p3/only_high_or_low/0002345779101012_subopt.pdf}
+    \caption{Suboptimal HLF-Schedule.}
+  \end{subfigure}
+  \caption{Intree $(0,0,0,2,3,4,5,7,7,9,10,10,12)$ requires the optimal schedule to start out by choosing two non-HLF tasks. All other schedules yield higher expected run times.}
+  \label{fig:only-high-or-low-not-optimal}
+\end{figure}
+
+\section{Conclusion}
+\label{sec:p3-conclusion}
+
+Unfortunately, we did not find any strategy that always yields an optimal schedule. Of course, it is still possible to compute the optimal schedule by an exhaustive search.
+
+During our research, we recognized some patterns that we are tempted to transform into some conjectures. We were, however, not yet able to prove or disprove them. This section shows the most important ones that could easily be used to decrease the number of snapshots that have to be examined if we want to compute the optimal snapshot by exhaustive search.
+
+\begin{definition}[Topmost task]
+  We say that a task is \emph{topmost} if its level is greater or equal than the levels of any other task in the intree. 
+\end{definition}
+
+% \begin{conjecture}[Very likely]
+%   For each snapshot resulting from an optimal schedule, at least one top-most task is scheduled.
+% \end{conjecture}
+
+% \begin{conjecture}[Weak one]
+%   For each snapshot resulting from an optimal schedule, at least two top-most tasks are scheduled -- if there are two or more topmost tasks.
+% \end{conjecture}
+
+\begin{conjecture}
+  An optimal schedule always schedules as many topmost tasks as possible.
+\end{conjecture}
+
+\begin{conjecture}
+  If for an intree only non-top tasks are scheduled, you can schedule any top-task instead of one non-top scheduled task to obtain a better run time.
+\end{conjecture}
+
+\begin{conjecture}
+  Parallel chains are optimally scheduled by HLF.
+\end{conjecture}
+
+The main problems we faced when we tried to prove the above conjectures can be summarized as follows:
+\begin{itemize}
+\item The particular intree structure is not necessarily maintained over the induction step --- and if so, many case distinctions may be required.
+\item Comparing different intrees seems to be quite cumbersome, especially if we do not know which tasks are scheduled.
+\end{itemize}
+
+
+%%% Local Variables:
+%%% TeX-master: "../thesis.tex"
+%%% End: 
