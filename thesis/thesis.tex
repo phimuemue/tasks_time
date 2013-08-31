@@ -30,20 +30,26 @@
 \end{itemize}
 
 %\input{../0011123669hlf.tex}
-
 %\input{examples/p2/001112566_with_condensed.tex}
-
 %\input{../maxtrees}
-\input{../default}
+%\input{../default}
 %\include{../default_optimized}
 %\include{../default_profile}
 %\include{../default_chain}
 
 % here, the document actually starts to get useful
+
+%\part{Introduction}
 \include{theory/theory}
 
+%\part{Warmup: The two-processor case}
 \include{p2/p2}
+
+%\part{The three processor case}
+\include{p3/suboptimal_strategies}
 \include{p3/p3}
+
+%\part{Implementation details}
 \include{additional_algs/additional_algs}
 
 \include{first/first}

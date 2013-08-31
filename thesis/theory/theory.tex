@@ -418,6 +418,8 @@ That is, we have several possibilities here. The first of them (which task finis
 
 One desirable goal is to always choose the next task to be scheduled in such a way that the overall expected run time is minimal. We will now see how we can compute the expected run time for a schedule.
 
+\todo{Scheduling-DAGs erklären mit allen Bestandteilen (Eintrittswkt, Probs, Exp).}
+
 \section{Computing the expected run time of a schedule}
 \label{sec:introduction-compute-expected-time-schedule}
 
@@ -990,6 +992,18 @@ While there currently is no known algorithm that checks isomorphism in polynomia
 One thing to keep in mind is that we have to explicitly take care of the currently scheduled tasks.
 
 \todo{Algorithmus, der equiv. snaps / bzw. canonical snaps berechnet zeigen.}
+
+\section{Aim}
+\label{sec:introduction-aim}
+
+We now sum up what we have as input and what we want to do:
+\begin{itemize}
+\item Given an intree of tasks,\dots
+\item \dots whose run times are independently, identically exponentially distributed, \dots
+\item \dots we want to obtain an optimal scheduling strategy, \dots
+\item in the sense that we want to minimize the overal expected run time.
+\end{itemize}
+
 
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"
