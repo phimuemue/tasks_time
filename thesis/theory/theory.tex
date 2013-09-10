@@ -177,6 +177,10 @@ Throughout this thesis, if not stated otherwise, we use the terms intree and tre
 
 The concept of levels is illustrated in figure \ref{fig:intrees-introductory-explanation}. Note that our definition of levels implies that the lowest level carries the number 0.
 
+\begin{definition}[Topmost leaf]
+  A leaf $t$ of an intree $I$ is called a \emph{topmost leaf} if for all vertices $v$ of $I$, we have $level(t) \geq level(v)$.
+\end{definition}
+
 We introduce intuitive (but non-standard) notation for modifying an intree by adding or deleting leaves.
 
 \begin{definition}[Removal of leaves]
@@ -980,18 +984,6 @@ The second observation is that we can make the snapshot DAG more compact by avoi
 It can be easily seen that we essentially compute the same thing twice if we carry out computations for several equivalent snapshots. Therefore, we can combine equivalent snapshots into one snapshot. This transformation (treating equivalent snapshots as one single snapshot) requires us to adjust the probabilities in the snapshot DAG, which can be done straightforward by summing up all probabilities along the edges that are merged into one single edge. Figure \ref{fig:intro-equivalent-snapshots-elimination} shows an example where we would originally have to deal with six snapshots, but can reduce this to only two snapshots by excluding equivalent snapshots.
 
 From now on, if not stated otherwise, we restrict ourselves to snapshot DAGs\todo{Bereits definiert?} that contain only distinct snapshots.
-
-\paragraph{Excluding equivalent snapshots in practice} \todo{Sollte das vielleicht eher in den Algorithmenteil?}
-
-It is a notable fact that we can determine in polynomial time (w.r.t. the number of nodes) whether two snapshots are equivalent. This computation involves foremost a check whether the two corresponding intrees are isomorphic. 
-
-%While it seems to be quite hard to check isomorphism for general graphs (\todo{unbedingt Referenz!}), it is feasible for intrees.
-
-While there currently is no known algorithm that checks isomorphism in polynomial time \emph{for general graphs} (see \cite{arora2009computational}), there is a simple algorithm for isomorphism of intrees. The idea behind this algorithm is to recursively sort the predecessors of a task according to the number of their respective predecessors. An early description of this algorithm can be found e.g. in \cite{aho1974design}. We can easily adapt this isomorphism check to our needs in the sense that we can construct an algorithm that constructs a ``canonical snapshot'', and all equivalent snapshots are converted to exactly this canonical snapshot.
-
-One thing to keep in mind is that we have to explicitly take care of the currently scheduled tasks.
-
-\todo{Algorithmus, der equiv. snaps / bzw. canonical snaps berechnet zeigen.}
 
 \section{Aim}
 \label{sec:introduction-aim}

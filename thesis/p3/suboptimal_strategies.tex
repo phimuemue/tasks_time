@@ -8,7 +8,7 @@ In this section, we take a look at some strategies and use them for scheduling w
 \section{HLF}
 \label{sec:hlf-p3-suboptimal}
 
-This section showcases some situations, where HLF is not optimal for three processors. We will consider several phenomena that can occur if we use HLF with three processors.
+First of all, we take look at some examples that show that HLF is not optimal for the three processor case. We will consider several phenomena that can occur if we use HLF with three processors.
 
 \subsection{HLF does not behave the same for intrees with same profile}
 \label{sec:p3-suboptimal-hlf-same-profiles-different-run-times}
@@ -90,10 +90,208 @@ However, there are intrees, where \emph{no} HLF-run is optimal. Figures \ref{fig
   \label{fig:hlf-vs-opt-00123455799}
 \end{figure}
 
+\subsection{Different categories of sub-optimality}
+\label{sec:hlf-suboptimal-two-variants}
+
+As we saw, there are two possibilities for the sub-optimality of HLF:
+
+\begin{itemize}
+\item \emph{Not each possible run} of HLF yields the same run time.
+\item The optimal run has to choose a strict non-HLF task.
+\end{itemize}
+
+We use the following nomenclature: A strategy is called \emph{can-optimal} (a term already used in \cite{MoritzMaasDiploma}), if it \emph{might} result in an optimal schedule. A strategy that \emph{can not} produce an optimal solution is called \emph{strictly suboptimal} (or simply suboptimmal if it is clear from the context). In the following, we focus on can-optimal strategies.
+
+It is a notable fact that there are many cases, where HLF is can-optimal. For these cases, we tried to derive a pattern according to which HLF should behave to generate an optimal schedule.
+
 \clearpage{}
+
+\section{Non-HLF strategies}
+\label{sec:suboptimal-non-hlf-strategies}
+
+We will now describe strategies that we examined, but that did not yield optimal schedules.
+
+\subsection{``2-HLF plus 1''}
+\label{sec:disproving-2hlf-plus-1}
+
+We examined all intrees with up to 13 tasks, especially the cases where HLF is not optimal. Thereby, we obsered that in all cases where three tasks could be scheduled, the optimal solution scheduled two tasks, that could be chosen by HLF for two processors and only the third task \emph{might} be a task that would not have been chosen by HLF (see figures \ref{fig:hlf-vs-opt-0012346688}, \ref{fig:hlf-vs-opt-0012446788} and \ref{fig:hlf-vs-opt-00123455799} as particular instances of those). Thus, we examined whether an optimal scheduling strategy for three processors has always \emph{at most one} task that is non-HLF. Interestingly, there is an intree with 15 tasks\todo{Eher den mit 14 Tasks reinhauen: $(0,0,1,2,2,3,3,6,8,9,10,11,12)$}, whose optimal schedule starts out by choosing the single topmost task and \emph{two} non-HLF tasks. This intree ($(0,0,1,2,2,3,3,6,8,9,10,11,12,13)$) is shown in figure \ref{fig:2-hlf-plus-one-not-optimal}. Another tree showing this fact is e.g. $(0, 0, 1, 2, 3, 4, 4, 5, 5, 8, 10, 11, 12)$.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \includegraphics{p3/2hlf_suboptimal/001223368910111213_opt.pdf}
+    \caption{Optimal schedule picking \emph{two} non-HLF tasks.}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \includegraphics{p3/2hlf_suboptimal/001223368910111213_subopt.pdf}
+    \caption{HLF-Schedule}
+  \end{subfigure}
+  \caption{Intree $(0,0,1,2,2,3,3,6,8,9,10,11,12,13)$ requires the optimal schedule to start out by choosing two non-HLF tasks.}
+  \label{fig:2-hlf-plus-one-not-optimal}
+\end{figure}
+
+\subsection{``As few free paths as possible''}
+\label{sec:disproving-hlf-no-free-chain}
+
+(For now,) we call a path from the root to a leaf (i.e. a ready task) $t$ \emph{free} if $t$ is not scheduled.
+
+One might be tempted to think that it should be the foremost goal to exploit parallelism as good as possible and that this might be acchieved by choosing the currently scheduled tasks in a manner such that as few free paths as possible in an optimal schedule. That is, we choose the leaves in a way so that the ends of as many different paths as possible are scheduled. This strategy was inspired by looking at the counterexamples against HLF depicted in figures \ref{fig:hlf-001112}, \ref{fig:hlf-vs-opt-0012346688}, \ref{fig:hlf-vs-opt-0012446788} and \ref{fig:hlf-vs-opt-00123455799}. We observe for these intrees that the optimal schedules has no as few free chains as possible.
+
+However, there are examples where this strategy does not yield optimal results. Consider e.g. the tree $(0,0,0,1,1,1,2,2,3)$ (figure \ref{fig:hlfnfc-is-not-optimal} compares the optimal schedule to the no-free-paths schedule).
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \includegraphics{p3/hlfnfc_not_optimal/000111223_hlfnfc.pdf}
+    \caption{HLF schedule while choosing tasks such that there are as few free paths as possible -- overall run time of 5.20199.}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \includegraphics{p3/hlfnfc_not_optimal/000111223_opt.pdf}
+    \caption{Optimal schedule (run time 5.20028) has three free paths at the beginning.}
+  \end{subfigure}
+  \caption{HLF with as few free paths as possible is not necessarily optimal.}
+  \label{fig:hlfnfc-is-not-optimal}
+\end{figure}
+
+\subsection{Only highest or lowest leaves}
+\label{sec:disproving-only-highest-or-lowest-leaves}
+
+So far, we have seen several scenarios where HLF was not optimal. The trees seen so far where HLF was not optimal resulted in schedules that picked only combinations highest leaves and lowest leaves possible. However, this is not a criterion for an optimal schedule, as we can observe by scheduling the 14-tasks-intree $(0,0,0,2,3,4,5,7,7,9,10,10,12)$, which is shown in figure \ref{fig:only-high-or-low-not-optimal}.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \includegraphics{p3/only_high_or_low/0002345779101012_opt.pdf}
+    \caption{Optimal schedule picking \emph{two} non-HLF tasks.}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \includegraphics{p3/only_high_or_low/0002345779101012_subopt.pdf}
+    \caption{Suboptimal HLF-Schedule.}
+  \end{subfigure}
+  \caption{Intree $(0,0,0,2,3,4,5,7,7,9,10,10,12)$ requires the optimal schedule to start out by choosing two non-HLF tasks. All other schedules yield higher expected run times.}
+  \label{fig:only-high-or-low-not-optimal}
+\end{figure}
+
+\section{Special cases where HLF is can-optimal}
+\label{sec:suboptimal-hlf-can-optimal-strategies}
+
+As mentioned in section \ref{sec:hlf-suboptimal-two-variants}, there are many cases where HLF is \emph{can-optimal}, i.e. where the optimal schedule always has tasks of the highest levels scheduled, but not each HLF schedule is optimal. This results from situations where HLF can choose one from several task as the next task to be scheduled. We describe some strategies that try to eliminate these ambiguities and give counterexamples that show that these strategies are not optimal.
+
+\subsection{Subtree with minimum number of topmost tasks}
+\label{sec:suboptimal-hlf-can-optimal-subtree-fewest-toptasks}
+
+If we consider the intree $(0,0,0,1,1,1,2,2,3)$, we have seen that an optimal schedule picks 7,8 and 9 as initially scheduled tasks (see figure \ref{fig:hlfnfc-is-not-optimal}). This fact lead us to the suspicion that -- if we have an intree for which HLF is can-optimal -- (informally) we should pick the subtrees with the lowest number of topmost tasks. 
+
+In this context, it is important to exactly describe which subtree we are talking about. Therefore, we employ the following definition:
+
+\begin{definition}[Toptask-maximal subtree for a leaf]
+  Let $t$ be a leaf of an intree $I$ and let $p=(t, t_1, t_2, t_3, \dots, r)$ be the path from $t$ to the root $r$.
+
+  The \emph{toptask-maximal subtree for a leaf} $t$ is the subtree rooted at the \emph{lowest} task within $p$ that is not $t$ and that does \emph{not} contain more topmost tasks than its predecessor within $p$.\todo{Versteht man das?}
+\end{definition}
+
+As an example, consider the following intree:
+
+\begin{center}
+  \begin{tikzpicture}[scale=.6, anchor=south]
+    \node[circle, scale=0.9, draw] (tid0) at (3,1.5){0};
+    \node[circle, scale=0.9, draw] (tid1) at (2.25,3){1};
+    \node[circle, scale=0.9, draw] (tid2) at (1.5,4.5){3};
+    \node[circle, scale=0.9, draw] (tid7) at (0.15,6){6};
+    \node[circle, scale=0.9, draw] (tid10) at (1.5,6){7};
+    \draw[ thick](tid2) -- (tid7);
+    \draw[ thick](tid2) -- (tid10);
+    \node[circle, scale=0.9, draw] (tid3) at (3.9,4.5){4};
+    \node[circle, scale=0.9, draw] (tid5) at (2.85,6){8};
+    \node[circle, scale=0.9, draw] (tid6) at (2.85,7.5){\small 10};
+    \draw[ thick](tid5) -- (tid6);
+    \draw[ thick](tid2) -- (tid5);
+    \draw[ thick](tid1) -- (tid2);
+    \draw[ thick](tid1) -- (tid3);
+    \node[circle, scale=0.9, draw] (tid4) at (5.25,3){2};
+    \node[circle, scale=0.9, draw] (tid9) at (4.3,6){9};
+    \draw[ thick](tid3) -- (tid9);
+    \node[circle, scale=0.9, draw] (tid11) at (4.3,7.5){11};
+    \draw[ thick](tid11) -- (tid9);
+    \node[circle, scale=0.9, draw] (tid8) at (5.25,4.5){5};
+    \draw[ thick](tid4) -- (tid8);
+    \draw[ thick](tid0) -- (tid1);
+    \draw[ thick](tid0) -- (tid4);
+  \end{tikzpicture}
+\end{center}
+
+The maximal subtree for leaf 10 is the subtree rooted at node 3, which can be derived as follows:
+\begin{itemize}
+\item The path from 10 to the root 0 is given by $p=(10,8,3,1,0)$.
+\item We consider the subtrees rooted at the tasks along this path, and denote the subtree rooted at node $x$ by $I_x$:
+  \begin{itemize}
+  \item The subtree rooted at 10 (called $I_{10}$) contains only the topmost task 10.
+  \item Subtree $I_8$ contains only topmost task 10.
+  \item Subtree $I_3$ still contains only 10 as the topmost task (it introduces only a new leaf, namely 7).
+  \item Subtree $I_1$ contains 10 \emph{and} 11 as topmost tasks.
+  \end{itemize}
+\item As seen, task 3 is the lowest task within $p$ that does not contain more topmost tasks than its predecessor.
+\end{itemize}
+
+A strategy now might be to resolve HLF-ambiguities as follows:
+\begin{itemize}
+\item Generate all possible choices that could result from HLF.
+\item For each topmost task, compute the topmost-maximal subtree.
+\item Prefer topmost tasks whose topmost-maximal subtrees contain fewer topmost tasks.
+\end{itemize}
+
+This strategy seems to do a good job in many cases, but can be seen to be false by examining the optimal schedule for the following intree with 18 tasks: $(0, 0, 1, 2, 2, 3, 5, 4, 4, 6, 6, 8, 7, 13, 11, 11, 11)$. It is shown in figure \ref{fig:subtree-with-fewest-toptasks-suboptimal}.
+
+\emph{Remark:} We did not specify what should be done if there are several maximal subtrees with the same number of topmost tasks, but our counterexample suffices that this strategy does not work optimally even if there are no maximal subtrees with the same number of nodes.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \includegraphics{p3/subtree_with_fewest_toptasks/subtree_with_fewest_toptasks_opt.pdf}
+    \caption{Optimal schedule picking a subtree with three topmost tasks.}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \includegraphics{p3/subtree_with_fewest_toptasks/subtree_with_fewest_toptasks_subopt.pdf}
+    \caption{The best schedule with initial tasks as shown.}
+  \end{subfigure}
+  \caption{Intree $(0, 0, 1, 2, 2, 3, 5, 4, 4, 6, 6, 8, 7, 13, 11, 11, 11)$: For this intree, the optimal schedule chooses all tasks from a subtree with three topmost tasks and chooses none of the subtree with only one topmost tasks.}
+  \label{fig:subtree-with-fewest-toptasks-suboptimal}
+\end{figure}
+
+\subsection{Subtree with maximum or minimum number of leaves}
+\label{sec:suboptimal-hlf-can-optimal-subtree-fewest-leaves}
+
+It can be quickly seen that slightly altering the strategy given in section \ref{sec:suboptimal-hlf-can-optimal-subtree-fewest-toptasks} in the sense that we do not concentrate on the number of \emph{topmost tasks} in a maximal subtree, but on the number of \emph{leaves} in a maximal subtree. We adapt the notion of topmost-maximal subtrees in a straightforward manner:
+
+\begin{definition}[Leaf-maximal subtree for a leaf]
+  Let $t$ be a leaf of an intree $I$ and let $p=(t, t_1, t_2, t_3, \dots, r)$ be the path from $t$ to the root $r$.
+
+  The \emph{leaf-maximal subtree for a leaf} $t$ is the subtree rooted at the \emph{lowest} task within $p$ that is not $t$ and that does \emph{not} contain more leaves than its predecessor within $p$.\todo{Versteht man das?}
+\end{definition}
+
+
+\begin{itemize}
+\item Preferring leaf-maximal subtrees with fewer leaves. Figure \ref{fig:subtree-with-fewest-toptasks-suboptimal} shows that this strategy is not optimal, since the optimal solution prefers a subtree with four leaves over one with only three leaves.
+\item Preferring leaf-maximal subtrees with more leaves. One of our first examples, the intree $(0,0,0,1,1,1,2,2,3)$ (see figure \ref{fig:hlfnfc-is-not-optimal}) already shows that this strategy is not optimal in general.
+\end{itemize}
+
 
 \section{Maximizing 3-processor-time, minimizing 1-processor time}
 \label{sec:p3-disproving-long-p3-and-short-p1-time}
+
+Up to now, we maily focused on the structure of the current intree to derive strategies --- which all turned out to be (not strictly, but still) suboptimal. We now inspect another, more involved approach.
 
 If we have three processors in total, we can split the total run time into three parts: The time where all three processors are processing tasks, the time where one processor is idle and two are working, and the time where only one processor is working.
 
@@ -101,8 +299,7 @@ If we have three processors in total, we can split the total run time into three
 
 \begin{definition}[Run time and its variants]
   We denote by $T$ the expected run time for a schedule associated with an intree. 
-
-  Moreover, we call the time where exactly $p$ taks are scheduled by $T_p$.
+  Moreover, we denote the time where exactly $p$ taks are scheduled by $T_p$.
 \end{definition}
 
 Note that $T$ actually describes an \emph{expected value}. Because of the linearity of expectation, we have that -- for three processors -- $T=T_1 + T_2 + T_3$. If we want to construct an optimal schedule for three processors, we might be tempted to think that (at least) one of the two following criteria should be fulfilled for the optimal schedule:
@@ -199,74 +396,6 @@ However, after some investigation, we are tempted to conjecture the following.
 Even if this conjecture turns out to be true, it seems complex to transform this knowledge into a scheduling strategy that does something more significantly efficient than ``explore everything, and choose the best'', because $T_3, T_2$ and $T_1$ are not that easy to compute.
 
 \clearpage{}
-
-\section{``No free chains''}
-\label{sec:disproving-hlf-no-free-chain}
-
-We can consider all paths from the root of a tree to all its leaves. We might be tempted to think, that it should be the foremost goal to exploit parallelism as good as possible and that this might be acchieved by choosing the currently scheduled tasks in a manner such that as few paths as possible are completely free. That is, we choose the leafs in a way so that the ends of as many different paths as possible are scheduled. This strategy was inspired by looking at the counterexamples against HLF depicted in figures \ref{fig:hlf-001112}, \ref{fig:hlf-vs-opt-0012346688}, \ref{fig:hlf-vs-opt-0012446788} and \ref{fig:hlf-vs-opt-00123455799}. We observe for these intrees that the optimal schedules has no as few free chains as possible.
-
-However, there are examples where this strategy does not yield optimal results. Consider e.g. the tree $(0,0,0,1,1,1,2,2,3)$. 
-
-\begin{figure}[ht]
-  \centering
-  \begin{subfigure}{.45\textwidth}
-    \centering
-    \includegraphics{p3/hlfnfc_not_optimal/000111223_hlfnfc.pdf}
-    \caption{HLF schedule while choosing tasks such that there are as few free paths as possible -- overall run time of 5.20199.}
-  \end{subfigure}
-  \quad
-  \begin{subfigure}{.45\textwidth}
-    \centering
-    \includegraphics{p3/hlfnfc_not_optimal/000111223_opt.pdf}
-    \caption{Optimal schedule (run time 5.20028) has three free paths at the beginning.}
-  \end{subfigure}
-  \caption{HLF with no free paths is not necessarily optimal.}
-  \label{fig:hlfnfc-is-not-optimal}
-\end{figure}
-
-\section{``2-HLF plus 1''}
-\label{sec:disproving-2hlf-plus-1}
-
-We examined all intrees with up to 14 tasks, especially the cases where HLF is not optimal. Thereby, we obsered that in all cases where three tasks could be scheduled, the optimal solution scheduled two tasks, that could be chosen by HLF for two processors and only the third task \emph{might} be a task that would not have been chosen by HLF (see figures \ref{fig:hlf-vs-opt-0012346688}, \ref{fig:hlf-vs-opt-0012446788} and \ref{fig:hlf-vs-opt-00123455799} as particular instances of those). Thus, we examined whether an optimal scheduling strategy for three processors has always \emph{at most one} task that is non-HLF. Interestingly, there is an intree with 15 tasks, whose optimal schedule starts out by choosing the single topmost task and \emph{two} non-HLF tasks. This intree ($(0,0,1,2,2,3,3,6,8,9,10,11,12,13)$) is shown in figure \ref{fig:2-hlf-plus-one-not-optimal}. Another tree showing this fact is e.g. $(0, 0, 1, 2, 3, 4, 4, 5, 5, 8, 10, 11, 12)$.
-
-\begin{figure}[ht]
-  \centering
-  \begin{subfigure}{.45\textwidth}
-    \centering
-    \includegraphics{p3/2hlf_suboptimal/001223368910111213_opt.pdf}
-    \caption{Optimal schedule picking \emph{two} non-HLF tasks.}
-  \end{subfigure}
-  \quad
-  \begin{subfigure}{.45\textwidth}
-    \centering
-    \includegraphics{p3/2hlf_suboptimal/001223368910111213_subopt.pdf}
-    \caption{HLF-Schedule}
-  \end{subfigure}
-  \caption{Intree $(0,0,1,2,2,3,3,6,8,9,10,11,12,13)$ requires the optimal schedule to start out by choosing two non-HLF tasks.}
-  \label{fig:2-hlf-plus-one-not-optimal}
-\end{figure}
-
-\section{Only highest or lowest leaves}
-\label{sec:disproving-only-highest-or-lowest-leaves}
-
-So far, we have seen several scenarios where HLF was not optimal. The trees seen so far where HLF was not optimal resulted in schedules that picked only combinations highest leaves and lowest leaves possible. However, this is not a criterion for an optimal schedule, as we can observe by scheduling the 14-tasks-intree $(0,0,0,2,3,4,5,7,7,9,10,10,12)$, which is shown in figure \ref{fig:only-high-or-low-not-optimal}.
-
-\begin{figure}[ht]
-  \centering
-  \begin{subfigure}{.45\textwidth}
-    \centering
-    \includegraphics{p3/only_high_or_low/0002345779101012_opt.pdf}
-    \caption{Optimal schedule picking \emph{two} non-HLF tasks.}
-  \end{subfigure}
-  \quad
-  \begin{subfigure}{.45\textwidth}
-    \centering
-    \includegraphics{p3/only_high_or_low/0002345779101012_subopt.pdf}
-    \caption{Suboptimal HLF-Schedule.}
-  \end{subfigure}
-  \caption{Intree $(0,0,0,2,3,4,5,7,7,9,10,10,12)$ requires the optimal schedule to start out by choosing two non-HLF tasks. All other schedules yield higher expected run times.}
-  \label{fig:only-high-or-low-not-optimal}
-\end{figure}
 
 \section{Conclusion}
 \label{sec:p3-conclusion}
