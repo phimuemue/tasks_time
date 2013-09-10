@@ -51,7 +51,17 @@ The algorithm recursively sorts the tasks in the intree according to the orderin
   \label{alg:compute-canonical-snapshot}
 \end{algorithm}
 
-\todo{Algorithmus, der equiv. snaps / bzw. canonical snaps berechnet zeigen.}
+\todo{Algorithmus, der equiv. snaps / bzw. canonical snaps berechnet zeigen.}\todo{Laufzeit!}
+
+\subsection{Additional approaches}
+\label{sec:algorithm-canonical-snap-additional-approaches}
+
+Unfortunately, computing canonical snapshots has a major impact on the overal performance of our program, which is why we tried other approaches to tackle this problem. For completeness, we will explain them shortly. Unfortunately, they did not work out as good as expected, but maybe they are helpful for future work. In this section, we focus on the part concerning the computation of \emph{canonical intrees} (i.e. we do not distinguish between scheduled and non-scheuled leaves).
+
+\begin{description}
+\item[Tree sequence] Most of the time, we are generating a certain subtree and want to know the canonical intree of it. We tried exploiting the fact that we already could \emph{start} with a canonical intree. That is, we tried to construct the tree sequence of a canonical subtree by just examining the tree sequence of the original intree. Sadly, we could not devise a simple pattern that works as a general rule.\todo{Example where equiv intrees yield drastically different sequences.}
+\item[Matula numbers] Intrees and their encodings have of course already been subject to research. One example is shown in \cite{matula1968natural}, where a (more or less) natural bijection between intrees and natural numbers, the so-called \emph{Matula numbers}, is shown.\todo{Short description.} While this description could lead to very elegant algorithms, it does not come in handy in practice because the matula numbers can be very big (more than 32 bit needed for matula numbers of 15-node intrees).
+\end{description}
 
 \section{Enumerating all intrees with a certain number of nodes}
 \label{sec:enumerating-all-intrees}
