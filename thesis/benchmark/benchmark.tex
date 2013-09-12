@@ -1,0 +1,46 @@
+\chapter{Benchmarks}
+\label{chap:benchmarks}
+
+While chapter \ref{chap:p3} focused on more theoretical aspects of our problem, we now summarize in short how the program performs in practice. We therefore ran tests that only considered non-trivial intrees, i.e. intrees, whose root-degree is strictly greater than 1.\todo{Figure?}
+
+\emph{Remark:} It may be the case that the program (and in particular, the data shown in the tables) changed since this thesis was finished.
+
+\todo{Verschiedene Settings (float vs. fractions).}
+
+\section{Keeping all intrees in memory}
+\label{sec:benchmarks-all-intrees-in-memory}
+
+As a first benchmark, we computed optimal schedules for all non-trivial intrees (with a certain amount of tasks) ``in one run'', i.e. we generated all non-trivial intrees, kept them in main memory and computed the optimal schedule for each of these intrees. This technique has the advantage that intermediate results can be re-used and do not need to be recomputed over and over again. On the other hand, keeping that many intrees in RAM leads to enormous memory consumption and, thus, was only done for up to 15 intrees.
+
+Table \ref{tab:time-benchmark} shows the results. This table was created on a reasonably modern machine (with an Intel Core i7). Moreover, we used simple floating point numbers to represent probabilities and expected run times. We also implemented another feature to support fractions (using Boost Rational Number library or GNU Multiple Precision Arithmetic Library). Surprisingly, using rational numbers does not increase run time significantly (it increases e.g. from 25 seconds to 28 seconds if used on all non-trivial intrees with 13 tasks).
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}[ht]{ccccc}
+    Tasks & Intrees & Snapshots & Time & Memory \\
+    \hline{}
+    $\leq 9$ & $<$ 171 & $<$ 891 & $<$ 0.5s & $<$ 1451040b \\
+    10 & 433 & 3004 & 1s & 4941576b \\
+    11 & 1123 & 10143 & 2s & 16847304b \\
+    12 & 2924 & 34065 & 7s & 57016592b \\
+    13 & 7720 & 113492 & 25s & 193781984b \\
+    14 & 20487 & 375088 & 1m40s & \\
+    15 & 54838 & 1230391 & 6m & \\
+    
+  \end{tabular}
+  \caption{Time needed to compute optimal schedules for all non-trivial intrees with a certain number of tasks using a floating-point representation for probabilities and run times.}
+  \label{tab:time-benchmark}
+\end{table}
+
+The memory consumption might look quite high at first glance, but if we look closer, it becomes clear that quite a lot of things have to be stored. We have to store each snapshot containing the current intree, the scheduled tasks, and its successors. Moreover, we need a ``pool'' of snapshots that is used to avoid over and over recomputing equivalent snapshots. Moreover, the statistics in table \ref{tab:time-benchmark} of course include the memory that is consumed by e.g. auxiliary data structures from the C++ container classes.
+
+The main problem is -- of course -- that the number of non-trivial intrees drastically grows as the number of tasks increases (1,1,2,2,5,11,28,67,171,433,1123,\dots --- see \cite{oeisnumbernontrivialintrees}). For that reason, we continue benchmarking by computing optimal schedules for single intrees (or a small set of intrees).
+
+\section{Clustering intrees and computing them one after another}
+\label{sec:benchmarks-clustered-intrees}
+
+The first benchmark we conducted was done for intrees with 15 or more tasks. First, we generated all intrees with a certain number of tasks. Afterwards, we split the whole collection of intrees into smaller chunks containing a certain amount of intrees. We then processed these chunks one after another. In this scenario, the measurements become more difficult to interpret. Especially, the number of snapshots and the amount of memory can not be directly compared to the values shown in section \ref{sec:benchmarks-all-intrees-in-memory}. For the time, it is also non-trivial.
+
+%%% Local Variables:
+%%% TeX-master: "../thesis.tex"
+%%% End: 
