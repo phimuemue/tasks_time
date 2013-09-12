@@ -5,6 +5,14 @@ map<Snapshot::PoolKind, map<snapshot_id, Snapshot*>> Snapshot::pool;
 void Snapshot::clear_pool(){
     // We have to ensure that we don't double-delete some pointers
     // TODO: Why does it not work this way?
+    cout << "Pool sizes: ";
+    for(auto pp : Snapshot::pool){
+        cout << pp.second.size() << ", ";
+        // for(auto xx : pp.second){
+        //     cout << *(xx.second) << endl;
+        // }
+    }
+    cout << endl;
     map<Snapshot*, bool> done;
     for_each(Snapshot::pool.begin(), Snapshot::pool.end(),
         [&](const pair<Snapshot::PoolKind, map<snapshot_id, Snapshot*>>& p){
@@ -101,7 +109,7 @@ Snapshot::Snapshot(Intree& t,
 }
 Snapshot::~Snapshot(){
 #if USE_CANONICAL_SNAPSHOT
-    Snapshot::pool.clear();
+    //Snapshot::pool.clear();
 #else
     for(auto it=successors.begin(); it!=successors.end(); ++it){
         delete(*it);
@@ -484,7 +492,6 @@ Snapshot* Snapshot::optimize() const {
     Intree new_intree(intree);
     vector<task_id> new_marked(marked);
     Intree::canonical_intree(new_intree, new_marked, iso, tid);
-
     
     pair<tree_id, vector<task_id>> opt_finder(tid, new_marked);
     if(Snapshot::pool[PoolOptimized].find(opt_finder) != 

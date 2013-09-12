@@ -16,6 +16,7 @@
 #include "info.h"
 #include "intree.h"
 #include "snapshot.h"
+#include "treegenerator.h"
 
 // schedulers
 #include "hlfscheduler.h"
@@ -23,7 +24,7 @@
 #include "hlfdeterministicscheduler.h"
 #include "hlfrandomscheduler.h"
 #include "specialcaseleafscheduler.h"
-#include "topmostsurescheduler.h"
+//#include "topmostsurescheduler.h"
 
 // exporters
 #include "exporter.h"
@@ -49,7 +50,7 @@ map<string, Scheduler*> schedulers =
     // "all possibilities" scheduler
     {"leaf", new Leafscheduler()}, 
     // leaf scheduler that schedules as many topmost tasks as possible
-    {"tms", new TopMostSureScheduler()},
+    // {"tms", new TopMostSureScheduler()},
     // leaf scheduler with known special cases
     {"scleaf", new SpecialCaseLeafscheduler()}, 
     // HLF schedulers (variants)
@@ -121,14 +122,18 @@ void tree_from_string(string raw, vector<pair<Task,Task>>& target){
     }
 }
 
-void read_raw_tree_from_file(string path, vector<pair<Task,Task>>& target){
-    // TODO: I assume (=am sure) that this can be done better.
-    // For now, we assume all tasks exponendially iid
+vector<Intree> read_raw_tree_from_file(string path, vector<pair<Task,Task>>& target){
+    vector<Intree> result;
     ifstream a(path);
     // read description from file
-    string raw((istreambuf_iterator<char>(a)),
-            istreambuf_iterator<char>());
-    tree_from_string(raw, target);
+    string line;
+    while(std::getline(a, line)){
+        tree_from_string(line, target);
+        Intree tmp(target);
+        result.push_back(tmp);
+        target.clear();
+    }
+    return result;
 }
 
 #define LINE_LENGTH get_terminal_line_length()
@@ -238,29 +243,33 @@ int read_variables_map_from_args(int argc,
     return 0;
 }
 
-Intree generate_tree(po::variables_map vm){
+vector<Intree> generate_tree(po::variables_map vm){
     vector<pair<Task,Task>> edges;
+    vector<Intree> result;
     if (vm.count("direct")){
         tree_from_string(vm["direct"].as<string>(), edges);
-    }
-    else if(vm.count("input")){
-        read_raw_tree_from_file(vm["input"].as<string>(), edges);
+        result.push_back(Intree(edges));
     }
     else if(vm.count("randp")){
         randomEdgesPerLevel(vm["randp"].as<string>(), edges);
+        result.push_back(Intree(edges));
+    }
+    else if(vm.count("input")){
+        result = read_raw_tree_from_file(vm["input"].as<string>(), edges);
     }
     else{
         int num_threads = (vm.count("random") ? vm["random"].as<int>() : NUM_THREADS_DEFAULT);
         randomEdges(num_threads, edges);
+        result.push_back(Intree(edges));
     }
-    // write to file for later reuse
+    // write last intree to file for later reuse
     ofstream output;
     output.open(".last.intree");
     for(auto& x : edges){
         output << x.second.get_id() << " ";
     }   
     output.close();
-    return Intree(edges);
+    return result;
 }
 
 void create_snapshot_dags(const po::variables_map& vm,
@@ -489,78 +498,80 @@ int main(int argc, char** argv){
         }
 
         // read tree and print it for user
-        Intree t = generate_tree(vm);
-        cout << "Raw form:\t" << t << endl;
-        map<task_id, task_id> isomorphism;
-        tree_id tid;
-        cout << "Normalized:  \t" 
-             << Intree::canonical_intree(t, 
-                     vector<task_id>(),
-                     isomorphism, tid) 
-             << endl;
-        
-        // compute snapshot dags
-        vector<vector<task_id>> initial_settings;
-        vector<Snapshot*> s;
-        vector<myfloat> probs;
-        vector<myfloat> expected_runtimes;
+        vector<Intree> trees = generate_tree(vm);
+        for(Intree t : trees){
+            cout << "Raw form:\t" << t << endl;
+            map<task_id, task_id> isomorphism;
+            tree_id tid;
+            cout << "Normalized:  \t" 
+                << Intree::canonical_intree(t, 
+                        vector<task_id>(),
+                        isomorphism, tid) 
+                << endl;
 
-        if(schedulers.find(vm["scheduler"].as<string>()) == schedulers.end()){
-            cout << "Scheduler " << vm["scheduler"].as<string>() << " not found." << endl;
-            return 1;
-        }
-        create_snapshot_dags(vm,
-                t,
-                schedulers[vm["scheduler"].as<string>()],
-                initial_settings,
-                s,
-                probs,
-                expected_runtimes);
+            // compute snapshot dags
+            vector<vector<task_id>> initial_settings;
+            vector<Snapshot*> s;
+            vector<myfloat> probs;
+            vector<myfloat> expected_runtimes;
 
-        // optimize current snapshot
-        if(vm["optimize"].as<bool>()){
-            cout << "Optimizing scheduling policies." << endl;
-            for(unsigned int i= 0; i<s.size(); ++i){
-                s[i] = s[i]->optimize();
+            if(schedulers.find(vm["scheduler"].as<string>()) == schedulers.end()){
+                cout << "Scheduler " << vm["scheduler"].as<string>() << " not found." << endl;
+                return 1;
             }
-        }
+            create_snapshot_dags(vm,
+                    t,
+                    schedulers[vm["scheduler"].as<string>()],
+                    initial_settings,
+                    s,
+                    probs,
+                    expected_runtimes);
 
-        // compute expected runtimes
-        cout << "Computing expected runtimes." << endl;
-        assert(expected_runtimes.size() == s.size());
-        for(unsigned int i= 0; i<s.size(); ++i){
-            expected_runtimes[i] = s[i]->expected_runtime();
-        }
-        myfloat expected_runtime = 0;
-        vector<Snapshot*> best {s[0]};
-        for(unsigned int i= 0; i<s.size(); ++i){
-            if(i>0 && s[i]->expected_runtime() <= best[0]->expected_runtime()){
-                if(s[i]->expected_runtime() < best[0]->expected_runtime()){
-                    best.clear();
+            // optimize current snapshot
+            if(vm["optimize"].as<bool>()){
+                cout << "Optimizing scheduling policies." << endl;
+                for(unsigned int i= 0; i<s.size(); ++i){
+                    s[i] = s[i]->optimize();
                 }
-                best.push_back(s[i]);
             }
-            expected_runtime += expected_runtimes[i] * probs[i];
+
+            // compute expected runtimes
+            cout << "Computing expected runtimes." << endl;
+            assert(expected_runtimes.size() == s.size());
+            for(unsigned int i= 0; i<s.size(); ++i){
+                expected_runtimes[i] = s[i]->expected_runtime();
+            }
+            myfloat expected_runtime = 0;
+            vector<Snapshot*> best {s[0]};
+            for(unsigned int i= 0; i<s.size(); ++i){
+                if(i>0 && s[i]->expected_runtime() <= best[0]->expected_runtime()){
+                    if(s[i]->expected_runtime() < best[0]->expected_runtime()){
+                        best.clear();
+                    }
+                    best.push_back(s[i]);
+                }
+                expected_runtime += expected_runtimes[i] * probs[i];
+            }
+            //expected_runtime /= (myfloat)s.size();
+
+            // output stats
+            generate_stats(vm, s, best, initial_settings);
+
+            cout << "Total expected run time: " << expected_runtime 
+                << endl;
+
+            map<const Snapshot*, bool> map_for_total_count;
+            unsigned int snap_count;
+            for(Snapshot* it : s){
+                it->count_snapshots_in_dag(map_for_total_count);
+            }
+            snap_count = map_for_total_count.size();
+            cout << "Total number of snaps:   " << snap_count
+                << endl;
+
+            // output stuff to files
+            generate_output(vm, s, best, initial_settings);
         }
-        //expected_runtime /= (myfloat)s.size();
-
-        // output stats
-        generate_stats(vm, s, best, initial_settings);
-
-        cout << "Total expected run time: " << expected_runtime 
-             << endl;
-
-        map<const Snapshot*, bool> map_for_total_count;
-        unsigned int snap_count;
-        for(Snapshot* it : s){
-            it->count_snapshots_in_dag(map_for_total_count);
-        }
-        snap_count = map_for_total_count.size();
-        cout << "Total number of snaps:   " << snap_count
-             << endl;
-
-        // output stuff to files
-        generate_output(vm, s, best, initial_settings);
 #if USE_CANONICAL_SNAPSHOT
         Snapshot::clear_pool();
 #endif

@@ -1,7 +1,7 @@
 \chapter{Additional algorithms}
 \label{sec:additional-algs}
 
-\newcommand{\treegeq}{\stackrel{\text{LEX}}{\geq}}
+\newcommand{\treegeq}[1][X]{\stackrel{\text{#1}}{\geq}}
 
 \section{Computing equivalent snapshots}
 \label{sec:algorithm-equivalent-snapshot}
@@ -21,13 +21,15 @@ One thing to keep in mind is that we have to explicitly take care of the current
 
 The algorithm basically relies on an ordering of intrees (there are of course many possible, but we use a simple one).
 
-\begin{definition}[Lexicographic ordering of intrees]
-  We can represent an intree by a properly parenthesized expression, where leaves are denoted by 1 resp. 0 depending on whether they are scheduled resp. non-scheduled. We call the corresponding string the \emph{parenthesized expression} of an intree.
-
-  We introduce an ordering denoted by $\treegeq$. For two intrees $I_1$ and $I_2$, we have $I_1 \treegeq I_2$ if and only if the parenthesized expression of $I_1$ is (lexicographically) greater than the parenthesized expression of $I_2$.
+\begin{definition}[Ordering of intrees with preferred tasks]
+  We introduce an ordering denoted by $\treegeq$. For two intrees $I_1$ and $I_2$ and a set $X$ of tasks, we define $I_1 \treegeq I_2$ inductively. 
+  \begin{itemize}
+  \item If both $I_1$ and $I_2$ consist only of a root, we have $I_1 \treegeq I_2$ if and only if the root of $I_1$ is in $X$ and the root of $I_2$ is not in $X$.
+  \item If the root of $I_1$ has less predecessors than the root of $I_2$, then $I_1 \treegeq I_2$.
+  \item If the root of $I_1$ has the same number $r$ of predecessors as the root of $I_2$, we sort the corresponding predecessors $p_1,\dots,p_r$ resp. $q_1,\dots,q_r$ (in $I_1$ resp. $I_2$ according to $\treegeq$). Then, if $p_i \treegeq q_i \forall i\in\{1,2,\dots,r \}$, we have $I_1 \treegeq I_2$.
+  \end{itemize}
 \end{definition}
 
-\todo{Improve definition}
 \todo{Examples!}
 
 The algorithm recursively sorts the tasks in the intree according to the ordering $\treegeq$. It is shown in algorithm \ref{alg:compute-canonical-snapshot}.
@@ -44,8 +46,9 @@ The algorithm recursively sorts the tasks in the intree according to the orderin
     \State $r \gets t.root$ \Comment{Retrieve root of subtree}
     \State $CanonicalPredecessors \gets 
            \left\{ \Call{CanonicalIntree}{c, X} \mid c \in r.predecessors \right\}$
-    \State \textbf{return} new root with predecessors in $CanonicalPredecessors$ in sorted order
+    \State \textbf{return} root with predecessors in $CanonicalPredecessors$ in sorted order according to $\treegeq$
     \EndProcedure
+    \Statex
   \end{algorithmic}
   \caption{Computing canonical snapshots for a snapshot $s$ containing the corresponding intree and the tasks that are currently scheduled (as defined in section \ref{sec:processing-an-intree-of-tasks}).\todo{Algorithmus verbessern.}}
   \label{alg:compute-canonical-snapshot}
