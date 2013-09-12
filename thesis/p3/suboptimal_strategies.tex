@@ -41,8 +41,6 @@ The example from figure \ref{fig:hlf-001112-optimal-version} shows the optimal r
 
 However, there are intrees, where \emph{no} HLF-run is optimal. Figures \ref{fig:hlf-vs-opt-0012346688}, \ref{fig:hlf-vs-opt-0012446788} and \ref{fig:hlf-vs-opt-00123455799} show some examples for which this is exactly the case.
 
-\todo{Explizit auf ambiguity bei HLF hinweisen, und auch dass es klassen von Graphen gibt, die keine HLF-Ambiguity zulassen.}
-
 \begin{figure}[ht]
   \centering
   \begin{subfigure}{.45\linewidth}
@@ -103,8 +101,6 @@ As we saw, there are two possibilities for the sub-optimality of HLF:
 We use the following nomenclature: A strategy is called \emph{can-optimal} (a term already used in \cite{MoritzMaasDiploma}), if it \emph{might} result in an optimal schedule. A strategy that \emph{can not} produce an optimal solution is called \emph{strictly suboptimal} (or simply suboptimmal if it is clear from the context). In the following, we focus on can-optimal strategies.
 
 It is a notable fact that there are many cases, where HLF is can-optimal. For these cases, we tried to derive a pattern according to which HLF should behave to generate an optimal schedule.
-
-\clearpage{}
 
 \section{Non-HLF strategies}
 \label{sec:suboptimal-non-hlf-strategies}
@@ -196,7 +192,7 @@ In this context, it is important to exactly describe which subtree we are talkin
 \begin{definition}[Toptask-maximal subtree for a leaf]
   Let $t$ be a leaf of an intree $I$ and let $p=(t, t_1, t_2, t_3, \dots, r)$ be the path from $t$ to the root $r$.
 
-  The \emph{toptask-maximal subtree for a leaf} $t$ is the subtree rooted at the \emph{lowest} task within $p$ that is not $t$ and that does \emph{not} contain more topmost tasks than its predecessor within $p$.\todo{Versteht man das?}
+  The \emph{toptask-maximal subtree for a leaf} $t$ is the subtree rooted at the \emph{lowest} task $t^*$ within $p$ that is not $t$ and that does \emph{not} contain more topmost tasks than the subtree rooted at the predecessor of $t^*$ within $p$.\todo{Versteht man das?}
 \end{definition}
 
 As an example, consider the following intree:
@@ -242,12 +238,14 @@ The maximal subtree for leaf 10 is the subtree rooted at node 3, which can be de
 \item As seen, task 3 is the lowest task within $p$ that does not contain more topmost tasks than its predecessor.
 \end{itemize}
 
-A strategy now might be to resolve HLF-ambiguities as follows:
+A strategy for cases where HLF is can-optimal now might be to resolve HLF-ambiguities as follows:
 \begin{itemize}
 \item Generate all possible choices that could result from HLF.
 \item For each topmost task, compute the topmost-maximal subtree.
 \item Prefer topmost tasks whose topmost-maximal subtrees contain fewer topmost tasks.
 \end{itemize}
+
+The last step in the above explanation can be viewed as follows: We first create all possible choices of topmost tasks and then only choose those, whose
 
 This strategy seems to do a good job in many cases, but can be seen to be false by examining the optimal schedule for the following intree with 18 tasks: $(0, 0, 1, 2, 2, 3, 5, 4, 4, 6, 6, 8, 7, 13, 11, 11, 11)$. It is shown in figure \ref{fig:subtree-with-fewest-toptasks-suboptimal}.
 
@@ -273,19 +271,18 @@ This strategy seems to do a good job in many cases, but can be seen to be false 
 \subsection{Subtree with maximum or minimum number of leaves}
 \label{sec:suboptimal-hlf-can-optimal-subtree-fewest-leaves}
 
-It can be quickly seen that slightly altering the strategy given in section \ref{sec:suboptimal-hlf-can-optimal-subtree-fewest-toptasks} in the sense that we do not concentrate on the number of \emph{topmost tasks} in a maximal subtree, but on the number of \emph{leaves} in a maximal subtree. We adapt the notion of topmost-maximal subtrees in a straightforward manner:
+It can be quickly seen that slightly altering the strategy given in section \ref{sec:suboptimal-hlf-can-optimal-subtree-fewest-toptasks} in the sense that we do not concentrate on the number of \emph{topmost tasks} in a maximal subtree, but more generraly on the number of \emph{leaves} in a maximal subtree, does not yield a successful strategy. We adapt the notion of topmost-maximal subtrees in a straightforward manner:
 
 \begin{definition}[Leaf-maximal subtree for a leaf]
   Let $t$ be a leaf of an intree $I$ and let $p=(t, t_1, t_2, t_3, \dots, r)$ be the path from $t$ to the root $r$.
 
-  The \emph{leaf-maximal subtree for a leaf} $t$ is the subtree rooted at the \emph{lowest} task within $p$ that is not $t$ and that does \emph{not} contain more leaves than its predecessor within $p$.\todo{Versteht man das?}
+  The \emph{leaf-maximal subtree for a leaf} $t$ is the subtree rooted at the \emph{lowest} task $t^*$ within $p$ that is not $t$ and that does \emph{not} contain more leaves than the predecessor of $t^*$ within $p$.
 \end{definition}
 
-
-\begin{itemize}
-\item Preferring leaf-maximal subtrees with fewer leaves. Figure \ref{fig:subtree-with-fewest-toptasks-suboptimal} shows that this strategy is not optimal, since the optimal solution prefers a subtree with four leaves over one with only three leaves.
-\item Preferring leaf-maximal subtrees with more leaves. One of our first examples, the intree $(0,0,0,1,1,1,2,2,3)$ (see figure \ref{fig:hlfnfc-is-not-optimal}) already shows that this strategy is not optimal in general.
-\end{itemize}
+\begin{description}
+\item [Preferring leaf-maximal subtrees with fewer leaves] Figure \ref{fig:subtree-with-fewest-toptasks-suboptimal} shows that this strategy is not optimal, since the optimal solution prefers a subtree with four leaves over one with only three leaves.
+\item [Preferring leaf-maximal subtrees with more leaves] One of our first examples, the intree $(0,0,0,1,1,1,2,2,3)$ (see figure \ref{fig:hlfnfc-is-not-optimal}) already shows that this strategy is not optimal in general.
+\end{description}
 
 
 \section{Maximizing 3-processor-time, minimizing 1-processor time}
@@ -404,9 +401,9 @@ Unfortunately, we did not find any strategy that always yields an optimal schedu
 
 During our research, we recognized some patterns that we are tempted to transform into some conjectures. We were, however, not yet able to prove or disprove them. This section shows the most important ones that could easily be used to decrease the number of snapshots that have to be examined if we want to compute the optimal snapshot by exhaustive search.
 
-\begin{definition}[Topmost task]
-  We say that a task is \emph{topmost} if its level is greater or equal than the levels of any other task in the intree. 
-\end{definition}
+% \begin{definition}[Topmost task]
+%   We say that a task is \emph{topmost} if its level is greater or equal than the levels of any other task in the intree. 
+% \end{definition}
 
 % \begin{conjecture}[Very likely]
 %   For each snapshot resulting from an optimal schedule, at least one top-most task is scheduled.
