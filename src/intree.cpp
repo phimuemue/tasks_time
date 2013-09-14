@@ -153,6 +153,11 @@ Intree Intree::canonical_intree(const Intree& _t,
         const vector<task_id>& _preferred,
         map<task_id, task_id>& isomorphism,
         tree_id& out){
+    // cout << "Computing canonical intree for " << _t;
+    // for(auto it : _preferred){
+    //     cout << it << ", ";
+    // }
+    // cout << endl;
     Outtree ot(_t, _preferred);
     ot.canonicalize();
     Intree result = ot.toIntree(isomorphism);
@@ -162,6 +167,7 @@ Intree Intree::canonical_intree(const Intree& _t,
     // }
     // cout << ot.getCompressedString() << endl;
     result.get_raw_tree_id(out);
+    // cout << result << endl;
     return result;
 }
 
@@ -540,6 +546,9 @@ void Intree::get_chain(const task_id t, vector<task_id>& target) const {
         auto edge = get_edge_from(current);
         current = edge.second.get_id();
         target.push_back(current);
+        if(current == NOTASK){
+            target.clear();
+        }
     }
 }
 

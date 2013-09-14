@@ -27,7 +27,8 @@ class Snapshot {
         Snapshot(Intree& t, 
             vector<task_id>& m, 
             vector<Snapshot*>& s,
-            vector<myfloat>& sp);
+            vector<myfloat>& sp,
+            vector<task_id>& ft);
 
         // snapshots are organized in a set of pools (no duplicates)
         // We need different pools for different versions of the snap,
@@ -47,7 +48,7 @@ class Snapshot {
         // TODO: combine successors and successor_probs into 1 vector!
         vector<Snapshot*> successors;
         vector<myfloat> successor_probs;
-
+        vector<task_id> finished_task;
 
     public:
         const vector<task_id> marked;
@@ -134,6 +135,8 @@ class Snapshot {
         void compile_snapshot_dag(const Scheduler& scheduler,
                 Snapshot::PoolKind representant = PoolDefault);
         size_t get_successor_count();
+        void consolidate(bool strict = true);
+        void finalize();
 
         const Snapshot* get_next_on_successor_path(const Snapshot* t) const;
         myfloat get_reaching_probability(const Snapshot* target) const;

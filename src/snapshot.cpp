@@ -82,10 +82,12 @@ Snapshot::Snapshot(Intree& t, vector<task_id> m) :
 Snapshot::Snapshot(Intree& t, 
         vector<task_id>& m, 
         vector<Snapshot*>& s,
-        vector<myfloat>& sp) :
+        vector<myfloat>& sp,
+        vector<task_id>& ft) :
     cache_expected_runtime(0),
     successors(s),
     successor_probs(sp),
+    finished_task(ft),
     marked(m),
     intree(t),
     Successors(this),
@@ -225,6 +227,48 @@ Snapshot* Snapshot::find_snapshot_in_pool(Intree& t,
     return result;
 }
 
+void Snapshot::consolidate(bool strict){
+    assert(successors.size() == successor_probs.size());
+    assert(successors.size() == finished_task.size());
+    for(unsigned int i=0; i<successors.size(); ++i){
+        for(unsigned int j=i+1; j<successors.size(); ++j){
+            if(successors[i] == successors[j]){
+                if(!strict || finished_task[i] == finished_task[j]){
+                    successors[j] = NULL;
+                    successor_probs[i] += successor_probs[j];
+                    successor_probs[j] = (myfloat)0;
+                    finished_task[j] = NOTASK;
+                }
+            }
+        }
+    }
+    successors.erase(remove_if(successors.begin(), successors.end(),
+                [](const Snapshot* a) -> bool {
+                return a == NULL;
+                }
+                ), successors.end());
+    successor_probs.erase(remove_if(
+                successor_probs.begin(), successor_probs.end(),
+                [](const myfloat& a) -> bool {
+                return a == (myfloat)0;
+                }
+                ), successor_probs.end());
+    finished_task.erase(remove_if(
+                finished_task.begin(), finished_task.end(),
+                [](const task_id a) -> bool {
+                return a == NOTASK;
+                }
+                ), finished_task.end());
+    assert(successors.size() == successor_probs.size());
+    assert(successors.size() == finished_task.size());
+}
+
+void Snapshot::finalize(){
+    for(auto s : successors){
+        s->finalize();
+    }
+    consolidate(false);
+}
 
 void Snapshot::get_successors(const Scheduler& scheduler,
     Snapshot::PoolKind representant){
@@ -241,6 +285,8 @@ void Snapshot::get_successors(const Scheduler& scheduler,
     auto finish_prob_it = finish_probs.begin();
     for(auto it = marked.begin(); it!=marked.end(); 
             ++it, ++finish_prob_it){
+        task_id current_finished_task = *it;
+        // TODO: can we remove this?
 #if SIMPLE_ISOMORPHISM_CHECK
         if(*finish_prob_it == 0)
             continue;
@@ -273,9 +319,11 @@ void Snapshot::get_successors(const Scheduler& scheduler,
                         newmarked,
                         representant);
 #endif
+                assert(current_finished_task != NOTASK);
                 successors.push_back(news);
                 successor_probs.push_back(
                         *finish_prob_it * raw_sucs[i].second);
+                finished_task.push_back(current_finished_task);
             }
         }
         else {
@@ -296,32 +344,14 @@ void Snapshot::get_successors(const Scheduler& scheduler,
                     newmarked,
                     representant);
 #endif
+            assert(current_finished_task != NOTASK);
             successors.push_back(news);
             successor_probs.push_back(*finish_prob_it);
+            finished_task.push_back(current_finished_task);
         }
     }
     // remove duplicate successors
-    assert(successors.size() == successor_probs.size());
-    for(unsigned int i=0; i<successors.size(); ++i){
-        for(unsigned int j=i+1; j<successors.size(); ++j){
-            if(successors[i] == successors[j]){
-                successors[j] = NULL;
-                successor_probs[i] += successor_probs[j];
-                successor_probs[j] = (myfloat)0;
-            }
-        }
-    }
-    successors.erase(remove_if(successors.begin(), successors.end(),
-        [](const Snapshot* a) -> bool {
-            return a == NULL;
-        }
-    ), successors.end());
-    successor_probs.erase(remove_if(
-                successor_probs.begin(), successor_probs.end(),
-                [](const myfloat& a) -> bool {
-                    return a == (myfloat)0;
-                }
-    ), successor_probs.end());
+    consolidate();
 }
 
 void Snapshot::compile_snapshot_dag(const Scheduler& scheduler,
@@ -347,6 +377,7 @@ myfloat Snapshot::expected_runtime() const {
         return Probability_Computer().get_expected_remaining_time(intree, 0);
     }
     assert(successor_probs.size() == successors.size());
+    assert(finished_task.size() == successors.size());
     // TODO: compute expected minimum runtime of marked 
     // threads dynamically
     myfloat expected_runtime_of_min_task = 
@@ -499,55 +530,58 @@ Snapshot* Snapshot::optimize() const {
         return Snapshot::pool[PoolOptimized][opt_finder];
     }
 
-    vector<pair<Snapshot*, myfloat>> new_sucs;
-    for(auto it : SuccessorProbabilities){
-        auto optimized_suc = it.get<0>()->optimize();
+    vector<boost::tuple<Snapshot*, myfloat, task_id>> new_sucs;
+    assert(successor_probs.size() == finished_task.size());
+    assert(finished_task.size() == finished_task.size());
+    for(unsigned int i = 0; i < successors.size(); ++i){
+        auto optimized_suc = successors[i]->optimize();
         new_sucs.push_back(
-                pair<Snapshot*, myfloat>(optimized_suc, it.get<1>())
+                boost::tuple<Snapshot*, myfloat, task_id>
+                (optimized_suc, successor_probs[i], finished_task[i])
                 );
     }
     // sort successors into different vectors, 
     // each one only containing successors with
     // same intree structure.
-    map<tree_id, decltype(new_sucs)> sucs_by_tree_id;
-    for(const pair<Snapshot*, myfloat>& s : new_sucs){
+    map<task_id, decltype(new_sucs)> sucs_by_finished_task;
+    for(const boost::tuple<Snapshot*, myfloat, task_id>& s : new_sucs){
         tree_id tid;
         map<task_id, task_id> iso;
         vector<task_id> none_marked;
         Intree::canonical_intree(
-            s.first->intree,
+            s.get<0>()->intree,
             none_marked,
             iso,
             tid);
-        sucs_by_tree_id[tid].push_back(s);
+        sucs_by_finished_task[s.get<2>()].push_back(s);
     }
     // traverse all sucs with same intree structure,
     // and only leave the best!
-    for(auto it=sucs_by_tree_id.begin(); it!=sucs_by_tree_id.end(); ++it){
+    for(auto it=sucs_by_finished_task.begin(); it!=sucs_by_finished_task.end(); ++it){
         // sum up probabilities for current intree structure
         myfloat orig_prob_sum = (myfloat)0;
-        for(const pair<Snapshot*, myfloat>& s : it->second){
-                orig_prob_sum += s.second;
+        for(const boost::tuple<Snapshot*, myfloat, task_id>& s : it->second){
+                orig_prob_sum += s.get<1>();
         }
         // cout << "Successors to choose from:" << endl;
         // for(auto iit : it->second){
         //     cout << iit.first << ": " << iit.first->expected_runtime() << endl;
         // }
         // get one best intree structure
-        pair<Snapshot*, myfloat> best_one = 
+        boost::tuple<Snapshot*, myfloat, task_id> best_one = 
             *min_element(it->second.begin(), it->second.end(),
-            [](const pair<Snapshot*, myfloat>& a, 
-               const pair<Snapshot*, myfloat>& b) -> bool {
-                    return a.first->expected_runtime() <=    
-                           b.first->expected_runtime();
+            [](const boost::tuple<Snapshot*, myfloat, task_id>& a, 
+               const boost::tuple<Snapshot*, myfloat, task_id>& b) -> bool {
+                    return a.get<0>()->expected_runtime() <=    
+                           b.get<0>()->expected_runtime();
                 }
         );
         // only leave the best element(s)!
         it->second.erase(
             remove_if(it->second.begin(), it->second.end(),
-                [&best_one](const pair<Snapshot*, myfloat>& a) -> bool {
-                    return a.first->expected_runtime() > 
-                           best_one.first->expected_runtime();
+                [&best_one](const boost::tuple<Snapshot*, myfloat, task_id>& a) -> bool {
+                    return a.get<0>()->expected_runtime() > 
+                           best_one.get<0>()->expected_runtime();
                 }
             ),
             it->second.end()
@@ -559,16 +593,18 @@ Snapshot* Snapshot::optimize() const {
         // compute new sum of probabilities to normalize the old ones
         myfloat new_prob_sum = (myfloat)0;
         for_each(it->second.begin(), it->second.end(),
-            [&](const pair<Snapshot*, myfloat>& s) {
-                new_prob_sum += s.second;
+            [&](const boost::tuple<Snapshot*, myfloat, task_id>& s) {
+                new_prob_sum += s.get<1>();
             }
         );
         // normalize old probabilities so that total sum is still 1
         transform(it->second.begin(), it->second.end(), it->second.begin(),
-            [&](pair<Snapshot*, myfloat>& s) -> pair<Snapshot*, myfloat> {
-                return pair<Snapshot*, myfloat>(
-                        s.first,
-                        (orig_prob_sum / new_prob_sum) * s.second
+            [&](boost::tuple<Snapshot*, myfloat, task_id>& s)
+            -> boost::tuple<Snapshot*, myfloat, task_id> {
+                return boost::tuple<Snapshot*, myfloat, task_id>(
+                        s.get<0>(),
+                        (orig_prob_sum / new_prob_sum) * s.get<1>(),
+                        s.get<2>()
                     );
             }
         );
@@ -577,17 +613,20 @@ Snapshot* Snapshot::optimize() const {
     // version of snapshot
     vector<Snapshot*> new_successors;
     vector<myfloat> new_successor_probs;
-    for(auto it=sucs_by_tree_id.begin(); it!=sucs_by_tree_id.end(); ++it){
+    vector<task_id> new_finished_task;
+    for(auto it=sucs_by_finished_task.begin(); it!=sucs_by_finished_task.end(); ++it){
         for(auto s=it->second.begin(); s!=it->second.end(); ++s){
-            new_successors.push_back(s->first);
-            new_successor_probs.push_back(s->second);
+            new_successors.push_back(s->get<0>());
+            new_successor_probs.push_back(s->get<1>());
+            new_finished_task.push_back(s->get<2>());
         }
     }
     Snapshot* result = new Snapshot(
         new_intree, 
         new_marked,
         new_successors,
-        new_successor_probs
+        new_successor_probs,
+        new_finished_task
     );
     Snapshot::pool[Snapshot::PoolKind::PoolOptimized]
                   [pair<tree_id, vector<task_id>>(tid, new_marked)] 

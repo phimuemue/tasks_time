@@ -534,6 +534,10 @@ int main(int argc, char** argv){
                     s[i] = s[i]->optimize();
                 }
             }
+            
+            for(unsigned int i= 0; i<s.size(); ++i){
+                s[i]->finalize();
+            }
 
             // compute expected runtimes
             cout << "Computing expected runtimes." << endl;
