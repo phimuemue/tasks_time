@@ -24,7 +24,7 @@
 #include "hlfdeterministicscheduler.h"
 #include "hlfrandomscheduler.h"
 #include "specialcaseleafscheduler.h"
-//#include "topmostsurescheduler.h"
+#include "topmostsurescheduler.h"
 
 // exporters
 #include "exporter.h"
@@ -50,7 +50,7 @@ map<string, Scheduler*> schedulers =
     // "all possibilities" scheduler
     {"leaf", new Leafscheduler()}, 
     // leaf scheduler that schedules as many topmost tasks as possible
-    // {"tms", new TopMostSureScheduler()},
+    {"tms", new TopMostSureScheduler()},
     // leaf scheduler with known special cases
     {"scleaf", new SpecialCaseLeafscheduler()}, 
     // HLF schedulers (variants)

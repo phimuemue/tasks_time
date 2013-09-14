@@ -1,5 +1,47 @@
-\chapter{Additional algorithms}
+\chapter{Implementation details}
 \label{sec:additional-algs}
+
+This chapter sums up some information about the implementation. We explain why we chose C++ and Python to implement the project and present some central algorithms that were developed during this project.
+
+\section{Choice or programming language(s)}
+\label{sec:implementation-prog-lang}
+
+The first question we faced was the programming language to use. We first tried to develop a prototype with Maple, because Maple already supports many mathematical concepts (in particular graph theory and probability theory) that might later be useful.
+
+However, we quickly realized that probably Maple has some downsides for this use case: We needed something that was able to cope with quite large amount of data. While Maple might be able to do so if you are experienced enough, we went for C++, sacrificing the elegant notation of Maple, but gaining speed and control over how data are organized in memory. We also considered simple C, but quickly discarded it, because we did not want to implement some basic data structures ourselves, but instead relied on well-tested implementations (especially of Maps and Vectors). As a bonus, there are many good C++ libraries out there, some of which we made use of (Boost and GMP).
+
+Additionally, we looked a simple language to solve several non-critical one-time tasks, such as e.g. generating a database containing all (distinct) intrees or some data analysis. We chose Python.
+
+\section{General structure}
+\label{sec:implementation-general-structure}
+
+The developed program basically starts off given a single intree, a certain number of processors and a scheduling strategy. According to this strategy, we then compute all initial combinations of scheduled tasks, i.e. all initial snapshots (up to equivalent snapshots).
+
+Starting at an initial snapshot, we then recursively compute all its successors, i.e. we simulate which task finishes first and wich task shall be chosen next according to the given scheduling strategy. All of these events (task finishes, next task is chosen) are associated with a certain probability. We do this until we reach the intree containing only 1 task, which then denotes the end of the scheduling process. We thereby eliminate equivalent snapshots in order to save memory.\footnote{We also implemented a variant that does not eliminate equivalent snapshots. However, this variant quickly became too slow as the number of tasks increased.}
+
+After the whole snapshot DAG has been computed we can compute the expected run times of the initial snapshots (recursively, as explained in section \ref{sec:introduction-compute-expected-time-schedule}).
+
+Moreover, the program is capable of ``excluding the scheduler's bad choices'', i.e. it determines where the scheduler has chosen a good and where it has chosen a bad task. Then, the program discards the bad choices and leaves only the good choices, yielding a (possibly) new schedule that is optimal for a given intree.
+
+In order to keep the program fast, we thereby had to cache quite a lot of results (since the recursions through the snapshot DAG would otherwise requiring computing the same things over and over). This, of course, leads to increased memory consumption.
+
+We implemented support for various representation of probabilities and expected run times, most notably floating point numbers. Other possible representation include doubles or rationals (through the use of e.g. the GNU Multiple Precision library).
+
+\section{Representation of intrees and snapshots}
+\label{sec:implementation-repr-intrees-snapshots}
+
+For the representation of intrees and snapshots, we tried to find a good balance between ease of use, memory consumption and speed. We thereby rely on well-tested data structures from the C++ standard library. We now describe on a very high level how we implemented the needed data structures.
+
+Intrees are basically maintained as a collection of edges that -- implicitly -- also store the vertices resp. tasks. We store the edges in an array such that an edge $(i,j)$ is stored as $array[i]=j$, i.e. the start of the edge is used as the array index while the target of the edge is used as the element at that particular position in the array. This is possible since we are dealing with intrees only and enables a quick lookup on which task is a successor of a given task.
+
+Snapshots store the following things:
+\begin{itemize}
+\item The corresponding intree (in normalized form -- see section \ref{sec:algorithm-equivalent-snapshot}).
+\item The set of currently scheduled tasks.
+\item The set of its successors in the snapshot DAG and the corresponding transition probability.
+\end{itemize}
+
+Additionally, we cache many results that are frequently needed and expensive to recompute, such as the expected run time. In order to be able to reuse snapshots so that we do not recompute results for equivalent snapshots, we need some data structure that enables us to retrieve an equivalent snapshot if it already has been constructed. Therefore we introduced a pool that manages all snapshots and can be used to avoid duplicates of (equivalent) snapshots.
 
 \newcommand{\treegeq}[1][X]{\stackrel{\text{#1}}{\geq}}
 
@@ -56,6 +98,54 @@ The algorithm recursively sorts the tasks in the intree according to the orderin
 
 \todo{Algorithmus, der equiv. snaps / bzw. canonical snaps berechnet zeigen.}\todo{Laufzeit!}
 
+Algorithm \ref{alg:compute-canonical-snapshot} is good for visualizing how the algorithm works. One disadvantage, however, is that recursively comparing two subtrees can be expensive. Nonetheless, there is a modification of this algorithm, that is more along the lines of \cite{aho1974design} and has a slightly better asymptotic run time. It is shown in algorithm \ref{sec:algorithm-canonical-intree-o-n}.
+
+\begin{algorithm}
+  \begin{algorithmic}[5]
+    \Procedure{CanonicalIntree}{$I$, $X$}
+      \State $L \gets $ number of levels in $I$
+      \State Label all leaves with ``0'' if they are not in $X$, otherwise with ``1''
+      \For{$i=L-2 \dots 0$}
+        \For{Each task $t$ in level $i$ with predecessors $p_1,\dots,p_r$}
+        \label{alg:canonical-intree-inner-loop}
+          \State Label $t$ by a $(label(p_1),\dots,label(p_r))$ \Comment{Concatenate sorted labels of predecessors}
+        \EndFor
+        \State{Sort tasks on level $i$ according to their label}
+        \label{alg:canonical-intree-sorting-line}
+        \State{Replace labels for tasks on level $i$ by consecutive numbers}
+        \label{alg:canonical-intree-numbering-line}
+      \EndFor
+    \EndProcedure
+  \end{algorithmic}
+  \caption{Computing a canonical intree with a better asymptotic run time}
+  \label{sec:algorithm-canonical-intree-o-n}
+\end{algorithm}
+
+Algorithm \ref{sec:algorithm-canonical-intree-o-n} is a very high level description that requires some explanations:
+
+\begin{itemize}
+\item For this algorithm, it is convenient to have a canonical intree structure in which each task directly knows its predecessors. We can transform our representation (as explained in section \ref{sec:implementation-repr-intrees-snapshots}) into this one in $O(n)$.
+\item Concatenating two labels can be done in $O(1)$ (either amortized by e.g. using dynamic arrays or simply using linked lists with some additional information such e.g. a pointer to the last node in the list).
+\item Line \ref{alg:canonical-intree-numbering-line} ensures that the labels of tasks do not become very long. To be precise, if level $i$ has exactly $l_i$ tasks, the labels for level $i$ are at most the numbers 0 to $l_1-1$.
+\item Line \ref{alg:canonical-intree-sorting-line} from algorithm \ref{sec:algorithm-canonical-intree-o-n} shall sort in the following way: Shorter labels come first, and if two labels have the same length, they are compared lexicographically. This sorting can be implemented in $O(l_{i+1}\cdot\log l_{i+1})$, where $i$ denotes the index from the algorithm and $l_i$ denotes the number of tasks of $I$ on level $i$. This can be explained as follows:
+  \begin{itemize}
+  \item First, we use a simple bucketsort to group the strings into buckets according to their lengths (can be done in $(O(l_{n+1}))$ if we store the lengths appropriately).
+  \item Each bucket is then sorted using radix sort. Assume that a bucket $j$ contains $n_j$ strings of length $j$. Then, radix sort can sort in time $O(n_j \cdot j)$.
+  \item Inductively, the labels on level $i+1$ are at most the numbers 0 to $l_{i+1}-1$, thus requiring $O(\log l_{i+1})$ bits per label.
+  \item Thus, each bucket can be sorted in $O(n_j \cdot \log l_{i+1})$, meaning that the whole level can be sorted in $\sum_{j=0}^B O(n_j \cdot \log l_{i+1}) = O(l_{i+1} \cdot \log l_{i+1})$.
+  \item The tree can be sorted top-down in $\sum_{i=0}^{L-2}O(l_{i+1} \cdot \log l_{i+1})=O(n\cdot \log n)$.
+  \end{itemize}
+\item Replacing labels can be done in $O(n)$ in total since each tasks gets assigned a label only once.
+\end{itemize}
+
+\begin{theorem}
+  The canonical intree of an intree with $n$ tasks can be constructed in $O(n\cdot \log n)$.
+\end{theorem}
+
+\begin{proof}
+  See considerations above.
+\end{proof}
+
 \subsection{Additional approaches}
 \label{sec:algorithm-canonical-snap-additional-approaches}
 
@@ -63,7 +153,42 @@ Unfortunately, computing canonical snapshots has a major impact on the overal pe
 
 \begin{description}
 \item[Tree sequence] Most of the time, we are generating a certain subtree and want to know the canonical intree of it. We tried exploiting the fact that we already could \emph{start} with a canonical intree. That is, we tried to construct the tree sequence of a canonical subtree by just examining the tree sequence of the original intree. Sadly, we could not devise a simple pattern that works as a general rule.\todo{Example where equiv intrees yield drastically different sequences.}
-\item[Matula numbers] Intrees and their encodings have of course already been subject to research. One example is shown in \cite{matula1968natural}, where a (more or less) natural bijection between intrees and natural numbers, the so-called \emph{Matula numbers}, is shown.\todo{Short description.} While this description could lead to very elegant algorithms, it does not come in handy in practice because the matula numbers can be very big (more than 32 bit needed for matula numbers of 15-node intrees).
+\item[Matula numbers] Intrees and their encodings have of course already been subject to research. One example is shown in \cite{matula1968natural}, where a (more or less) natural bijection between intrees and natural numbers, the so-called \emph{Matula numbers}, is shown.
+
+These numbering is inductively defined as follows: A single leaf (resp. a tree consisting of a single root) obtains the number 1. A root with predecessors $t_1,\dots,t_r$ with corresponding numbers $n_1,\dots,n_r$ obtains the number $p(n_1)\cdot p(n_2) \cdot \dots \cdot p(n_r)$, where $p(x)$ denotes the $x$-th prime number. See figure \ref{fig:matula-illustration} for an example.
+
+\begin{figure}[t]
+  \centering
+  \begin{tikzpicture}
+    \node[draw, circle](1_1) at (0,0){1};
+    \node[draw, circle](1_2) at (1,0){1};
+    \node[draw, circle](1_3) at (4,0){1};
+    
+    \node[draw, circle](4_1) at (.5,-1){4};
+    \node[draw, circle](1_4) at (1.5,-1){1};
+    \node[draw, circle](1_5) at (2.5,-1){1};
+    \node[draw, circle](2_1) at (4,-1){2};
+
+    \node[draw, circle](28_1) at (2,-2){28};
+    \node[draw, circle](3_1) at (4,-2){3};
+
+    \node[draw, circle](535) at (3, -3){535};
+
+    \draw(1_1)--(4_1);
+    \draw(1_2)--(4_1);
+    \draw(1_3)--(2_1);
+    \draw(1_4)--(28_1);
+    \draw(1_5)--(28_1);
+    \draw(4_1)--(28_1);
+    \draw(2_1)--(3_1);
+    \draw(28_1)--(535);
+    \draw(3_1)--(535);
+  \end{tikzpicture}
+  \caption{A tree whose vertices are labelled by the corresponding matula numbers. Consider e.g. the node 4, whose predecessors are two nodes labelled 1. Thus, we can compute $4=p(1)\cdot p(1)$. The node labelled 28 can be computed by $28 = p(4)\cdot p(1) \cdot p(1) = 2\cdot 2 \cdot 7$. The node 535 obtains its label by $535=p(28)\cdot p(3) = 107\cdot 5$.}
+  \label{fig:matula-illustration}
+\end{figure}
+
+While this description could lead to very elegant algorithms in a theoretical setting, it does not come in handy in practice because the matula numbers can be very big (more than 32 bit needed for matula numbers of 15-node intrees).
 \end{description}
 
 \section{Enumerating all intrees with a certain number of nodes}
@@ -82,16 +207,15 @@ We can exploit these two facts to construct a recursive algorithm which is descr
 \begin{equation*}
   n_1 + n_2 + \dots + n_r = n-1 \quad \text{ and } \quad 1\leq n_1\leq n_2\leq\dots\leq n_r.
 \end{equation*}
-It then generates all combinations of predecessor intrees $(p_1,\dots,p_r)$ whose respective number of nodes are $n_1,\dots,n_r$. The algorithm thereby omits duplicate combinations. This can easily be acchieved by defining an order $\left(\treegeq\right)$ on intrees as follows ($t_1$ and $t_2$ being two intrees):
+It then (recursively) generates all combinations of predecessor intrees $(p_1,\dots,p_r)$ whose respective number of nodes are $n_1,\dots,n_r$. The algorithm thereby omits duplicate combinations. This can easily be acchieved by defining an order $\left(\treegeq\right)$ on intrees as follows ($t_1$ and $t_2$ being two intrees with roots $r_1$ resp. $r_2$ and roots' predecessors $p_{1,1}\dots,p_{1,r}$ resp. $p_{2,1},\dots,p_{2,r}$):
 
 \begin{equation}
   \label{eq:definition-treegeq}
   t_1 \treegeq t_2 \equiv (\text{$t_1$ has more vertices than $t_2$}) \vee \exists k \in \left\{ 1,2,\dots,r \right\}. \left( p_{1,k} \treegeq p_{2,k} \wedge \forall i<k. p_{1,i}=p_{2,i} \right)
 \end{equation}
 
-
 \begin{algorithm}
-  \begin{algorithmic}
+  \begin{algorithmic}[5]
     \Procedure{GenerateIntrees}{$n$} \Comment{Returns the set of all intrees with exactly $n$ vertices}
       \If{$n=1$} 
         \State \textbf{return} $\left\{ \tikz{\fill(0,0) circle (0.1cm);} \right\}$ \Comment{Base case: Intree with just 1 vertex}
@@ -103,6 +227,7 @@ It then generates all combinations of predecessor intrees $(p_1,\dots,p_r)$ whos
               1 \leq r < n \wedge
               1 \leq n_1 \leq n_2 \leq \dots \leq n_r
             \right\}$}
+          \label{alg:huge-for-loop-in-tree-generation}
         \State $P \gets$ (\Call{GenerateIntrees}{$n_1$},\dots,\Call{GenerateIntrees}{$n_r$}) \Comment{Predecessor intrees}
         \For{$(p_1,\dots,p_r) \in P[1] \times P[2] \times \dots \times P[r]$}
           \If{$p_1 \treegeq p_2 \treegeq \dots \treegeq p_r$} \Comment{No duplicates}
@@ -134,6 +259,9 @@ It then generates all combinations of predecessor intrees $(p_1,\dots,p_r)$ whos
   \label{alg:generate-intrees}
 \end{algorithm}
 
+Please note that algorithm \ref{alg:generate-intrees} can be easily adjusted to generate only non-trivial intrees (i.e. intrees whose root has a degree greater than 1) by adding a simple check that shall occur \emph{only in the initial call} of \textsc{GenerateIntrees}: We then simply have to assure that $r$ is greater than 1 in line \ref{alg:huge-for-loop-in-tree-generation}.
+
+Moreover, even if the algorithm is described here in a quite mathematical way, it can be faily easy implemented in e.g. Python. Especially, the ordering of intrees -- that might look complicated at first sight -- can be acchieved with very simplistic methods.
 
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"

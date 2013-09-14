@@ -12,20 +12,22 @@ While chapter \ref{chap:p3} focused on more theoretical aspects of our problem, 
 
 As a first benchmark, we computed optimal schedules for all non-trivial intrees (with a certain amount of tasks) ``in one run'', i.e. we generated all non-trivial intrees, kept them in main memory and computed the optimal schedule for each of these intrees. This technique has the advantage that intermediate results can be re-used and do not need to be recomputed over and over again. On the other hand, keeping that many intrees in RAM leads to enormous memory consumption and, thus, was only done for up to 15 intrees.
 
-Table \ref{tab:time-benchmark} shows the results. This table was created on a reasonably modern machine (with an Intel Core i7). Moreover, we used simple floating point numbers to represent probabilities and expected run times. We also implemented another feature to support fractions (using Boost Rational Number library or GNU Multiple Precision Arithmetic Library). Surprisingly, using rational numbers does not increase run time significantly (it increases e.g. from 25 seconds to 28 seconds if used on all non-trivial intrees with 13 tasks).
+Table \ref{tab:time-benchmark} shows the results. This table was created on a reasonably modern machine (with an Intel Core i7). Peak memory consumption was measured with Valgrind for up to 13 tasks. According to the valgrind manual \cite{massifmanual}, these measurements are accurate within 1\%. For more than 13 tasks, Valgrind was too slow, so we went for a more simplistic approach: We simply observed the stats shown by htop. This means, that the memory consumption for 14 and 15 tasks is not \emph{that} accurate, but probably still accurate enough to get an impression of how many memory was needed.
+
+Moreover, we used simple floating point numbers to represent probabilities and expected run times. We also implemented another feature to support fractions (using Boost Rational Number library or GNU Multiple Precision Arithmetic Library). Surprisingly, using rational numbers does not increase run time significantly (it increases e.g. from 25 seconds to 28 seconds if used on all non-trivial intrees with 13 tasks), but requires considerably more memory.
 
 \begin{table}[ht]
   \centering
   \begin{tabular}[ht]{ccccc}
     Tasks & Intrees & Snapshots & Time & Memory \\
     \hline{}
-    $\leq 9$ & $<$ 171 & $<$ 891 & $<$ 0.5s & $<$ 1451040b \\
+    $\leq 9$ & $\leq$ 171 & $\leq$ 891 & $\leq$ 0.5s & $\leq$ 1451040b \\
     10 & 433 & 3004 & 1s & 4941576b \\
     11 & 1123 & 10143 & 2s & 16847304b \\
     12 & 2924 & 34065 & 7s & 57016592b \\
     13 & 7720 & 113492 & 25s & 193781984b \\
-    14 & 20487 & 375088 & 1m40s & \\
-    15 & 54838 & 1230391 & 6m & \\
+    14 & 20487 & 375088 & 1m40s & $\approx$ 580mb \\
+    15 & 54838 & 1230391 & 6m & $\approx$ 2Gb \\
     
   \end{tabular}
   \caption{Time needed to compute optimal schedules for all non-trivial intrees with a certain number of tasks using a floating-point representation for probabilities and run times.}
@@ -36,10 +38,29 @@ The memory consumption might look quite high at first glance, but if we look clo
 
 The main problem is -- of course -- that the number of non-trivial intrees drastically grows as the number of tasks increases (1,1,2,2,5,11,28,67,171,433,1123,\dots --- see \cite{oeisnumbernontrivialintrees}). For that reason, we continue benchmarking by computing optimal schedules for single intrees (or a small set of intrees).
 
-\section{Clustering intrees and computing them one after another}
+\section{Grouping intrees and computing them one after another}
 \label{sec:benchmarks-clustered-intrees}
 
 The first benchmark we conducted was done for intrees with 15 or more tasks. First, we generated all intrees with a certain number of tasks. Afterwards, we split the whole collection of intrees into smaller chunks containing a certain amount of intrees. We then processed these chunks one after another. In this scenario, the measurements become more difficult to interpret. Especially, the number of snapshots and the amount of memory can not be directly compared to the values shown in section \ref{sec:benchmarks-all-intrees-in-memory}. For the time, it is also non-trivial.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}[ht]{ccccc}
+    Tasks & Intrees & Chunk size & Time & Memory per chunk \\
+    \hline
+    15 & 54838 & 5000 & 11m & $<$ 500mb \\
+    16 & 147570 & 5000 & 1h & $<$ 800mb \\
+    17 & 399466 & 5000 & 3h & \\
+    18 & 1086312 & 6000 & 13.3h & \\
+    19 & 2967517 & 6000 & 24h &
+  \end{tabular}
+  \caption{Time needed to compute optimal schedules for all non-trivial intrees  with a certain number using sets of subtrees of tasks using floating point numbers for probabilities and run times.}
+  \label{tab:benchmark-clustered-run-time}
+\end{table}
+
+One interesting fact that can be observed from table \ref{tab:benchmark-clustered-run-time} is that for 15 tasks, we needed roughly 11 minutes, while in the non-grouped case, it took only about the half of this time (about 6 minutes --- see table \ref{tab:time-benchmark}). That is, as expected, grouping the intrees into smaller chunks considerably increases the run time, but -- on the other hand -- seems to be the only real alternative since the number of trees grows that fast so they do not fit into main memory anymore.
+
+As you can see, the time needed to compute optimal schedules for all non-trivial intrees increases very fast with growing number of tasks. Of course, the run time can be reduced by parallelizing the computations for example in a way that computes different chunks in parallel.
 
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"
