@@ -8,7 +8,20 @@ We now researching some properties of snapshot DAGs and optimal schedules. In pa
 
 As shown in \cite{chandyreynoldslargepaper1979}, it is known that an optimal scheduling strategy does not keep a processor idle if it could do some work. An intuitive explanation of this fact is as follows: Assume that there is a strategy that keeps a processor idle at some point even if there is a ready task $t$ that could be processed. Then, we construct a new strategy, that schedules $t$ (using the idle processor) and behaves like the original strategy. Then, it can be shown that this new strategy yields a smaller overall expected run time.
 
+Moreover, it is known that preemtive scheduling yields better results than non-preemtive scheduling. As an example, \cite{MoritzMaasDiploma} shows the intree $(0,0,1,1,1,2,2,2)$. This intree is -- non-preemtively -- optimally processed by starting out with tasks 3, 4 and 5. The optimal preemtive schedule
 
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{.45\linewidth}
+    \centering
+    \includegraphics{p3/preemtive/00111222hlf.pdf}
+    \caption{Optimal non-preemtive schedule.}
+  \end{subfigure}
+  \quad
+
+  \caption{Preemtive vs. non-preemtive scheduling for $(0,0,1,1,1,2,2,2)$}
+  \label{fig:preemtive-example-00111222}
+\end{figure}
 
 \section{Size of the snapshot DAG}
 \label{sec:p3-size-of-snapshot-dag-first-attempts}
