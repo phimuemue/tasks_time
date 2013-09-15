@@ -400,8 +400,8 @@ string get_processor_time_string(const Snapshot* s, unsigned int n){
     // TODO: make it recognize the second argument
     stringstream ss;
     ss << "(";
-    ss << s->expected_time_for_n_processors(3) << "/";
-    ss << s->expected_time_for_n_processors(2) << "/";
+    ss << s->expected_time_for_n_processors(3) << "|";
+    ss << s->expected_time_for_n_processors(2) << "|";
     ss << s->expected_time_for_n_processors(1);
     ss << ")";
     return ss.str();

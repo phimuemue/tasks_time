@@ -5,6 +5,8 @@
 
 %\includeonly{p3/p3}
 
+\addbibresource{bib.bib}
+
 \begin{document}
 
 \chapter{TODO-Lists}
@@ -60,7 +62,9 @@
 
 %\include{counterexamples/counterexamples}
 
-\bibliographystyle{alpha}
-\bibliography{bib}
+%\bibliographystyle{alphabetic}
+\nocite{*}
+\printbibliography[notkeyword=oeis,title={Bibliography}]
+%\printbibliography[title={Number sequences},keyword=oeis]
 
 \end{document}
