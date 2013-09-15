@@ -264,10 +264,13 @@ void Snapshot::consolidate(bool strict){
 }
 
 void Snapshot::finalize(){
+    if(finalized)
+        return;
     for(auto s : successors){
         s->finalize();
     }
     consolidate(false);
+    finalized = true;
 }
 
 void Snapshot::get_successors(const Scheduler& scheduler,
@@ -517,6 +520,8 @@ myfloat Snapshot::get_reaching_probability(const Snapshot* t) const {
     return result;
 }
 
+// TODO: Maybe we can speed up things by not iterating over boost::tuples,
+// but instead use the proper vectors directly.
 Snapshot* Snapshot::optimize() const {
     tree_id tid;
     map<task_id, task_id> iso;
@@ -545,14 +550,14 @@ Snapshot* Snapshot::optimize() const {
     // same intree structure.
     map<task_id, decltype(new_sucs)> sucs_by_finished_task;
     for(const boost::tuple<Snapshot*, myfloat, task_id>& s : new_sucs){
-        tree_id tid;
-        map<task_id, task_id> iso;
-        vector<task_id> none_marked;
-        Intree::canonical_intree(
-            s.get<0>()->intree,
-            none_marked,
-            iso,
-            tid);
+        // tree_id tid;
+        // map<task_id, task_id> iso;
+        // vector<task_id> none_marked;
+        // Intree::canonical_intree(
+        //     s.get<0>()->intree,
+        //     none_marked,
+        //     iso,
+        //     tid);
         sucs_by_finished_task[s.get<2>()].push_back(s);
     }
     // traverse all sucs with same intree structure,

@@ -80,6 +80,8 @@ vars.Add(EnumVariable("USE_SIMPLE_OPENMP", "Simple multithreading for computing 
 vars.Add(EnumVariable("USE_CANONICAL_SNAPSHOT", "Only consider non-isomorphic snapshots", 1, allowed_values=("0", "1")))
 vars.Add(EnumVariable("USE_TASKMAP", "Set to 1 if tasks in one tree behave different.", 0,
             allowed_values=("0", "1")))
+vars.Add(EnumVariable("RELEASE_MODE", "Set to 1 if you want to disable assertions.", 0,
+            allowed_values=("0", "1")))
 
 # we use C++11 (mainly to simplify some writing in C++)
 
@@ -97,6 +99,7 @@ env = Environment(variables = vars,
                             "-DUSE_SIMPLE_OPENMP=${USE_SIMPLE_OPENMP}",
                             "-DUSE_CANONICAL_SNAPSHOT=${USE_CANONICAL_SNAPSHOT}",
                             "-DUSE_TASKMAP=${USE_TASKMAP}",
+                            "-DRELEASE_MODE=${RELEASE_MODE}",
                             ], 
                   LIBS = [
                           "boost_program_options",

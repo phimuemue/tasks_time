@@ -1,6 +1,10 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#if RELEASE_MODE
+#define NDEBUG
+#endif
+
 #include<utility>
 #include<vector>
 #include<limits>

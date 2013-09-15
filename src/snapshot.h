@@ -44,6 +44,7 @@ class Snapshot {
         mutable map<unsigned int, myfloat> cache_expected_runtime_for_n_procs;
         mutable map<unsigned int, bool> cache_is_hlf;
         mutable map<unsigned int, bool> cache_is_hlf_first;
+        bool finalized = false;
 
         // TODO: combine successors and successor_probs into 1 vector!
         vector<Snapshot*> successors;
