@@ -165,7 +165,7 @@ So far, we have seen several scenarios where HLF was not optimal. The trees we e
   \begin{subfigure}{.45\textwidth}
     \centering
     \includegraphics{p3/only_high_or_low/0002345779101012_opt.pdf}
-    \caption{Optimal schedule picking \emph{two} non-HLF tasks.}
+    \caption{Optimal schedule picking a non-HLF task that is also not the lowest possible.}
   \end{subfigure}
   \quad
   \begin{subfigure}{.45\textwidth}
@@ -558,12 +558,10 @@ During our research, we recognized some patterns that we are tempted to transfor
   An optimal schedule always schedules as many topmost tasks as possible.
 \end{conjecture}
 
-\begin{conjecture}
-  If for an intree only non-top tasks are scheduled, you can schedule any top-task instead of one non-top scheduled task to obtain a better run time.
-\end{conjecture}
+Please note that the above conjecture does not state anything about \emph{which} topmost tasks should be chosen in order to generate a schedule that is as good as possible.
 
 \begin{conjecture}
-  Parallel chains are optimally scheduled by HLF.
+  If for an intree only non-top tasks are scheduled, you can schedule any top-task instead of one non-top scheduled task to obtain a better run time.
 \end{conjecture}
 
 The main problems we faced when we tried to prove the above conjectures can be summarized as follows:

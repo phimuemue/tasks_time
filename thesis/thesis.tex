@@ -17,13 +17,14 @@
 \label{chap:current-questions}
 
 \begin{itemize}
-\item ``Topmost singles:'' Are topmost tasks, whose successors have \emph{exactly one} predecessor, always scheduled?
-\item Are there intrees where we have to schedule topmost tasks of \emph{three different (root-)subtrees? (Root-subtree: Subtree rooted at a direct predecessor of the root.)}
-\item If a tree $T$ is non-HLF-optimal, can there a be a supertree $S$ of this tree ($T\subseteq S$) such that $S$ is HLF-optimal?
-\item Are chain collections optimally scheduled by HLF?\done{Possibly so. Check proof once again.}
 \item P3: Is it possible, that there are -- at one level of the optimal snapshot DAG -- multiple snapshots containing the same intree, but a different set of scheduled tasks? \remark{Probably not w.l.o.g.}
 \item For each snapshot resulting from an optimal schedule, at least one top-most task is scheduled? \remark{Seems so.}
 \item If for an intree only non-top tasks are scheduled, you can exchange one of the non-top tasks with a top-tasks and obtain a better run time?\remark{Seems so}
+\item ``Topmost singles:'' Are topmost tasks, whose successors have \emph{exactly one} predecessor, always scheduled?\done{No! See chapter ``suboptimal strategies'' (number of topmost tasks).}
+\item Are there intrees where we have to schedule topmost tasks of \emph{three different (root-)subtrees? (Root-subtree: Subtree rooted at a direct predecessor of the root.)}\done{Yes. Siehe suboptimal-Kapitel, irgendein non-HLF-optimal-Beispiel.}
+\item If a tree $T$ is non-HLF-optimal, can there a be a supertree $S$ of this tree ($T\subseteq S$) such that $S$ is HLF-optimal? \done{Yes, refer to section \ref{sec:properties-optimal-schedules-no-implications}.}
+\item Are chain collections optimally scheduled by HLF?\done{Possibly so. Check proof once again.}
+\item Let's assume we force the \emph{first step} to be HLF. Is then the best possible solution with exactly this HLF-beginning again HLF?\done{No -- consider the non-HLF examples!}
 \end{itemize}
 
 \section{Other TODOs}

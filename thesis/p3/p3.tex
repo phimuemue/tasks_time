@@ -58,15 +58,27 @@ Another example that shows nicely that preemtive scheduling yields better result
 \subsection{Considerations about subtrees}
 \label{sec:properties-optimal-schedules-no-implications}
 
-From another point of view, the intree $(0,0,1,2,2,3,3,6,8,9,10,11,12,13)$ shows that an optimal schedule may be forced at some time to process a subtree in a way that it would not process it if the subtree was processed for itself. This means that we can formulate the following:
+It can be easily seen by examining any of the intrees for which HLF is strictly suboptimal (described in chapter \ref{chap:p3-suboptimal}) that the following theorem must hold:
+
+\begin{theorem}
+  There are intrees $T$ and $S$ such that $T$ is a subtree of $S$ and both $T$ and $S$ have the same root such that the optimal (non-preemtive) schedule for $S$ is strictly non-HLF, but the optimal schedule for $T$ is HLF.
+\end{theorem}
+
+\begin{proof}
+  See considerations and examples in chapter \ref{chap:p3-suboptimal}.
+\end{proof}
+
+The other way around can be examined by looking at the intree $(0,0,1,2,2,3,3,6,8,9,10,11,12,13)$ that we have considered before. From another point of view, the intree $(0,0,1,2,2,3,3,6,8,9,10,11,12,13)$ shows that an optimal schedule may be forced at some time to process a subtree in a way that it would not process it if the subtree was processed for itself. This means that we can formulate the following:
 
 \begin{theorem}
   There are intrees $T$ and $S$ such that $T$ is a subtree of $S$ and both $T$ and $S$ have the same root such that the optimal (non-preemtive) schedule for $S$ is HLF, but the optimal (non-preemtive) schedule for $T$ is non-HLF.
 \end{theorem}
 
 \begin{proof}
-  See considerations above.
+  See figure \ref{fig:2-hlf-plus-one-not-optimal} and the corresponding considerations above.
 \end{proof}
+
+That is, the fact that we consider non-preemtive scheduling only results in the fact that we can not conclude anything about the (non-)optimality of HLF within subtrees even if we know the optimal schedule for a whole intree.
 
 \section{Size of the snapshot DAG}
 \label{sec:p3-size-of-snapshot-dag-first-attempts}
@@ -651,7 +663,33 @@ We will now consider another class of intrees that can be shown to have HLF as o
   Let $I$ be an intree. We call $I$ a \emph{parallel chain}, if each task except the root has at most one predecessor. The root may have arbitrarily many predecessors.
 \end{definition}
 
-\todo{Figure von einer parallel chain.}
+We show an example of a parallel chain in figure \ref{fig:parallel-chain-intro-figure}.
+
+\begin{figure}[th]
+  \centering
+  \begin{tikzpicture}[scale=.2]
+    \foreach \y in {1,...,5}
+    \node[circle, scale=0.75, fill]() at (0,\y*1.5){};
+    \foreach \y in {1,...,3}
+    \node[circle, scale=0.75, fill]() at (2,\y*1.5){};
+    \foreach \y in {1,...,6}
+    \node[circle, scale=0.75, fill]() at (4,\y*1.5){};
+    \foreach \y in {1,...,5}
+    \node[circle, scale=0.75, fill]() at (6,\y*1.5){};
+    \foreach \y in {1,...,2}
+    \node[circle, scale=0.75, fill]() at (8,\y*1.5){};
+    \node[circle, scale=0.75, fill] (tid0) at (4,-.5){};
+    \draw (0,1.5) -- (0, 7.5);
+    \draw (2,1.5) -- (2, 4.5);
+    \draw (4,1.5) -- (4, 9);
+    \draw (6,1.5) -- (6, 7.5);
+    \draw (8,1.5) -- (8, 3.5);
+    \foreach \x in {0,...,4}
+    \draw (tid0) -- (\x*2, 1.5);
+  \end{tikzpicture}
+  \caption{Parallel chains have the property that -- except for the root -- all tasks have at most one direct predecessor. Note that for parallel chains, HLF admits no ambiguities in the sense that all different possible choices of HLF result in equivalent snapshots.}
+  \label{fig:parallel-chain-intro-figure}
+\end{figure}
 
 We start out by a lemma that we will use later. This lemma is an analogue variant of a lemma described in \cite{chandyreynoldsshortpaper1975}. While their lemma works for two processors and general intrees, our variant is for three processors, but restricted to parallel chains.
 
@@ -663,9 +701,53 @@ We start out by a lemma that we will use later. This lemma is an analogue varian
 \begin{proof}
   \newcommand{\iminus}[1]{I\setminus\{#1\}}
 
-  \todo{Induktionsanfang}
+  We prove the claim by induction. For parallel chains with fewer than 6 tasks (all parallel chains with fewer than 5 tasks are trivially optimally scheduled by HLF), the fact can be easily proven. Note that it suffices to examine all parallel chains with at least 3 ready tasks, since intrees with two or less tasks are optimally scheduled by HLF (according to the fact that only two processors can be used for those intrees and the fact that for two processors HLF is optimal). The only parallel chain with fewer than 6 tasks is the intree $(0,0,0,1)$. This parallel chain (and its resulting parallel chains after removing topmost tasks) are shown in figure       \ref{fig:parallel-intrees-lemma-induction-start-concrete}.
 
-  We consider the HLF schedules on the intrees $I\setminus \{x\}$ and $I \setminus \{y\}$, with variable names as aforementioned. Note that the intrees $I\setminus \{x\}$ and $\setminus \{y\}$ have at least two common HLF-tasks (i.e. tasks that are scheduled by HLF). We call these two tasks $x_1$ and $x_2$. \todo{Erklären, was passiert, wenn es im nächsten Schritt nicht mehr drei, sondern weniger Tasks zur Verfügung gibt.}For the intree $\iminus{x}$, we call the third HLF-task $x_3$ and can compute its expected run time (for HLF) by
+  \begin{figure}[th]
+    \centering
+    \begin{subfigure}{.38\textwidth}
+      \centering
+      \begin{tikzpicture}[scale=.4]
+        \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+        \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+        \node[circle, scale=0.75, draw] (tid2) at (2.25,3){$y$};
+        \node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
+        \node[circle, scale=0.75, draw] (tid4) at (3.75,4.5){$x$};
+        \draw[](tid3) -- (tid4);
+        \draw[](tid0) -- (tid1);
+        \draw[](tid0) -- (tid2);
+        \draw[](tid0) -- (tid3);
+        \draw[->, decorate, decoration=snake](5,3) -- (7,3);
+        \begin{scope}[xshift=8cm, scale=.5, yshift=2.5cm]
+          \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+          \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+          \node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
+          \node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
+          \draw[](tid0) -- (tid1);
+          \draw[](tid0) -- (tid2);
+          \draw[](tid0) -- (tid3);
+          \node at (2.25,-2){2.83333};
+        \end{scope}
+        \begin{scope}[xshift=11cm, scale=.5, yshift=2.5cm]
+          \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+          \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+          \node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
+          \node[circle, scale=0.75, fill] (tid4) at (3.75,4.5){};
+          \draw[](tid3) -- (tid4);  
+          \draw[](tid0) -- (tid1);
+          \draw[](tid0) -- (tid3);
+          \node at (2.25,-2){3.25};
+        \end{scope}
+      \end{tikzpicture}
+      \caption{Original parallel chain $(0,0,0,1)$, and the parallel chains resulting from removing $x$ resp. $y$ with their respective expected HLF run times. This serves as base case for the induction in the proof of lemma \ref{lemma:parallel-chains-flatness}.}
+      \label{fig:parallel-intrees-lemma-induction-start-concrete}
+    \end{subfigure}
+    \quad
+    \caption{Removing tasks on lower levels from parallel chains results in higher run times than removing tasks on higher levels.}
+    \label{fig:parallel-intrees-lemma-induction-start}
+  \end{figure}
+
+  We consider the HLF schedules on the intrees $I\setminus \{x\}$ and $I \setminus \{y\}$, with variable names as aforementioned. Note that the intrees $I\setminus \{x\}$ and $\setminus \{y\}$ have at least two common HLF-tasks (i.e. tasks that are scheduled by HLF). We call these two tasks $x_1$ and $x_2$. For the intree $\iminus{x}$, we call the third HLF-task $x_3$ and can compute its expected run time (for HLF) by
   \begin{equation*}
     T_{HLF}(\iminus{x}) = 
     \frac{1}{3} \cdot T(\iminus{x, x_1}) +
@@ -688,7 +770,7 @@ We start out by a lemma that we will use later. This lemma is an analogue varian
   It remains to compare $T(\iminus{x, x_3})$ and $T(\iminus{y, x'})$. If $\iminus{y,x'}$ has fewer ready tasks than $T(\iminus{x, x_3})$, then we trivially have $T(\iminus{x, x_3}) \leq T(\iminus{y, x'})$ (similar to the case before, it has been shown for two processors, and we additionally can use a third processor for $\iminus{x,x_3}$). We, thus, focus on other cases.
 
   \begin{itemize}
-  \item  If $level(x')=level(x_3)$, the intrees $\iminus{x'}$ and $\iminus{x_3}$ are isomorphic (we are dealing with parallel chains only), and can -- thus -- be considered equal in our computations. That is, we can w.l.o.g. assume $x'=x_3$ if the levels of $x'$ and $x_3$ are equal. In this case, we have that $T(\iminus{x, x_3})$ and $T(\iminus{y, x'})$ share a common supertree (namely $\iminus{x_3}=\iminus{x'}$), and we know -- by induction since $level(x)>level(y)$ that $T(\iminus{x, x_3}) < T(\iminus{y, x'})$.
+  \item  If $level(x')=level(x_3)$, the intrees $\iminus{x'}$ and $\iminus{x_3}$ are isomorphic (we are dealing with parallel chains only), and can -- thus -- be considered equal in our computations (we can do so because HLF can be seen as deterministic for parallel chains). That is, we can w.l.o.g. assume $x'=x_3$ if the levels of $x'$ and $x_3$ are equal. In this case, we have that $T(\iminus{x, x_3})$ and $T(\iminus{y, x'})$ share a common supertree (namely $\iminus{x_3}=\iminus{x'}$), and we know -- by induction since $level(x)>level(y)$ that $T(\iminus{x, x_3}) < T(\iminus{y, x'})$.
   \item   If $level(x') \neq level(x_3)$, we know that $x_3$ is \emph{not} a HLF task in $\iminus{y}$, but $x'$ is. This means that $x'$ can only be a HLF task since it is not part of $\iminus{y}$. Therefore, we conclude that $y$ must be the same as $x_3$ (implying w.l.o.g. $\iminus{x,y}=\iminus{y,x'}$). This means that $level(x)>level(y)=level(x_3)$. Moreover, because $x'$ is only a HLF task because $x_3$ is not existent in $\iminus{y}$, we know that $level(x') < level(x_3)$. Combining the inequalities yields $level(x)>level(x')$. We can now argue that $\iminus{y}$ is (w.l.o.g.) a common supertree of $\iminus{x,y}=\iminus{x,x_3}$ and $\iminus{y,x'}$ with $n-1$ tasks. Since -- as explained before -- $level(x) > level(x_3)$, we can apply the induction hypothesis and conclude that $T(\iminus{x, x_3}) \leq T(\iminus{y, x'})$.
   \end{itemize}
 
@@ -701,7 +783,9 @@ We start out by a lemma that we will use later. This lemma is an analogue varian
   These inequalities can be used to derive the desired inequality.
 \end{proof}
 
-We now use lemma \ref{lemma:parallel-chains-flatness} to derive the following theorem.
+\emph{Remark:} In the above proof, we used the fact that, for parallel chains, HLF does not admit any ambiguities (i.e. all tasks that can be chosen by HLF as the next task to be scheduled result in equivalent snapshots). We used this fact in the case distinction where we said that two intrees are isomorphic and we can consider them equal for our computations. This, however, is something that can not be extended to arbitrary intrees for three processors.
+
+We will now use lemma \ref{lemma:parallel-chains-flatness} to derive the following theorem.
 
 \begin{theorem}
   Parallel chains are optimally scheduled by HLF.
@@ -709,8 +793,8 @@ We now use lemma \ref{lemma:parallel-chains-flatness} to derive the following th
 
 \begin{proof}
   \newcommand{\iminus}[1]{I\setminus\{#1\}}
-  \todo{Induktionsanfang.}
-  We prove the claim by induction and can clearly observe that for any parallel chain with fewer than $5$ tasks, HLF is optimal. \todo{Figure mit allen parallel chains mit weniger als 5 tasks.}
+
+  We prove the claim by induction and can clearly observe that for any parallel chain with fewer than 5 tasks, HLF is optimal (because there is no other possibility to schedule the tasks).
   
   Consider the HLF run time for a parallel chain $I$ with $n$ tasks. Let $x_1,x_2,x_3$ denote the HLF tasks of $I$. We can compute the expected run time by
   \begin{equation*}
@@ -739,6 +823,11 @@ We now use lemma \ref{lemma:parallel-chains-flatness} to derive the following th
   The arguments work similar for $x_2$ resp. $x_3$ with $y_2$ resp. $y_3$ (where we can even allow the run times to be equal), resulting in our claim.
 
 \end{proof}
+
+\section{Conclusion}
+\label{sec:properties-schedules-conclusion}
+
+We have seen two very regular classes of intrees that are optimally scheduled by HLF. Unfortunately, even simplest combinations of the two classes are not guaranteed to be optimally scheduled by HLF. As an example, consider the intree $(0,0,1,2,3,4,6,6,8,8)$ depicted in figure \ref{fig:hlf-vs-opt-0012346688} whose components attached to its root are a degenerate intree with 7 tasks and a simple chain with 3 tasks. As shown in section \ref{sec:p3-suboptimal-hlf-strictly-suboptimal}, for this intree, HLF is strictly suboptimal.
 
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"
