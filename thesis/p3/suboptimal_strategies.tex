@@ -491,8 +491,24 @@ It can also be shown that even combining the two arguments -- in the sense that 
 
 \begin{figure}[ht]
   \centering
-  \input{p3/p3l_p1s_suboptimal.tex}
-  \caption{A combination of P3L and P1S is not an optimality criterion for an optimal schedule.\todo{Subfigures.}}
+  \begin{subfigure}{.3\linewidth}
+    \centering
+    \includegraphics{p3/max_p3_min_p1/00112333opt.pdf}
+    \caption{Optimal schedule. $(T_3^*,T_2^*,T_1^*)=(\frac{4}{3},\frac{217}{216},\frac{323}{108})$.}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.3\linewidth}
+    \centering
+    \includegraphics{p3/max_p3_min_p1/00112333t1min.pdf}
+    \caption{Schedule with minimal $T_1$. $(T_3,T_2,T_1)=(\frac{290}{243},\frac{2369}{1944},\frac{2899}{972})$.}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.3\linewidth}
+    \centering
+    \includegraphics{p3/max_p3_min_p1/00112333t3max.pdf}
+    \caption{Schedule with maximal $T_3$. $(T_3,T_2,T_1)=(\frac{110}{81},\frac{299}{324},\frac{499}{162})$.}
+  \end{subfigure}
+  \caption{A combination of P3L and P1S is not a criterion for an optimal schedule. The optimal schedule has $T_3^*=\frac{4}{3}\approx 1.333$ and $T_1^*=\frac{323}{108}\approx 2.99074$. One other (suboptimal) schedule has $T_1=\frac{2899}{972}\approx 2.98251 < T_1^*$, while still another schedule has $T_3=\frac{110}{81}\approx1.358025 > T_3^*$.}
   \label{fig:p3l-p1s-combo-suboptimal}
 \end{figure}
 
@@ -518,8 +534,6 @@ However, after some investigation, we are tempted to conjecture the following.
 \end{conjecture}
 
 Even if this conjecture turns out to be true, it seems complex to transform this knowledge into a scheduling strategy that does something more significantly efficient than ``explore everything, and choose the best'', because $T_3, T_2$ and $T_1$ are not that easy to compute.
-
-\clearpage{}
 
 \section{Conclusion}
 \label{sec:p3-conclusion}

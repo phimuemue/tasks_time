@@ -6,22 +6,67 @@ We now researching some properties of snapshot DAGs and optimal schedules. In pa
 \section{Properties of optimal schedules}
 \label{sec:optimal-schedules-properties}
 
+\subsection{Idle processors}
+\label{sec:optimal-schedule-no-idleness}
+
 As shown in \cite{chandyreynoldslargepaper1979}, it is known that an optimal scheduling strategy does not keep a processor idle if it could do some work. An intuitive explanation of this fact is as follows: Assume that there is a strategy that keeps a processor idle at some point even if there is a ready task $t$ that could be processed. Then, we construct a new strategy, that schedules $t$ (using the idle processor) and behaves like the original strategy. Then, it can be shown that this new strategy yields a smaller overall expected run time.
 
-Moreover, it is known that preemtive scheduling yields better results than non-preemtive scheduling. As an example, \cite{MoritzMaasDiploma} shows the intree $(0,0,1,1,1,2,2,2)$. This intree is -- non-preemtively -- optimally processed by starting out with tasks 3, 4 and 5. The optimal preemtive schedule
+\subsection{Preemtive vs. non-preemtive scheduling}
+\label{sec:optimal-schedules-preemtive}
+
+\label{preemtiveness-explanation}
+In section \ref{sec:schedules-problem-setting}, we mentioned that preemptive scheduling might yield better results than non-preemtive scheduling. As an example, \cite{MoritzMaasDiploma} shows the intree $(0,0,1,2,2,3,3,3,4,5)$. This intree is -- non-preemtively -- optimally processed by starting out with tasks 7, 8 and 9. However, we can acchieve a better overall runtime by initially scheduling 8, 9 and 10. Consider figure \ref{fig:preemtive-example-00111222} to compare both schedules.
 
 \begin{figure}[ht]
   \centering
   \begin{subfigure}{.45\linewidth}
     \centering
-    \includegraphics{p3/preemtive/00111222hlf.pdf}
+    \includegraphics{p3/preemtive/0012233345_nonpreemtive.pdf}
     \caption{Optimal non-preemtive schedule.}
   \end{subfigure}
   \quad
-
-  \caption{Preemtive vs. non-preemtive scheduling for $(0,0,1,1,1,2,2,2)$}
+  \begin{subfigure}{.45\linewidth}
+    \centering
+    \includegraphics{p3/preemtive/0012233345_preemtive.pdf}
+    \caption{A better preemtive schedule.}
+  \end{subfigure}
+  \caption{Preemtive vs. non-preemtive scheduling for $(0,0,1,1,1,2,2,2)$. Note that the snapshots in the second line are the same, but they are reached with different probabilities due to the fact that we can reschedule in the preemtive case.}
   \label{fig:preemtive-example-00111222}
 \end{figure}
+
+Another example that shows nicely that preemtive scheduling yields better results in some cases is the intree $(0,0,1,2,2,3,3,6,8,9,10,11,12,13)$ shown in figure \ref{fig:2-hlf-plus-one-not-optimal}. It is clear that -- if the first 6 steps, always the topmost task is the first task to finish, we at some point reach the intree shown in figure \ref{fig:preemtive-better-bad-case}. If we allowed to reschedule (by possibly interrupting the execution of some tasks) and chose a schedule as shown in figure \ref{fig:preemtive-better-good-case}, we would obviously acchieve a better overal run time. 
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{.46\textwidth}
+    \centering
+    \includegraphics{p3/preemtive/00112556subopt.pdf}
+    \caption{Suboptimal schedule. These snapshots are part of the optimal schedule for the intree $(0,0,0,2,3,4,5,7,7,9,10,10,12)$, shown in figure \ref{fig:2-hlf-plus-one-not-optimal}.}
+    \label{fig:preemtive-better-bad-case}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.46\textwidth}
+    \centering
+    \includegraphics{p3/preemtive/00112556opt.pdf}
+    \caption{Optimal schedule for $(0,0,1,1,2,5,5,6)$. This schedule is HLF.}
+    \label{fig:preemtive-better-good-case}
+  \end{subfigure}
+  \caption{Intree $(0,0,1,1,2,5,5,6)$. This intree might result at some point from the intree $(0,0,1,2,2,3,3,6,8,9,10,11,12,13)$ with the two lowest tasks scheduled (see figure \ref{fig:2-hlf-plus-one-not-optimal}). If we allowed for preemting tasks we could improve the overal run time.}
+  \label{fig:preemtive-is-better}
+\end{figure}
+
+\subsection{Considerations about subtrees}
+\label{sec:properties-optimal-schedules-no-implications}
+
+From another point of view, the intree $(0,0,1,2,2,3,3,6,8,9,10,11,12,13)$ shows that an optimal schedule may be forced at some time to process a subtree in a way that it would not process it if the subtree was processed for itself. This means that we can formulate the following:
+
+\begin{theorem}
+  There are intrees $T$ and $S$ such that $T$ is a subtree of $S$ and both $T$ and $S$ have the same root such that the optimal (non-preemtive) schedule for $S$ is HLF, but the optimal (non-preemtive) schedule for $T$ is non-HLF.
+\end{theorem}
+
+\begin{proof}
+  See considerations above.
+\end{proof}
 
 \section{Size of the snapshot DAG}
 \label{sec:p3-size-of-snapshot-dag-first-attempts}
@@ -348,7 +393,7 @@ We generalize this fact in the next section.
 
       If $x'$ is \emph{not} in the topmost level, it can not be blocked by $z_2$ because we assumed that $z_2$ is added in a way such that $I\cup\{z_2\}$ is still a degenerate intree.
 
-      Otherwise (if $x'$ is a topmost task \todo{topmost definieren!}), $z_2$ can not be added \emph{above} $x'$ because we assumed $level(z_1)>level(z_2)$.
+      Otherwise (if $x'$ is a topmost task), $z_2$ can not be added \emph{above} $x'$ because we assumed $level(z_1)>level(z_2)$.
 
       Again, $x'$ is ready in $I_2^x$.
       % we still have two subcases:
@@ -524,13 +569,13 @@ We can now derive the following theorem.
 \begin{proof}
   Consider a degenerate intree with $n=3$ tasks. It is trivially clear that for P3, a HLF schedule is optimal for this intree (see figure \ref{fig:p3-lemma-adding-intrees-induction-start} to see what these intrees look like -- we simply can conclude examine all possible schedules and see that the optimal ones is exactly HLF).
   
-  Consider now a degenerate tree $I$ with $n$ nodes and assume that we know that for all degenerate trees with $n-1$ nodes HLF is optimal for three processors. If $I$ has two or less topmost tasks, it is obvious that we have to use HLF (since we can use at most two processors and HLF is known to be optimal for two processors \todo{Referenz und Beweis in P2-Kapitel}).
+  Consider now a degenerate tree $I$ with $n$ nodes and assume that we know that for all degenerate trees with $n-1$ nodes HLF is optimal for three processors. If $I$ has two or less topmost tasks, it is obvious that we have to use HLF (since we can use at most two processors and HLF is known to be optimal for two processors --- see chapter \ref{chap:p2}).
 
   Thus, we only have to focus on the case where $I$ has at least three ready tasks.
 
   If we choose three topmost tasks $x,y,z$ of $I$, we can argue as follows: If $x$ is the task that finishes first, for the resulting subtree $I\setminus \left\{ x \right\}$, we can be sure that we can choose the next task such that we adhere to HLF, thus choosing the optimal solution for $I\setminus\left\{ x \right\}$ (by induction hypothesis). The same holds if $y$ or $z$ finishes first.
   
-  We now consider a \todo{(possibly?) }non-HLF schedule for $I$ and compare it to the HLF schedule described before.
+  We now consider a (possibly) non-HLF schedule for $I$ and compare it to the HLF schedule described before.
   Let $x',y',z'$ be the tasks to be chosen such that at least $x\neq x'$ or $y\neq y'$ or $z\neq z'$. We can -- without loss of generality -- assume $level(x')\leq level(x)$, $level(y')\leq level(y')$, $level(z')\leq level(z)$. If $x'$ is the first task to finish, we consider the degenerate intree $I\setminus\left\{ x' \right\}$. Since $I \setminus \left\{ x' \right\}$ is a degenerate intree with $n-1$ tasks, it would be optimal to use HLF. However, using HLF may or may not be possible depending on our previous choices of $y'$ and $z'$. That is, the optimum for $I\setminus\left\{ x' \right\}$ \emph{might} be acchieved if we chose $y'$ and $z'$ accordingly. From this we can conclude that the optimal expected run time is at least $T_{HLF}\left( I\setminus\left\{ x' \right\} \right)$, where $T_{HLF}$ denotes the run time for HLF (which we know, by induction, is optimal).
 
   Now we compare the run time for $I\setminus\left\{ x' \right\}$ to the optimal run time for $I \setminus\left\{ x \right\}$, which is exactly given by $T_{HLF}\left( I \setminus\left\{ x \right\} \right)$. We recognize that $I\setminus\left\{ x' \right\}$ and $I\setminus\left\{ x \right\}$ have a common subtree, namely $I\setminus\left\{ x,x' \right\}$ with $n-2$ tasks.

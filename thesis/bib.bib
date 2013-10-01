@@ -7,7 +7,6 @@
                   f{\"u}r Informatik, TU M{\"u}nchen},
   year =	 2001,
   month =	 {Sep},
-  type = {Diploma thesis}
 }
 
 @book{schickinger2001diskrete,
@@ -15,7 +14,6 @@
   author={Schickinger, T. and Steger, A.},
   isbn={9783642568381},
   series={Diskrete Strukturen},
-  url={http://books.google.de/books?id=w8yW5IotvlwC},
   year={2001},
   publisher={Springer-Verlag GmbH}
 }
@@ -26,7 +24,6 @@
   isbn={9783540261827},
   lccn={2005928165},
   series={Graduate Texts in Mathematics},
-  url={http://books.google.de/books?id=04YbQF8oscQC},
   year={2005},
   publisher={Springer-Verlag GmbH}
 }
@@ -36,7 +33,6 @@
   author={Flajolet, P. and Sedgewick, R.},
   isbn={9781139477161},
   lccn={2009280635},
-  url={http://books.google.de/books?id=0h-4QcA1c1QC},
   year={2009},
   publisher={Cambridge University Press}
 }
@@ -46,7 +42,6 @@
   author={Aho, A.V. and Hopcroft, J.E. and Ullman, J.D.},
   lccn={74003995},
   series={Addison-Wesley series in computer science and information processing},
-  url={http://books.google.de/books?id=SJJQAAAAMAAJ},
   year={1974},
   publisher={Addison-Wesley Pub. Co.}
 }
@@ -56,7 +51,6 @@
   author={Arora, S. and Barak, B.},
   isbn={9780521424264},
   lccn={2009002789},
-  url={http://books.google.de/books?id=8Wjqvsoo48MC},
   year={2009},
   publisher={Cambridge University Press}
 }
@@ -71,6 +65,7 @@
 }
 
 @MISC{oeisnumbernontrivialintrees,
+  keywords={oeis},
   SHORTHAND={A174145},
   AUTHOR={N. J. A. Sloane},
   TITLE={The {O}n-{L}ine {E}ncyclopedia of {I}nteger {S}equences},
@@ -80,19 +75,117 @@
   NOTE={Number of rooted forests with n nodes in which each component contains at least two nodes.}
 }
 
+@MISC{oeistwoprocsA0,
+  keywords={oeis},
+  SHORTHAND={A001787},
+AUTHOR={N. J. A. Sloane},
+TITLE={The {O}n-{L}ine {E}ncyclopedia of {I}nteger {S}equences},
+HOWPUBLISHED={\href{http://oeis.org/A001787}{A001787}},
+MONTH={},
+YEAR={},
+NOTE={$n*2^(n-1)$.}
+}
+
+@MISC{oeistwoprocsA1,
+  keywords={oeis},
+  SHORTHAND={A000337},
+AUTHOR={N. J. A. Sloane},
+TITLE={The {O}n-{L}ine {E}ncyclopedia of {I}nteger {S}equences},
+HOWPUBLISHED={\href{http://oeis.org/A000337}{A000337}},
+MONTH={},
+YEAR={},
+NOTE={$(n-1)*2^n + 1$.}
+}
+
+@MISC{oeistwoprocsA2,
+  keywords={oeis},
+  SHORTHAND={A045618},
+AUTHOR={Wolfdieter Lang},
+TITLE={The {O}n-{L}ine {E}ncyclopedia of {I}nteger {S}equences},
+HOWPUBLISHED={\href{http://oeis.org/A045618}{A045618}},
+MONTH={},
+YEAR={},
+NOTE={Partial sums of A000337(n+4), $n \geq 0$.}
+}
+
+@MISC{oeistwoprocsA3,
+  keywords={oeis},
+  SHORTHAND={A045889},
+AUTHOR={Wolfdieter Lang},
+TITLE={The {O}n-{L}ine {E}ncyclopedia of {I}nteger {S}equences},
+HOWPUBLISHED={\href{http://oeis.org/A045889}{A045889}},
+MONTH={},
+YEAR={},
+NOTE={Partial sums of A045618.}
+}
+
+@MISC{oeistwoprocsA4,
+  keywords={oeis},
+  SHORTHAND={A034009},
+AUTHOR={Wolfdieter Lang},
+TITLE={The {O}n-{L}ine {E}ncyclopedia of {I}nteger {S}equences},
+HOWPUBLISHED={\href{http://oeis.org/A034009}{A034009}},
+MONTH={},
+YEAR={},
+NOTE={Partial sums of A045889.}
+}
+
+@MISC{oeisrootedtrees,
+  keywords={oeis},
+  SHORTHAND={A000081},
+AUTHOR={N. J. A. Sloane},
+TITLE={The {O}n-{L}ine {E}ncyclopedia of {I}nteger {S}equences},
+HOWPUBLISHED={\href{http://oeis.org/A000081}{A000081}},
+MONTH={},
+YEAR={},
+NOTE={Number of rooted trees with n nodes (or connected functions with a fixed point).}
+}
+
 @Misc{massifmanual,
   key = 	 {ValM},
   author = 	 {{Valgrind (TM) Developers}},
   title = 	 {{Valgrind User Manual -- Massif: a heap profiler}},
-  howpublished = {\url{http://valgrind.org/docs/manual/ms-manual.html}},
-  OPTmonth = 	 {},
-  OPTyear = 	 {},
-  OPTnote = 	 {},
-  OPTannote = 	 {}
-}
+  howpublished = {\url{http://valgrind.org/docs/manual/ms-manual.html}}}
 
 @MISC{chandyreynoldslargepaper1979,
-    author = {P. F. Reynolds and K. M. Chandy},
+    author = {K. M. Chandy and P. F. Reynolds},
     title = {Scheduling Partially Ordered Tasks with Exponentially Distributed Times},
     year = {1979}
 }
+
+@article{chandyreynoldsshortpaper1975,
+ author = {Chandy, K. M. and Reynolds, P. F.},
+ title = {Scheduling partially ordered tasks with probabilistic execution times},
+ journal = {SIGOPS Oper. Syst. Rev.},
+ issue_date = {November 1975},
+ volume = {9},
+ number = {5},
+ month = nov,
+ year = {1975},
+ issn = {0163-5980},
+ pages = {169--177},
+ numpages = {9},
+ url = {http://doi.acm.org/10.1145/1067629.806534},
+ doi = {10.1145/1067629.806534},
+ acmid = {806534},
+ publisher = {ACM},
+ location = {New York, NY, USA},
+ keywords = {Deterministic models, Multi-processing, Multi-tasking, Probabilistic models},
+} 
+
+@inproceedings{Chandy:1975:SPO:800213.806534,
+ author = {Chandy, K. M. and Reynolds, P. F.},
+ title = {Scheduling partially ordered tasks with probabilistic execution times},
+ booktitle = {Proceedings of the fifth ACM symposium on Operating systems principles},
+ series = {SOSP '75},
+ year = {1975},
+ location = {Austin, Texas, USA},
+ pages = {169--177},
+ numpages = {9},
+ url = {http://doi.acm.org/10.1145/800213.806534},
+ doi = {10.1145/800213.806534},
+ acmid = {806534},
+ publisher = {ACM},
+ location = {New York, NY, USA},
+ keywords = {Deterministic models, Multi-processing, Multi-tasking, Probabilistic models},
+} 

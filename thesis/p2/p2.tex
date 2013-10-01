@@ -8,7 +8,7 @@
 
 \todo{Prove that same profiles have same runtime.}
 
-If one considers the problem of scheduling an intree onto two processors, it becomes clear that HLF is optimal (\todo{Proof.}). Moreover, we can conclude that we can compute the optimal expected finish time in polynomial time. This chapter provides a proof for this claim that mainly relies on so-called \emph{profiles}. In this context, a profile is another structure that describes (some characteristics of) an intree in a compressed form.
+If one considers the problem of scheduling an intree onto two processors, it becomes clear that HLF is optimal (see \cite{chandyreynoldsshortpaper1975} for a proof) (\todo{Proof zeigen?}). Moreover, we can conclude that we can compute the optimal expected finish time in polynomial time. This chapter provides a proof for this claim that mainly relies on so-called \emph{profiles}. In this context, a profile is another structure that describes (some characteristics of) an intree in a compressed form.
 
 \subsection{Profiles of Intrees}
 \label{sec:p2-simple-method-runtime-profiles-for-intrees}
@@ -164,7 +164,7 @@ Unfortunately, the recurrence relation in equation (\ref{eq:p2-profile-optimal-e
     $A_4(n)$ & 0 & 1 & 8 & 38 & 140 & 443 & 1268 &
     $(n-3)\cdot2^{n+4}+\binom{n+3}{3}+4\cdot\left(\binom{n+1}{2}+4 n+12\right)$ \\
   \end{tabular}
-  \caption{Example values for $A_i(n)$. \todo{OEIS zitieren.}}
+  \caption{Example values for $A_i(n)$. For more information about these sequences, see \cite{oeistwoprocsA0}\cite{oeistwoprocsA1,oeistwoprocsA2,oeistwoprocsA3,oeistwoprocsA4}.}
   \label{tab:example-values-an-p2-profile}
 \end{table}
 
@@ -173,7 +173,7 @@ Before we prove theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf}, let u
 
 From this table and by looking at the definition of $A_i(n)$ we can deduce a simple lemma that will later be useful.
 
-Note that there are closed expressions for $A_i(n)$ for $i\leq 5$ (and possibly for higher values of $i$, as well). However, these formulae are quite complex (also see table \ref{tab:example-values-an-p2-profile}) and we were not able to deduce a \emph{simple} pattern according to which $A_i(n)$ can be constructed\todo[Hr. Mayr]{Sagen Ihnen die Polynombestandteile in Tabelle \ref{tab:example-values-an-p2-profile} etwas?}. It seems that $A_i(n)$ involves the term $(n+1-i)\cdot 2^{n+i}$ in some way, and the remaining term seems to be a polynomial in $n$.
+Note that there are closed expressions for $A_i(n)$ for $i\leq 5$ (and possibly for higher values of $i$, as well). However, these formulae are quite complex (also see table \ref{tab:example-values-an-p2-profile}) and we were not able to deduce a \emph{simple} pattern according to which $A_i(n)$ can be constructed. It seems that $A_i(n)$ involves the term $(n+1-i)\cdot 2^{n+i}$ in some way, and the remaining term seems to be a polynomial in $n$.
 
 \begin{lemma}
   \label{lemma:p2-hlf-profiles-an-simple-recurrence}
@@ -253,7 +253,7 @@ We can now proof theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf}.
   This concludes the proof.
 \end{proof}
 
-Moritz Maaß has shown another property in \cite{MoritzMaasDiploma}, that we are able to generalize.
+Moritz Maaß has shown another property in \cite{MoritzMaasDiploma}:
 
 \begin{theorem}[Intrees with exactly two leaves and intrees with same profiles]
   Let $l, k\in\naturals$, $a\in\naturals_0$ and $\profile{\profilerepeat{1}{l-k}, \profilerepeat{2}{k}, \profilerepeat{1}{a+1}}$ be a profile. Then, it holds that
@@ -273,9 +273,7 @@ Moritz Maaß has shown another property in \cite{MoritzMaasDiploma}, that we are
   \end{eqnarray*}
 \end{theorem}
 
-\begin{proof}
-  \todo{Proof.}
-\end{proof}
+For a proof of the above theorem, please refer to \cite{MoritzMaasDiploma}.
 
 Even if we were not able to deduce a more general formula that holds if more entries in the profile differ from 1, this might serve as a starting point for a more advanced proof.
 

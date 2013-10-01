@@ -5,6 +5,9 @@
 
 %\includeonly{p3/p3}
 
+\bibliography{bib}
+\addbibresource{bib.bib}
+
 \begin{document}
 
 \chapter{TODO-Lists}
@@ -14,18 +17,17 @@
 \label{chap:current-questions}
 
 \begin{itemize}
+\item If a tree $T$ is non-HLF-optimal, can there a be a supertree $S$ of this tree ($T\subseteq S$) such that $S$ is HLF-optimal?
 \item Are chain collections optimally scheduled by HLF?
-\item P3: Is it possible, that there are -- at one level of the optimal snapshot DAG -- multiple snapshots containing the same intree, but a different set of scheduled tasks?
-\item For each snapshot resulting from an optimal schedule, at least one top-most task is scheduled?
-\item For each snapshot resulting from an optimal schedule, at least two top-most tasks are scheduled?
-\item If for an intree only non-top tasks are scheduled, you can exchange one of the non-top tasks with a top-tasks and obtain a better run time?
+\item P3: Is it possible, that there are -- at one level of the optimal snapshot DAG -- multiple snapshots containing the same intree, but a different set of scheduled tasks? \remark{Probably not w.l.o.g.}
+\item For each snapshot resulting from an optimal schedule, at least one top-most task is scheduled? \remark{Seems so.}
+\item For each snapshot resulting from an optimal schedule, at least two top-most tasks are scheduled?\done{Not necessarily.}
+\item If for an intree only non-top tasks are scheduled, you can exchange one of the non-top tasks with a top-tasks and obtain a better run time?\remark{Seems so}
 \end{itemize}
 
 \section{Other TODOs}
 
 \begin{itemize}
-\item Implement ``examine all trees with certain structure'' in the program.
-\item Improve tree generation method so only trees with four or more leaves are output.
 \item Appendix containing all tree sequences for which optimal schedule is strictly non-HLF.
 \item Improve program by using arrays instead of maps (only for canonical snapshots). \done{Works for canonical snapshots, ``normal ones'' broken.} \todo{Correct it!}
 \end{itemize}
@@ -60,7 +62,9 @@
 
 %\include{counterexamples/counterexamples}
 
-\bibliographystyle{alpha}
-\bibliography{bib}
+%\bibliographystyle{alphabetic}
+\nocite{*}
+\printbibliography[notkeyword=oeis,title={Bibliography}]
+%\printbibliography[title={Number sequences},keyword=oeis]
 
 \end{document}

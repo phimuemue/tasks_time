@@ -4,7 +4,7 @@
 \section{Probability theory}
 \label{sec:some-probability}
 
-As we will see later, we will often be using probability distributions (in particular continuous probability distributions).
+Our computations are based on fundamental probability theoretic considerations. We therefore introduce some important concepts, where we rely on established notation (i.e. we use $\p{}$ to denote probabilities, $\E{}$ for expected values, etc).
 
 \subsection{Exponential distribution}
 \label{sec:exponential-distribution}
@@ -154,6 +154,55 @@ This is a very advantageous property that can be exploited in our considerations
   (\ref{eq:probability-that-cont-random-variable-is-smallest-out-of-iid-is-one-over-n}).
 \end{proof}
 
+\subsection{Law of total probability}
+\label{sec:theory-law-total-probability}
+
+\begin{theorem}
+  \label{theo:law-total-prob}
+  Let $A$ be an event and let ${\cal B}=\left\{ B_1,B_2,B_3,\dots \right\}$ a finite or countably infinite set of pairwise disjoint events with $A \subseteq \bigcup_{B \in {\cal B}} B$. Then, we have
+  \begin{equation*}
+    \p{A} = \sum_{B\in{\cal B}} \p{A \mid B} \cdot \p{B},
+  \end{equation*}
+  where $\p{A \mid B}$ denotes the conditional probability of $A$ under the condition that $B$ is fulfilled.
+\end{theorem}
+
+\begin{proof}
+  According to the requirements for ${\cal B}$, we have
+  \begin{equation*}
+    A = 
+    \left( A\cap B_1 \right) \cup
+    \left( A\cap B_2 \right) \cup
+    \left( A\cap B_3 \right) \cup
+    \dots
+  \end{equation*}
+  Because two events $B_i$ and $B_j$ are disjoint (if $i\neq j$), we have that $\left( A\cap B_i \right)$ and $\left( A\cap B_j \right)$ are disjoint, as well. Thus, we can compute the probability
+  \begin{equation*}
+    \p{A} = 
+    \p{
+      \left( A\cap B_1 \right) \cup
+      \left( A\cap B_2 \right) \cup
+      \dots
+    }
+    =
+    \p{ A\cap B_1} +
+    \p{ A\cap B_2} + \dots
+  \end{equation*}
+  Now, solving the definition of conditional probability $\p{A\mid B_i} = \frac{\p{A \cap B_i}}{\p{B_i}}$ for $\p{A\cap B_i}$, and substituting each term accordingly, results in the desired equation.
+\end{proof}
+
+Theorem \ref{theo:law-total-prob} can be used to derive its counterpart for expected values:
+
+\begin{theorem}
+  Let $X$ be a random variable in a probability space $\Omega$ and ${\cal B}\left\{ B_1,B_2,B_3,\dots \right\}$ a finite or countably infinite set of pairwise disjoint events with $A \subseteq \bigcup_{B \in {\cal B}} B$. Then,
+  \begin{equation*}
+    \E{X} = \sum_{B\in{\cal B}} \E{X | B} \cdot \p{B}.
+  \end{equation*}
+\end{theorem}
+
+\begin{proof}
+  We use the definition of the expected value and theorem \ref{theo:law-total-prob} to obtain the desired result.
+\end{proof}
+
 \section{Intrees}
 \label{sec:foundations-graph-theory}
 
@@ -196,8 +245,6 @@ We introduce intuitive (but non-standard) notation for modifying an intree by ad
   If the successor $t$ of $v$ is clear from the context, we sometimes simply write $I\cup\left\{ v \right\}$ instead of $I\cup\left\{ (v,t) \right\}$.
 \end{definition}
 
-\todo{Anzahl der rooted trees angeben?}
-
 \paragraph{Describing intrees}
 
 We conclude this short introduction on intrees with an intuitive way of describing intrees. Most readers are probably acquainted with a visual description of intrees such the one in figure \ref{fig:intree-example-task-names-directed-edges}. For textual representations (and even more important: for use in command line), we rely on another representation. 
@@ -215,7 +262,7 @@ Consider the intree in figure \ref{fig:intree-example-task-names-directed-edges}
 \end{equation*}
 Carrying out the procedure given above yields the sequence
 \begin{equation*}
-  (0, 0, 1, 1, 1, 3, 3, 3, 6, 8).
+  (0, 0, 1, 1, 2, 3, 3, 3, 6, 8).
 \end{equation*}
 
 Note that since the root carries number 0, we can start iterating at 1. Moreover, this representation enforces that the first number in such a sequence describing an intree is always 0. This, of course, introduces some redundancy, but, on the other hand, enables us to describe the tree consisting of only a root: It is denoted by an empty sequence: $()$.
@@ -230,8 +277,10 @@ Those intrees can naturally be used to describe dependencies between different t
 \todo{Vielleicht ein Beispiel aus der echten Welt.}
 
 \begin{definition}[Ready tasks]
-  Let $I$ be an intree of tasks (represented by vertices) and. If $t$ is a leaf of $I$, we call the corresponding task (resp. -- for simplicity -- the whole vertex) \emph{ready}.\todo{Figure.}
+  Let $I$ be an intree of tasks (represented by vertices) and. If $t$ is a leaf of $I$, we call the corresponding task (resp. -- for simplicity -- the whole vertex) \emph{ready}.
 \end{definition}
+
+The intree $(0,0,1,1,2,3,3,3,6,8)$ (see figure \ref{fig:intree-example-task-names-directed-edges}) has the ready tasks 4, 5, 7, 9 and 10.
 
 \subsection{Labelled and unlabelled intrees}
 \label{sec:intrees-labelled-unlabelled}
@@ -324,7 +373,130 @@ As an example for isomorphic intrees, consider $(0,0,1,1,2,3,3,3,6,8)$, $(0,1,2,
 \subsection{Extension to in-forests}
 \label{sec:intrees-extension-to-forests}
 
-It is worth mentioning that -- for our needs -- there is a straightforward extension of intrees to in-forests for our scenario. In-forests are graphs whose components are all intrees\todo{Figure reinhauen}. To convert an in-forest to an intree, we simply add an auxiliary new root and connect all roots of the intrees within the in-forest to the new root. This way, we clearly obtain a new intree.\todo{Evtl. später nochmal ansprechen!}
+It is worth mentioning that -- for our needs -- there is a straightforward extension of intrees to in-forests for our scenario. In-forests are graphs whose components are all intrees. To convert an in-forest to an intree, we simply add an auxiliary new root and connect all roots of the intrees within the in-forest to the new root. This way, we clearly obtain a new intree.
+
+\begin{figure}[th]
+  \centering
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=.2, anchor=south]
+      \begin{scope}[xshift=-2cm]
+        \begin{scope}[xshift=-2cm]
+          \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+        \end{scope}
+        \node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
+        \node[circle, scale=0.75, fill] (tid6) at (2.25,4.5){};
+        \node[circle, scale=0.75, fill] (tid7) at (4.5,4.5){};
+        \node[circle, scale=0.75, fill] (tid12) at (3.75,6){};
+        \node[circle, scale=0.75, fill] (tid13) at (5.25,6){};
+      \end{scope}
+      \draw[](tid7) -- (tid12);
+      \draw[](tid7) -- (tid13);
+      \draw[](tid2) -- (tid6);
+      \draw[](tid2) -- (tid7);
+      \node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+      \node[circle, scale=0.75, fill] (tid8) at (6.75,4.5){};
+      \draw[](tid3) -- (tid8);
+      \begin{scope}[xshift=2cm]
+        \node[circle, scale=0.75, fill] (tid4) at (10.5,3){};
+        \node[circle, scale=0.75, fill] (tid9) at (9,4.5){};
+        \node[circle, scale=0.75, fill] (tid14) at (8.25,6){};
+        \node[circle, scale=0.75, fill] (tid15) at (9.75,6){};
+        \node[circle, scale=0.75, fill] (tid20) at (9.75,7.5){};
+        \draw[](tid15) -- (tid20);
+        \draw[](tid9) -- (tid14);
+        \draw[](tid9) -- (tid15);
+        \node[circle, scale=0.75, fill] (tid10) at (12,4.5){};
+        \node[circle, scale=0.75, fill] (tid16) at (11.25,6){};
+        \node[circle, scale=0.75, fill] (tid17) at (12.75,6){};
+        \node[circle, scale=0.75, fill] (tid21) at (12.75,7.5){};
+        \draw[](tid17) -- (tid21);
+        \draw[](tid10) -- (tid16);
+        \draw[](tid10) -- (tid17);
+        \draw[](tid4) -- (tid9);
+        \draw[](tid4) -- (tid10);
+        \begin{scope}[xshift=2cm]
+          \node[circle, scale=0.75, fill] (tid5) at (15,3){};
+          \node[circle, scale=0.75, fill] (tid11) at (15,4.5){};
+          \node[circle, scale=0.75, fill] (tid18) at (14.25,6){};
+          \node[circle, scale=0.75, fill] (tid22) at (14.25,7.5){};
+          \draw[](tid18) -- (tid22);
+          \node[circle, scale=0.75, fill] (tid19) at (15.75,6){};
+          \node[circle, scale=0.75, fill] (tid23) at (15.75,7.5){};      
+        \end{scope}
+      \end{scope}
+      \draw[](tid19) -- (tid23);
+      \draw[](tid11) -- (tid18);
+      \draw[](tid11) -- (tid19);
+      \draw[](tid5) -- (tid11);
+    \end{tikzpicture}
+    \caption{Original in-forest (each component is a separate intree).}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=.2, anchor=south]
+      \node[circle, scale=0.75, draw, thick] (tid0) at (8.25,0){};
+      \begin{scope}[xshift=-2cm]
+        \begin{scope}[xshift=-2cm]
+          \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+        \end{scope}
+        \node[circle, scale=0.75, fill] (tid2) at (3.75,3){};
+        \node[circle, scale=0.75, fill] (tid6) at (2.25,4.5){};
+        \node[circle, scale=0.75, fill] (tid7) at (4.5,4.5){};
+        \node[circle, scale=0.75, fill] (tid12) at (3.75,6){};
+        \node[circle, scale=0.75, fill] (tid13) at (5.25,6){};
+      \end{scope}
+      \draw[](tid7) -- (tid12);
+      \draw[](tid7) -- (tid13);
+      \draw[](tid2) -- (tid6);
+      \draw[](tid2) -- (tid7);
+      \node[circle, scale=0.75, fill] (tid3) at (6.75,3){};
+      \node[circle, scale=0.75, fill] (tid8) at (6.75,4.5){};
+      \draw[](tid3) -- (tid8);
+      \begin{scope}[xshift=2cm]
+        \node[circle, scale=0.75, fill] (tid4) at (10.5,3){};
+        \node[circle, scale=0.75, fill] (tid9) at (9,4.5){};
+        \node[circle, scale=0.75, fill] (tid14) at (8.25,6){};
+        \node[circle, scale=0.75, fill] (tid15) at (9.75,6){};
+        \node[circle, scale=0.75, fill] (tid20) at (9.75,7.5){};
+        \draw[](tid15) -- (tid20);
+        \draw[](tid9) -- (tid14);
+        \draw[](tid9) -- (tid15);
+        \node[circle, scale=0.75, fill] (tid10) at (12,4.5){};
+        \node[circle, scale=0.75, fill] (tid16) at (11.25,6){};
+        \node[circle, scale=0.75, fill] (tid17) at (12.75,6){};
+        \node[circle, scale=0.75, fill] (tid21) at (12.75,7.5){};
+        \draw[](tid17) -- (tid21);
+        \draw[](tid10) -- (tid16);
+        \draw[](tid10) -- (tid17);
+        \draw[](tid4) -- (tid9);
+        \draw[](tid4) -- (tid10);
+        \begin{scope}[xshift=2cm]
+          \node[circle, scale=0.75, fill] (tid5) at (15,3){};
+          \node[circle, scale=0.75, fill] (tid11) at (15,4.5){};
+          \node[circle, scale=0.75, fill] (tid18) at (14.25,6){};
+          \node[circle, scale=0.75, fill] (tid22) at (14.25,7.5){};
+          \draw[](tid18) -- (tid22);
+          \node[circle, scale=0.75, fill] (tid19) at (15.75,6){};
+          \node[circle, scale=0.75, fill] (tid23) at (15.75,7.5){};      
+        \end{scope}
+      \end{scope}
+      \draw[](tid19) -- (tid23);
+      \draw[](tid11) -- (tid18);
+      \draw[](tid11) -- (tid19);
+      \draw[](tid5) -- (tid11);
+      \draw[dashed, thick](tid0) -- (tid1);
+      \draw[dashed, thick](tid0) -- (tid2);
+      \draw[dashed, thick](tid0) -- (tid3);
+      \draw[dashed, thick](tid0) -- (tid4);
+      \draw[dashed, thick](tid0) -- (tid5);
+    \end{tikzpicture}
+    \caption{Adding a new root that is connected with all intrees' roots.}
+  \end{subfigure}
+  \caption{Converting an in-forest to an intree.}
+  \label{fig:in-forest-to-intree}
+\end{figure}
 
 To manipulate intrees, we define some non-standard notation that is, however, very convenient and should be easily understandable.
 
@@ -356,7 +528,9 @@ We assume that one single task can be processed by one processor exclusively, i.
 
 \paragraph{Non-preemtive scheduling}
 
-We will focus on non-preemtive scheduling, i.e. once a task is processor is assigned a task, this task has to be processed \emph{completely} before the processor can be used for anything else.\todo{Erwähnen, dass dies eine Einschränkung darstellt, da man preemtives Scheduling nicht durch non-präemtives simulieren kann (siehe Maaß).}
+We will focus on non-preemtive scheduling, i.e. once a task is processor is assigned a task, this task has to be processed \emph{completely} before the processor can be used for anything else. Note that the restriction on non-preemtive scheduling is no problem when we work with two processors (as shown in \cite{chandyreynoldslargepaper1979}) --- in the two-processor case, the optimal schedule is (without loss of generality) non-preemtive. However, for three processors, preemtive schedules might be better than non-preemtive ones. We show an example intree for this fact in section \ref{preemtiveness-explanation}.
+
+However, as shown in \cite{chandyreynoldslargepaper1979} an optimal schedule (without loss of generality) only preemts a task directly after another task finishes.
 
 \subsection{Processing a whole intree of tasks}
 \label{sec:processing-an-intree-of-tasks}
@@ -416,7 +590,7 @@ Consider now a snapshot, i.e. the current intree and a set of currently schedule
   Note that we could -- in principle -- easily choose a certain task with some probability and another task with another probability, thus introducing more possibilities.
 \end{itemize}
 
-That is, we have several possibilities here. The first of them (which task finishes first) can not be influenced in our scenario. The second, however, leaves us free choice. Depending on which task we choose next, we might get a better or worse overall run time:
+That is, we have several possibilities here. The first of them (which task finishes first) can not be influenced in our scenario. The second, however, leaves us free choice. Depending on which task we choose next, we might get a better or worse overall run time.
 
 \begin{definition}[Scheduling strategy]
   A \emph{scheduling strategy} determines which task shall be the next to be processed.
@@ -739,10 +913,14 @@ As an example, consider the tree in figure \ref{fig:intro-computing-expected-run
   \label{fig:intro-computing-expected-runtime}
 \end{figure}
 
+\paragraph{Computing the runtime for an in-forset}
+
+As mentioned in section \ref{sec:intrees-extension-to-forests}, we can also deal with in-forests by adding a new root connected to all intrees of the forest. To compute the expected run time for a specific schedule, we simply compute the expected run time for the intree resulting from the in-forest conversion and subtract 1. This can be done because the last task in the resulting intree to be processed \emph{must} be the root we introduced. The expected run time for the root is 1, so we can simply subtract 1 to obtain the expected run time for the original in-forest.
+
 \section{A first glance at schedules}
 \label{sec:intro-first-glance-schedules}
 
-We now move on to describing basic insights about schedules. Foremost, we make the following -- quite simple -- observation: If two intrees $I_1$ and $I_2$ are isomorphic, then for each schedule $S_1$ for $I_1$, there is a schedule $S_2$ for $I_2$ that has exactly the same run time. We see this by examining the bijective function $f:I_1 \mapsto I_2$ and for $S_2$ scheduling exactly the task $f(t_1)$ if $S_1$ would choose $t_1$. \todo{Figure, die komplette schedules von 2 isomorphen Bäumen zeigt!}
+We now move on to describing basic insights about schedules. Foremost, we make the following -- quite simple -- observation: If two intrees $I_1$ and $I_2$ are isomorphic, then for each schedule $S_1$ for $I_1$, there is a schedule $S_2$ for $I_2$ that has exactly the same run time. We see this by examining the bijective function $f:I_1 \mapsto I_2$ and for $S_2$ scheduling exactly the task $f(t_1)$ if $S_1$ would choose $t_1$.
 
 The second observation is that we can make the snapshot DAG more compact by avoiding snapshots that are -- essentially -- duplicates. We therefore extend the concept of isomorphisms from trees to snapshots in a straightforward way.
 
@@ -752,6 +930,51 @@ The second observation is that we can make the snapshot DAG more compact by avoi
 
   If $S$ and $S'$ are not equivalent, we call them \emph{distinct}.
 \end{definition}
+
+The requirement that scheduled tasks are ``preserved'' by the isomorphism is central to equivalence of snapshots, because otherwise, the corresponding run times may be unequal. Figure \ref{fig:non-isomorphic-snapshots} shows two variants of the intree $(0,0,0,1,1)$ with different sets of scheduled tasks, resulting in two distinct snapshots.
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=.35]
+      \node[circle, scale=0.9, fill, draw=black] (tid0) at (3,1.5){};
+      \node[circle, scale=0.9, fill, draw=black] (tid1) at (1.5,3){};
+      \node[circle, scale=0.9, fill, task_scheduled] (tid4) at (0.9,4.5){};
+      \node[circle, scale=0.9, fill, task_scheduled] (tid6) at (2.25,4.5){};
+      \draw[](tid1) -- (tid4);
+      \draw[](tid1) -- (tid6);
+      \node[circle, scale=0.9, fill, task_scheduled] (tid3) at (3.9,3){};
+      \node[circle, scale=0.9, fill, draw=black] (tid5) at (5.25,3){};
+      \draw[](tid0) -- (tid1);
+      \draw[](tid0) -- (tid3);
+      \draw[](tid0) -- (tid5);
+    \end{tikzpicture}
+    \caption{Intree $(0,0,0,1,1)$ with scheduled tasks 2, 4 and 5.}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=.35]
+      \node[circle, scale=0.9, fill, draw=black] (tid0) at (3,1.5){};
+      \node[circle, scale=0.9, fill, draw=black] (tid1) at (1.5,3){};
+      \node[circle, scale=0.9, fill, draw=black] (tid4) at (0.9,4.5){};
+      \node[circle, scale=0.9, fill, task_scheduled] (tid6) at (2.25,4.5){};
+      \draw[](tid1) -- (tid4);
+      \draw[](tid1) -- (tid6);
+      \node[circle, scale=0.9, fill, task_scheduled] (tid3) at (3.9,3){};
+      \node[circle, scale=0.9, fill, task_scheduled] (tid5) at (5.25,3){};
+      \draw[](tid0) -- (tid1);
+      \draw[](tid0) -- (tid3);
+      \draw[](tid0) -- (tid5);
+    \end{tikzpicture}
+    \caption{Intree $(0,0,0,1,1)$ with scheduled tasks 2, 3 and 5.}
+  \end{subfigure}
+  \caption{Two non-equivalent (i.e. \emph{distinct}) snapshots. This example shows that even if the underlying intrees are isomorphic, the containing snapshots are not necessarily equivalent, because there is no isomorphism between the two intrees that preserves scheduled tasks.}
+  \label{fig:non-isomorphic-snapshots}
+\end{figure}
+
+It can be easily seen that we essentially compute the same thing twice if we carry out computations for several equivalent snapshots. Therefore, we can combine equivalent snapshots into one snapshot. This transformation (treating equivalent snapshots as one single snapshot) requires us to adjust the probabilities in the snapshot DAG, which can be done straightforward by summing up all probabilities along the edges that are merged into one single edge. Figure \ref{fig:intro-equivalent-snapshots-elimination} shows an example where we would originally have to deal with six snapshots, but can reduce this to only two snapshots by excluding equivalent snapshots.
 
 \begin{figure}[tt]
   \centering
@@ -979,11 +1202,10 @@ The second observation is that we can make the snapshot DAG more compact by avoi
     \end{tikzpicture}
     \caption{Condensed DAG with distinct snapshots only.}
   \end{subfigure}
+  \quad
   \caption{Equivalent snapshots can be eliminated. Note that this changes the probabilities along the edges. To obtain the new probabilities, we sum up the probabilities all edges that are merged into the corresponding edge.}
   \label{fig:intro-equivalent-snapshots-elimination}
 \end{figure}
-
-It can be easily seen that we essentially compute the same thing twice if we carry out computations for several equivalent snapshots. Therefore, we can combine equivalent snapshots into one snapshot. This transformation (treating equivalent snapshots as one single snapshot) requires us to adjust the probabilities in the snapshot DAG, which can be done straightforward by summing up all probabilities along the edges that are merged into one single edge. Figure \ref{fig:intro-equivalent-snapshots-elimination} shows an example where we would originally have to deal with six snapshots, but can reduce this to only two snapshots by excluding equivalent snapshots.
 
 From now on, if not stated otherwise, we restrict ourselves to snapshot DAGs\todo{Bereits definiert?} that contain only distinct snapshots.
 
