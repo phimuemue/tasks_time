@@ -619,7 +619,7 @@ Computing the expected run time for a given schedule (more precisely for the who
   \end{equation*}
   where $\frac{1}{r}$ accounts for the expected run time of task $x_i$ and $T_{X_i}(I\setminus\left\{ x_i \right\})$ denotes the expected run time for the intree $I\setminus\left\{ x_i \right\}$ if the tasks within $X_i$ are scheduled.
 
-  Since \emph{each} of the tasks $x_1,x_2,\dots,x_r$ can be the first task to finish (each with probability $\frac{1}{r}$ according to theorem \ref{thm:iid-cont-rand-var-minimum}), we can compute the overal run time by \todo{Bedingte Wahrscheinlichkeitssumme einführen}
+  Since \emph{each} of the tasks $x_1,x_2,\dots,x_r$ can be the first task to finish (each with probability $\frac{1}{r}$ according to theorem \ref{thm:iid-cont-rand-var-minimum}), we can compute the overal run time by 
   \begin{eqnarray}
     \nonumber
     T_X(I) 
@@ -1209,7 +1209,7 @@ It can be easily seen that we essentially compute the same thing twice if we car
 
 From now on, if not stated otherwise, we restrict ourselves to snapshot DAGs\todo{Bereits definiert?} that contain only distinct snapshots.
 
-\section{Aim}
+\section{Summary: Problem statement}
 \label{sec:introduction-aim}
 
 We now sum up what we have as input and what we want to do:

@@ -653,75 +653,84 @@ We will now consider another class of intrees that can be shown to have HLF as o
 
 \todo{Figure von einer parallel chain.}
 
+We start out by a lemma that we will use later.
+
 \begin{lemma}
-  \label{lem:parallel-chains-chain-switching-higher-is-worse}
-  Let $I$ be a parallel chain with three ready tasks $x,y,z$. Such that $level(x)>level(y)$. Let $x'$ resp. $y'$ be two new nodes that are added as predecessors of $x$ resp. $y$. Then, $T_{x',y,z}(I\cup\left\{ x' \right\}) > T_{x,y',z}(I\cup\left\{ y' \right\})$. \todo{T-Notation mit Index mal anständig definieren!}
+  \label{lemma:parallel-chains-flatness}
+  Let $I$ be an intree and $x$ and $y$ two ready tasks with $level(x) > level(y)$. Then, $T_{HLF}(I\setminus\{ x \}) < T_{HLF}(I\setminus\{ y \})$, where $T_{HLF}(I)$ denotes the run time that is acchieved if intree $I$ is scheduled according to HLF.
 \end{lemma}
 
 \begin{proof}
-  We consider the parallel chain $I\cup\left\{ x' \right\}$ and its optimal schedule. We then construct a schedule for $I\cup\left\{ y' \right\}$ whose run time is less than the optimal run time for $I\cup\left\{ x' \right\}$.
+  \newcommand{\iminus}[1]{I\setminus\{#1\}}
+  \todo{Induktionsanfang}
+  We consider the HLF schedules on the intrees $I\setminus \{x\}$ and $\setminus \{y\}$, with variable names as aforementioned. Note that the intrees $I\setminus \{x\}$ and $\setminus \{y\}$ have at least two common HLF-tasks (i.e. tasks that are scheduled by HLF). We call these two tasks $x_1$ and $x_2$. \todo{Erklären, was passiert, wenn es im nächsten Schritt nicht mehr drei, sondern weniger Tasks zur Verfügung gibt.}For the intree $\iminus{x}$, we call the third HLF-task $x_3$ and can compute its expected run time (for HLF) by
+  \begin{equation*}
+    T_{HLF}(\iminus{x}) = 
+    \frac{1}{3} \cdot T(\iminus{x, x_1}) +
+    \frac{1}{3} \cdot T(\iminus{x, x_2}) +
+    \frac{1}{3} \cdot T(\iminus{x, x_3})
+    .
+  \end{equation*}
+  On the other hand, for the intree $\iminus{y}$, we call the third HLF-task $x'$ and can compute its expected run time analogously by
+  \begin{equation*}
+    T_{HLF}(\iminus{y}) = 
+    \frac{1}{3} \cdot T(\iminus{y, x_1}) +
+    \frac{1}{3} \cdot T(\iminus{y, x_2}) +
+    \frac{1}{3} \cdot T(\iminus{y, x'})
+    .
+  \end{equation*}
+  We can now compare $T(\iminus{x, x_1})$ with $T(\iminus{y, x_1})$, $T(\iminus{x, x_2})$ with $T(\iminus{x, x_2})$ and $T(\iminus{x, x_3})$ with $T(\iminus{y, x'})$.
   
-  We observe that in $I\cup\left\{ x' \right\}$ either $x'$, $y$ or $z$ finishes first. For each of these cases we now show that we can construct a corresponding schedule in $I\cup\left\{ y' \right\}$ such that the corresponding run time in $I\cup\left\{ y' \right\}$ is at most the one in $I\cup\left\{ x' \right\}$.
+  The intrees $\iminus{x,x_1}$ and $\iminus{y,x_1}$ have a common subtree, namely $\iminus{x_1}$. By induction ($\iminus{x_1}$ has $n-1$ tasks, $level(x) > level(y)$), we know that the expected HLF run time for $\iminus{x,x_1}$ is less than the expected run time for $\iminus{y,x_1}$. This consideration can be done for $x_2$ in the same manner.
+
+  It remains to compare $T(\iminus{x, x_3})$ and $T(\iminus{y, x'})$:
 
   \begin{itemize}
-  \item If $x'$ finishes first in $I\cup\left\{ x' \right\}$, then obtain the same intree like if $y'$ finishes first in $I\cup\left\{ y' \right\}$. Thus, we can assume the two resulting schedules to have the same run time.
-  \item If $z$ finishes first, we can argue by induction since the trees
-    \begin{equation*}
-      I\cup\left\{ x' \right\}\setminus\left\{ z \right\}
-      \quad
-      \text{ and }
-      \quad 
-      I\cup\left\{ y' \right\}\setminus\left\{ z \right\}
-    \end{equation*}
-    both have $n-1$ tasks and can be obtained by attaching $x'$ resp. $y'$ to the parallel chain $I\setminus\left\{ z \right\}$. We then know -- by induction -- that $T_{x',y,z}(I\cup\left\{ x' \right\}\setminus\left\{ z \right\}) > T_{x,y',z}(I\cup\left\{ y' \right\}\setminus\left\{ z \right\})$.
-  \item It remains to explain what to do if $y$ finishes in $I\cup\left\{ x' \right\}$ compared to if $x$ finishes first in $I\cup\left\{ y' \right\}$.
-    
-    The two respective intrees then are
-    \begin{equation*}
-      I\cup\left\{ x' \right\}\setminus\left\{ y \right\} 
-      \quad
-      \text{ and }
-      \quad
-      I\cup\left\{ y' \right\}\setminus\left\{ x \right\}.
-    \end{equation*}
-    
-    By induction, we know that
-    \begin{equation*}
-      T_{x', z}(I\cup\left\{ x' \right\}\setminus\left\{ y \right\})
-      >
-    \end{equation*}
+  \item  If $level(x')=level(x_3)$, the intrees $\iminus{x'}$ and $\iminus{x_3}$ are isomorphic (we are dealing with parallel chains only), and can -- thus -- be considered equal in our computations. That is, we can w.l.o.g. assume $x'=x_3$ if the levels of $x'$ and $x_3$ are equal. In this case, we have that $T(\iminus{x, x_3})$ and $T(\iminus{y, x'})$ share a common supertree (namely $\iminus{x_3}=\iminux{x'}$), and we know -- by induction since $level(x)>level(y)$ that $T(\iminus{x, x_3}) < T(\iminus{y, x'})$.
+  \item   If $level(x') \neq level(x_3)$, we know that $x_3$ is \emph{not} a HLF task in $\iminus{y}$, but $x'$ is. This means that $x'$ can only be a HLF task since it is not part of $\iminus{y}$. Therefore, we conclude that $y$ must be the same as $x_3$ (implying w.l.o.g. $\iminus{x,y}=\iminus{y,x'}$). This means that $level(x)>level(y)=level(x_3)$. Moreover, because $x'$ is only a HLF task because $x_3$ is not existent in $\iminus{y}$, we know that $level(x') < level(x_3)$. Combining the inequalities yields $level(x)>level(x')$. We can now argue that $\iminus{y}$ is (w.l.o.g.) a common supertree of $\iminus{x,y}=\iminus{x,x_3}$ and $\iminus{y,x'}$ with $n-1$ tasks. Since -- as explained before -- $level(x) > level(x_3)$, we can apply the induction hypothesis and conclude that $T(\iminus{x, x_3}) \leq T(\iminus{y, x'})$.
   \end{itemize}
+
+  We have now shown:
+  \begin{eqnarray*} 
+    T(\iminus{x, x_1}) \leq T(\iminus{y, x_1}) \\
+    T(\iminus{x, x_2}) \leq T(\iminus{x, x_2}) \\
+    T(\iminus{x, x_3}) \leq T(\iminus{y, x'})
+  \end{eqnarray*}
+  These inequalities can be used to derive the desired inequality.
 \end{proof}
 
-\begin{lemma}
-  \label{lem:parallel-chains-adding-tasks-level-comparison}
-  Let $I$ be a parallel chain and $x, y$ two (not necessarily distinct) redy tasks within $I$. Let $z_1$ and $z_2$ be two new tasks to be added to $I$ with $level(z_1) > level(z_2)$ and $I_1=I\cup\left\{ z_1 \right\}, I_2=I\cup\left\{ z_2 \right\}$.
-  
-  Then, $T_{x,y,z_1}(I_1) > T_{x,y,z_2}(I_2)$, where $T_{a,b,c}{I}$ denotes the optimal run time that can be acchieved if $a,b,c$ are chosen as initially scheduled tasks.
-\end{lemma}
+We now use lemma \ref{lemma:parallel-chains-flatness} to derive the following theorem.
+
+\begin{theorem}
+  Parallel chains are optimally scheduled by HLF.
+\end{theorem}
 
 \begin{proof}
-  The proof is very similar to the one for lemma \ref{lem:p3-adding-tasks-level-keep-scheduled-same-inequality}. We start by examining small chain trees (with four or less tasks --- see figure \ref{fig:p3-lemma-adding-intrees-induction-start}) and confirm our claim by simply examining the execution times.
+  \newcommand{\iminus}[1]{I\setminus\{#1\}}
+  \todo{Induktionsanfang.}
+  Consider the HLF run time for a parallel chain $I$ with $n$ tasks. Let $x_1,x_2,x_3$ denote the HLF tasks of $I$. We can compute the expected run time by
+  \begin{equation*}
+    T_{HLF}(I) = 
+    \frac{1}{3} \cdot T(\iminus{x_1}) +
+    \frac{1}{3} \cdot T(\iminus{x_2}) +
+    \frac{1}{3} \cdot T(\iminus{x_3})
+    .
+  \end{equation*}
+  For the parallel chains $\iminus{x_1}, \iminus{x_2}$ and $\iminus{x_3}$ (each having $n-1$ tasks) we know by induction that they are optimally scheduled by HLF. Note that we can choose the next tasks in a way such that for each of these intrees we behave according to HLF (because $x_1, x_2$ and $x_3$ are HLF tasks of $I$). This means, we can acchieve optimal run times for each of the three intrees.
+
+  Now consider any other initial choice of tasks $y_1,y_2,y_3$. We can (w.l.o.g.) assume that $level(y_i)\leq level(x_i)$ for $i=1,2,3$ and we can assume (w.l.o.g.) $level(y_1) < level(x_1)$. The optimal expected run time for this initial choice of tasks is given by
+  \begin{equation*}
+    T_{\{y_1,y_2,y_3\}}(I) = 
+    \frac{1}{3} \cdot T_{y_2,y_3,z_1}(\iminus{y_1}) +
+    \frac{1}{3} \cdot T_{y_1,y_3,z_2}(\iminus{y_2}) +
+    \frac{1}{3} \cdot T_{y_1,y_2,z_3}(\iminus{y_3})
+    ,
+  \end{equation*}
+  where $z_i$ denotes the optimal task to be chosen if $y_i$ is the first task to finish.
   
-  We now consider a parallel chain $I$ with $n$ tasks, and tasks $x,y$ and $z_1, z_2$ as specified in the requirements for lemma \ref{lem:parallel-chains-adding-tasks-level-comparison}. We now compare the run times $T_{x,y,z_1}(I_1)$ and $T_{x,y,z_2}(I_2)$, where $I_1=I\cup\left\{ z_1 \right\}$ and $I_2=I\cup\left\{z_2  \right\}$.
+  We now apply lemma \ref{lemma:parallel-chains-flatness}: The parallel chains $\iminus{y_1}$ and $\iminus{x_1}$ share $I$ as common supertree and $level(x_1) > level(y_1)$. Applying the lemma shows that $T_{HLF}(\iminus{y_1}) > T_{HLF}(\iminus{x_1})$. We know by induction that $\iminus{y_1}$ is optimally scheduled by HLF, implying that $T_{y_2,y_3,z_1}(\iminus{y_1}) \geq T_{HLF}(\iminus{y_1})$. Combining the two inequalities gives $T_{y_2,y_3,z_1}(\iminus{y_1}) > t_{HLF}(\iminus{x_1})$.
 
-  We do a case distinction on which task is to finish first (and compare the situation for $I_1$ and $I_2$):
-  \begin{itemize}
-  \item If $z_1$ resp. $z_2$ is the first task to finish, we can argue that the run time for the resulting trees can be the same if we choose -- coming from $I_2$ -- the same task that optimally would be chosen coming from $I_1$ (if coming from $I_1$ takes no task at all, we can also do so for $I_2$). 
-  \item If $x$ is the first task to finish, we denote by $x'$ the task that would be optimally chosen if we come from $I_1$. We now distinguish:\todo{Was, wenn kein $x'$ gewählt werden kann?}
-    \begin{itemize}
-    \item If $x'$  is the direct successor of $x$, then $x'$ can only be blocked by $z_2$ if $x'$ is the root. In this case, however, $x'$ would have been blocked by $z_1$ which leads to a contradiction since $x'$ is ready.
-
-      So, we can assume that $x'$ is \emph{not} the root. Thus, we can argue that $x'$ \emph{must} be the end of some chain in $I_1\setminus\left\{ x \right\}$, and can not be blocked by $z_2$. So, $x'$ is ready in $I_2\setminus\left\{ x \right\}$ as well.
-    \item If $x'$ is not the direct successor of $x$, then $x'$ can not be the root and $x'$ can be blocked by $z_2$ in $I_2$.
-      \begin{itemize}
-      \item If $x'$ is \emph{not} blocked by $z_2$, then it is ready in $I_2$.
-      \item If $x'$ is exactly the successor of $z_2$, then we 
-      \end{itemize}
-
-    \end{itemize}
-
-  \end{itemize}
+  The arguments work similar for $x_2$ resp. $x_3$ with $y_2$ resp. $y_3$, resulting in our claim.
 
 \end{proof}
 
