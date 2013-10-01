@@ -17,11 +17,12 @@
 \label{chap:current-questions}
 
 \begin{itemize}
+\item ``Topmost singles:'' Are topmost tasks, whose successors have \emph{exactly one} predecessor, always scheduled?
+\item Are there intrees where we have to schedule topmost tasks of \emph{three different (root-)subtrees? (Root-subtree: Subtree rooted at a direct predecessor of the root.)}
 \item If a tree $T$ is non-HLF-optimal, can there a be a supertree $S$ of this tree ($T\subseteq S$) such that $S$ is HLF-optimal?
-\item Are chain collections optimally scheduled by HLF?
+\item Are chain collections optimally scheduled by HLF?\done{Possibly so. Check proof once again.}
 \item P3: Is it possible, that there are -- at one level of the optimal snapshot DAG -- multiple snapshots containing the same intree, but a different set of scheduled tasks? \remark{Probably not w.l.o.g.}
 \item For each snapshot resulting from an optimal schedule, at least one top-most task is scheduled? \remark{Seems so.}
-\item For each snapshot resulting from an optimal schedule, at least two top-most tasks are scheduled?\done{Not necessarily.}
 \item If for an intree only non-top tasks are scheduled, you can exchange one of the non-top tasks with a top-tasks and obtain a better run time?\remark{Seems so}
 \end{itemize}
 
