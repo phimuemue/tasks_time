@@ -3,7 +3,7 @@
 
 In this section, we take a look at some strategies and use them for scheduling with three processors. We will do so very exemplarily and inspect counterexamples for the respective strategies.
 
-Finally, we conclude some properties that \emph{optimal} seem to fulfill.
+Finally, we conclude some properties that \emph{optimal} scheduling strategies seem to fulfill.
 
 \todo{Introductory text}
 
@@ -90,6 +90,25 @@ However, there are intrees, where \emph{no} HLF-run is optimal. Figures \ref{fig
   \label{fig:hlf-vs-opt-00123455799}
 \end{figure}
 
+\subsection{Quality of HLF}
+\label{sec:suboptimal-hlf-quality}
+
+We have seen that HLF is suboptimal in some cases, but experience shows that HLF is quite good in many cases. In fact \cite{journals/siamcomp/PapadimitriouT87} have shown that the following theorem holds:
+
+\begin{theorem}
+  There is a function $\beta: \mathbb{N} \mapsto \mathbb{R}^+_0$ with $\lim_{n\rightarrow \infty} \beta(n) = 0$ such that for each intree $I$ and an arbitrary HLF strategy $HLF$ we have
+  \begin{equation*}
+    T_{HLF}(I) \leq \inf_\pi\, T_{\pi}(I) \cdot \left( 1+\beta(N) \right),
+  \end{equation*}
+  where $T_{P}(I)$ denotes the expected run time for intree $I$ if it is scheduled by policy $P$, $N$ is the number of tasks in $I$ and the infimum is taken over all scheduling strategies $\pi$.
+\end{theorem}
+
+\begin{proof}
+  See \cite{journals/siamcomp/PapadimitriouT87}.
+\end{proof}
+
+This result is quite useful because it shows that HLF is -- even if not optimal -- quite close as the number of tasks grows.
+
 \subsection{Different categories of sub-optimality}
 \label{sec:hlf-suboptimal-two-variants}
 
@@ -102,7 +121,16 @@ As we saw, there are two possibilities for the sub-optimality of HLF:
 
 We use the following nomenclature: A strategy is called \emph{can-optimal} (a term already used in \cite{MoritzMaasDiploma}), if it \emph{might} result in an optimal schedule. A strategy that \emph{can not} produce an optimal solution is called \emph{strictly suboptimal} (or simply suboptimmal if it is clear from the context). 
 
-It is a notable fact that there are many cases, where HLF is can-optimal. For these cases, we examined several patterns and show -- for each of them -- an example where it is not optimal.
+It is a notable fact that there are many cases, where HLF is can-optimal. 
+
+We use this distinction to (roughly) differentiate the following strategies into two categories: 
+
+\begin{itemize}
+\item The cases where HLF is strictly suboptimal lead us to several strategies that are presented in section \ref{sec:suboptimal-non-hlf-strategies}. These strategies are strict counterparts to HLF.
+\item For the cases where HLF is can-optimal, we examined several strategies that try to determine which tasks should be chosen to minimize the expected run time. These strategies are presented in section \ref{sec:suboptimal-hlf-can-optimal-strategies}. These strategies can be seen as ``refinements'' of HLF such that HLF behaves better.
+\end{itemize}
+
+The strategies that we consider are in many cases ambiguous, i.e. they admit several possible choices. However, they do \emph{not} allow \emph{all} possible choices, thereby possibly reducing the amount of snapshots to examine. Not all strategies fall strictly into one of the groups -- we then put it into the category we found more insightful.
 
 \section{Non-HLF strategies}
 \label{sec:suboptimal-non-hlf-strategies}
@@ -131,6 +159,33 @@ We examined all intrees with up to 13 tasks, especially the cases where HLF is n
   \label{fig:2-hlf-plus-one-not-optimal}
 \end{figure}
 
+\subsection{Only highest or lowest leaves}
+\label{sec:disproving-only-highest-or-lowest-leaves}
+
+So far, we have seen several scenarios where HLF was not optimal. The trees we examined resulted in schedules that picked only combinations highest leaves and lowest leaves possible. Thus, we were tempted to think that an optimal schedule chooses only topmost tasks or leaves whose level is minimal (among all leaves). However, this is not a criterion for an optimal schedule, as we can observe by scheduling the 14-tasks-intree $(0,0,0,2,3,4,5,7,7,9,10,10,12)$, which is shown in figure \ref{fig:only-high-or-low-not-optimal}.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \includegraphics{p3/only_high_or_low/0002345779101012_opt.pdf}
+    \caption{Optimal schedule picking a non-HLF task that is also not the lowest possible.}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \includegraphics{p3/only_high_or_low/0002345779101012_subopt.pdf}
+    \caption{Suboptimal HLF-Schedule.}
+  \end{subfigure}
+  \caption{Intree $(0,0,0,2,3,4,5,7,7,9,10,10,12)$ shows that there are intrees where an optimal schedule has to choose a non-HLF task that has a higher level than some non-chosen task.}
+  \label{fig:only-high-or-low-not-optimal}
+\end{figure}
+
+\section{Refining can-optimal HLF}
+\label{sec:suboptimal-hlf-can-optimal-strategies}
+
+As mentioned in section \ref{sec:hlf-suboptimal-two-variants}, there are many cases where HLF is \emph{can-optimal}, i.e. where the optimal schedule always has tasks of the highest levels scheduled, but not each HLF schedule is optimal. This results from situations where HLF can choose one from several task as the next task to be scheduled. We describe some strategies that try to eliminate these ambiguities and give counterexamples that show that these strategies are not optimal.
+
 \subsection{``As few free paths as possible''}
 \label{sec:disproving-hlf-no-free-chain}
 
@@ -156,33 +211,6 @@ However, there are examples where this strategy does not yield optimal results. 
   \caption{HLF with as few free paths as possible is not necessarily optimal.}
   \label{fig:hlfnfc-is-not-optimal}
 \end{figure}
-
-\subsection{Only highest or lowest leaves}
-\label{sec:disproving-only-highest-or-lowest-leaves}
-
-So far, we have seen several scenarios where HLF was not optimal. The trees we examined resulted in schedules that picked only combinations highest leaves and lowest leaves possible. Thus, we were tempted to think that an optimal schedule chooses only topmost tasks or leaves whose level is minimal (among all leaves). However, this is not a criterion for an optimal schedule, as we can observe by scheduling the 14-tasks-intree $(0,0,0,2,3,4,5,7,7,9,10,10,12)$, which is shown in figure \ref{fig:only-high-or-low-not-optimal}.
-
-\begin{figure}[ht]
-  \centering
-  \begin{subfigure}{.45\textwidth}
-    \centering
-    \includegraphics{p3/only_high_or_low/0002345779101012_opt.pdf}
-    \caption{Optimal schedule picking a non-HLF task that is also not the lowest possible.}
-  \end{subfigure}
-  \quad
-  \begin{subfigure}{.45\textwidth}
-    \centering
-    \includegraphics{p3/only_high_or_low/0002345779101012_subopt.pdf}
-    \caption{Suboptimal HLF-Schedule.}
-  \end{subfigure}
-  \caption{Intree $(0,0,0,2,3,4,5,7,7,9,10,10,12)$ shows that there are intrees where an optimal schedule has to choose a non-HLF task that has a higher level than some non-chosen task.}
-  \label{fig:only-high-or-low-not-optimal}
-\end{figure}
-
-\section{Special cases where HLF is can-optimal}
-\label{sec:suboptimal-hlf-can-optimal-strategies}
-
-As mentioned in section \ref{sec:hlf-suboptimal-two-variants}, there are many cases where HLF is \emph{can-optimal}, i.e. where the optimal schedule always has tasks of the highest levels scheduled, but not each HLF schedule is optimal. This results from situations where HLF can choose one from several task as the next task to be scheduled. We describe some strategies that try to eliminate these ambiguities and give counterexamples that show that these strategies are not optimal.
 
 \subsection{Subtree with minimum number of topmost tasks}
 \label{sec:suboptimal-hlf-can-optimal-subtree-fewest-toptasks}
@@ -288,7 +316,7 @@ It can be quickly seen that slightly altering the strategy given in section \ref
 \item [Preferring leaf-maximal subtrees with more leaves] One of our first examples, the intree $(0,0,0,1,1,1,2,2,3)$ (see figure \ref{fig:hlfnfc-is-not-optimal}) already shows that this strategy is not optimal in general.
 \end{description}
 
-\subsection{Prefer root's predecessors with longest processing time}
+\subsection{Preferring root's predecessors with longest processing time}
 \label{sec:suboptimal-hlf-can-roots-longest-predecessors}
 
 We also tried a recursive approach that decomposed an intree as follows: We separate the intrees rooted at the predecessors of the root. This way, we get a whole set of intrees. For each subtree, we now compute the optimal schedule and, moreover, the expected processing time -- assuming three processors in each individual subtree. The schedule for the whole intree then shall prefer subtrees whose expected processing time is the longest.
@@ -423,7 +451,7 @@ We observed that (for three processors) an optimal schedule looks as if it chose
 
 In an optimal schedule, we can -- without loss of generality -- assume that it is \emph{not} the case that there are two distinct scheduled tasks $x$ and $y$ with different successors and each of them having a non-scheduled, but ready task.
 
-An alternative formulation of conjecture \ref{conj:optimal-schedule-fills-up} states that at most one task having as well scheduled as non-scheduled predecessors that are leaves. We can only assume this without loss of generality because e.g. the intree $(0,0,0,1,1,2,2,3)$ admits two different schedules (one beginning with tasks 4,5,8 and the other beginning with 4,6,8) that have exactly the same run time (see figure \ref{fig:filling-up-without-loss-of-generality}). The reason is that both schedules result in equivalent snapshots with the same probabilities.
+An alternative formulation of the above conjecture states that at most one task having as well scheduled as non-scheduled predecessors that are leaves. We can only assume this without loss of generality because e.g. the intree $(0,0,0,1,1,2,2,3)$ admits two different schedules (one beginning with tasks 4,5,8 and the other beginning with 4,6,8) that have exactly the same run time (see figure \ref{fig:filling-up-without-loss-of-generality}). The reason is that both schedules result in equivalent snapshots with the same probabilities.
 
 \begin{figure}[th]
   \centering
@@ -447,7 +475,7 @@ For trees with fewer than 12 tasks, we could not find any tree that violated our
 \begin{figure}[th]
   \centering
   \includegraphics{p3/suboptimal/00022355666_optimal_no_fill_up.pdf}
-  \caption{The optimal schedule has two tasks (5 and 6) that have both scheduled and non-scheduled leaves as predecessors.}
+  \caption{The optimal schedule for $(0,0,0,2,2,3,5,5,6,6,6)$ has two tasks (5 and 6) that have both scheduled and non-scheduled leaves as predecessors.}
   \label{fig:filling-op-is-not-strictly-optimal}
 \end{figure}
 
@@ -647,7 +675,7 @@ Conjecture \ref{conj:only-nontop-tasks-exchange-better} is not that useful in a 
 
 The main problems we faced when we tried to prove the above conjectures can be summarized as follows:
 \begin{itemize}
-\item The particular intree structure is not necessarily maintained over the induction step --- and if so, many case distinctions may be required.
+\item If working with particular cases of intrees, the structure is not necessarily maintained over the induction step --- and if so, many case distinctions may be required.
 \item Comparing different intrees seems to be quite cumbersome, especially if we do not know which tasks are scheduled.
 \end{itemize}
 

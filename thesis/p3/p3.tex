@@ -14,6 +14,8 @@ As shown in \cite{chandyreynoldslargepaper1979}, it is known that an optimal sch
 \subsection{Preemtive vs. non-preemtive scheduling}
 \label{sec:optimal-schedules-preemtive}
 
+\paragraph{Nonpreemtive scheduling is worse than preemtive scheduling}
+
 \label{preemtiveness-explanation}
 In section \ref{sec:schedules-problem-setting}, we mentioned that preemptive scheduling might yield better results than non-preemtive scheduling. As an example, \cite{MoritzMaasDiploma} shows the intree $(0,0,1,2,2,3,3,3,4,5)$. This intree is -- non-preemtively -- optimally processed by starting out with tasks 7, 8 and 9. However, we can acchieve a better overall runtime by initially scheduling 8, 9 and 10. Consider figure \ref{fig:preemtive-example-00111222} to compare both schedules.
 
@@ -54,6 +56,10 @@ Another example that shows nicely that preemtive scheduling yields better result
   \caption{Intree $(0,0,1,1,2,5,5,6)$. This intree might result at some point from the intree $(0,0,1,2,2,3,3,6,8,9,10,11,12,13)$ with the two lowest tasks scheduled (see figure \ref{fig:2-hlf-plus-one-not-optimal}). If we allowed for preemting tasks we could improve the overal run time.}
   \label{fig:preemtive-is-better}
 \end{figure}
+
+\paragraph{Rescheduling only at certain points in time}
+
+We have seen that preemtive scheduling might result in lower expected run times than non-preemtive scheduling. However, it has been proven in \cite{chandyreynoldslargepaper1979} that -- without loss of generality -- that rescheduling is only necessary -- if at all -- when one task finishes. I.e. as long as no task on any processor has finished, we can leave them working until the first task finishes.
 
 \subsection{Considerations about subtrees}
 \label{sec:properties-optimal-schedules-no-implications}
@@ -166,8 +172,6 @@ To determine the maximum size of the optimal snapshot DAG for the P3 case, it mi
 
 \section{Degenerate intrees}
 \label{sec:p3-degenerate-intrees}
-
-\todo{Definitions: intree, level, suc, adding tasks to trees etc.}
 
 We now focus one one particular class on intrees, namely \emph{degenerate intrees}. A degenerate intree is an intree that consists of one longest chain from the bottom to one leaf, and all other tasks are direct predecessors to one of the tasks within this longest chain. Another characterization is the following: On each level, \emph{at most one task} has predecessors.\todo{Figure zeigen.}
 
@@ -691,6 +695,9 @@ We show an example of a parallel chain in figure \ref{fig:parallel-chain-intro-f
   \label{fig:parallel-chain-intro-figure}
 \end{figure}
 
+\subsection{Parallel chains are optimally scheduled by HLF}
+\label{sec:parallel-chains-optimally-hlf}
+
 We start out by a lemma that we will use later. This lemma is an analogue variant of a lemma described in \cite{chandyreynoldsshortpaper1975}. While their lemma works for two processors and general intrees, our variant is for three processors, but restricted to parallel chains.
 
 \begin{lemma}
@@ -823,6 +830,77 @@ We will now use lemma \ref{lemma:parallel-chains-flatness} to derive the followi
   The arguments work similar for $x_2$ resp. $x_3$ with $y_2$ resp. $y_3$ (where we can even allow the run times to be equal), resulting in our claim.
 
 \end{proof}
+
+\subsection{Comparison of exhaustive search and HLF}
+\label{sec:parallel-chains-benchmarking}
+
+Similarily to the comparison done in section \ref{sec:p3-degenerate-intrees}, we are interested in what we gain by the fact that parallel chains are optimally scheduled by HLF and, thus, need not be examined by an exhaustive search. 
+
+To to this, we introduce a shorthand notation for parallel chains for this section: Instead of writing the whole intree in the usual manner, we focus on the lengths of the parallel chains. The parallel chain in figure \ref{fig:parallel-chain-intro-figure} consists of a root with five chains of lengths 5, 3, 6, 5 and 2. We simply write down the chain lengths as a tuple $(5,4,6,5,2)$.
+
+The results are summed up in table \ref{tab:parallel-chains-comparison-leaf-hlf}. This table compares the scheduling approaches for parallel chains with a given amount of chains, where each chain has the same length. Other comparisons for selected parallel chains can be found in table \ref{tab:selected-parallel-chains-comparison}.
+
+\begin{table}[ht]
+  \centering
+  \begin{subtable}{.45\textwidth}
+    \centering
+    \begin{tabular}[ht]{c|cccc}
+      Length / No. chains & 3 & 4 & 5 & 6 \\
+      \hline
+      2 & 10 & 18 & 30 & 46 \\
+      3 & 20 & 50 & 110 & 210 \\
+      4 & 35 & 115 & 315 & 715 \\
+      5 & 56 & 231 & 756 & 1981 \\
+      6 & 84 & 420 & 1596 & 4732
+    \end{tabular}
+    \caption{Number of snapshots with examined by exhaustive search.}
+  \end{subtable}
+  \quad
+  \begin{subtable}{.45\textwidth}
+    \centering
+    \begin{tabular}[ht]{c|cccc}
+      Length / No. chains & 3 & 4 & 5 & 6 \\
+      \hline
+      2 & 10 & 14 & 18 & 22 \\
+      3 & 20 & 30 & 40 & 50 \\
+      4 & 35 & 55 & 75 & 95 \\
+      5 & 56 & 91 & 126 & 161 \\
+      6 & 84 & 140 & 196 & 252
+    \end{tabular}
+    \caption{Number of snapshots examined by HLF.}
+  \end{subtable}
+  \caption{Parallel chains: Comparison of the number of snapshots needed by exhaustive search in contrast to HLF. Each table denotes the number of chains to the right, and the length of each chain downwards.}
+  \label{tab:parallel-chains-comparison-leaf-hlf}
+\end{table}
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}[ht]{lcc}
+    Chain lengths & Exhaustive search & HLF \\
+    \hline
+    $(4,3,6,3)$ & 233 & 99 \\
+    $(3,2,2,10)$ & 247 & 126 \\
+    $(1,2,3,4)$ & 63 & 37 \\
+    $(1,2,3,4,5)$ & 356 & 85 \\
+    $(1,2,3,4,5,6)$ & 2007 & 172 \\
+    $(1,2,3,4,5,6,7)$ & 10760 & 315
+  \end{tabular}
+  \caption{Comparing exhaustive search to HLF for selected parallel chains.}
+  \label{tab:selected-parallel-chains-comparison}
+\end{table}
+
+We can see that (deterministic) HLF can drastically reduce the number of snapshots that have to be examined. This, of course, reduces computation times for parallel chains.
+
+\section{Improving exhaustive search}
+\label{sec:improving-exhaustive-search}
+
+We have seen that degenerate intrees and parallel chains are optimally scheduled by HLF. We can now try to improve exhaustive search by proceeding according to (deterministic) HLF from the point on where we have a degenerate intree or a parallel chain. When we do so, we assume the following:
+
+\emph{Assumption:} We assume that for degenerate intrees and parallel chains, that, if already two tasks are scheduled, the optimal task to be scheduled as third task should be chosen according to HLF.
+
+Note that this assumption is not proven. Our experiments suggest that it is true. 
+
+We will use it to research the number of snapshots that have to be examined by an improved exhaustive search. If we recognize that this improved exhaustive search performs significantly better than an ordinary exhaustive search, we try to prove (or disprove) the above assumption. If not, it is probably not rewarding to examine whether the assumption is true or not (because our assumption (possibly) allows us to exclude more snapshots).
 
 \section{Conclusion}
 \label{sec:properties-schedules-conclusion}
