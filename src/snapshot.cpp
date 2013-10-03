@@ -455,6 +455,48 @@ bool Snapshot::is_hlf_first() const {
     return cache_is_hlf_first[1] = true;
 }
 
+bool Snapshot::only_one_nonscheduled_sibling() const {
+    if(cache_only_one_nonscheduled_sibling.find(1) != cache_only_one_nonscheduled_sibling.end()){
+        return cache_only_one_nonscheduled_sibling[1];
+    }
+    unsigned int count = 0;
+    set<task_id> marked_successors;
+    for(task_id it : marked){
+        marked_successors.insert(intree.edges[it]);
+    }
+    for(task_id suc : marked_successors){
+        vector<task_id> preds;
+        intree.get_predecessors(suc, preds);
+        preds.erase(
+                remove_if(preds.begin(), preds.end(),
+                    [&](const task_id x) -> bool{
+                        vector<task_id> new_preds;
+                        intree.get_predecessors(x, new_preds);
+                        return new_preds.size() > 0;
+                    }
+                    ), 
+                preds.end()
+                );
+        bool a = find(marked.begin(), marked.end(), preds[0])!=marked.end();
+        for(task_id pred : preds){
+            bool b = find(marked.begin(), marked.end(), pred)!=marked.end();
+            if(b != a){
+                count = count + 1;
+                break;
+            }
+            a = b;
+        }
+    }
+    if(!(count > 1)){
+        return cache_only_one_nonscheduled_sibling[1] = !(count > 1);
+    }
+    bool result = !(count > 1);
+    for(auto it : successors){
+        result = result && it->only_one_nonscheduled_sibling();
+    }
+    return cache_only_one_nonscheduled_sibling[1] = result;
+}
+
 myfloat Snapshot::expected_time_for_n_processors(unsigned int p) const {
     if(cache_expected_runtime_for_n_procs.find(p) != cache_expected_runtime_for_n_procs.end()){
         return cache_expected_runtime_for_n_procs[p];
