@@ -185,7 +185,9 @@ As mentioned in section \ref{sec:hlf-suboptimal-two-variants}, there are many ca
 \subsection{Subtree with minimum number of topmost tasks}
 \label{sec:suboptimal-hlf-can-optimal-subtree-fewest-toptasks}
 
-If we consider the intree $(0,0,0,1,1,1,2,2,3)$, we have seen that an optimal schedule picks 7,8 and 9 as initially scheduled tasks (see figure \ref{fig:hlfnfc-is-not-optimal}). This fact lead us to the suspicion that -- if we have an intree for which HLF is can-optimal -- (informally) we should pick the subtrees with the lowest number of topmost tasks. 
+If we consider the intree $(0,0,0,1,1,1,2,2,3)$, we have seen that an optimal schedule picks 7,8 and 9 as initially scheduled tasks (see figure \ref{fig:hlfnfc-is-not-optimal}). Moreover, in many cases, topmost-tasks that are the \emph{single direct predecessor} of their respective direct successor, are chosen by an optimal schedule.
+
+These facts lead us to the suspicion that -- if we have an intree for which HLF is can-optimal -- (informally) we should pick the subtrees with the lowest number of topmost tasks. 
 
 In this context, it is important to exactly describe which subtree we are talking about. Therefore, we employ the following definition:
 
