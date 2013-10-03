@@ -415,6 +415,15 @@ void Intree::get_predecessors(const task_id t, vector<task_id>& target) const{
     }
 }
 
+void Intree::get_siblings(const task_id t, vector<task_id>& target) const {
+    task_id successor = edges[t];
+    for(task_id it = 0; it < edges.size(); ++it){
+        if(edges[it] == successor){
+            target.push_back(it);
+        }
+    }
+}
+
 void Intree::get_leaves(vector<task_id>& target) const{
     for(task_id it = 1; it < edges.size(); ++it){
         if (get_in_degree(it) == 0){
@@ -506,10 +515,29 @@ bool Intree::is_degenerate_tree() const {
     // store - for each level - the one task that may have predecessors
     map<unsigned int, task_id> cont;
     for(task_id it = 1; it < edges.size(); ++it){
+        if(edges[it] == NOTASK){
+            continue;
+        }
         if(cont.find(get_level(edges[it])) != cont.end() && cont[get_level(edges[it])] != edges[it]){
             return false;
         }
         cont[get_level(edges[it])] = edges[it];
+    }
+    return true;
+}
+
+bool Intree::is_parallel_chain() const {
+    map<task_id, unsigned int> pred_count;
+    for(task_id it = 1; it < edges.size(); ++it){
+        if(edges[it] == NOTASK){
+            continue;
+        }
+        pred_count[edges[it]]++;
+    }
+    for(auto it : pred_count){
+        if (it.second > 1 && it.first!=0){
+            return false;
+        }
     }
     return true;
 }

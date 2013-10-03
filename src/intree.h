@@ -88,6 +88,7 @@ class Intree {
 
         void get_predecessors(const Task& t, vector<task_id>& target) const;
         void get_predecessors(const task_id t, vector<task_id>& target) const;
+        void get_siblings(const task_id t, vector<task_id>& target) const;
         void get_leaves(set<task_id>& target) const;
         void get_leaves(vector<task_id>& target) const;
         bool is_leaf(const task_id t) const;
@@ -101,6 +102,7 @@ class Intree {
 
         bool is_chain() const;
         bool is_degenerate_tree() const;
+        bool is_parallel_chain() const;
         bool same_chain(const task_id t1, const task_id t2) const;
         unsigned int count_free_chains(vector<task_id>& marked) const;
         void get_chain(const Task& t, vector<task_id>& target) const;
