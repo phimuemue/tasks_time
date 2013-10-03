@@ -3,6 +3,8 @@
 
 In this section, we take a look at some strategies and use them for scheduling with three processors. We will do so very exemplarily and inspect counterexamples for the respective strategies.
 
+Finally, we conclude some properties that \emph{optimal} seem to fulfill.
+
 \todo{Introductory text}
 
 \section{HLF}
@@ -414,6 +416,43 @@ Once again, this strategy can be shown to be suboptimal by considering $(0,0,0,1
   \end{tikzpicture}
 \end{center}
 
+\subsection{``Filling up subtrees''}
+\label{sec:suboptimal-filling-subtrees}
+
+We observed that (for three processors) an optimal schedule looks as if it chose certain subtrees and ``filled them up one after another''. This is probably most concise formalized as follows:
+
+In an optimal schedule, we can -- without loss of generality -- assume that it is \emph{not} the case that there are two distinct scheduled tasks $x$ and $y$ with different successors and each of them having a non-scheduled, but ready task.
+
+An alternative formulation of conjecture \ref{conj:optimal-schedule-fills-up} states that at most one task having as well scheduled as non-scheduled predecessors that are leaves. We can only assume this without loss of generality because e.g. the intree $(0,0,0,1,1,2,2,3)$ admits two different schedules (one beginning with tasks 4,5,8 and the other beginning with 4,6,8) that have exactly the same run time (see figure \ref{fig:filling-up-without-loss-of-generality}). The reason is that both schedules result in equivalent snapshots with the same probabilities.
+
+\begin{figure}[th]
+  \centering
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \includegraphics{p3/suboptimal/000111223_opt458.pdf}
+    \caption{Optimal schedule starting with tasks 4,5 and 8.}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \includegraphics{p3/suboptimal/000111223_opt468.pdf}
+    \caption{Optimal schedule starting with tasks 4,6 and 8.}
+  \end{subfigure}
+  \caption{The intree $(0,0,0,1,1,2,2,3)$ has two different schedules reaching the optimum expected run time.}
+  \label{fig:filling-up-without-loss-of-generality}
+\end{figure}
+
+For trees with fewer than 12 tasks, we could not find any tree that violated our conjecture, but the intree $(0,0,0,2,2,3,5,5,6,6,6)$ has the interesting property that the optimal schedule for this intree has to schedule tasks such that the intree contains two tasks that have as well scheduled as non-scheduled but ready predecessors. Figure \ref{fig:filling-op-is-not-strictly-optimal} shows the first steps of an optimal schedule for this intree.
+
+\begin{figure}[th]
+  \centering
+  \includegraphics{p3/suboptimal/00022355666_optimal_no_fill_up.pdf}
+  \caption{The optimal schedule has two tasks (5 and 6) that have both scheduled and non-scheduled leaves as predecessors.}
+  \label{fig:filling-op-is-not-strictly-optimal}
+\end{figure}
+
+\emph{Remark:} Surprisingly, every subtree of $(0,0,0,2,2,3,5,5,6,6,6)$ fulfills the conjecture that there is at most one task that has both scheduled and non-scheduled leaves as predecessors (during the whole schedule). This shows that even task that \emph{might seem} of minor impact for the first choices, might be relevant to the question which tasks are chosen in the optimal schedule.
+
 \section{Maximizing 3-processor-time, minimizing 1-processor time}
 \label{sec:p3-disproving-long-p3-and-short-p1-time}
 
@@ -542,29 +581,69 @@ Even if this conjecture turns out to be true, it seems complex to transform this
 
 Unfortunately, we did not find any strategy that always yields an optimal schedule. Of course, it is still possible to compute the optimal schedule by an exhaustive search.
 
-During our research, we recognized some patterns that we are tempted to transform into some conjectures. We were, however, not yet able to prove or disprove them. This section shows the most important ones that could easily be used to decrease the number of snapshots that have to be examined if we want to compute the optimal snapshot by exhaustive search.
+During our research, we recognized some patterns that we are tempted to transform into conjectures. We were, however, not yet able to prove or disprove them. These conjectures might be used to reduce the number of snapshots that need to be examined by an exhaustive search used to compute the optimal snapshot.
 
-% \begin{definition}[Topmost task]
-%   We say that a task is \emph{topmost} if its level is greater or equal than the levels of any other task in the intree. 
-% \end{definition}
-
-% \begin{conjecture}[Very likely]
-%   For each snapshot resulting from an optimal schedule, at least one top-most task is scheduled.
-% \end{conjecture}
-
-% \begin{conjecture}[Weak one]
-%   For each snapshot resulting from an optimal schedule, at least two top-most tasks are scheduled -- if there are two or more topmost tasks.
-% \end{conjecture}
+This section shows the most important conjectures we found.
 
 \begin{conjecture}
+  \label{conj:as-many-topmost-as-possibly}
   An optimal schedule always schedules as many topmost tasks as possible.
 \end{conjecture}
 
-Please note that the above conjecture does not state anything about \emph{which} topmost tasks should be chosen in order to generate a schedule that is as good as possible.
+Please note that the above conjecture does not state anything about \emph{which} topmost tasks should be chosen in order to generate a schedule that is as good as possible. It can -- however -- drastically reduce the number of choices for the tasks to be scheduled. As an example, consider the following tree:
+
+\begin{center}
+  \begin{tikzpicture}[scale=.2]
+    \node[circle, scale=0.75, fill] (tid0) at (7.5,1.5){};
+    \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+    \node[circle, scale=0.75, fill] (tid2) at (5.25,3){};
+    \node[circle, scale=0.75, fill] (tid4) at (2.25,4.5){};
+    \node[circle, scale=0.75, fill] (tid5) at (3.75,4.5){};
+    \node[circle, scale=0.75, fill] (tid8) at (3.75,6){};
+    \draw[](tid5) -- (tid8);
+    \node[circle, scale=0.75, fill] (tid6) at (6.75,4.5){};
+    \node[circle, scale=0.75, fill] (tid9) at (6,6){};
+    \node[circle, scale=0.75, fill] (tid13) at (5.25,7.5){};
+    \node[circle, scale=0.75, fill] (tid14) at (6.75,7.5){};
+    \draw[](tid9) -- (tid13);
+    \draw[](tid9) -- (tid14);
+    \node[circle, scale=0.75, fill] (tid10) at (8.25,6){};
+    \node[circle, scale=0.75, fill] (tid15) at (8.25,7.5){};
+    \draw[](tid10) -- (tid15);
+    \draw[](tid6) -- (tid9);
+    \draw[](tid6) -- (tid10);
+    \draw[](tid2) -- (tid4);
+    \draw[](tid2) -- (tid5);
+    \draw[](tid2) -- (tid6);
+    \node[circle, scale=0.75, fill] (tid3) at (12,3){};
+    \node[circle, scale=0.75, fill] (tid7) at (12,4.5){};
+    \node[circle, scale=0.75, fill] (tid11) at (9.75,6){};
+    \node[circle, scale=0.75, fill] (tid12) at (12.75,6){};
+    \node[circle, scale=0.75, fill] (tid16) at (11.25,7.5){};
+    \node[circle, scale=0.75, fill] (tid17) at (12.75,7.5){};
+    \node[circle, scale=0.75, fill] (tid18) at (14.25,7.5){};
+    \draw[](tid12) -- (tid16);
+    \draw[](tid12) -- (tid17);
+    \draw[](tid12) -- (tid18);
+    \draw[](tid7) -- (tid11);
+    \draw[](tid7) -- (tid12);
+    \draw[](tid3) -- (tid7);
+    \draw[](tid0) -- (tid1);
+    \draw[](tid0) -- (tid2);
+    \draw[](tid0) -- (tid3);
+  \end{tikzpicture}
+\end{center}
+
+This tree has 6 topmost tasks, but 10 leaves in total. If conjecture \ref{conj:as-many-topmost-as-possibly} is correct, then we can restrict ourselves to combinations of 6 topmost tasks -- being at most $\binom{6}{3}=20$ possible choices, in this particular case even only 6 due to equivalence of snapshots. In contrast, considering all 10 leaves, we have 48 possible choices in the above example.
+
+Moreover, we are tempted to say the following:
 
 \begin{conjecture}
+  \label{conj:only-nontop-tasks-exchange-better}
   If for an intree only non-top tasks are scheduled, you can schedule any top-task instead of one non-top scheduled task to obtain a better run time.
 \end{conjecture}
+
+Conjecture \ref{conj:only-nontop-tasks-exchange-better} is not that useful in a direct application to reduce the number of snapshots needed to examine if we do an exhaustive search. However, it might be useful for proofs.
 
 The main problems we faced when we tried to prove the above conjectures can be summarized as follows:
 \begin{itemize}
