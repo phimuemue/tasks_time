@@ -432,23 +432,33 @@ void generate_stats(const po::variables_map& vm,
         lines.push_back(vector<string>());
         //
         vector<string>& line = lines.back();
+        // best snapshot?
         if(find(best.begin(), best.end(), s[i]) != best.end()){
             line.push_back(string("*"));
         }
         else{
             line.push_back(string(" "));
         }
+        // is HLF?
         if(s[i]->is_hlf()){
             line.push_back(string("H"));
         }
         else{
             line.push_back(string(" "));
         }
+        // is HLF in the first snapshot?
         if(s[i]->is_hlf_first()){
             line.push_back(string(" "));
         }
         else {
             line.push_back(string("!"));
+        }
+        // at most one task with unscheduled siblings?
+        if(s[i]->only_one_nonscheduled_sibling()){
+            line.push_back(string(" "));
+        }
+        else {
+            line.push_back(string("U"));
         }
         line.push_back(" ");
         line.push_back(s[i]->markedstring());

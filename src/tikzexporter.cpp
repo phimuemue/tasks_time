@@ -76,6 +76,7 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
         unsigned int task_count_limit,
         bool first,
         unsigned int depth) const {
+    cout << "Beginning with TikZ export" << endl;
     if(first){
         map<unsigned int, vector<Snapshot*>> levels;
         tikz_dag_by_levels(s, levels, 1, consec_num);
@@ -154,6 +155,7 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
         }
     }
     
+    cout << "End of 'first' part" << endl;
     if(s->intree.count_tasks() < task_count_limit){
         return;
     }

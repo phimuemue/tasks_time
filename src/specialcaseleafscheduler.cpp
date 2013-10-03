@@ -18,7 +18,9 @@ void SpecialCaseLeafscheduler::get_initial_schedule(const Intree& t,
 void SpecialCaseLeafscheduler::get_next_tasks(const Intree& t, 
         const vector<task_id>& marked,
         vector<pair<task_id,myfloat>>& target) const {
-    if(t.is_degenerate_tree()){
+    // cout << t << endl;
+    // cout << t.is_degenerate_tree() << " " << t.is_parallel_chain() << endl;
+    if(t.is_degenerate_tree() || t.is_parallel_chain()){
         HLFDeterministicScheduler hlfds;
         hlfds.get_next_tasks(t, marked, target);
     }
