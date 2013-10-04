@@ -898,9 +898,13 @@ We have seen that degenerate intrees and parallel chains are optimally scheduled
 
 \emph{Assumption:} We assume that for degenerate intrees and parallel chains, that, if already two tasks are scheduled, the optimal task to be scheduled as third task should be chosen according to HLF.
 
-Note that this assumption is not proven. Our experiments suggest that it is true. 
+Using this assumption, we can exclude snapshots that are non-HLF from the point on where the current intree is a degenerate trees or a parallel chain.
 
-We will use it to research the number of snapshots that have to be examined by an improved exhaustive search. If we recognize that this improved exhaustive search performs significantly better than an ordinary exhaustive search, we try to prove (or disprove) the above assumption. If not, it is probably not rewarding to examine whether the assumption is true or not (because our assumption (possibly) allows us to exclude more snapshots).
+Please note that this assumption is not proven. Our experiments suggest that it is true. Also note that we possibly exclude too many snapshots, if the assumption turns out to be false. Nevertheless, we will use the assumption to research the number of snapshots that have to be examined by an improved exhaustive search. 
+
+If we recognize that this improved exhaustive search performs significantly better than an ordinary exhaustive search, it might be worth proving (or possibly even disproving) the assumption. If not, it is probably not rewarding to examine whether the assumption is true or not (because our assumption (possibly) allows us to exclude more snapshots).
+
+
 
 \section{Conclusion}
 \label{sec:properties-schedules-conclusion}
