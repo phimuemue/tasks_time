@@ -30,7 +30,8 @@ Snapshot::Snapshot() :
     cache_expected_runtime(0),
     Successors(this),
     Probabilities(this),
-    SuccessorProbabilities(this)
+    SuccessorProbabilities(this),
+    finalized(false)
 {
 
 }
@@ -41,7 +42,8 @@ Snapshot::Snapshot(const Snapshot& s) :
     intree(s.intree),
     Successors(this),
     Probabilities(this),
-    SuccessorProbabilities(this)
+    SuccessorProbabilities(this),
+    finalized(false)
     {
 }
 
@@ -50,7 +52,8 @@ Snapshot::Snapshot(Intree& t) :
     intree(t),
     Successors(this),
     Probabilities(this),
-    SuccessorProbabilities(this)
+    SuccessorProbabilities(this),
+    finalized(false)
 {
 
 }
@@ -61,7 +64,8 @@ Snapshot::Snapshot(Intree& t, vector<task_id> m) :
     intree(t),
     Successors(this),
     Probabilities(this),
-    SuccessorProbabilities(this)
+    SuccessorProbabilities(this),
+    finalized(false)
 {
     sort(m.begin(), m.end());
     for(auto it=m.begin(); it!=m.end(); ++it){
@@ -92,7 +96,8 @@ Snapshot::Snapshot(Intree& t,
     intree(t),
     Successors(this),
     Probabilities(this),
-    SuccessorProbabilities(this)
+    SuccessorProbabilities(this),
+    finalized(false)
 {
     sort(m.begin(), m.end());
     for(auto it=m.begin(); it!=m.end(); ++it){

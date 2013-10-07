@@ -45,7 +45,7 @@ class Snapshot {
         mutable map<unsigned int, bool> cache_is_hlf;
         mutable map<unsigned int, bool> cache_is_hlf_first;
         mutable map<unsigned int, bool> cache_only_one_nonscheduled_sibling;
-        bool finalized = false;
+        bool finalized;
 
         // TODO: combine successors and successor_probs into 1 vector!
         vector<Snapshot*> successors;
