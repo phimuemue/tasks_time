@@ -927,19 +927,56 @@ Table \ref{tab:improving-leaf-scheduler-benchmark} compares the number of snapsh
 
 We have seen that working with HLF for degenerate intrees and parallel chains has -- in contrast to the benchmarks described in tables \ref{tab:p3-degenerate-binary-trees-no-snapshots} and \ref{tab:parallel-chains-comparison-leaf-hlf} -- only a minor impact on the total number of snapshots needed. It is an interesting question why we do not observe an improvement as strong as it was when the \emph{original} intree was already a degenerate intree or a parallel chain. The reason for this behaviour is that, if we reach a degenerate intree or a parallel chain, we can possibly reach it in \emph{many different ways}, requiring the algorithm to examine HLF for each of the reached intrees. 
 
-As an example, consider the intree $(0,1,0,3,0,5,0,7,0,9,1,1)$. Note that this intree is neither a degenerate intree nor a parallel chain. However, it is quite close to being a parallel chain (by simply removing one of the tasks 11 and 12). However, since an exhaustive search (even the improved one) has to start out by ordinarily examining all combinations of settings for the original intree. Only under certain circumstances, it reaches a situation where it can apply HLF for a parallel chain. But, as you can see from figure \ref{fig:improving-leaf-not-that-useful-in-some-cases}, it is not deterministic which parallel chain we reach. Each parallel chain that is reached still has to be examined seperately by HLF. This explains why this improvement, while still reducing the number of required snapshots, is quite restricted.
+As an example, consider the intree $(0,0,1,1,3,3,5,1,2)$. Note that this intree is neither a degenerate intree nor a parallel chain. However, it is quite close to being a degenerate intree (by simply removing one task 9). However, since an exhaustive search (even the improved one) has to start out by ordinarily examining all combinations of settings for the original intree. Only under certain circumstances, it reaches a situation where it can apply HLF for a degenerate intree. But, as you can see from figure \ref{fig:improving-leaf-not-that-useful-in-some-cases}, it is clear from the beginning which degenerate intrees we reach. 
+
+Each degenerate intree that is reached still has to be examined seperately by HLF. This explains why this improvement, while still reducing the number of required snapshots, is not as useful if only a subtree of the original intree is a degenerate intree (or a parallel chain). Note that in figure \ref{fig:improving-leaf-not-that-useful-in-some-cases}, there are certain intrees  that occur in both schedules, but \emph{with different sets of scheduled tasks} in each schedule (see figure \ref{fig:improving-leaf-duplicate-task} for the respective intree). This requires us to examine both of these snapshots seperately by HLF to compute the optimal run time.
 
 \begin{figure}[th]
   \centering
-  \todo{BILD von dem intree reinhauen!}
-  \caption{Intree $(0,1,0,3,0,5,0,7,0,9,1,1)$ can be used to illustrate why improving exhaustive search for degenerate intrees and parallel chains is not that useful in some cases. There are several screenshots containing a parallel chain, each of whom must be processed by HLF seperately.}
+  \subcaptionbox{One possible schedule.}{
+    \centering
+    \includegraphics{p3/improving_leaf_001133512_v1.pdf}
+  }
+  \subcaptionbox{Another possible schedule.}{
+    \centering
+    \includegraphics{p3/improving_leaf_001133512_v2.pdf}
+  }
+  \begin{subfigure}{.8\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=.2]
+      \node[circle, scale=0.75, fill] (tid0) at (3.75,1.5){};
+      \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+      \node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
+      \node[circle, scale=0.75, fill] (tid3) at (2.25,4.5){};
+      \node[circle, scale=0.75, fill] (tid4) at (3.75,4.5){};
+      \node[circle, scale=0.75, fill] (tid5) at (6,4.5){};
+      \node[circle, scale=0.75, fill] (tid6) at (5.25,6){};
+      \node[circle, scale=0.75, fill] (tid7) at (6.75,6){};
+      \draw[](tid5) -- (tid6);
+      \draw[](tid5) -- (tid7);
+      \draw[](tid2) -- (tid3);
+      \draw[](tid2) -- (tid4);
+      \draw[](tid2) -- (tid5);
+      \draw[](tid0) -- (tid1);
+      \draw[](tid0) -- (tid2);
+    \end{tikzpicture}
+    \caption{This intree occurs in both schedules, but with different sets of scheduled tasks, requiring to HLF to examine both variants if we compute the optimal run time.}
+    \label{fig:improving-leaf-duplicate-task}
+  \end{subfigure}
+  \caption{Two possible schedules for intree $(0,0,1,1,3,3,5,1,2)$ that must be examined by exhaustive search to compute the optimal schedule. These can be used to illustrate why improving exhaustive search for degenerate intrees and parallel chains is not that useful in some cases. There are several screenshots containing a degenerate intree, each of whom must be processed by HLF seperately.}
   \label{fig:improving-leaf-not-that-useful-in-some-cases}
 \end{figure}
+
+\emph{Remark:} Even if -- at the point of computation -- there are different snapshots containing the same (or an isomorphic) intree, we did not observe one single instance where the \emph{optimal schedule} contained two distinct snapshots with two isomorphic intrees. This lead us to the following conjecture:
+
+\begin{conjecture}
+  Let $x$ and $y$ be two distinct snapshots in an optimal snapshot DAG. Then, their respective intrees are not isomorphic.
+\end{conjecture}
 
 \section{Conclusion}
 \label{sec:properties-schedules-conclusion}
 
-We have seen two very regular classes of intrees that are optimally scheduled by HLF. Unfortunately, even simplest combinations of the two classes are not guaranteed to be optimally scheduled by HLF. As an example, consider the intree $(0,0,1,2,3,4,6,6,8,8)$ depicted in figure \ref{fig:hlf-vs-opt-0012346688} whose components attached to its root are a degenerate intree with 7 tasks and a simple chain with 3 tasks. As shown in section \ref{sec:p3-suboptimal-hlf-strictly-suboptimal}, for this intree, HLF is strictly suboptimal.
+We have seen two very regular classes of intrees that are optimally scheduled by HLF. Unfortunately, even simplest combinations of the two classes are not guaranteed to be optimally scheduled by HLF. As an example, consider the intree $(0,0,1,2,3,4,6,6,8,8)$ (depicted in figure \ref{fig:hlf-vs-opt-0012346688}) whose components attached to its root are a degenerate intree with 7 tasks and a simple chain with 3 tasks. As shown in section \ref{sec:p3-suboptimal-hlf-strictly-suboptimal}, for this intree, HLF is strictly suboptimal.
 
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"

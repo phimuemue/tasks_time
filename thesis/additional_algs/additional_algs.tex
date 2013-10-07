@@ -15,16 +15,31 @@ Additionally, we looked a simple language to solve several non-critical one-time
 \section{General structure}
 \label{sec:implementation-general-structure}
 
-The developed program basically starts off given a single intree, a certain number of processors and a scheduling strategy. According to this strategy, we then compute all initial combinations of scheduled tasks, i.e. all initial snapshots (up to equivalent snapshots).
+The algorithmic core works in two main steps: 
+\begin{itemize}
+\item Computing \emph{all} schedules for an intree allowed by a specific scheduling strategy.
+\item Optimizing the generated schedules.
+\end{itemize}
 
-Starting at an initial snapshot, we then recursively compute all its successors, i.e. we simulate which task finishes first and wich task shall be chosen next according to the given scheduling strategy. All of these events (task finishes, next task is chosen) are associated with a certain probability. We do this until we reach the intree containing only 1 task, which then denotes the end of the scheduling process. We thereby eliminate equivalent snapshots in order to save memory.\footnote{We also implemented a variant that does not eliminate equivalent snapshots. However, this variant quickly became too slow as the number of tasks increased.}
+Before starting, the usual amount of command-line parsing and initialization is done, and afterwards, we can generate output files and clean up. We will now describe in short the two most important steps when generating an optimal schedule.
+
+\subsection{Generating all schedules according to a specific strategy}
+\label{sec:implementation-core-generate-schedules}
+
+Our program basically starts off given a single intree, a certain number of processors and a scheduling strategy. According to this strategy, we then compute all initial combinations of scheduled tasks, i.e. all initial snapshots (up to equivalent snapshots).
+
+Starting at an initial snapshot, we then recursively compute all its successors, i.e. we simulate which task finishes first and wich task shall be chosen next according to the given scheduling strategy. All of these events (task finishes, next task is chosen) are associated with a certain probability. We do this until we reach the intree containing only 1 task, which then denotes the end of the scheduling process. We thereby eliminate equivalent snapshots in order to save memory.\footnote{We also implemented a variant that does not eliminate equivalent snapshots. However, this variant quickly became too slow as the number of tasks increased. This is why we focussed on the variant that eliminates equivalent snapshots.}
 
 After the whole snapshot DAG has been computed we can compute the expected run times of the initial snapshots (recursively, as explained in section \ref{sec:introduction-compute-expected-time-schedule}).
+
+\subsection{Optimizing schedules}
+\label{sec:implementation-core-optimizing-schedules}
 
 Moreover, the program is capable of ``excluding the scheduler's bad choices'', i.e. it determines where the scheduler has chosen a good and where it has chosen a bad task. Then, the program discards the bad choices and leaves only the good choices, yielding a (possibly) new schedule that is optimal for a given intree.
 
 In order to keep the program fast, we thereby had to cache quite a lot of results (since the recursions through the snapshot DAG would otherwise requiring computing the same things over and over). This, of course, leads to increased memory consumption.
 
+\label{sec:implementation-numbers}
 We implemented support for various representation of probabilities and expected run times, most notably floating point numbers. Other possible representation include doubles or rationals (through the use of e.g. the GNU Multiple Precision library).
 
 \section{Representation of intrees and snapshots}
@@ -149,7 +164,7 @@ Algorithm \ref{sec:algorithm-canonical-intree-o-n} is a very high level descript
 \subsection{Additional approaches}
 \label{sec:algorithm-canonical-snap-additional-approaches}
 
-Unfortunately, computing canonical snapshots has a major impact on the overal performance of our program, which is why we tried other approaches to tackle this problem. For completeness, we will explain them shortly. Unfortunately, they did not work out as good as expected, but maybe they are helpful for future work. In this section, we focus on the part concerning the computation of \emph{canonical intrees} (i.e. we do not distinguish between scheduled and non-scheuled leaves).
+We experienced that computing canonical snapshots has a major impact on the overal performance of our program, which is why we tried other approaches to tackle this problem. For completeness, we will explain them shortly. Unfortunately, they did not work out as good as expected, but maybe they are helpful for future work. In this section, we focus on the part concerning the computation of \emph{canonical intrees} (i.e. we do not distinguish between scheduled and non-scheuled leaves).
 
 \begin{description}
 \item[Tree sequence] Most of the time, we are generating a certain subtree and want to know the canonical intree of it. We tried exploiting the fact that we already could \emph{start} with a canonical intree. That is, we tried to construct the tree sequence of a canonical subtree by just examining the tree sequence of the original intree. Sadly, we could not devise a simple pattern that works as a general rule.\todo{Example where equiv intrees yield drastically different sequences.}
@@ -189,6 +204,38 @@ These numbering is inductively defined as follows: A single leaf (resp. a tree c
 \end{figure}
 
 While this description could lead to very elegant algorithms in a theoretical setting, it does not come in handy in practice because the matula numbers can be very big (more than 32 bit needed for matula numbers of 15-node intrees).
+\end{description}
+
+\section{Computing all schedules according to a specific scheduling strategy}
+\label{sec:implementation-computing-all-schedules}
+
+\todo{Aufschreiben! Algorithmus mit Laufzeit!}
+
+\section{Extending the program}
+\label{sec:implementation-extending-program}
+
+We now describe in short how the program can be extended. We describe the possible adjustments and how complex they are.
+
+\subsection{Easy adjustments}
+\label{sec:implementation-extensions-easy}
+
+\begin{description}
+\item[Number representations] As mentioned in section \ref{sec:implementation-numbers}, we already support different possibilities to represent probabilities and expected values, namely \texttt{float}s, \texttt{double}s, and rational numbers using Boost Rational Number Library\todo{Referenz?} or the GNU Multiple Precision Arithmetic Library. These can easily be extended to other data types if they have overloaded operators and can be used like ordinary \emph{float}s.
+\item[Scheduling strategies] We provide an interface to implement new scheduling strategies. New scheduling strategies have to provide (most important) two methods: One to generate the initial chioces of tasks to be chosen and one method to determine which task should be the next to be chosen. We thereby focus on non-preemtive schedulers.
+\item[Exporters] An important part of the program consists of code for exporters to various formats (most notably to \LaTeX (in connection with TikZ)) and the program provides a straightforward interface for new exporting methods.
+\end{description}
+
+\subsection{Complex adjustments}
+\label{sec:implementations-extensions-moderate}
+
+\begin{description}
+\item[Other distributions] While our program is developed around tasks having exponentially distributed processing times, we offer an interface that could -- in principle -- deal with other distributions and other probabilities. While this adjustment is not particularly difficult to implement, one should keep the following in mind:
+  \begin{itemize}
+  \item Having other distributions probably destroys memorylessness, and, thus, probably prevents us from excluding equivalent snapshots. However, excluding equivalent snapshots is one of the main features of the program.
+  \item While it is not particularly difficult to \emph{implement} other distributions, it might still be difficult to \emph{calculate} the corresponding expected values and probabilities which task finishes first.
+  \end{itemize}
+\item[Preemtive scheduling] While our schedulers focus on preemtive scheduling, it is possible to adapt the program for non-preemtive scheduling. However, this would require to rewrite some interfaces and to adjust the schedulers.
+\item[General DAGs instead of intrees] It should be possible to adapt the program to work with arbitrary DAGs instead of simple intrees. While it would probably still be possible to exclude equivalent snapshots \todo{Ist rooted-DAG-isomorphismus effizient machbar?}, it would probably require some tuning
 \end{description}
 
 \section{Enumerating all intrees with a certain number of nodes}

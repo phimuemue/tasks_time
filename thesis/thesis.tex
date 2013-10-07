@@ -1,4 +1,4 @@
-\documentclass[a4paper, 11pt]{report}
+\documentclass[a4paper, 10pt]{report}
 
 \input{packages}
 \input{commands_and_environments}
@@ -12,6 +12,14 @@
 
 \chapter{TODO-Lists}
 \label{chap:todo}
+
+\section{Strict TODOs}
+\label{sec:strict-todos}
+
+\begin{itemize}
+\item Show that more processors can not be worse.
+\item Show that static and dynamic list-scheduling can not be optimal.
+\end{itemize}
 
 \section{Current questions}
 \label{chap:current-questions}
@@ -54,13 +62,14 @@
 %\part{Warmup: The two-processor case}
 \include{p2/p2}
 
+%\part{Implementation details}
+\include{additional_algs/additional_algs}
+\include{benchmark/benchmark}
+
 %\part{The three processor case}
 \include{p3/suboptimal_strategies}
 \include{p3/p3}
 
-%\part{Implementation details}
-\include{additional_algs/additional_algs}
-\include{benchmark/benchmark}
 
 \include{first/first}
 

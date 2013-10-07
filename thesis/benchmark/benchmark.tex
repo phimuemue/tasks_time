@@ -1,11 +1,9 @@
 \chapter{Benchmarks}
 \label{chap:benchmarks}
 
-While chapter \ref{chap:p3} focused on more theoretical aspects of our problem, we now summarize in short how the program performs in practice. We therefore ran tests that only considered non-trivial intrees, i.e. intrees, whose root-degree is strictly greater than 1.\todo{Figure?}
+While chapter \ref{chap:p3} will focus on more theoretical aspects of our problem, we first summarize in short how the program performs in practice. We therefore ran tests that only considered non-trivial intrees, i.e. intrees, whose root-degree is strictly greater than 1.\todo{Figure?}
 
 \emph{Remark:} It may be the case that the program (and in particular, the data shown in the tables) changed since this thesis was finished.
-
-\todo{Verschiedene Settings (float vs. fractions).}
 
 \section{Keeping all intrees in memory}
 \label{sec:benchmarks-all-intrees-in-memory}
@@ -14,7 +12,7 @@ As a first benchmark, we computed optimal schedules for all non-trivial intrees 
 
 Table \ref{tab:time-benchmark} shows the results. This table was created on a reasonably modern machine (with an Intel Core i7). Peak memory consumption was measured with Valgrind for up to 13 tasks. According to the valgrind manual \cite{massifmanual}, these measurements are accurate within 1\%. For more than 13 tasks, Valgrind was too slow, so we went for a more simplistic approach: We simply observed the stats shown by htop. This means, that the memory consumption for 14 and 15 tasks is not \emph{that} accurate, but probably still accurate enough to get an impression of how many memory was needed.
 
-Moreover, we used simple floating point numbers to represent probabilities and expected run times. We also implemented another feature to support fractions (using Boost Rational Number library or GNU Multiple Precision Arithmetic Library). Surprisingly, using rational numbers does not increase run time significantly (it increases e.g. from 25 seconds to 28 seconds if used on all non-trivial intrees with 13 tasks), but requires considerably more memory.
+Moreover, we carried out these tests with simple floating point numbers to represent probabilities and expected run times. We also implemented another feature to support fractions (using Boost Rational Number library or GNU Multiple Precision Arithmetic Library). Surprisingly, using rational numbers does not increase run time significantly (it increases e.g. from 25 seconds to 28 seconds if used on all non-trivial intrees with 13 tasks), but requires considerably more memory.
 
 \begin{table}[ht]
   \centering
@@ -41,7 +39,11 @@ The main problem is -- of course -- that the number of non-trivial intrees drast
 \section{Grouping intrees and computing them one after another}
 \label{sec:benchmarks-clustered-intrees}
 
-The first benchmark we conducted was done for intrees with 15 or more tasks. First, we generated all intrees with a certain number of tasks. Afterwards, we split the whole collection of intrees into smaller chunks containing a certain amount of intrees. We then processed these chunks one after another. In this scenario, the measurements become more difficult to interpret. Especially, the number of snapshots and the amount of memory can not be directly compared to the values shown in section \ref{sec:benchmarks-all-intrees-in-memory}. For the time, it is also non-trivial.
+The next benchmark we conducted was done for intrees with 15 or more tasks. First, we generated all (nontrivial) intrees with a certain number of tasks. Afterwards, we split the whole collection of intrees into smaller chunks containing a certain amount of intrees. We then processed these chunks one after another. 
+
+The results for this setting are shown in table \ref{tab:benchmark-clustered-run-time}.
+
+In this scenario, the measurements become more difficult to interpret. Especially, the number of snapshots and the amount of memory can not be directly compared to the values shown in section \ref{sec:benchmarks-all-intrees-in-memory}. For the time, it is also non-trivial. This is because we carry out some computations twice. While we can measure the time quite accurately, we can not do this for the memory consumption because Valgrind slowed down the program too much to finish in reasonable time. This is why we used \texttt{htop} to estimate the amount of memory used for 15 and 16 tasks. We did not exactly measure the memory consumption for 17 or more tasks, but it can be said that we experienced no problems on a machine with 8Gb RAM.
 
 \begin{table}[ht]
   \centering
@@ -50,9 +52,9 @@ The first benchmark we conducted was done for intrees with 15 or more tasks. Fir
     \hline
     15 & 54838 & 5000 & 11m & $<$ 500mb \\
     16 & 147570 & 5000 & 1h & $<$ 800mb \\
-    17 & 399466 & 5000 & 3h & \\
-    18 & 1086312 & 6000 & 13.3h & \\
-    19 & 2967517 & 6000 & 24h &
+    17 & 399466 & 5000 & 3h & n.a. \\
+    18 & 1086312 & 6000 & 13.3h & n.a. \\
+    19 & 2967517 & 6000 & 24h & n.a.
   \end{tabular}
   \caption{Time needed to compute optimal schedules for all non-trivial intrees  with a certain number using sets of subtrees of tasks using floating point numbers for probabilities and run times.}
   \label{tab:benchmark-clustered-run-time}
