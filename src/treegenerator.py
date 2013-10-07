@@ -111,10 +111,10 @@ def generate_trees(n, exclude_trivials=False):
     for i in generate_hashes_clever(n, exclude_trivials):
         yield list_from_hash(i)
 
-for n in xrange(16,17):
+for n in xrange(1,30):
     print "Working with %d tasks."%n
-    with open("../database/%d_no_trivials.txt"%n, "w") as f:
-        for i in generate_trees(n, True):
+    with open("../database/%d_trivials.txt"%n, "w") as f:
+        for i in generate_trees(n, False):
             for num in i:
                 f.write("%d "%num)
             f.write("\n")
