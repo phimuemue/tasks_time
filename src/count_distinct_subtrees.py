@@ -281,7 +281,7 @@ def count_subtrees(it, pool):
 filename = (sys.argv[1])
 print "Working with filename %s"%filename
 database = open(sys.argv[1], "r")
-resultfile = open(filename+".unopt.result", "w")
+resultfile = open(filename+".unopt.result.scleaf", "w")
 
 def myprint(a):
     #print str(a), 
@@ -292,8 +292,8 @@ for line in database:
     progs = [
                 # ("c0 o0", ["build/tasks_cs0", "-s", "leaf"]),
                 # ("c0 o1", ["build/tasks_cs0", "-s", "leaf", "--optimize"]),
-                #("c1 o0", ["build/tasks_cs1", "-s", "leaf"]),
-                #("c1 o1", ["build/tasks_cs1", "-s", "leaf", "--optimize"]),
+                # ("c1 o0", ["build/tasks_cs1_20131008", "-s", "leaf"]),
+                # ("c1 o1", ["build/tasks_cs1_20131008", "-s", "leaf", "--optimize"]),
                 ("c1 o0", ["build/tasks_cs1", "-s", "scleaf"]),
             ]
     tmp = Intree([int(x) for x in tree.split()])
