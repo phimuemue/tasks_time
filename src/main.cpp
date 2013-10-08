@@ -264,8 +264,8 @@ vector<Intree> generate_tree(po::variables_map vm){
     }
     // write last intree to file for later reuse
     ofstream output;
-    output.open(".last.intree");
-    for(auto& x : edges){
+    output.open(".last.intree.new");
+    for(auto& x: edges){
         output << x.second.get_id() << " ";
     }   
     output.close();
