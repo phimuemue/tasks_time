@@ -691,6 +691,8 @@ Please note that the above conjecture does not state anything about \emph{which}
 
 This tree has 6 topmost tasks, but 10 leaves in total. If conjecture \ref{conj:as-many-topmost-as-possibly} is correct, then we can restrict ourselves to combinations of 6 topmost tasks -- being at most $\binom{6}{3}=20$ possible choices, in this particular case even only 6 due to equivalence of snapshots. In contrast, considering all 10 leaves, we have 48 possible choices in the above example.
 
+Note that conjecture \ref{conj:as-many-topmost-as-possibly} also helps us to restrict the number of snapshots in another way: If we have to keep two tasks scheduled (because they were already scheduled in the previous step), we possibly do not need to examine all other tasks to be scheduled. If there are topmost tasks remaining, we can focus on them and do not need to examine non-topmost tasks.
+
 Moreover, we are tempted to say the following:
 
 \begin{conjecture}
