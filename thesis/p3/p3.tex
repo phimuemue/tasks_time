@@ -96,7 +96,19 @@ It is intuitively clear that more processors should be able to process an intree
 \end{theorem}
 
 \begin{proof}
-  \todo{beweisen!}
+  We consider a schedule $S_p$ that works for $p$ processors and construct a new schedule $S_{p+1}$ working for $p+1$ processors. We show that the expected run time for $S_{p+1}$ is not longer than the expected run time for $S_p$:
+
+  If the intree $I$ has at the beginning at most $p$ ready tasks, then a new processor can not help any further because we then can at most keep $p$ processors busy. In this case $S_{p+1}$ shall work exactly like $S_p$, implying that the run times for $S_p$ and $S_{p+1}$ are the same.
+
+  However, if $I$ has more than $p$ ready tasks, then $S_{p+1}$ shall initially schedule exactly the same tasks as $S_p$ would do (we call those $x_1,\dots,x_p$) and one \emph{additional} task $y$.
+
+  We can now compare the run times of $S_p$ and $S_{p+1}$. First of all, note that the tasks $x_1,\dots,x_p$ are independent (one of our basic assumptions) and do not know whether they are currently scheduled by $S_p$ or by $S_{p+1}$. This means, they all finish at the same respective times in $S_p$ and $S_{p+1}$. 
+
+  Of course, the task $y$ finishes at some point in $S_p$, but it finishes \emph{earlier} in $S_{p+1}$ because it has been scheduled from the beginning.\todo{Figure reinhauen!}
+
+  We now consider tasks that are scheduled \emph{after} task $y$ in $S_p$ (we call them $z_1,z_2,z_3,\dots$). These tasks are scheduled after $y$ in $S_p$ because they either require $y$ to be finished or because they could not be scheduled earlier because the $p$ processors were busy.
+
+  However, with $p+1$ processors and scheduling strategy $S_{p+1}$, we know that $y$ finishes earlier, thus allowing $z_1,z_2,z_3,\dots$ to be scheduled earlier because $y$ is already processed. This shows that the overall run time for $S_{p+1}$ is less than the overall run time for $S_p$.
 \end{proof}
 
 \section{Size of the snapshot DAG}
