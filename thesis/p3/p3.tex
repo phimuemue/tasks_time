@@ -104,11 +104,45 @@ It is intuitively clear that more processors should be able to process an intree
 
   We can now compare the run times of $S_p$ and $S_{p+1}$. First of all, note that the tasks $x_1,\dots,x_p$ are independent (one of our basic assumptions) and do not know whether they are currently scheduled by $S_p$ or by $S_{p+1}$. This means, they all finish at the same respective times in $S_p$ and $S_{p+1}$. 
 
-  Of course, the task $y$ finishes at some point in $S_p$, but it finishes \emph{earlier} in $S_{p+1}$ because it has been scheduled from the beginning.\todo{Figure reinhauen!}
+  Of course, the task $y$ finishes at some point in $S_p$, but it finishes \emph{earlier} in $S_{p+1}$ because it has been scheduled from the beginning. We now use induction to prove the claim: For small intrees (with, say, fewer than six tasks) we can easily test that the claim is true.
 
-  We now consider tasks that are scheduled \emph{after} task $y$ in $S_p$ (we call them $z_1,z_2,z_3,\dots$). These tasks are scheduled after $y$ in $S_p$ because they either require $y$ to be finished or because they could not be scheduled earlier because the $p$ processors were busy.
+  % \begin{figure}[th]
+  %   \centering
+  %   \begin{tikzpicture}
+  %     \begin{scope}[yscale=.4, xscale=.75]
+  %       \draw(0,0) rectangle node{$x_1$} +(4,1);
+  %       \draw(0,1) rectangle node{$x_2$} +(8,1);
+  %       \draw(0,2) rectangle node{$x_3$} +(5,1);
+  %       \draw(4,0) rectangle node{$a$} +(3,1);
+  %       \draw(7,0) rectangle node{$b$} +(3.5,1);
+  %       \draw(8,1) rectangle node{$c$} +(4,1);
+  %       \draw(5,2) rectangle node{$y$} +(4.5,1);
+  %       \draw(9.5,2) rectangle node{$z_1$} +(1,1);
+  %     \end{scope}
+  %     \begin{scope}[yscale=.4, xscale=.75, yshift=-5cm]
+  %       \draw(0,0) rectangle node{$x_1$} +(4,1);
+  %       \draw(0,1) rectangle node{$x_2$} +(8,1);
+  %       \draw(0,2) rectangle node{$x_3$} +(5,1);
+  %       \draw(4,0) rectangle node{$a$} +(3,1);
+  %       \draw(7,0) rectangle node{$b$} +(3.5,1);
+  %       \draw(8,1) rectangle node{$c$} +(4,1);
+  %       \draw(0,-1) rectangle node{$y$} +(4.5,1);
+  %       \draw(5,2) rectangle node{$z_1$} +(1,1);
+  %     \end{scope}
+  %   \end{tikzpicture}
+  %   \caption{Exemplary scheduling diagram for $p$ and $p+1$ processors with respective schedules $S_p$ and $S_{p+1}$.}
+  %   \label{fig:exemplary-schedules-sp-sp1}
+  % \end{figure}
 
-  However, with $p+1$ processors and scheduling strategy $S_{p+1}$, we know that $y$ finishes earlier, thus allowing $z_1,z_2,z_3,\dots$ to be scheduled earlier because $y$ is already processed. This shows that the overall run time for $S_{p+1}$ is less than the overall run time for $S_p$.
+  % We now consider tasks that are scheduled \emph{after} task $y$ in $S_p$ (we call them $z_1,z_2,z_3,\dots$). These tasks are scheduled after $y$ in $S_p$ because they either require $y$ to be finished or because they could not be scheduled earlier because the $p$ processors were busy.
+
+%   However, with $p+1$ processors and scheduling strategy $S_{p+1}$, we know that $y$ finishes earlier \emph{and} that -- after $y$ finishes in $S_{p+1}$ the $(p+1)$-th processor can be used to process tasks. 
+
+% thus allowing $z_1,z_2,z_3,\dots$ to be scheduled earlier because $y$ is already processed. This shows that the overall run time for $S_{p+1}$ is less than the overall run time for $S_p$.
+  
+  For $S_{p+1}$, we can argue as follows: If $y$ is the first task to finish, we basically have the same situation as for $S_p$, but with the modification that we do not have to process the whole intree $I$ but instead only a subtree, namely $I\setminus\left\{ y \right\}$. It is clear that processing this subtree requires less time than processing the original intree.
+
+  If, on the other hand, one of the tasks $x_1,\dots,x_p$ finishes first, we continue like $S_p$ would have continued. If $S_p$ chose $y$ as next task, we can argue that the resulting run time for $S_{p+1}$ is at most the run time for $S_p$ because then $y$ finishes earlier in $S_{p+1}$ than in $S_p$. Otherwise, the expected run time for $S_{p+1}$ still is smaller than the expected run time for $S_{p+1}$ by induction.\todo{Improve this}
 \end{proof}
 
 \section{Size of the snapshot DAG}
