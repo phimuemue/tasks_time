@@ -86,23 +86,37 @@ The other way around can be examined by looking at the intree $(0,0,1,2,2,3,3,6,
 
 That is, the fact that we consider non-preemtive scheduling only results in the fact that we can not conclude anything about the (non-)optimality of HLF within subtrees even if we know the optimal schedule for a whole intree.
 
+\subsection{More processors do not worsen the run time}
+\label{sec:properties-more-processors-are-better}
+
+It is intuitively clear that more processors should be able to process an intree faster (if appropriately scheduled). We show a short proof why this is the case.
+
+\begin{theorem}
+  Let $I$ be an intree that is processed by $p$ processors according to a specific scheduling strategy. Then we can construct a scheduling strategy for $p+1$ processors whose expected run time is at least as good as the run time for $p$ processors.
+\end{theorem}
+
+\begin{proof}
+  \todo{beweisen!}
+\end{proof}
+
 \section{Size of the snapshot DAG}
 \label{sec:p3-size-of-snapshot-dag-first-attempts}
 
 Similar to the reasoning in section \ref{sec:p2-snapshot-dag}, we can research the size of a snapshot DAG for the P3 case. 
-We conducted an experiment and examined the size for snapshot DAGs of intrees containing up to 17 tasks. 
+We conducted an experiment and examined the size for snapshot DAGs of intrees containing up to 14 tasks. 
 Therefore, we generated all intrees (up to isomorphism) with a certain number of tasks (see section \ref{sec:enumerating-all-intrees} for an algorithm).
 Then we computed the following for each intree:
 \begin{itemize}
 \item Number of distinct (i.e. non-isomorphic) subtrees.
-\item Number of snapshots that can be constructed using the LEAF scheduling strategy (i.e. ``try-everything'' scheduling).
-\item The size of the \emph{optimal} snapshot DAG.
+\item Number of snapshots that are constructed using the LEAF scheduling strategy (i.e. exhaustive search).
+\item The size of the \emph{optimal} snapshot DAG. This DAG is constructed by excluding bad choices of the LEAF scheduler.
 \end{itemize}
 
 We do so because of the following: It is easily possible to construct an optimal schedule if we take the possible snapshot DAGs of the LEAF scheduler and only leave the choices that yield the best expected run time.
 
-Since the size of the snapshot DAG for an intree with $n$ tasks is at most $n^3$ times as large as the number of subtrees of the original intree, we also computed the number of subtrees for each of these intrees.
-That is, we can compare the number of intrees to the number of snapshots to be considered.
+It is clear that the size of the snapshot DAG for an intree with $n$ tasks is at most $n^3$ times as large as the number of subtrees of that particular intree. This can be easily seen by an argument similar to the one in section \ref{sec:p2-snapshot-dag}, where we said that each subtree has three scheduled tasks and we have at most $\binom{n}{3} \leq n^3$ possibilities to choose three tasks from each intree.
+
+We examined all intrees up to 15 tasks and computed for each of them the number of subtrees, the number of snapshots to be examined by an exhaustive search and the number of snapshots in the snapshot DAG for the optimal schedule.
 
 The results are summed up in table \ref{tab:num-subtrees-size-of-dags}\todo{Complete!}.
 
@@ -132,7 +146,7 @@ The results are summed up in table \ref{tab:num-subtrees-size-of-dags}\todo{Comp
   \label{tab:num-subtrees-size-of-dags}
 \end{table}
 
-As we can see in table \ref{tab:num-subtrees-size-of-dags}, the number of subtrees is (at least for $n\geq  9$) significantly larger than the number of snapshots in the snapshot DAG describing an optimal schedule.
+As we can see in table \ref{tab:num-subtrees-size-of-dags}, the number of subtrees is (at least for $n\geq  9$) significantly larger than the number of snapshots in the snapshot DAG for the optimal schedule. However, the overall number of snapshots is strictly higher than the number of subtrees.
 
 Another interesting fact is that there is no ``strict correlation'' between the number of subtrees and the number of snapshots in the optimal snapshot DAG. That is, there are certain DAGs that have more non-isomorphic subtrees than another DAG, yet -- on the other hand -- more snapshots in the optimal snapshot DAG. As an example, consider the intrees $T_1$ described by 00011111 and $T_2$ described by 00001234: $T_1$ has 19 subtrees and its optimal snapshot DAG contains 13 snapshots, while $T_2$ has only 15 subtrees, but an optimal snapshot DAG containing 14 snapshots.
 
@@ -143,7 +157,7 @@ To determine the maximum size of the optimal snapshot DAG for the P3 case, it mi
 \begin{figure}[t]
   \centering
   \includegraphics[scale=1.4]{p3/max_unoptimized.pdf}
-  \caption{These are the intrees for which the a brute-force algorithm has to generate maximally many snapshots to generate the optimal schedule (maximal compared to all other intrees with the same number $n$ of vertices). We show $2\leq n \leq 14$.}
+  \caption{These are the intrees (containing between 2 and 14 tasks) for which the a brute-force algorithm has to generate maximally many snapshots to generate the optimal schedule (maximal compared to all other intrees with the same number of vertices).}
   \label{fig:intrees-maximum-unoptimized-p3}
 \end{figure}
 
@@ -972,6 +986,46 @@ Each degenerate intree that is reached still has to be examined seperately by HL
 \begin{conjecture}
   Let $x$ and $y$ be two distinct snapshots in an optimal snapshot DAG. Then, their respective intrees are not isomorphic.
 \end{conjecture}
+
+\section{Improving exhaustive search with conjectures}
+\label{sec:improving-leaf-with-conjectures}
+
+As we have seen in conjecture \ref{conj:as-many-topmost-as-possibly}, we suspect that if there are more topmost tasks than processors, then we have to schedule as many topmost tasks as possible. 
+
+Even if we were not able to prove this conjecture, we still wrote a scheduler that exploits it, because it can drastically reduce the number of snapshots that have to be considered by an exhaustive search.
+
+That is, we now consider a LEAF scheduler that
+\begin{itemize}
+\item uses HLF for degenerate intrees and parallel chains \dots
+\item \dots and discards snapshots that have unscheduled topmost tasks and scheduled non-topmost tasks.
+\end{itemize}
+
+We do an analogue comparison to the one done in section \ref{sec:improving-exhaustive-search} and show the results in table \ref{tab:improving-improved-leaf-scheduler-benchmark}.
+
+\begin{table}[th]
+  \centering
+  \begin{tabular}[ht]{ccccccc}
+    \multirow{2}{*}{Tasks} & \multicolumn{2}{c}{LEAF} & \multicolumn{2}{c}{CSCLEAF} & \multicolumn{2}{c}{Ratio}\\
+    &  Max & Avg & Max & Avg & Max & Avg\\
+    \hline
+    5 & 7 & 5.89 & 7 & 5.89 & 1 & 1\\
+    6 & 11 & 8.25 & 11 & 8.05 & 1 & 0.98\\
+    7 & 19 & 11.75 & 16 & 10.90 & 0.84 & 0.93 \\
+    8 & 34 & 17.39 & 29 & 15.03 & 0.85 & 0.86 \\
+    9 & 63 & 26.53 & 52 & 21.41 & 0.83 & 0.81 \\
+    10 & 119 & 41.85 & 96 & 32.25 & 0.81 & 0.77 \\
+    11 & 230 & 67.48 & 195 & 50.96 & 0.85 & 0.76 \\
+    12 & 437 & 112.68 & 405 & 83.49 & 0.93 & 0.74 \\
+    13 & 812 & 184.95 & n.a. & n.a. &  &  \\
+    14 & 1510 & 304.41 & n.a. & n.a. & & 
+  \end{tabular}
+  \caption{Conjecture-improved LEAF scheduling with HLF when encountering a degenerate intree or a parallel chain and scheduling as much topmost tasks as possible}
+  \label{tab:improving-improved-leaf-scheduler-benchmark}
+\end{table}
+
+We can see that the results are slightly better than the ones we acchieved by only working with HLF from the point on where we come to degenerate intrees or parallel chains. However, the average improvement is still far from being close to 60\%.
+
+Still, these conjectures and improvements might serve as a starting point for further optimizations and exclusion rules for snapshots that can be omitted by an exhaustive search.
 
 \section{Conclusion}
 \label{sec:properties-schedules-conclusion}
