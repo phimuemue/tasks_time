@@ -1059,19 +1059,18 @@ We do an analogue comparison to the one done in section \ref{sec:improving-exhau
     7 & 19 & 11.75 & 16 & 10.83 & 0.84 & 0.92 \\
     8 & 34 & 17.39 & 28 & 14.66 & 0.82 & 0.84 \\
     9 & 63 & 26.53 & 46 & 20.19 & 0.73 & 0.76 \\
-    10 & 119 & 41.85 & 96 & 32.25 & 0.81 & 0.77 \\
-    \todo{Fill the following up!}
-    %11 & 230 & 67.48 & 195 & 50.96 & 0.85 & 0.76 \\
-    %12 & 437 & 112.68 & 405 & 83.49 & 0.93 & 0.74 \\
-    %13 & 812 & 184.95 & 736 & 139.52 & 0.90 & 0.75 \\
-    %14 & 1510 & 304.41 & 1392 & 235.20 & 0.92 & 0.77 \\
+    10 & 119 & 41.85 & 81 & 28.83 & 0.68 & 0.69 \\
+    11 & 230 & 67.48 & 148 & 42.92 & 0.64 & 0.64 \\
+    12 & 437 & 112.68 & 327 & 66.52 & 0.75 & 0.59 \\
+    13 & 812 & 184.95 & 564 & 106.12 & 0.69 & 0.57 \\
+    14 & 1510 & 304.41 & 1090 & 172.44 & 0.72 & 0.57 \\
     %15 &  &  & 2585 & 396.29 & &  \\
   \end{tabular}
-  \caption{Conjecture-improved LEAF scheduling with HLF when encountering a degenerate intree or a parallel chain and scheduling as much topmost tasks as possible}
+  \caption{\todo{Fill table!}Conjecture-improved LEAF scheduling with HLF when encountering a degenerate intree or a parallel chain and scheduling as much topmost tasks as possible}
   \label{tab:improving-improved-leaf-scheduler-benchmark}
 \end{table}
 
-We can see that the results are slightly better than the ones we acchieved by only working with HLF from the point on where we come to degenerate intrees or parallel chains. However, the average improvement is still far from being close to 60\%.
+We can see that the results are better than the ones we acchieved by only working with HLF from the point on where we come to degenerate intrees or parallel chains. Most notably, we gain over 30\% on average for intrees with more than 9 tasks.
 
 Still, these conjectures and improvements might serve as a starting point for further optimizations and exclusion rules for snapshots that can be omitted by an exhaustive search.
 

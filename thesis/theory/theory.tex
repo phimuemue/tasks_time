@@ -597,17 +597,47 @@ Consider now a snapshot, i.e. the current intree and a set of currently schedule
 That is, we have several possibilities here. The first of them (which task finishes first) can not be influenced in our scenario. The second, however, leaves us free choice. Depending on which task we choose next, we might get a better or worse overall run time.
 
 \begin{definition}[Scheduling strategy]
-  A \emph{scheduling strategy} determines which task shall be the next to be processed.
+  A \emph{scheduling strategy} determines the probability that a certain task should be the next task to be scheduled.
 \end{definition}
 
-One desirable goal is to always choose the next task to be scheduled in such a way that the overall expected run time is minimal. We will now see how we can compute the expected run time for a schedule.
+That means, we use the notion of a \emph{probabilistic scheduler} in the sense that the scheduler is not forced to restrict on \emph{one single} task, but can instead specify probabilities for each ready, currently unscheduled task. Note that we can easily ``simulate'' a deterministic scheduler by assigning probability 1 to one single ready task, and probability 0 to all other possibilities.
+
+One desirable goal is to always choose the next task to be scheduled (resp. the respective probabilities) in such a way that the overall expected run time is minimal. We will now see how we can compute the expected run time for a schedule.
 
 \todo{Scheduling-DAGs erklären mit allen Bestandteilen (Eintrittswkt, Probs, Exp).}
 
 \section{Computing the expected run time of a schedule}
 \label{sec:introduction-compute-expected-time-schedule}
 
-If we are speaking of a schedule, we can think of it as a directed acyclic graph, where each vertex represents one single snapshot. The edges between the snapshots then represent transitions that indicate that a certain task has finished. We can naturally assign the edges weights that represent the corresponding probability that a task has finished.\todo{Hier ausführlicher einleiten mit Figure!}\todo{Dag definieren? Oder Verweis auf irgendwen?}
+If we are speaking of a schedule, we talk about the complete processing of an intree of tasks.
+
+We can think of it as a directed acyclic graph, where each vertex represents one single snapshot. The edges between the snapshots then represent transitions that indicate that a certain task has finished and (possibly) a new task has chosen to be scheduled. We can naturally assign the edges weights that represent the corresponding probability that a task has finished and the new task has been picked.\todo{Hier ausführlicher einleiten mit Figure!}\todo{Dag definieren? Oder Verweis auf irgendwen?}
+
+That is, we have two sources of non-determinism:
+\begin{itemize}
+\item Each of the currently scheduled tasks can be the first task to finish. Depending on which task finishes first, we have to continue with another intree.
+\item When one task finishes, the corresponding processor becomes idle and can be used to process other tasks. This is the second source where we have different possibilities. However, for this point, we can decide ourselves how to continue.
+\end{itemize}
+
+Figure \ref{fig:intro-snapshot-graphical-representation} shows (the beginning) a schedule for the intree $(0,0,1,2,2,2,6.6,8)$ in two variants: Figure \ref{fig:schedule-dag-intro-intermediates} shows the schedule and incorporates situations where the scheduler can decide wich tasks should be scheduled next with wich probabilities (``intermediate snapshots''). \todo{Erläutern, wie der scheduler wählt.} Figure \ref{fig:schedule-dag-intro-no-intermediates} shows the version of the schedule that omits intermediate snapshots. From now on, we will restrict ourselves to the latter structure (without intermediate snapshots) because this representation is easier to maintain and -- after some time to get accustomed to it -- as easy to understand as the version with intermediate snapshots.
+
+\begin{figure}[th]
+  \centering
+  \begin{subfigure}{\textwidth}
+    \centering
+    \input{theory/schedule_dag_intro}
+    \caption{A snapshot DAG with intermediate snapshots. In the beginning, there are two tasks scheduled. Each task is the first to finish with probability 0.5 (see the corresponding edges). An intermediate snapshot describes a situation where the scheduler can assign probabilities to be scheduled as next task to the tasks. According to these probabilities, the processing continues with the corresponding probabilities.}
+  \label{fig:schedule-dag-intro-intermediates}
+  \end{subfigure}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \input{theory/schedule_dag_intro_no_intermediates}
+    \caption{The same snapshot DAG without intermediate snapshots. Intermediate snapshots are eliminated and the edges are drawn directly between non-intermediate snapshots. The probabilities are obtained by multiplying the corresponding probabilities along the original edges that are needed to form the new edges.}
+  \label{fig:schedule-dag-intro-no-intermediates}
+  \end{subfigure}
+  \caption{An exemplary schedule DAG with and without intermediate snapshots. From now on, we will focus on snapshot DAGs without intermediate snapshots.}
+  \label{fig:schedule-dag-intro}
+\end{figure}
 
 Computing the expected run time for a given schedule (more precisely for the whole processing of an intree according to a certain schedule) can be easily acchieved via a recursive formula that can be explained as follows:
 
