@@ -130,7 +130,7 @@ We use this distinction to (roughly) differentiate the following strategies into
 \item For the cases where HLF is can-optimal, we examined several strategies that try to determine which tasks should be chosen to minimize the expected run time. These strategies are presented in section \ref{sec:suboptimal-hlf-can-optimal-strategies}. These strategies can be seen as ``refinements'' of HLF such that HLF behaves better.
 \end{itemize}
 
-The strategies that we consider are in many cases ambiguous, i.e. they admit several possible choices. However, they do \emph{not} allow \emph{all} possible choices, thereby possibly reducing the amount of snapshots to examine. Not all strategies fall strictly into one of the groups -- we then put it into the category we found more insightful.
+We will not only focus on particular strategies, but we will focus on which snapshots can be excluded or which particular structure snapshots might have. That is, the strategies we consider are in many cases ambiguous because they admit several possible choices. However, they do \emph{not} allow \emph{all} possible choices, thereby possibly reducing the amount of snapshots to examine. Not all strategies fall strictly into one of the groups -- we then put it into the category we found more insightful.
 
 \section{Non-HLF strategies}
 \label{sec:suboptimal-non-hlf-strategies}
@@ -162,7 +162,7 @@ We examined all intrees with up to 13 tasks, especially the cases where HLF is n
 \subsection{Only highest or lowest leaves}
 \label{sec:disproving-only-highest-or-lowest-leaves}
 
-So far, we have seen several scenarios where HLF was not optimal. The trees we examined resulted in schedules that picked only combinations highest leaves and lowest leaves possible. Thus, we were tempted to think that an optimal schedule chooses only topmost tasks or leaves whose level is minimal (among all leaves). However, this is not a criterion for an optimal schedule, as we can observe by scheduling the 14-tasks-intree $(0,0,0,2,3,4,5,7,7,9,10,10,12)$, which is shown in figure \ref{fig:only-high-or-low-not-optimal}.
+So far, we have seen several scenarios where HLF was not optimal. The trees we examined resulted in schedules that picked only combinations highest leaves and lowest leaves possible. Thus, we were tempted to think that an optimal schedule chooses only topmost tasks or leaves whose level is minimal (among all leaves). However, this is not a criterion for an optimal schedule, as we can observe by scheduling the 14-tasks-intree $(0,0,0,2,3,4,5,7,7,9,10,10,12)$, which is shown in figure \ref{fig:only-high-or-low-not-optimal}. For this intree, we have to schedule two topmost tasks and one task on level 3, but there is one unscheduled task remaining on level 1.
 
 \begin{figure}[ht]
   \centering
@@ -191,9 +191,9 @@ As mentioned in section \ref{sec:hlf-suboptimal-two-variants}, there are many ca
 
 (For now,) we call a path from the root to a leaf (i.e. a ready task) $t$ \emph{free} if $t$ is not scheduled.
 
-One might be tempted to think that it should be the foremost goal to exploit parallelism as good as possible and that this might be acchieved by choosing the currently scheduled tasks in a manner such that as few free paths as possible in an optimal schedule. That is, we choose the leaves in a way so that the ends of as many different paths as possible are scheduled. This strategy was inspired by looking at the counterexamples against HLF depicted in figures \ref{fig:hlf-001112}, \ref{fig:hlf-vs-opt-0012346688}, \ref{fig:hlf-vs-opt-0012446788} and \ref{fig:hlf-vs-opt-00123455799}. We observe for these intrees that the optimal schedules has no as few free chains as possible.
+One might be tempted to think that it should be the foremost goal to exploit parallelism as good as possible and that this might be acchieved by choosing the currently scheduled tasks in a manner such that as few free paths as possible in an optimal schedule. That is, we choose the leaves in a way so that the ends of as many different paths as possible are scheduled. This strategy was the first that came to our mind and was inspired by looking at the counterexamples against HLF depicted in figures \ref{fig:hlf-001112}, \ref{fig:hlf-vs-opt-0012346688}, \ref{fig:hlf-vs-opt-0012446788} and \ref{fig:hlf-vs-opt-00123455799}. We observe for these intrees that the optimal schedules has no as few free chains as possible.
 
-However, there are examples where this strategy does not yield optimal results. Consider e.g. the tree $(0,0,0,1,1,1,2,2,3)$ (figure \ref{fig:hlfnfc-is-not-optimal} compares the optimal schedule to the no-free-paths schedule).
+However, there are examples where the optimal contains snapshots that do not adhere to this property. Consider e.g. the tree $(0,0,0,1,1,1,2,2,3)$ (figure \ref{fig:hlfnfc-is-not-optimal} compares the optimal schedule to the no-free-paths schedule).
 
 \begin{figure}[ht]
   \centering
@@ -481,6 +481,33 @@ For trees with fewer than 12 tasks, we could not find any tree that violated our
 
 \emph{Remark:} Surprisingly, every subtree of $(0,0,0,2,2,3,5,5,6,6,6)$ fulfills the conjecture that there is at most one task that has both scheduled and non-scheduled leaves as predecessors (during the whole schedule). This shows that even task that \emph{might seem} of minor impact for the first choices, might be relevant to the question which tasks are chosen in the optimal schedule.
 
+\section{(Dynamic) list scheduling}
+\label{sec:suboptimal-strategies-list-scheduling}
+
+List scheduling considers the current intree and generates a list of tasks sorted in such a way that the tasks that come first in the list shall be priorized and scheduled first, if possible. As shown by \cite{MoritzMaasDiploma}, dynamic list scheduling strategies can not be optimal for non-preemtive scheduling of intrees (whose tasks' run times are exponentially distributed) with three processors.
+
+This can be seen by examining the intree $(0,0,1,1,1,2,2,2,2,3,6)$ as shown in figure \ref{fig:list-scheduling-counter-example}. Because the subtree shown in figure \ref{fig:list-schedule-counter-example-subtree} is optimally scheduled using other tasks than the one that have to be used when it is reached in the original schedule, there can not exist a dynamic list scheduling strategy that works for \emph{all} intrees.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{.45\textwidth}
+    \centering
+    \includegraphics{p3/list_sched_0011122236_opt_sched.pdf}
+    \caption{Optimal schedule for intree $(0,0,1,1,1,2,2,2,2,3,6)$.}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}[b]{.45\textwidth}
+    \centering
+    \vfill
+    \includegraphics{p3/list_sched_subtree.pdf}
+    \vfill
+    \caption{This intree is optimally scheduled as shown, but in the optimal schedule for the original intree, it has to be scheduled in another way.}
+    \label{fig:list-schedule-counter-example-subtree}
+  \end{subfigure}
+  \caption{A counterexample for list scheduling}
+  \label{fig:list-scheduling-counter-example}
+\end{figure}
+
 \section{Maximizing 3-processor-time, minimizing 1-processor time}
 \label{sec:p3-disproving-long-p3-and-short-p1-time}
 
@@ -663,6 +690,8 @@ Please note that the above conjecture does not state anything about \emph{which}
 \end{center}
 
 This tree has 6 topmost tasks, but 10 leaves in total. If conjecture \ref{conj:as-many-topmost-as-possibly} is correct, then we can restrict ourselves to combinations of 6 topmost tasks -- being at most $\binom{6}{3}=20$ possible choices, in this particular case even only 6 due to equivalence of snapshots. In contrast, considering all 10 leaves, we have 48 possible choices in the above example.
+
+Note that conjecture \ref{conj:as-many-topmost-as-possibly} also helps us to restrict the number of snapshots in another way: If we have to keep two tasks scheduled (because they were already scheduled in the previous step), we possibly do not need to examine all other tasks to be scheduled. If there are topmost tasks remaining, we can focus on them and do not need to examine non-topmost tasks.
 
 Moreover, we are tempted to say the following:
 
