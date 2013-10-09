@@ -53,6 +53,7 @@ void SpecialCaseLeafscheduler::get_initial_schedule(const Intree& t,
 }
 
 void SpecialCaseLeafscheduler::get_next_tasks(const Intree& t, 
+#define CHECK_TARGET_VALIDITY
         const vector<task_id>& marked,
         vector<pair<task_id,myfloat>>& target) const {
     // cout << t << endl;
@@ -64,6 +65,9 @@ void SpecialCaseLeafscheduler::get_next_tasks(const Intree& t,
     else
     {
         Leafscheduler::get_next_tasks(t, marked, target);
+#ifdef CHECK_TARGET_VALIDITY
+        bool more_than_zero_in_target = target.size() > 0;
+#endif
 #if 1 // use conjecture that as many toptask as possible shall be scheduled
         vector<task_id> leaves;
         t.get_leaves(leaves);
@@ -103,6 +107,14 @@ void SpecialCaseLeafscheduler::get_next_tasks(const Intree& t,
         for(auto& it : target){
             it.second /= probsum;
         }
+#ifdef CHECK_TARGET_VALIDITY
+        if(more_than_zero_in_target){
+            if(target.size() == 0){
+                cout << t << endl;
+            }
+            assert(target.size() > 0);
+        }
+#endif
 #endif
     }
     // if(t.is_degenerate_tree()){
@@ -112,4 +124,5 @@ void SpecialCaseLeafscheduler::get_next_tasks(const Intree& t,
     //     cout << "NO! ";
     // }
     // cout << t << endl;
+#undef CHECK_TARGET_VALIDITY
 }
