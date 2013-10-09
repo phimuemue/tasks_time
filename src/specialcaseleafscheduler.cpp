@@ -38,7 +38,7 @@ void SpecialCaseLeafscheduler::get_initial_schedule(const Intree& t,
         }
     }
     // more topmost tasks than processors -> only consider topmost-combinations
-    if(count > p){
+    if(count >= p){
         target.erase(remove_if(target.begin(), target.end(),
                     [&](const vector<task_id>& a) -> bool {
                         for(auto it : a){
@@ -51,19 +51,19 @@ void SpecialCaseLeafscheduler::get_initial_schedule(const Intree& t,
                     ), target.end());
     }
     // less topmost tasks than processors -> only consider those schedules with all topmost tasks
-    // else {
-    //     target.erase(remove_if(target.begin(), target.end(),
-    //                 [&](const vector<task_id>& a) -> bool {
-    //                     unsigned int schedtopcount = 0;
-    //                     for(auto it : a){
-    //                         if(t.get_level(it) == max_level){
-    //                             schedtopcount++;
-    //                         }
-    //                     }
-    //                     return schedtopcount != count;
-    //                 }
-    //                 ), target.end());
-    // }
+    else {
+        target.erase(remove_if(target.begin(), target.end(),
+                    [&](const vector<task_id>& a) -> bool {
+                        unsigned int schedtopcount = 0;
+                        for(auto it : a){
+                            if(t.get_level(it) == max_level){
+                                schedtopcount++;
+                            }
+                        }
+                        return schedtopcount != count;
+                    }
+                    ), target.end());
+    }
 #endif
 }
 
@@ -108,30 +108,31 @@ void SpecialCaseLeafscheduler::get_next_tasks(const Intree& t,
         }
         // cout << count << " topmost tasks" << endl;
         // cout << marked.size() << endl;
-        if(count > marked.size()){
+        // more topmost than marked -> only topmost-combinations
+        if(count >= marked.size()){
             target.erase(remove_if(target.begin(), target.end(),
                 [&](const pair<task_id, myfloat>& a) -> bool {
                     return t.get_level(a.first) < max_level;
                 }
             ), target.end());
         }
-        // else{
-        //     target.erase(remove_if(target.begin(), target.end(),
-        //         [&](const pair<task_id, myfloat>& a) -> bool {
-        //             unsigned int newcount = 0;
-        //             for (auto tsk : marked){
-        //                 if(t.get_level(tsk) == max_level){
-        //                     newcount++;
-        //                 }
-        //             }
-        //             if(t.get_level(a.first) == max_level){
-        //                 newcount++;
-        //             }
-        //             return newcount < count;
-        //         }
-        //     ), target.end());
-        // }
-        assert(target.size() > 0);
+        // less topmost than marked -> all topmost must be scheduled
+        else{
+            target.erase(remove_if(target.begin(), target.end(),
+                [&](const pair<task_id, myfloat>& a) -> bool {
+                    unsigned int newcount = 0;
+                    for (auto tsk : marked){
+                        if(t.get_level(tsk) == max_level){
+                            newcount++;
+                        }
+                    }
+                    if(t.get_level(a.first) == max_level){
+                        newcount++;
+                    }
+                    return newcount < count;
+                }
+            ), target.end());
+        }
         myfloat probsum = 0;
         for(const auto& it : target){
             probsum += it.second;
