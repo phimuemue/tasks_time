@@ -37,6 +37,7 @@ void SpecialCaseLeafscheduler::get_initial_schedule(const Intree& t,
             break;
         }
     }
+    // more topmost tasks than processors -> only consider topmost-combinations
     if(count > p){
         target.erase(remove_if(target.begin(), target.end(),
                     [&](const vector<task_id>& a) -> bool {
@@ -49,6 +50,20 @@ void SpecialCaseLeafscheduler::get_initial_schedule(const Intree& t,
                     }
                     ), target.end());
     }
+    // less topmost tasks than processors -> only consider those schedules with all topmost tasks
+    // else {
+    //     target.erase(remove_if(target.begin(), target.end(),
+    //                 [&](const vector<task_id>& a) -> bool {
+    //                     unsigned int schedtopcount = 0;
+    //                     for(auto it : a){
+    //                         if(t.get_level(it) == max_level){
+    //                             schedtopcount++;
+    //                         }
+    //                     }
+    //                     return schedtopcount != count;
+    //                 }
+    //                 ), target.end());
+    // }
 #endif
 }
 
@@ -100,6 +115,23 @@ void SpecialCaseLeafscheduler::get_next_tasks(const Intree& t,
                 }
             ), target.end());
         }
+        // else{
+        //     target.erase(remove_if(target.begin(), target.end(),
+        //         [&](const pair<task_id, myfloat>& a) -> bool {
+        //             unsigned int newcount = 0;
+        //             for (auto tsk : marked){
+        //                 if(t.get_level(tsk) == max_level){
+        //                     newcount++;
+        //                 }
+        //             }
+        //             if(t.get_level(a.first) == max_level){
+        //                 newcount++;
+        //             }
+        //             return newcount < count;
+        //         }
+        //     ), target.end());
+        // }
+        assert(target.size() > 0);
         myfloat probsum = 0;
         for(const auto& it : target){
             probsum += it.second;
