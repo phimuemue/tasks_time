@@ -294,7 +294,7 @@ for line in database:
                 # ("c0 o1", ["build/tasks_cs0", "-s", "leaf", "--optimize"]),
                 # ("c1 o0", ["build/tasks_cs1_20131008", "-s", "leaf"]),
                 # ("c1 o1", ["build/tasks_cs1_20131008", "-s", "leaf", "--optimize"]),
-                ("c1 o0", ["build/tasks_cs1", "-s", "scleaf"]),
+                ("c1 o0", ["build/tasks_cs1_20131009", "-s", "scleaf"]),
             ]
     tmp = Intree([int(x) for x in tree.split()])
     curparts = []
