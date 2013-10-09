@@ -132,6 +132,37 @@ We use this distinction to (roughly) differentiate the following strategies into
 
 We will not only focus on particular strategies, but we will focus on which snapshots can be excluded or which particular structure snapshots might have. That is, the strategies we consider are in many cases ambiguous because they admit several possible choices. However, they do \emph{not} allow \emph{all} possible choices, thereby possibly reducing the amount of snapshots to examine. Not all strategies fall strictly into one of the groups -- we then put it into the category we found more insightful.
 
+\section{(Dynamic) list scheduling}
+\label{sec:suboptimal-strategies-list-scheduling}
+
+List scheduling considers the current intree and generates a list of tasks sorted in such a way that the tasks that come first in the list shall be priorized and scheduled first, if possible. As shown by \cite{MoritzMaasDiploma}, dynamic list scheduling strategies can not be optimal for non-preemtive scheduling of intrees (whose tasks' run times are exponentially distributed) with three processors.
+
+This can be seen by examining the intree $(0,0,1,1,1,2,2,2,2,3,6)$ as shown in figure \ref{fig:list-scheduling-counter-example}. Because the subtree shown in figure \ref{fig:list-schedule-counter-example-subtree} is optimally scheduled using other tasks than the one that have to be used when it is reached in the original schedule, there can not exist a dynamic list scheduling strategy that works for \emph{all} intrees.
+
+Note that this also excludes HLF from being optimal.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{.45\textwidth}
+    \centering
+    \includegraphics{p3/list_sched_0011122236_opt_sched.pdf}
+    \caption{Optimal schedule for intree $(0,0,1,1,1,2,2,2,2,3,6)$.}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}[b]{.45\textwidth}
+    \centering
+    \vfill
+    \includegraphics{p3/list_sched_subtree.pdf}
+    \vfill
+    \caption{This intree is optimally scheduled as shown, but in the optimal schedule for the original intree, it has to be scheduled in another way.}
+    \label{fig:list-schedule-counter-example-subtree}
+  \end{subfigure}
+  \caption{A counterexample for list scheduling}
+  \label{fig:list-scheduling-counter-example}
+\end{figure}
+
+That is, an optimal strategy has to consider which tasks are already scheduled from previous steps and can not rely \emph{only} on the current intree's structure. We experience this phenomenon in many intrees shown in this chapter. However, for the initial snapshot, we -- of course -- must rely on the structure of the intree. Thus, we will examine some strategies and inspect if the first snapshot of an optimal schedule adheres to specific rules.
+
 \section{Non-HLF strategies}
 \label{sec:suboptimal-non-hlf-strategies}
 
@@ -480,33 +511,6 @@ For trees with fewer than 12 tasks, we could not find any tree that violated our
 \end{figure}
 
 \emph{Remark:} Surprisingly, every subtree of $(0,0,0,2,2,3,5,5,6,6,6)$ fulfills the conjecture that there is at most one task that has both scheduled and non-scheduled leaves as predecessors (during the whole schedule). This shows that even task that \emph{might seem} of minor impact for the first choices, might be relevant to the question which tasks are chosen in the optimal schedule.
-
-\section{(Dynamic) list scheduling}
-\label{sec:suboptimal-strategies-list-scheduling}
-
-List scheduling considers the current intree and generates a list of tasks sorted in such a way that the tasks that come first in the list shall be priorized and scheduled first, if possible. As shown by \cite{MoritzMaasDiploma}, dynamic list scheduling strategies can not be optimal for non-preemtive scheduling of intrees (whose tasks' run times are exponentially distributed) with three processors.
-
-This can be seen by examining the intree $(0,0,1,1,1,2,2,2,2,3,6)$ as shown in figure \ref{fig:list-scheduling-counter-example}. Because the subtree shown in figure \ref{fig:list-schedule-counter-example-subtree} is optimally scheduled using other tasks than the one that have to be used when it is reached in the original schedule, there can not exist a dynamic list scheduling strategy that works for \emph{all} intrees.
-
-\begin{figure}[ht]
-  \centering
-  \begin{subfigure}[b]{.45\textwidth}
-    \centering
-    \includegraphics{p3/list_sched_0011122236_opt_sched.pdf}
-    \caption{Optimal schedule for intree $(0,0,1,1,1,2,2,2,2,3,6)$.}
-  \end{subfigure}
-  \quad
-  \begin{subfigure}[b]{.45\textwidth}
-    \centering
-    \vfill
-    \includegraphics{p3/list_sched_subtree.pdf}
-    \vfill
-    \caption{This intree is optimally scheduled as shown, but in the optimal schedule for the original intree, it has to be scheduled in another way.}
-    \label{fig:list-schedule-counter-example-subtree}
-  \end{subfigure}
-  \caption{A counterexample for list scheduling}
-  \label{fig:list-scheduling-counter-example}
-\end{figure}
 
 \section{Maximizing 3-processor-time, minimizing 1-processor time}
 \label{sec:p3-disproving-long-p3-and-short-p1-time}
