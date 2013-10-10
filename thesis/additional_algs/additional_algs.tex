@@ -209,7 +209,30 @@ While this description could lead to very elegant algorithms in a theoretical se
 \section{Computing all schedules according to a specific scheduling strategy}
 \label{sec:implementation-computing-all-schedules}
 
+We have seen how we can compute equivalent snapshots resp. a canonical representation of a snapshot. We now describe in short how this can be used to generate all schedules according to a specific scheduling policy.
+
+The program starts out with a given intree and the scheduler generates a list of possible initial settings describing which tasks shall be chosen. This gives us a list of \emph{initial snapshots} where each snapshot contains the original intree and a set of tasks that shall be scheduled initially. We then process one initial snapshot after another. We describe now what we have to do for each initial snapshot.
+
+When we have a snapshot with a certain set of scheduled tasks, the program computes the intrees that occur if one of the tasks finishes. This has to be done for every currently scheduled task. That means, that for every currently scheduled task that could finish, we obtain a new intree \emph{and} also a set of tasks that are scheduled (since we are considering non-preemtive scheduling, we have to keep the other tasks scheduled).
+
+For each of the newly generated intrees, the scheduler determines which task shall be chosen with which probability in the next step, and generates new snapshots this way. The original snapshot stores pointers to the newly generated snapshots, associated with the respective probabilities of reaching them.
+
+However, as aforementioned, it is useful to compute a canonical version of each snapshot, thereby eliminating quite a large amount of snapshots for which we would -- essentially -- compute the same things twice. This requires us to manage a \emph{snapshot pool} where we store all snapshots that we have encountered up to now. If a newly generated snapshot is already is in this pool, we do not continue computations on this newly generated snapshot but instead re-use the original one.
+
+This, on the other hand, requires us to quickly find out whether a snapshot has already been generated or not (and also to retrieve its address in memory). There are several ways to acchieve this. We are using a technique that maps snapshots onto the respective addresses. We therefore basically encode the snapshot's intree and the scheduled tasks as a sequence of bits. We could do this using ordinary \texttt{int}s or \texttt{long}s (or their \texttt{unsigned} equivalents in C++), but we decided to encode them using C++'s \texttt{vector<unsigned char>}s in connection with a list of the currently scheduled tasks.
+
+We went for this solution for several reasons:
+
+\begin{itemize}
+\item The number of intrees grows rapidly, thus possibly exceeding the range of a (32- or even 64-bit) integer.
+\item An encoding of intrees as integers in a way such that we do \emph{not} ``waste'' some encodings may be very cumbersome to implement (we could use the aforementioned Matula numbers, but as said, these are not very handy in practice).
+\end{itemize}
+
+Using a \texttt{vector} of course increases memory consumption compared to e.g. using an ordinary \texttt{long} but is much more convenient when it comes to implementation details and -- at least in theory -- provides a much larger range that a single \texttt{int} or \texttt{long}.
+
 \todo{Aufschreiben! Algorithmus mit Laufzeit!}
+
+We basically describe the current intree storing the same notation as shown in this work (just stored in a \texttt{vector} of \texttt{unsigned char}s). Of course, there are more memory-efficient solutions, but since we did never experience any problems regarding memory, we went for this solution.
 
 \section{Extending the program}
 \label{sec:implementation-extending-program}
