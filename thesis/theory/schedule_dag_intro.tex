@@ -1,6 +1,6 @@
 \renewcommand{\leveltopI}{-12cm + \leveltop}
 \renewcommand{\leveltopII}{-12cm + \leveltopI}
-\renewcommand{\leveltopIII}{-15cm + \leveltopII}
+\renewcommand{\leveltopIII}{-14cm + \leveltopII}
 \renewcommand{\leveltopIIII}{-12cm + \leveltopIII}
 \renewcommand{\leveltopIIIII}{-12cm + \leveltopIIII}
 \renewcommand{\leveltopIIIIII}{-12cm + \leveltopIIIII}
@@ -10,7 +10,13 @@
 \renewcommand{\leveltopIIIIIIIIII}{-12cm + \leveltopIIIIIIIII}
 \renewcommand{\leveltopIIIIIIIIIII}{-12cm + \leveltopIIIIIIIIII}
 \begin{tikzpicture}[scale=.2, anchor=south]
+  % "key"
+  \fill[fill=grey!5!white] (-35, -24) rectangle +(72, 9.5);
+  \draw[dashed] (-35, -14.5) -- +(72, 0);
+  \draw[dashed] (-35, -24) -- +(72, 0);
+  \node at (27, -21) {Intermediate snapshots};
   \begin{scope}[yshift=\leveltopI cm]
+    \node at (-7.5,3) {\huge $A$};
     \matrix (line1)[column sep=0.5cm] {
       \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x17d67b0){
         \begin{tikzpicture}[scale=.2]
@@ -61,9 +67,10 @@
           \draw[](tid0) -- (tid2);
           \draw[](tid0) -- (tid3);
         \end{tikzpicture}
-      };
+      }
+      node[left, xshift=-25, yshift=25]{\huge $B$};
       & 
-      \node[minimum width=4cm]{};
+      \node[minimum width=1cm]{};
       &
       \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x17d57c0){
         \begin{tikzpicture}[scale=.2]
@@ -85,7 +92,8 @@
           \draw[](tid0) -- (tid2);
           \draw[](tid0) -- (tid3);
         \end{tikzpicture}
-      };
+      }
+      node[left, xshift=-25, yshift=25]{\huge $C$};
       & 
       \\
     };
@@ -112,7 +120,8 @@
           \draw[](tid0) -- (tid2);
           \draw[](tid0) -- (tid3);
         \end{tikzpicture}
-      };
+      }
+      node[left, xshift=-25, yshift=25]{\huge $B_1$};
       & 
       \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x17d6160){
         \begin{tikzpicture}[scale=.2]
@@ -134,7 +143,8 @@
           \draw[](tid0) -- (tid2);
           \draw[](tid0) -- (tid3);
         \end{tikzpicture}
-      };
+      }
+      node[left, xshift=-25, yshift=25]{\huge $B_2$};
       & 
       \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x17d5380){
         \begin{tikzpicture}[scale=.2]
@@ -156,7 +166,8 @@
           \draw[](tid0) -- (tid2);
           \draw[](tid0) -- (tid3);
         \end{tikzpicture}
-      };
+      }
+      node[left, xshift=-25, yshift=25]{\huge $C_1$};
       & 
       \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x17d2f50){
         \begin{tikzpicture}[scale=.2]
@@ -178,7 +189,8 @@
           \draw[](tid0) -- (tid2);
           \draw[](tid0) -- (tid3);
         \end{tikzpicture}
-      };
+      }
+      node[left, xshift=-25, yshift=25]{\huge $C_2$};
       & 
       \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x17d3a00){
         \begin{tikzpicture}[scale=.2]
@@ -200,7 +212,8 @@
           \draw[](tid0) -- (tid2);
           \draw[](tid0) -- (tid3);
         \end{tikzpicture}
-      };
+      }
+      node[left, xshift=-25, yshift=25]{\huge $C_3$};
       & 
       \\
     };
@@ -211,10 +224,7 @@
   \draw (sn0x17d65a0.south) -- node[left, xshift=-.25cm]{$0.2$} (sn0x17d55b0.north);
   \draw (sn0x17d57c0.south) -- node[right, xshift=.25]{$0.2$} (sn0x17d2f50.north);
   \draw (sn0x17d57c0.south) -- node[left above, xshift=-.5]{$0.4$} (sn0x17d5380.north);
-  \draw (sn0x17d57c0.south) -- node[right, xshift=.25]{$0.6$} (sn0x17d3a00.north);
-  \draw[dashed] (-30, -14.5) -- +(75, 0);
-  \draw[dashed] (-30, -24) -- +(75, 0);
-  \node at (33, -21) {Intermediate snapshots}
+  \draw (sn0x17d57c0.south) -- node[right, xshift=.25]{$0.4$} (sn0x17d3a00.north);
 \end{tikzpicture}
 %%% Local Variables:
 %%% TeX-master: "thesis/thesis.tex"

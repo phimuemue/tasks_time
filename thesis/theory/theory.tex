@@ -193,6 +193,7 @@ This is a very advantageous property that can be exploited in our considerations
 Theorem \ref{theo:law-total-prob} can be used to derive its counterpart for expected values:
 
 \begin{theorem}
+  \label{theo:law-total-expectation}
   Let $X$ be a random variable in a probability space $\Omega$ and ${\cal B}\left\{ B_1,B_2,B_3,\dots \right\}$ a finite or countably infinite set of pairwise disjoint events with $A \subseteq \bigcup_{B \in {\cal B}} B$. Then,
   \begin{equation*}
     \E{X} = \sum_{B\in{\cal B}} \E{X | B} \cdot \p{B}.
@@ -606,12 +607,12 @@ One desirable goal is to always choose the next task to be scheduled (resp. the 
 
 \todo{Scheduling-DAGs erklären mit allen Bestandteilen (Eintrittswkt, Probs, Exp).}
 
-\section{Computing the expected run time of a schedule}
-\label{sec:introduction-compute-expected-time-schedule}
+\section{Visualizing a schedule}
+\label{sec:intro-visualizing-schedules}
 
 If we are speaking of a schedule, we talk about the complete processing of an intree of tasks.
 
-We can think of it as a directed acyclic graph, where each vertex represents one single snapshot. The edges between the snapshots then represent transitions that indicate that a certain task has finished and (possibly) a new task has chosen to be scheduled. We can naturally assign the edges weights that represent the corresponding probability that a task has finished and the new task has been picked.\todo{Hier ausführlicher einleiten mit Figure!}\todo{Dag definieren? Oder Verweis auf irgendwen?}
+We can think of it as a connected directed acyclic graph or DAG (see \cite{diestel2005graph} for more information), where each vertex represents one single snapshot. The edges between the snapshots then represent transitions that indicate that a certain task has finished and (possibly) a new task has chosen to be scheduled. We can naturally assign the edges weights that represent the corresponding probability that a task has finished and the new task has been picked.
 
 That is, we have two sources of non-determinism:
 \begin{itemize}
@@ -619,7 +620,35 @@ That is, we have two sources of non-determinism:
 \item When one task finishes, the corresponding processor becomes idle and can be used to process other tasks. This is the second source where we have different possibilities. However, for this point, we can decide ourselves how to continue.
 \end{itemize}
 
-Figure \ref{fig:intro-snapshot-graphical-representation} shows (the beginning) a schedule for the intree $(0,0,1,2,2,2,6.6,8)$ in two variants: Figure \ref{fig:schedule-dag-intro-intermediates} shows the schedule and incorporates situations where the scheduler can decide wich tasks should be scheduled next with wich probabilities (``intermediate snapshots''). \todo{Erläutern, wie der scheduler wählt.} Figure \ref{fig:schedule-dag-intro-no-intermediates} shows the version of the schedule that omits intermediate snapshots. From now on, we will restrict ourselves to the latter structure (without intermediate snapshots) because this representation is easier to maintain and -- after some time to get accustomed to it -- as easy to understand as the version with intermediate snapshots.
+We will look at the intree $(0,0,1,2,2,2,6,6,8)$ -- processed by two processors -- as an example. This intree looks as follows:
+
+\begin{center}
+  \begin{tikzpicture}[scale=.4]
+    \node[circle, scale=0.75, draw] (tid0) at (4.5,1.5){0};
+    \node[circle, scale=0.75, draw] (tid2) at (2.25,3){1};
+    \node[circle, scale=0.75, draw] (tid4) at (2.25,4.5){3};
+    \draw[](tid2) -- (tid4);
+    \node[circle, scale=0.75, draw] (tid3) at (6,3){2};
+    \node[circle, scale=0.75, draw] (tid5) at (4.5,4.5){4};
+    \node[circle, scale=0.75, draw] (tid6) at (6,4.5){5};
+    \node[circle, scale=0.75, draw] (tid7) at (7.5,4.5){6};
+    \node[circle, scale=0.75, draw] (tid8) at (6.75,6){7};
+    \node[circle, scale=0.75, draw] (tid9) at (8.25,6){8};
+    \node[circle, scale=0.75, draw] (tid10) at (8.25,7.5){9};
+    \draw[](tid9) -- (tid10);
+    \draw[](tid7) -- (tid8);
+    \draw[](tid7) -- (tid9);
+    \draw[](tid3) -- (tid5);
+    \draw[](tid3) -- (tid6);
+    \draw[](tid3) -- (tid7);
+    \draw[](tid0) -- (tid2);
+    \draw[](tid0) -- (tid3);
+  \end{tikzpicture}
+\end{center}
+
+Figure \ref{fig:schedule-dag-intro} shows (the beginning) a two-processor schedule for the intree $(0,0,1,2,2,2,6.6,8)$ in two variants: Figure \ref{fig:schedule-dag-intro-intermediates} shows the schedule and incorporates situations where the scheduler can decide wich tasks should be scheduled next with wich probabilities (``intermediate snapshots''). At the beginning, the nodes 9 and 3 are scheduled (snapshot $A$). Then each of these two tasks is the first one to finish (each one with probability 50\%). This intermediate situation, where exactly one of the two tasks is finished and the scheduler can assign probabilities describing which task to pick next, are shown in snapshots $B$ (this is the situation where task 3 finished first) and $C$ (where 9 finished first).
+
+In the situation described by the intermediate snapshot $B$, the scheduler can decide which task shall be chosen next with which probability. In the situation of snapshot $B$, the scheduler decides that with probability 20\%, the task 1 shall be chosen as next task (snapshot $B_1$) and with probability 80\% task 4 shall be chosen as next task (snapshot $B_2$). Similarily it decides in the situation denoted by $C$ that tasks 8 resp. 4 shall be chosen with probability 40\% each ($C_1$ resp. $C_3$) and task 7 shall be chosen with probability 20\% ($C_2$).
 
 \begin{figure}[th]
   \centering
@@ -632,40 +661,60 @@ Figure \ref{fig:intro-snapshot-graphical-representation} shows (the beginning) a
   \begin{subfigure}{\textwidth}
     \centering
     \input{theory/schedule_dag_intro_no_intermediates}
-    \caption{The same snapshot DAG without intermediate snapshots. Intermediate snapshots are eliminated and the edges are drawn directly between non-intermediate snapshots. The probabilities are obtained by multiplying the corresponding probabilities along the original edges that are needed to form the new edges.}
+    \caption{The same snapshot DAG without intermediate snapshots. Intermediate snapshots are eliminated and the edges are drawn directly between non-intermediate snapshots. The probabilities are in shown in percent in directly within the snapshot (in the respective order). The probabilities are obtained by multiplying the corresponding probabilities along the original edges that are needed to form the new edges.}
   \label{fig:schedule-dag-intro-no-intermediates}
   \end{subfigure}
   \caption{An exemplary schedule DAG with and without intermediate snapshots. From now on, we will focus on snapshot DAGs without intermediate snapshots.}
   \label{fig:schedule-dag-intro}
 \end{figure}
 
+Figure \ref{fig:schedule-dag-intro-no-intermediates} shows the version of the schedule that omits intermediate snapshots. From now on, we will restrict ourselves to the latter structure (without intermediate snapshots) because this representation is easier to maintain and -- after some time to get accustomed to it -- as easy to understand as the version with intermediate snapshots.
+
+\section{Computing the expected run time of a schedule}
+\label{sec:introduction-compute-expected-time-schedule}
+
 Computing the expected run time for a given schedule (more precisely for the whole processing of an intree according to a certain schedule) can be easily acchieved via a recursive formula that can be explained as follows:
 
 \begin{itemize}
 \item If the current intree $I$ consists of exactly one task (the root), then we simply have to process this single task. Since one task has expected run time $\frac{1}{\lambda}=1$ (remember: we assumed w.l.o.g $\lambda=1$), we know that the expected run time for $I$ is 1.
-\item If the current intree consists of more than 1 task, there may be up to $p$ tasks scheduled. Let us assume that there are $r\leq p$ tasks scheduled ($r$ may be smalle than $p$ if there are less ready tasks than processors) and denote the set of these tasks by $X=\{x_1,x_2,\dots,x_r\}$. According to theorem \ref{thm:iid-cont-rand-var-minimum}, the probability that task $x_i$ ($i\in\left\{ 1,2,\dots,r \right\}$) is the \emph{first} task to finish is $\frac{1}{r}$. The expected run time for $x_i$ is $\frac{1}{n}$ (by theorems \ref{thm:minimum-of-exponential-distribution-is-exponential} and \ref{thm:exponential-distribution-expectancy}).
+\item If the current intree consists of more than 1 task, there may be up to $p$ tasks scheduled, where $p$ denotes the number of processors. Let us assume that there are $r\leq p$ tasks scheduled ($r$ may be smaller than $p$ if there are less ready tasks than processors) and denote the set of these tasks by $X=\{x_1,x_2,\dots,x_r\}$. According to theorem \ref{thm:iid-cont-rand-var-minimum}, the probability that task $x_i$ ($i\in\left\{ 1,2,\dots,r \right\}$) is the \emph{first} task to finish is $\frac{1}{r}$. The expected run time for $x_i$ is $\frac{1}{n}$ (by theorems \ref{thm:minimum-of-exponential-distribution-is-exponential} and \ref{thm:exponential-distribution-expectancy}). Moreover, the probability that two tasks finish at exactly the same time is 0 (since the run times of tasks are exponentially -- i.e. continuously -- distributed).
 
-  If task $x_i$ finishes, the remaining intree is $I\setminus\left\{ x_i \right\}$, with -- due to non-preemtive scheduling -- at least tasks $\left\{ x_1,x_2,\dots,x_r \right\} \setminus \left\{ x_i \right\}$ scheduled. By $X_i$ we denote the set of tasks that are scheduled in the next step (i.e. $\left\{ x_1,x_2,\dots,x_r \right\} \setminus \left\{ x_i \right\} \subseteq X_i$). The expected run time for $I\setminus\left\{ x_i \right\}$ can then be computed recursively (see remark below).
+  If task $x_i$ finishes, the remaining intree is $I\setminus\left\{ x_i \right\}$, with -- due to non-preemtive scheduling -- at least tasks within $\left\{ x_1,x_2,\dots,x_r \right\} \setminus \left\{ x_i \right\}$ scheduled. By $X_i$ we denote the set of tasks that are scheduled in the next step (i.e. $\left\{ x_1,x_2,\dots,x_r \right\} \setminus \left\{ x_i \right\} \subseteq X_i$). The expected run time for $I\setminus\left\{ x_i \right\}$ can then be computed recursively (see remark below).
 
-  This means: If $x_i$ is the first task to finish, the expected run time is given by
+  This means: If $x_i$ is the first task to finish, we can use the expected run time is given by
   \begin{equation*}
     \frac{1}{r} + T_{X_i}(I\setminus\left\{ x_i \right\}),
   \end{equation*}
-  where $\frac{1}{r}$ accounts for the expected run time of task $x_i$ and $T_{X_i}(I\setminus\left\{ x_i \right\})$ denotes the expected run time for the intree $I\setminus\left\{ x_i \right\}$ if the tasks within $X_i$ are scheduled.
+  where $\frac{1}{r}$ accounts for the expected run time of task $x_i$ and $T_{X_i}(I\setminus\left\{ x_i \right\})$ denotes the run time for the intree $I\setminus\left\{ x_i \right\}$ if the tasks within $X_i$ are scheduled (of course with respect to a specific scheduling strategy).
 
-  Since \emph{each} of the tasks $x_1,x_2,\dots,x_r$ can be the first task to finish (each with probability $\frac{1}{r}$ according to theorem \ref{thm:iid-cont-rand-var-minimum}), we can compute the overal run time by 
+  We define events $F_1,\dots,F_r$, where $F_i$ describes the event that task $x_i$ is the first task to finish. Note that the events $F_i$ are pairwise disjoint, $\p{F_i}=\frac{1}{r}$ and that one of the events $F_i$ \emph{must} occur (meaning that $\p{F_1\cup \dots \cup F_r}=1$).
+  
+  Since \emph{each} of the tasks $x_1,x_2,\dots,x_r$ can be the first task to finish (each with probability $\frac{1}{r}$ according to theorem \ref{thm:iid-cont-rand-var-minimum}), we can use theorem \ref{theo:law-total-expectation} and compute the overal run time by 
   \begin{eqnarray}
-    \nonumber
-    T_X(I) 
+    %\nonumber
+    \label{eqn:intro-recursive-formula-for-run-time-total-exp}
+    \E{T_X(I)}
     &=& 
-    \sum_{i=1}^r \frac{1}{r} \cdot \left( \frac{1}{r} + T_{X_i}\left( I\setminus\left\{ x_i \right\} \right) \right) = \\
+    \sum_{i=1}^r \p{F_i} \cdot \E{T_{X} (I) \mid F_i}
+    = \\
+    &=& 
+    \label{eqn:intro-recursive-formula-for-intermediate-form}
+    \sum_{i=1}^r \p{F_i} \cdot \E{T(x_i) + T_{X_i} (I \setminus \{x_i\})}
+    = \\
+    \label{eqn:intro-recursive-formula-for-intermediate-form-2}
+    &=& \sum_{i=1}^r \frac{1}{r} \cdot \left( \frac{1}{r} + \E{T_{X_i}\left( I\setminus\left\{ x_i \right\} \right)} \right) = \\
     \label{eqn:intro-recursive-formula-for-run-time}
     &=&     
-    \frac{1}{r} + \frac{1}{r} \cdot \sum_{i=1}^r T_{X_i}\left( I\setminus\left\{ x_i \right\} \right).
+    \frac{1}{r} + \frac{1}{r} \cdot \sum_{i=1}^r \E{T_{X_i}\left( I\setminus\left\{ x_i \right\} \right)}.
   \end{eqnarray}
 \end{itemize}
 
-\emph{Remark:} The fact that we can compute the expected run time \emph{recursively} follows from the fact that exponentially distributed random variables are memoryless (see theorem \ref{thm:exponential-memoryless}): If one task finishes, the other scheduled tasks -- of course -- \emph{might} have been processed up to a certain point. But since their processing time are exponentially distributed, and thus \emph{memoryless}, we assume them to behave \emph{as if} they had not been processed at all. That is, the remaining tree can be considered \emph{as if} we just started all scheduled tasks. This, however, means that we are in the same situation as before, except that we are dealing with an intree that has one task less than the intree before. 
+\emph{Remark:} We can reformulate (\ref{eqn:intro-recursive-formula-for-run-time-total-exp}) to (\ref{eqn:intro-recursive-formula-for-intermediate-form}) because the expected run time to process the whole tree $I$ under the condition $F_i$ (i.e. under the knowledge that task $x_i$ is the first to finish) can be computed by summing up the time that is needed by task $x_i$ (thus the term $T(x_i)$) and the time needed for the remaining tree (denoted by $T_{X_i}(I}\setminus\{x_i\}$).
+
+Since all tasks' processing times are assumed to be exponentially distributed, i.e. in particular memoryless (see theorem \ref{thm:exponential-memoryless}), we can argue as follows: If one task finishes, the other scheduled tasks -- of course -- \emph{might} have been processed up to a certain point. But since their processing times are memoryless, we can assume them to behave \emph{as if} they had not been processed at all. That is, the remaining tree can be considered \emph{as if} we just started all scheduled tasks. This, however, means that we are in the same situation as before, except that we are dealing with an intree that has one task less than the intree before. Thus, we can justify the reformulation from (\ref{eqn:intro-recursive-formula-for-intermediate-form}) to (\ref{eqn:intro-recursive-formula-for-intermediate-form-2}).
+
+%The fact that we can compute the expected run time \emph{recursively} follows from the fact that exponentially distributed random variables are memoryless (see theorem \ref{thm:exponential-memoryless}): 
+
 
 As an example, consider the tree in figure \ref{fig:intro-computing-expected-runtime}. The topmost snapshots describe the first step of schedules for three resp. four processors on the same intree. We are the corresponding expected run times. We can assume that the run times of the snapshots in the second line have already been computed (recursively). Using these, we can compute the overal expected run time using theorem (\ref{eqn:intro-recursive-formula-for-run-time}) as described in figures \ref{fig:intro-recursive-formula-run-time-example-three-procs} and \ref{fig:intro-recursive-formula-run-time-example-four-procs}. \todo{Vielleicht kleineres Beispiel, das jedoch dann komplett.}
 
@@ -951,10 +1000,10 @@ As an example, consider the tree in figure \ref{fig:intro-computing-expected-run
 
 As mentioned in section \ref{sec:intrees-extension-to-forests}, we can also deal with in-forests by adding a new root connected to all intrees of the forest. To compute the expected run time for a specific schedule, we simply compute the expected run time for the intree resulting from the in-forest conversion and subtract 1. This can be done because the last task in the resulting intree to be processed \emph{must} be the root we introduced. The expected run time for the root is 1, so we can simply subtract 1 to obtain the expected run time for the original in-forest.
 
-\section{A first glance at schedules}
+\section{Equivalent snapshots}
 \label{sec:intro-first-glance-schedules}
 
-We now move on to describing basic insights about schedules. Foremost, we make the following -- quite simple -- observation: If two intrees $I_1$ and $I_2$ are isomorphic, then for each schedule $S_1$ for $I_1$, there is a schedule $S_2$ for $I_2$ that has exactly the same run time. We see this by examining the bijective function $f:I_1 \mapsto I_2$ and for $S_2$ scheduling exactly the task $f(t_1)$ if $S_1$ would choose $t_1$.
+We now move on to describing a basic insight about schedules. Foremost, we make the following -- quite simple -- observation: If two intrees $I_1$ and $I_2$ are isomorphic, then for each schedule $S_1$ for $I_1$, there is a schedule $S_2$ for $I_2$ that has exactly the same run time. We see this by examining the bijective function $f:I_1 \mapsto I_2$ and for $S_2$ scheduling exactly the task $f(t_1)$ if $S_1$ would choose $t_1$.
 
 The second observation is that we can make the snapshot DAG more compact by avoiding snapshots that are -- essentially -- duplicates. We therefore extend the concept of isomorphisms from trees to snapshots in a straightforward way.
 
@@ -1241,7 +1290,7 @@ It can be easily seen that we essentially compute the same thing twice if we car
   \label{fig:intro-equivalent-snapshots-elimination}
 \end{figure}
 
-From now on, if not stated otherwise, we restrict ourselves to snapshot DAGs\todo{Bereits definiert?} that contain only distinct snapshots.
+From now on, if not stated otherwise, we restrict ourselves to snapshot DAGs that contain only distinct snapshots.
 
 \section{Summary: Problem statement}
 \label{sec:introduction-aim}

@@ -1,6 +1,6 @@
 \renewcommand{\leveltopI}{-12cm + \leveltop}
-\renewcommand{\leveltopII}{-18cm + \leveltopI}
-\renewcommand{\leveltopIII}{-15cm + \leveltopII}
+\renewcommand{\leveltopII}{-10cm + \leveltopI}
+\renewcommand{\leveltopIII}{-10cm + \leveltopII}
 \renewcommand{\leveltopIIII}{-12cm + \leveltopIII}
 \renewcommand{\leveltopIIIII}{-12cm + \leveltopIIII}
 \renewcommand{\leveltopIIIIII}{-12cm + \leveltopIIIII}
@@ -12,7 +12,7 @@
 \begin{tikzpicture}[scale=.2, anchor=south]
   \begin{scope}[yshift=\leveltopI cm]
     \matrix (line1)[column sep=0.5cm] {
-      \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x17d67b0){
+      \node[draw=black, rectangle split,  rectangle split parts=2] (sn0x17d67b0){
         \begin{tikzpicture}[scale=.2]
           \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
           \node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
@@ -34,6 +34,8 @@
           \draw[](tid0) -- (tid2);
           \draw[](tid0) -- (tid3);
         \end{tikzpicture}
+        \nodepart{two}
+        \footnotesize{10\ 40\ 20\ 10\ 20}
       };
       & 
       \\
@@ -154,11 +156,16 @@
       \\
     };
   \end{scope}
-  \draw (sn0x17d67b0.south) -- node[left, xshift=-.125cm]{$0.4$} (sn0x17d6160.north);
-  \draw (sn0x17d67b0.south) -- node[left, xshift=-.25cm]{$0.1$} (sn0x17d55b0.north);
-  \draw (sn0x17d67b0.south) -- node[right, xshift=.25]{$0.1$} (sn0x17d2f50.north);
-  \draw (sn0x17d67b0.south) -- node[left]{$0.2$} (sn0x17d5380.north);
-  \draw (sn0x17d67b0.south) -- node[right, xshift=.25cm]{$0.3$} (sn0x17d3a00.north);
+  % \draw (sn0x17d67b0.south) -- node[left, xshift=-.125cm]{$0.4$} (sn0x17d6160.north);
+  % \draw (sn0x17d67b0.south) -- node[left, xshift=-.25cm]{$0.1$} (sn0x17d55b0.north);
+  % \draw (sn0x17d67b0.south) -- node[right, xshift=.25]{$0.1$} (sn0x17d2f50.north);
+  % \draw (sn0x17d67b0.south) -- node[left]{$0.2$} (sn0x17d5380.north);
+  % \draw (sn0x17d67b0.south) -- node[right, xshift=.25cm]{$0.3$} (sn0x17d3a00.north);
+  \draw (sn0x17d67b0.south) -- (sn0x17d6160.north);
+  \draw (sn0x17d67b0.south) -- (sn0x17d55b0.north);
+  \draw (sn0x17d67b0.south) -- (sn0x17d2f50.north);
+  \draw (sn0x17d67b0.south) -- (sn0x17d5380.north);
+  \draw (sn0x17d67b0.south) -- (sn0x17d3a00.north);
 \end{tikzpicture}
 %%% Local Variables:
 %%% TeX-master: "thesis/thesis.tex"
