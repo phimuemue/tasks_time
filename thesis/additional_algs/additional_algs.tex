@@ -121,9 +121,10 @@ Algorithm \ref{alg:compute-canonical-snapshot} is good for visualizing how the a
       \State $L \gets $ number of levels in $I$
       \State Label all leaves with ``0'' if they are not in $X$, otherwise with ``1''
       \For{$i=L-2 \dots 0$}
-        \For{Each task $t$ in level $i$ with predecessors $p_1,\dots,p_r$}
+        \For{Each non-leaf $t$ in level $i$ with predecessors $p_1,\dots,p_r$}
         \label{alg:canonical-intree-inner-loop}
           \State Label $t$ by a $(label(p_1),\dots,label(p_r))$ \Comment{Concatenate sorted labels of predecessors}
+          \label{alg:canonical-intree-concatenate-line}
         \EndFor
         \State{Sort tasks on level $i$ according to their label}
         \label{alg:canonical-intree-sorting-line}
@@ -140,7 +141,7 @@ Algorithm \ref{sec:algorithm-canonical-intree-o-n} is a very high level descript
 
 \begin{itemize}
 \item For this algorithm, it is convenient to have a canonical intree structure in which each task directly knows its predecessors. We can transform our representation (as explained in section \ref{sec:implementation-repr-intrees-snapshots}) into this one in $O(n)$.
-\item Concatenating two labels can be done in $O(1)$ (either amortized by e.g. using dynamic arrays or simply using linked lists with some additional information such e.g. a pointer to the last node in the list).
+\item Concatenating two labels can be done in $O(1)$ (either amortized by e.g. using dynamic arrays or simply using linked lists with some additional information such e.g. a pointer to the last node in the list). Thus, the overal costs arising from line \ref{alg:canonical-intree-concatenate-line} (resp. for the whole inner loop) are $O(n)$ because the label of each task is subject to concatenation at most once.
 \item Line \ref{alg:canonical-intree-numbering-line} ensures that the labels of tasks do not become very long. To be precise, if level $i$ has exactly $l_i$ tasks, the labels for level $i$ are at most the numbers 0 to $l_1-1$.
 \item Line \ref{alg:canonical-intree-sorting-line} from algorithm \ref{sec:algorithm-canonical-intree-o-n} shall sort in the following way: Shorter labels come first, and if two labels have the same length, they are compared lexicographically. This sorting can be implemented in $O(l_{i+1}\cdot\log l_{i+1})$, where $i$ denotes the index from the algorithm and $l_i$ denotes the number of tasks of $I$ on level $i$. This can be explained as follows:
   \begin{itemize}
