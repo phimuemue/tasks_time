@@ -170,7 +170,13 @@ void TikzExporter2::tikz_draw_node(const TikzNode* s,
         auto old_precision = output.precision();
         output << setprecision(2);
         for(auto pit=successor_probs_in_order.begin(); pit!=successor_probs_in_order.end(); ++pit){
-            output << (pit->second < 1 ? (pit->second)*100 : pit->second);
+            if(pit->second < 1){
+                output << pit->second * 100;
+            }
+            else {
+                output << "100";
+            }
+            //output << ((pit->second < 1) ? (pit->second)*100 : "100");
             if(next(pit) != successor_probs_in_order.end()){
                 output << "\\:";
             }
@@ -342,6 +348,8 @@ void TikzExporter2::merge_tikz_nodes(map<unsigned int, vector<const TikzNode*>>&
     assert(find(levels[l].begin(), levels[l].end(), b)!=levels[l].end());
     if(a->snapshot->expected_runtime() != b->snapshot->expected_runtime()){
         cerr << "Warning: Snapshots to be merged have different run times." << endl;
+        cerr << *a->snapshot << ": " << a->snapshot->expected_runtime() << endl;
+        cerr << *b->snapshot << ": " << b->snapshot->expected_runtime() << endl;
     }
     TikzExporter2::TNSucs combined_sucs(a->successors);
     for(auto it : b->successors){

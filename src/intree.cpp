@@ -613,8 +613,13 @@ void Intree::get_profile(vector<unsigned int>& target) const {
     for(task_id it = 1; it < edges.size(); ++it){
         target[get_level(it)]++;
     }
-    assert(target[0]==0);
-    target[0] = 1;
+    if(target.size() > 0){
+        assert(target[0]==0);
+        target[0] = 1;
+    }
+    else{
+        target.push_back(1);
+    }
 }
 
 void Intree::get_raw_tree_id(tree_id& target){
