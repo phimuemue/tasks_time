@@ -521,7 +521,7 @@ We assume that the dependencies between the tasks under consideration can be des
 
 \paragraph{Random task processing times}
 
-We assume that we do not know the processing time for a certain task in advance. We instead assume that we can model the task time for each task within the intree by an exponentially distributed random variable as defined in section \ref{sec:exponential-distribution}. We furthermore assume that all tasks are exponentially distributed with the \emph{same} parameter $\lambda$. Note that we can assume w.l.o.g. --  according to theorem \ref{thm:expoenential-distr-scalability} -- that all tasks have parameter $\lambda=1$. \todo{More explanation needed?}
+We assume that we do not know the processing time for a certain task in advance. We instead assume that we can model the task time for each task within the intree by an exponentially distributed random variable as defined in section \ref{sec:exponential-distribution}. We furthermore assume that all tasks are exponentially distributed with the \emph{same} parameter $\lambda$. Note that we can assume w.l.o.g. --  according to theorem \ref{thm:expoenential-distr-scalability} explaining exponential variables' scaling -- that all tasks have parameter $\lambda=1$.
 
 \paragraph{Parallel processors}
 
@@ -545,13 +545,13 @@ Assuming that we have a certain amount $p$ of identical processors, we can proce
 That is, we assign some (at most $p$) ready tasks to processors, wait until the first assigned task finishes, assign a new task (if available) to the now idle processor, and continue with the subtree obtained by removing the finished task. That is, in each point of time, we know the current intree containing all tasks not yet finished and all tasks currently being processed. We therefore introduce the notation of \emph{snapshots}.
 
 \begin{definition}[Schedules and snapshots]  
-  Let $I$ be an intree of tasks that is processed. A \emph{schedule} is the order in which tasks are processed. Since task times are unknown, the order is not known a priori.\todo{Verbessern.}
+  Let $I$ be an intree of tasks that is processed. A \emph{schedule} is the order in which tasks are processed. Since task times are unknown, this order is not deterministic and can vary from execution to execution.
 
   Let $S$ be a schedule of $I$.
-  A \emph{snapshot} of $S$ a 2-tuple containing
+  A \emph{snapshot} of $S$ a pair containing
   \begin{itemize}
-  \item the current subtree $I'\subseteq I$ describing which tasks are not finished,
-  \item a set $X$ holding the tasks that are currently being processed.
+  \item the current subtree $I'\subseteq I$ describing which tasks are not finished yet,
+  \item a set $X$ holding the tasks that are currently being processed (i.e. a set of \emph{currently scheduled tasks}).
   \end{itemize}
 \end{definition}
 
@@ -590,37 +590,37 @@ Consider now a snapshot, i.e. the current intree and a set of currently schedule
 
 \begin{itemize}
 \item Any of the currently scheduled tasks may be the first task to finish.
-\item If a certain task finishes, the corresponding processor gets idle and can be assigned new work. That is, we may be able to choose a new task\footnote{It may be the case that we are not able if all leaves are already scheduled. In this case, the processor has to stay idle.\todo{Passt das?}} and assign it to the newly free processor.
+\item If a certain task finishes, the corresponding processor gets idle and can be assigned new work. That is, we may be able to choose a new task\footnote{It may be the case that we are not able to select any new task because all leaves are already scheduled. In this case, the processor has to stay idle and can not get assigned a new task.} and assign it to the now idle processor.
 
-  Note that we could -- in principle -- easily choose a certain task with some probability and another task with another probability, thus introducing more possibilities.
+  Note that we can -- in principle -- easily choose a certain task with some probability and another task with another probability, thus introducing more possibilities.
 \end{itemize}
 
-That is, we have several possibilities here. The first of them (which task finishes first) can not be influenced in our scenario. The second, however, leaves us free choice. Depending on which task we choose next, we might get a better or worse overall run time.
+That is, we have several possibilities here. The first of them (which task finishes first) can not be influenced in our scenario. The second, however, leaves us a choice that we can influence. Depending on which task we choose next, we might get a better or worse overall run time.
 
 \begin{definition}[Scheduling strategy]
-  A \emph{scheduling strategy} determines the probability that a certain task should be the next task to be scheduled.
+  A \emph{scheduling strategy} determines the probability that a certai tasks should be the next tasks to be scheduled.
 \end{definition}
 
 That means, we use the notion of a \emph{probabilistic scheduler} in the sense that the scheduler is not forced to restrict on \emph{one single} task, but can instead specify probabilities for each ready, currently unscheduled task. Note that we can easily ``simulate'' a deterministic scheduler by assigning probability 1 to one single ready task, and probability 0 to all other possibilities.
 
 One desirable goal is to always choose the next task to be scheduled (resp. the respective probabilities) in such a way that the overall expected run time is minimal. We will now see how we can compute the expected run time for a schedule.
 
-\todo{Scheduling-DAGs erklären mit allen Bestandteilen (Eintrittswkt, Probs, Exp).}
-
 \section{Visualizing a schedule}
 \label{sec:intro-visualizing-schedules}
+
+\todo{Scheduling-DAGs erklären mit allen Bestandteilen (Eintrittswkt, Probs, Exp).}
 
 If we are speaking of a schedule, we talk about the complete processing of an intree of tasks.
 
 We can think of it as a connected directed acyclic graph or DAG (see \cite{diestel2005graph} for more information), where each vertex represents one single snapshot. The edges between the snapshots then represent transitions that indicate that a certain task has finished and (possibly) a new task has chosen to be scheduled. We can naturally assign the edges weights that represent the corresponding probability that a task has finished and the new task has been picked.
 
-That is, we have two sources of non-determinism:
+As stated before, we have two sources of non-determinism:
 \begin{itemize}
 \item Each of the currently scheduled tasks can be the first task to finish. Depending on which task finishes first, we have to continue with another intree.
 \item When one task finishes, the corresponding processor becomes idle and can be used to process other tasks. This is the second source where we have different possibilities. However, for this point, we can decide ourselves how to continue.
 \end{itemize}
 
-We will look at the intree $(0,0,1,2,2,2,6,6,8)$ -- processed by two processors -- as an example. This intree looks as follows:
+We will look at the intree $(0,0,1,2,2,2,6,6,8)$ -- it shall be processed by two processors -- as an example. This intree looks as follows:
 
 \begin{center}
   \begin{tikzpicture}[scale=.4]
@@ -992,7 +992,7 @@ As an example, consider the tree in figure \ref{fig:intro-computing-expected-run
     }
     \label{fig:intro-recursive-formula-run-time-example-four-procs}
   \end{subfigure}
-  \caption{Computing the expected run time according to equation (\ref{eqn:intro-recursive-formula-for-run-time}) for three resp. four processors on the same intree. Each box represents a single snapshot.}
+  \caption{Computing the expected run time according to equation (\ref{eqn:intro-recursive-formula-for-run-time}) for three resp. four processors on the same intree. Each box represents a single snapshot containing the intree (with scheduled tasks marked) and the expected run time for the respective snapshot.}
   \label{fig:intro-computing-expected-runtime}
 \end{figure}
 
@@ -1209,9 +1209,9 @@ It can be easily seen that we essentially compute the same thing twice if we car
         --node[below, yshift=-.1cm]{Task 2 finished first} +(14.1,0);
         % equivalences
         \draw[decorate,decoration={brace,mirror}] (-22,-19)
-        --node[below, yshift=-.1cm]{4 equivalent tasks} +(28.5,0);
+        --node[below, yshift=-.1cm]{4 equivalent snapshots} +(28.5,0);
         \draw[decorate,decoration={brace,mirror}] (7.2,-19)
-        --node[below, yshift=-.1cm]{2 equivalent tasks} +(14.1,0);
+        --node[below, yshift=-.1cm]{2 equivalent snapshots} +(14.1,0);
       \end{scope}
     \end{tikzpicture}
     \caption{Schedule DAG showing all possible snapshots. Tasks currently scheduled are drawn white. Other tasks are drawn gray.}
@@ -1291,6 +1291,22 @@ It can be easily seen that we essentially compute the same thing twice if we car
 \end{figure}
 
 From now on, if not stated otherwise, we restrict ourselves to snapshot DAGs that contain only distinct snapshots.
+
+\section{Snapshot DAGs revisited}
+\label{sec:introduction-snapshot-dags-revisited}
+
+We have seen transition probabilities between certain snapshots, how compute the expected run time of a schedule recursively, excluding equivalent snapshots. We now come back to the description of a schedule as a snapshot DAG (as introduced in section \ref{sec:intro-visualizing-schedules}) that already contained the transition probabilities as elements in the corresponding snapshots.
+
+We augment this visualization by two new elements: The expected run time for a snapshot and probability of reaching a certain snapshot.
+
+\begin{figure}[th]
+  \centering
+  \includegraphics{theory/snapshot_dag_complete.pdf}
+  \caption{Snapshot DAG with each node containing the following elements of the respective snapshot: Probability of reaching it, intree (with scheduled tasks marked), expected run time, probability of successors.}
+  \label{fig:intro-complete-dag}
+\end{figure}
+
+Figure \ref{fig:intro-complete-dag} visualizes a schedule for the intree $(0,0,1,1,2)$ processed by three processors. This snapshot DAG contains -- for each snapshot -- the probability of reaching it, the corresponding intree, the expected run time and the probabilities for the successors.
 
 \section{Summary: Problem statement}
 \label{sec:introduction-aim}
