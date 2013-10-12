@@ -304,6 +304,7 @@ void create_snapshot_dags(const po::variables_map& vm,
                 p_s[i].second += p_s[j].second;
                 p_s.erase(p_s.begin() + j);
                 j--;
+                initial_settings.erase(initial_settings.begin() + j);
             }
         }
     }
@@ -428,6 +429,7 @@ void generate_stats(const po::variables_map& vm,
         const vector<vector<task_id>>& initial_settings
         ){
     vector<vector<string>> lines;
+    assert(s.size() == initial_settings.size());
     for(unsigned int i= 0; i<s.size(); ++i){
         lines.push_back(vector<string>());
         //
@@ -461,7 +463,17 @@ void generate_stats(const po::variables_map& vm,
             line.push_back(string("U"));
         }
         line.push_back(" ");
-        line.push_back(s[i]->markedstring());
+        stringstream markedstring("");
+        markedstring << "[";
+        for(unsigned int midx = 0; midx < initial_settings[i].size(); ++midx){
+            markedstring << initial_settings[i][midx];
+            if(midx < initial_settings[i].size() - 1){
+                markedstring << ", ";
+            }
+        }
+        markedstring << "]";
+        line.push_back(markedstring.str());
+        // line.push_back(s[i]->markedstring());
         line.push_back("  ");
         line.push_back(get_expected_runtime_string(s[i]));
         line.push_back("  ");
