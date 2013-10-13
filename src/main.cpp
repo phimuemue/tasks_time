@@ -33,6 +33,7 @@
 #include "chainsideexporter.h"
 #include "profileexporter.h"
 #include "dagviewexporter.h"
+#include "commandlineexporter.h"
 
 #include "tikztopdf.h"
 
@@ -531,6 +532,9 @@ int main(int argc, char** argv){
                         isomorphism, tid) 
                 << endl;
 
+            CommandLineExporter cle;
+            cle.export_tree(cout, t);
+
             // compute snapshot dags
             vector<vector<task_id>> initial_settings;
             vector<Snapshot*> s;
@@ -548,6 +552,7 @@ int main(int argc, char** argv){
                     s,
                     probs,
                     expected_runtimes);
+
 
             // optimize current snapshot
             if(vm["optimize"].as<bool>()){

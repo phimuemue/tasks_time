@@ -23,6 +23,7 @@ using namespace std;
 class Intree {
     friend class Probability_Computer;
     friend class Snapshot;
+    friend class CommandLineExporter;
     private:
         std::vector<task_id> edges;
 #if USE_TASKMAP

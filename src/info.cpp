@@ -3,8 +3,8 @@
 char builtby[] = "philipp";
 char version[] = "0";
 char minor[] = "4";
-char build[] = "863";
-char date[] = "2013/10/12 19:01:11";
+char build[] = "1013";
+char date[] = "2013/10/13 10:49:07";
 
 using namespace std;
 
