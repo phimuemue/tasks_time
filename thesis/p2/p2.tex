@@ -571,13 +571,25 @@ This, on the other hand, implies a poly-time algorithm that can be used to deter
 
 We have shown that we can compute the optimal expected run time in polynomial time and -- moreover -- that we can compute the exptected run time for special cases using relatively easy formulas. 
 
-We have also seen that we can consider profile DAGs instead of whole snapshot DAGs and can rely on them. In fact, it can be shown that -- for a given intree -- we can rely on an even simpler DAG that does not contain the profiles, but instead only the \emph{length} of the corresponding profile (i.e. implicitly the length of the longest path from the root to one leaf) and the number of overall tasks.
+We have also seen that we can consider profile DAGs instead of whole snapshot DAGs and can rely on them. In fact, it can be shown that -- for a given intree -- we can rely on an even simpler DAG that does not contain the profiles, but instead only the \emph{length} of the corresponding profile (i.e. implicitly the length of the longest path from the root to one leaf) and the number of overall tasks. 
+
+However, this simplification is only valid ``within the snapshot DAG for a given intree'', in the sense that there are different intrees with same profile length and same number of nodes aside this longest chain, but having different run times. Figure \ref{fig:p2-different-intrees-same-chainside} shows two such intrees (namely $(0,0,0,0,1)$ and $(0,0,0,1,1)$).
 
 \begin{figure}[th]
   \centering
-  \todo{Hier Bild von einem chainside-DAG}
-  \caption{A profile DAG and the corresponding DAG containing only the length of the longest path from the root to a leaf and the number of tasks that are \emph{not} on this longest path.}
-  \label{fig:p2-chainside-summary}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics{p2/00001.pdf}
+    \caption{Snapshot DAG for HLF on intree $(0,0,0,0,1)$ resulting in an overal run time of 4.0625.}
+  \end{subfigure}
+
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics{p2/00011.pdf}
+    \caption{Snapshot DAG for HLF on intree $(0,0,0,1,1)$ resulting in an overal run time of 4.125.}
+  \end{subfigure}
+  \caption{Snapshot DAGs for two different intrees with the same profile length}
+  \label{fig:p2-different-intrees-same-chainside}
 \end{figure}
 
 %%% Local Variables:
