@@ -272,7 +272,52 @@ Carrying out the procedure given above yields the sequence
 
 Note that since the root carries number 0, we can start iterating at 1. Moreover, this representation enforces that the first number in such a sequence describing an intree is always 0. This, of course, introduces some redundancy, but, on the other hand, enables us to describe the tree consisting of only a root: It is denoted by an empty sequence: $()$.
 
-\todo{Sollten auch andere Repräsentation erwähnt werden? We can represent an intree by a properly parenthesized expression, where leaves are denoted by 1 resp. 0 depending on whether they are scheduled resp. non-scheduled. We call the corresponding string the \emph{parenthesized expression} of an intree.}
+That means, that the sequence $(x_1,x_2,\dots,x_n)$ describes an intree with $n+1$ tasks where task $i$ is a requirement for task $x_i$.
+
+Note that this representation still is not the most concise one in the sense that it allows several possible sequences for one intree. E.g. the sequences $(0,0,0,1,2,2,3,3,3)$, $(0,0,0,1,1,1,2,2,3)$, $(0,1,0,0,3,4,3,4,4)$ and $(2,0,0,5,0,5,3,3,5)$ all describe the following intree:
+
+\begin{center}
+  \begin{tikzpicture}[scale=.2]
+    \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
+    \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+    \node[circle, scale=0.75, fill] (tid4) at (0.75,4.5){};
+    \node[circle, scale=0.75, fill] (tid5) at (2.25,4.5){};
+    \draw[](tid1) -- (tid4);
+    \draw[](tid1) -- (tid5);
+    \node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
+    \node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+    \node[circle, scale=0.75, fill] (tid7) at (5.25,4.5){};
+    \draw[](tid2) -- (tid6);
+    \draw[](tid2) -- (tid7);
+    \node[circle, scale=0.75, fill] (tid3) at (7.5,3){};
+    \node[circle, scale=0.75, fill] (tid8) at (6.75,4.5){};
+    \node[circle, scale=0.75, fill] (tid9) at (8.25,4.5){};
+    \draw[](tid3) -- (tid8);
+    \draw[](tid3) -- (tid9);
+    \draw[](tid0) -- (tid1);
+    \draw[](tid0) -- (tid2);
+    \draw[](tid0) -- (tid3);
+  \end{tikzpicture}
+\end{center}
+
+However, we will most of the time use a notion where we assume that for a tree sequence $(x_1,x_2,\dots, x_n)$ we have $\forall i \in \left\{ 1,2,\dots,n \right\}x_i\leq i$. This is always possible because we can start a breadth-first search (BFS) at task 0 and assign numbers to the tasks representing the order in which BFS visits the tasks.
+
+That means that there are $n!$ possibilities for tree sequences with exactly $n$ tasks. On the other hand, there are less (distinct) intrees of size $n$:
+
+\begin{theorem}
+  Let $T_n$ denote the number of intrees containing $n$ tasks. Then,
+  \begin{equation*}
+    T_n \sim C\cdot r^{-n}\cdot n^{-1.5} 
+    \quad \text{ as } n\rightarrow \infty,
+  \end{equation*}
+  where $C=0.4399237\dots$ and $r=0.3383219\dots$.
+\end{theorem}
+
+\begin{proof}
+  See \cite{asymptotic_enum_odlyzko}.
+\end{proof}
+
+%\todo{Sollten auch andere Repräsentation erwähnt werden? We can represent an intree by a properly parenthesized expression, where leaves are denoted by 1 resp. 0 depending on whether they are scheduled resp. non-scheduled. We call the corresponding string the \emph{parenthesized expression} of an intree.}
 
 \subsection{Interpretation as dependency graphs}
 \label{sec:intrees-interpreted-as-dependency-graphs}
@@ -533,7 +578,7 @@ We assume that one single task can be processed by one processor exclusively, i.
 
 \paragraph{Non-preemtive scheduling}
 
-We will focus on non-preemtive scheduling, i.e. once a task is processor is assigned a task, this task has to be processed \emph{completely} before the processor can be used for anything else. Note that the restriction on non-preemtive scheduling is no problem when we work with two processors (as shown in \cite{chandyreynoldslargepaper1979}) --- in the two-processor case, the optimal schedule is (without loss of generality) non-preemtive. However, for three processors, preemtive schedules might be better than non-preemtive ones. We show an example intree for this fact in section \ref{preemtiveness-explanation}.
+We will focus on non-preemtive scheduling, i.e. once a task is processor is assigned a task, this task has to be processed \emph{completely} before the processor can be used for anything else. Note that the restriction on non-preemtive scheduling is no problem when we work with two processors (as shown in \cite{chandyreynoldslargepaper1979}) --- in the two-processor case, the optimal schedule is (without loss of generality) non-preemtive. However, for three processors, preemtive schedules might be better than non-preemtive ones. We will later show an example intree for this fact (see section \ref{preemtiveness-explanation}).
 
 However, as shown in \cite{chandyreynoldslargepaper1979} an optimal schedule (without loss of generality) only preemts a task directly after another task finishes.
 
@@ -607,8 +652,6 @@ One desirable goal is to always choose the next task to be scheduled (resp. the 
 
 \section{Visualizing a schedule}
 \label{sec:intro-visualizing-schedules}
-
-\todo{Scheduling-DAGs erklären mit allen Bestandteilen (Eintrittswkt, Probs, Exp).}
 
 If we are speaking of a schedule, we talk about the complete processing of an intree of tasks.
 
@@ -716,7 +759,7 @@ Since all tasks' processing times are assumed to be exponentially distributed, i
 %The fact that we can compute the expected run time \emph{recursively} follows from the fact that exponentially distributed random variables are memoryless (see theorem \ref{thm:exponential-memoryless}): 
 
 
-As an example, consider the tree in figure \ref{fig:intro-computing-expected-runtime}. The topmost snapshots describe the first step of schedules for three resp. four processors on the same intree. We are the corresponding expected run times. We can assume that the run times of the snapshots in the second line have already been computed (recursively). Using these, we can compute the overal expected run time using theorem (\ref{eqn:intro-recursive-formula-for-run-time}) as described in figures \ref{fig:intro-recursive-formula-run-time-example-three-procs} and \ref{fig:intro-recursive-formula-run-time-example-four-procs}. \todo{Vielleicht kleineres Beispiel, das jedoch dann komplett.}
+As an example, consider the tree in figure \ref{fig:intro-computing-expected-runtime}. The topmost snapshots describe the first step of schedules for three resp. four processors on the same intree. We are the corresponding expected run times. We can assume that the run times of the snapshots in the second line have already been computed (recursively). Using these, we can compute the overal expected run time using theorem (\ref{eqn:intro-recursive-formula-for-run-time}) as described in figures \ref{fig:intro-recursive-formula-run-time-example-three-procs} and \ref{fig:intro-recursive-formula-run-time-example-four-procs}. 
 
 \begin{figure}[tt]
   \centering

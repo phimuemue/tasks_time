@@ -69,27 +69,27 @@ It is a notable fact that we can determine in polynomial time (w.r.t. the number
 
 %While it seems to be quite hard to check isomorphism for general graphs (\todo{unbedingt Referenz!}), it is feasible for intrees.
 
-While there currently is no known algorithm that checks isomorphism in polynomial time \emph{for general graphs} (see \cite{arora2009computational}), there is a simple algorithm for isomorphism of intrees. The idea behind this algorithm is to recursively sort the predecessors of a task according to the number of their respective predecessors. An early description of this algorithm can be found e.g. in \cite{aho1974design}. We can easily adapt this isomorphism check to our needs in the sense that we can construct an algorithm that constructs a ``canonical snapshot'', and all equivalent snapshots are converted to exactly this canonical snapshot.
+While there currently is no known algorithm that checks isomorphism in polynomial time \emph{for general graphs} (see \cite{arora2009computational}), there is a simple algorithm for isomorphism of intrees. The idea behind this algorithm is to recursively sort the predecessors of a task according to the number of their respective predecessors. An early description of a possible algorithm can be found e.g. in \cite{aho1974design}. We can easily adapt this isomorphism check to our needs in the sense that we can construct an algorithm that constructs a \emph{canonical snapshot}, and all equivalent snapshots are converted to exactly this canonical snapshot.
 
 One thing to keep in mind is that we have to explicitly take care of the currently scheduled tasks, i.e. we have to adopt the algorithm to distinguish between scheduled and unscheduled tasks.
 
 \subsection{The algorithm}
 \label{sec:algorithm-equiv-snapshots-actual-algo}
 
-The algorithm basically relies on an ordering of intrees (there are of course many possible, but we use a simple one).
+The algorithm basically relies on an ordering of intrees (there are of course many possible, but we use a simple one). To be able to compute equivalent snapshots, this ordering has to incorporate which tasks are currently scheduled. Thus, we use an ordering that uses a set of tasks (the scheduled tasks), and does not solely rely on the structure of the intree.
 
 \begin{definition}[Ordering of intrees with preferred tasks]
   We introduce an ordering denoted by $\treegeq$. For two intrees $I_1$ and $I_2$ and a set $X$ of tasks, we define $I_1 \treegeq I_2$ inductively. 
   \begin{itemize}
-  \item If both $I_1$ and $I_2$ consist only of a root, we have $I_1 \treegeq I_2$ if and only if the root of $I_1$ is in $X$ and the root of $I_2$ is not in $X$.
-  \item If the root of $I_1$ has less predecessors than the root of $I_2$, then $I_1 \treegeq I_2$.
-  \item If the root of $I_1$ has the same number $r$ of predecessors as the root of $I_2$, we sort the corresponding predecessors $p_1,\dots,p_r$ resp. $q_1,\dots,q_r$ (in $I_1$ resp. $I_2$ according to $\treegeq$). Then, if $p_i \treegeq q_i \forall i\in\{1,2,\dots,r \}$, we have $I_1 \treegeq I_2$.
+  \item If both $I_1$ and $I_2$ consist only of a root, we have $I_1 \treegeq I_2$ if and only if the root of $I_2$ is not in $X$ or the root of $I_1$ is in $X$.
+  \item If the root of $I_1$ has more predecessors than the root of $I_2$, then $I_1 \treegeq I_2$.
+  \item If the root of $I_1$ has the same number $r$ of predecessors as the root of $I_2$, we sort the corresponding predecessors $p_1,\dots,p_r$ resp. $q_1,\dots,q_r$ (in $I_1$ resp. $I_2$) according to $\treegeq$. Then, if $p_i \treegeq q_i \forall i\in\{1,2,\dots,r \}$, we have $I_1 \treegeq I_2$.
   \end{itemize}
 \end{definition}
 
 \todo{Examples!}
 
-The algorithm recursively sorts the tasks in the intree according to the ordering $\treegeq$. It is shown in algorithm \ref{alg:compute-canonical-snapshot}.
+An algorithm to compute a \emph{canonical form} of a snapshot, can recursively sort the tasks in the intree according to the ordering $\treegeq$. It is shown in algorithm \ref{alg:compute-canonical-snapshot}.
 
 \begin{algorithm}
   \begin{algorithmic}
@@ -110,8 +110,6 @@ The algorithm recursively sorts the tasks in the intree according to the orderin
   \caption{Computing canonical snapshots for a snapshot $s$ containing the corresponding intree and the tasks that are currently scheduled (as defined in section \ref{sec:processing-an-intree-of-tasks}).\todo{Algorithmus verbessern.}}
   \label{alg:compute-canonical-snapshot}
 \end{algorithm}
-
-\todo{Algorithmus, der equiv. snaps / bzw. canonical snaps berechnet zeigen.}\todo{Laufzeit!}
 
 Algorithm \ref{alg:compute-canonical-snapshot} is good for visualizing how the algorithm works. One disadvantage, however, is that recursively comparing two subtrees can be expensive. Nonetheless, there is a modification of this algorithm, that is more along the lines of \cite{aho1974design} and has a slightly better asymptotic run time. It is shown in algorithm \ref{sec:algorithm-canonical-intree-o-n}.
 
@@ -168,8 +166,42 @@ Algorithm \ref{sec:algorithm-canonical-intree-o-n} is a very high level descript
 We experienced that computing canonical snapshots has a major impact on the overal performance of our program, which is why we tried other approaches to tackle this problem. For completeness, we will explain them shortly. Unfortunately, they did not work out as good as expected, but maybe they are helpful for future work. In this section, we focus on the part concerning the computation of \emph{canonical intrees} (i.e. we do not distinguish between scheduled and non-scheuled leaves).
 
 \begin{description}
-\item[Tree sequence] Most of the time, we are generating a certain subtree and want to know the canonical intree of it. We tried exploiting the fact that we already could \emph{start} with a canonical intree. That is, we tried to construct the tree sequence of a canonical subtree by just examining the tree sequence of the original intree. Sadly, we could not devise a simple pattern that works as a general rule.\todo{Example where equiv intrees yield drastically different sequences.}
-\item[Matula numbers] Intrees and their encodings have of course already been subject to research. One example is shown in \cite{matula1968natural}, where a (more or less) natural bijection between intrees and natural numbers, the so-called \emph{Matula numbers}, is shown.
+\item[Tree sequence] As we have seen in previous chapters, we can describe intrees as a sequence of tasks $(x_1,\dots,x_n)$ such that task $i$ is a requirement for task $x_i$ (see section \ref{sec:foundations-graph-theory}). It is clear that we can assume certain facts about these sequences: We could e.g. assume that w.l.o.g. the sequence $(x_1,\dots,x_n)$ is non-decreasing (simply assign number by a breadth first search started by task 0). We tried to exploit the knowledge about tree sequences.
+
+Most of the time, we are generating a certain subtree from a tree whose tree sequence is already known. We then want to know the canonical intree of this subtree. We tried exploiting the fact that we already could \emph{start} with a canonical intree. That is, we tried to construct the tree sequence of a canonical subtree by just examining the tree sequence of the original intree. 
+
+It seems that we can compute the tree sequence of an intree $I\setminus \left\{ t \right\}$ (where $t$ is a leaf of the intree $I$) in some cases by simply removing the corresponding entry in the tree sequence. But iterating this (i.e. removing two or more tasks one after another) often leads to problems.
+
+We could not devise a simple pattern that works as a general rule. The problem for this approach is that -- even if it might work for pure intrees -- it seems to be very complex to incorporate the fact that isomorphic intrees with a different set of scheduled tasks might or might not yield equivalent snapshots. Consider e.g. the intree $(0,0,0,1,1,2,2,3,3)$ with tasks 4, 6 and 8 scheduled (shown in figure \ref{fig:tree-sequence-not-working}). For the situation shown, it does not matter which task is the first to finish --- each resulting snapshot is equivalent to all others. However, the tree sequences obtained by removing the respective tasks are $(0,0,0,1,2,2,3,3)$, $(0,0,0,1,1,2,3,3)$ and $(0,0,0,1,1,2,2,3)$.
+
+\begin{figure}[ht]
+  \centering
+  \begin{tikzpicture}[scale=.2]
+    \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
+    \node[circle, scale=0.75, fill] (tid1) at (1.5,3){};
+    \node[circle, scale=0.75, fill] (tid4) at (0.75,4.5){};
+    \node[circle, scale=0.75, fill, task_scheduled] (tid5) at (2.25,4.5){};
+    \draw[](tid1) -- (tid4);
+    \draw[](tid1) -- (tid5);
+    \node[circle, scale=0.75, fill] (tid2) at (4.5,3){};
+    \node[circle, scale=0.75, fill] (tid6) at (3.75,4.5){};
+    \node[circle, scale=0.75, fill, task_scheduled] (tid7) at (5.25,4.5){};
+    \draw[](tid2) -- (tid6);
+    \draw[](tid2) -- (tid7);
+    \node[circle, scale=0.75, fill] (tid3) at (7.5,3){};
+    \node[circle, scale=0.75, fill] (tid8) at (6.75,4.5){};
+    \node[circle, scale=0.75, fill, task_scheduled] (tid9) at (8.25,4.5){};
+    \draw[](tid3) -- (tid8);
+    \draw[](tid3) -- (tid9);
+    \draw[](tid0) -- (tid1);
+    \draw[](tid0) -- (tid2);
+    \draw[](tid0) -- (tid3);
+  \end{tikzpicture}
+  \caption{The tree sequences for the snapshots resulting when one task finishes are different, but the snapshots are still equivalent.}
+  \label{fig:tree-sequence-not-working}
+\end{figure}
+
+\item[Matula numbers] Intrees and their encodings have of course already been subject to research. One example is \cite{matula1968natural}, where a (more or less) natural bijection between intrees and natural numbers, the so-called \emph{Matula numbers}, is shown.
 
 These numbering is inductively defined as follows: A single leaf (resp. a tree consisting of a single root) obtains the number 1. A root with predecessors $t_1,\dots,t_r$ with corresponding numbers $n_1,\dots,n_r$ obtains the number $\prod_{i=1}^r p(n_i) = p(n_1)\cdot p(n_2) \cdot \dots \cdot p(n_r)$, where $p(x)$ denotes the $x$-th prime number. See figure \ref{fig:matula-illustration} for an example.
 
@@ -230,8 +262,6 @@ We went for this solution for several reasons:
 \end{itemize}
 
 Using a \texttt{vector} of course increases memory consumption compared to e.g. using an ordinary \texttt{long} but is much more convenient when it comes to implementation details and -- at least in theory -- provides a much larger range that a single \texttt{int} or \texttt{long}.
-
-\todo{Aufschreiben! Algorithmus mit Laufzeit!}
 
 We basically describe the current intree storing the same notation as shown in this work (just stored in a \texttt{vector} of \texttt{unsigned char}s). Of course, there are more memory-efficient solutions, but since we did never experience any problems regarding memory, we went for this solution.
 
