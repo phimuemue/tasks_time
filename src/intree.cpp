@@ -627,10 +627,15 @@ void Intree::get_raw_tree_id(tree_id& target){
     // (I think) quite correct solution and a 
     // (I think) quite correct but more efficient solution
 #if 1
+#if USE_MATULA
+    cout << "Matula not implemented due to too much memory consumption." << endl;
+    assert(false);
+#else
     target.push_back(NOTASK);
     for(task_id it = 1; it < edges.size(); ++it){
         target.push_back(edges[it]);
     }
+#endif
 #else
     task_id max_id = 0;
     for(task_id it = 1; it<edges.size(); ++it){

@@ -111,13 +111,18 @@ def generate_trees(n, exclude_trivials=False):
     for i in generate_hashes_clever(n, exclude_trivials):
         yield list_from_hash(i)
 
+def count_leaves(l):
+    nl = {a for a in l}
+    return len(l)+1-len(nl)
+
 for n in xrange(1,30):
     print "Working with %d tasks."%n
-    with open("../database/%d_trivials.txt"%n, "w") as f:
-        for i in generate_trees(n, False):
-            for num in i:
-                f.write("%d "%num)
-            f.write("\n")
+    with open("../database/%d_no_trivials_3_leaves.txt"%n, "w") as f:
+        for i in generate_trees(n, True):
+            if count_leaves(i) > 3:
+                for num in i:
+                    f.write("%d "%num)
+                f.write("\n")
 
 
 

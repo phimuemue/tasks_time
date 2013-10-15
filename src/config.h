@@ -41,7 +41,11 @@ typedef mpq_class myfloat;
 #endif 
 
 typedef unsigned int task_id;
+#if USE_MATULA
+typedef unsigned int tree_id;
+#else
 typedef std::vector<unsigned char> tree_id;
+#endif
 typedef std::pair<tree_id, std::vector<task_id>> snapshot_id;
 
 #define NOTASK (std::numeric_limits<task_id>::max())
