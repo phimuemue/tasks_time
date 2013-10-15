@@ -8,6 +8,8 @@
 \bibliography{bib}
 \addbibresource{bib.bib}
 
+\hyphenation{ma-the-ma-tics}
+
 \begin{document}
 
 \chapter{TODO-Lists}
@@ -25,8 +27,9 @@
 \label{chap:current-questions}
 
 \begin{itemize}
+\item Gibt es situationen, wo im Optimum auf HLF-level tasks geschedult sind, auf (HLF-1)-level ungeschedulte tasks sind, und auf einem niedrigeren level wieder tasks geschedult sind?
 \item Falls bei einer parallel chain oder einem degenerate intree bereits 2 tasks geschedult sind: Ist es dann optimal, einen HLF-task dazu zu nehmen?
-\item Benchmarks: Compare usual LEAF scheduler to SCLEAF and SCLEAF with conjecture that as many topmost tasks as possible shall be sheduled (esp. no. of snapshots is important).
+\item Benchmarks: Compare usual LEAF scheduler to SCLEAF and SCLEAF with conjecture that as many topmost tasks as possible shall be sheduled (esp. no. of snapshots is important).\done{Erledigt. Verbesserung von 40\%.}
 \item P3: Is it possible, that there are -- at one level of the optimal snapshot DAG -- multiple snapshots containing the same intree, but a different set of scheduled tasks? \remark{Probably not w.l.o.g.}
 \item For each snapshot resulting from an optimal schedule, at least one top-most task is scheduled? \remark{Seems so.}
 \item If for an intree only non-top tasks are scheduled, you can exchange one of the non-top tasks with a top-tasks and obtain a better run time?\remark{Seems so}
@@ -69,8 +72,7 @@
 \include{p3/suboptimal_strategies}
 \include{p3/p3}
 
-
-\include{first/first}
+%\include{first/first}
 
 \appendix{}
 

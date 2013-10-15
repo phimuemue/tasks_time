@@ -317,6 +317,8 @@ That means that there are $n!$ possibilities for tree sequences with exactly $n$
   See \cite{asymptotic_enum_odlyzko}.
 \end{proof}
 
+The first values for $T_n$ are $0, 1, 1, 2, 4, 9, 20, 48, 115, 286, 719, 1842, 4766, 12486, 32973, \dots$ \cite{oeisrootedtrees}.
+
 %\todo{Sollten auch andere Repräsentation erwähnt werden? We can represent an intree by a properly parenthesized expression, where leaves are denoted by 1 resp. 0 depending on whether they are scheduled resp. non-scheduled. We call the corresponding string the \emph{parenthesized expression} of an intree.}
 
 \subsection{Interpretation as dependency graphs}
@@ -578,7 +580,7 @@ We assume that one single task can be processed by one processor exclusively, i.
 
 \paragraph{Non-preemtive scheduling}
 
-We will focus on non-preemtive scheduling, i.e. once a task is processor is assigned a task, this task has to be processed \emph{completely} before the processor can be used for anything else. Note that the restriction on non-preemtive scheduling is no problem when we work with two processors (as shown in \cite{chandyreynoldslargepaper1979}) --- in the two-processor case, the optimal schedule is (without loss of generality) non-preemtive. However, for three processors, preemtive schedules might be better than non-preemtive ones. We will later show an example intree for this fact (see section \ref{preemtiveness-explanation}).
+We will focus on non-preemtive scheduling, i.e. once a task is processor is assigned a task, this task has to be processed \emph{completely} before the processor can be used for anything else. Note that the restriction on non-preemtive scheduling is no problem when we work with two processors (as shown in \cite{chandyreynoldslargepaper1979}) --- in this case, the optimal schedule is (without loss of generality) non-preemtive. However, for three processors, preemtive schedules might be better than non-preemtive ones. We will later show an example intree for this fact (see section \ref{preemtiveness-explanation}).
 
 However, as shown in \cite{chandyreynoldslargepaper1979} an optimal schedule (without loss of generality) only preemts a task directly after another task finishes.
 
@@ -650,7 +652,32 @@ That means, we use the notion of a \emph{probabilistic scheduler} in the sense t
 
 One desirable goal is to always choose the next task to be scheduled (resp. the respective probabilities) in such a way that the overall expected run time is minimal. We will now see how we can compute the expected run time for a schedule.
 
-\section{Visualizing a schedule}
+\subsection{Two prominent scheduling strategies}
+\label{sec:intro-two-scheduling-strategies}
+
+We will now present two important scheduling strategies that we will use to research the problem throughout this work.
+
+\begin{definition}[HLF scheduling]
+  A \emph{highest level first} scheduler (or HLF scheduler) assigns, if there are idle processors, ready tasks whose levels are maximal.
+\end{definition}
+
+Note that the above definition of HLF leaves some freedom if there are several tasks that could be chosen by HLF. If this is the case, then there are (basically) two possibilities:
+\begin{itemize}
+\item Choose \emph{one} task according to a certain pattern or randomly.
+\item Assign to \emph{each} possibly chosen task a certain probability.
+\end{itemize}
+
+Note that we can consider the first possibility as a special case of the second one. HLF scheduling is optimal for intrees whose task times are equal scheduled on any number of processors \cite{hu:1961:hlfoptimalforknowntimesintree} and for intrees whose task times are exponentially distributed (with same parameter) scheduled on two processors (see \cite{chandyreynoldsshortpaper1975} and chapter \ref{chap:p2}). 
+
+Another (very trivial) scheduler is the scheduler that tries all possibilities:
+
+\begin{definition}[LEAF scheduling]
+  A LEAF scheduler, if a processor gets free and can be assigned a new task, assigns each ready task with the same probability to this processor. In the beginning, each possible combination of scheduled tasks is taken with the same probability.
+\end{definition}
+
+LEAF schedulers are useful to examine all possible schedules and play an important role when we research how many snapshots have to be examined \emph{at most}.
+
+\subsection{Visualizing a schedule}
 \label{sec:intro-visualizing-schedules}
 
 If we are speaking of a schedule, we talk about the complete processing of an intree of tasks.
