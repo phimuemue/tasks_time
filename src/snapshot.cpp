@@ -502,6 +502,32 @@ bool Snapshot::only_one_nonscheduled_sibling() const {
     return cache_only_one_nonscheduled_sibling[1] = result;
 }
 
+bool Snapshot::has_succs_with_same_run_time() const {
+    if(cache_has_succs_with_same_run_time.find(1) != cache_has_succs_with_same_run_time.end()){
+        return cache_has_succs_with_same_run_time[1];
+    }
+    myfloat epsilon = (myfloat)0.00001;
+    for(unsigned int i1 = 0; i1 < successors.size(); ++i1){
+        for(unsigned int i2 = i1+1; i2 < successors.size(); ++i2){
+            if(abs(successors[i1]->expected_runtime() - successors[i2]->expected_runtime()) < epsilon){
+                auto s1(successors[i1]->successors);
+                auto s2(successors[i2]->successors);
+                sort(s1.begin(), s1.end());
+                sort(s2.begin(), s2.end());
+                if(s1 != s2){
+                    return cache_has_succs_with_same_run_time[1] = true;
+                }
+            }
+        }
+    }
+    for(auto s : successors){
+        if(s->has_succs_with_same_run_time()){
+            return cache_has_succs_with_same_run_time[1] = true;
+        }
+    }
+    return cache_has_succs_with_same_run_time[1] = false;
+}
+
 myfloat Snapshot::expected_time_for_n_processors(unsigned int p) const {
     if(cache_expected_runtime_for_n_procs.find(p) != cache_expected_runtime_for_n_procs.end()){
         return cache_expected_runtime_for_n_procs[p];

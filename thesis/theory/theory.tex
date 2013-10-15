@@ -675,7 +675,7 @@ Another (very trivial) scheduler is the scheduler that tries all possibilities:
   A LEAF scheduler, if a processor gets free and can be assigned a new task, assigns each ready task with the same probability to this processor. In the beginning, each possible combination of scheduled tasks is taken with the same probability.
 \end{definition}
 
-LEAF schedulers are useful to examine all possible schedules and play an important role when we research how many snapshots have to be examined \emph{at most}.
+LEAF schedulers are useful to examine all possible schedules and play an important role when we research how many snapshots have to be examined \emph{at most}. Note that a LEAF scheduler examines \emph{all possible} schedules. The resulting schedule, thus, \emph{must} contain the optimal choices as a part of it. That means, we can compute an optimal schedule by first scheduling the intree with the LEAF scheduler, and afterwards excluding the ``wrong'' (i.e. suboptimal) choices.
 
 \subsection{Visualizing a schedule}
 \label{sec:intro-visualizing-schedules}

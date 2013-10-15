@@ -463,6 +463,13 @@ void generate_stats(const po::variables_map& vm,
         else {
             line.push_back(string("U"));
         }
+        // can snapshots be aggregated?
+        if(s[i]->has_succs_with_same_run_time()){
+            line.push_back(string("S"));
+        }
+        else {
+            line.push_back(string(" "));
+        }
         line.push_back(" ");
         stringstream markedstring("");
         markedstring << "[";
