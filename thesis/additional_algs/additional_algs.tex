@@ -121,12 +121,12 @@ Algorithm \ref{alg:compute-canonical-snapshot} is good for visualizing how the a
       \For{$i=L-2 \dots 0$}
         \For{Each non-leaf $t$ in level $i$ with predecessors $p_1,\dots,p_r$}
         \label{alg:canonical-intree-inner-loop}
-          \State Label $t$ by a $(label(p_1),\dots,label(p_r))$ \Comment{Concatenate sorted labels of predecessors}
+          \State Label $t$ by a $(label(p_1),\dots,label(p_r))$ \Comment{Concatenate \emph{sorted} labels of predecessors}
           \label{alg:canonical-intree-concatenate-line}
         \EndFor
         \State{Sort tasks on level $i$ according to their label}
         \label{alg:canonical-intree-sorting-line}
-        \State{Replace labels for tasks on level $i$ by consecutive numbers}
+        \State{Replace labels for tasks on level $i$ by integers $geq 1$ such that same labels obtain same numbers}
         \label{alg:canonical-intree-numbering-line}
       \EndFor
     \EndProcedure
@@ -139,14 +139,21 @@ Algorithm \ref{sec:algorithm-canonical-intree-o-n} is a very high level descript
 
 \begin{itemize}
 \item For this algorithm, it is convenient to have a canonical intree structure in which each task directly knows its predecessors. We can transform our representation (as explained in section \ref{sec:implementation-repr-intrees-snapshots}) into this one in $O(n)$.
-\item Concatenating two labels can be done in $O(1)$ (either amortized by e.g. using dynamic arrays or simply using linked lists with some additional information such e.g. a pointer to the last node in the list). Thus, the overal costs arising from line \ref{alg:canonical-intree-concatenate-line} (resp. for the whole inner loop) are $O(n)$ because the label of each task is subject to concatenation at most once.
-\item Line \ref{alg:canonical-intree-numbering-line} ensures that the labels of tasks do not become very long. To be precise, if level $i$ has exactly $l_i$ tasks, the labels for level $i$ are at most the numbers 0 to $l_1-1$.
-\item Line \ref{alg:canonical-intree-sorting-line} from algorithm \ref{sec:algorithm-canonical-intree-o-n} shall sort in the following way: Shorter labels come first, and if two labels have the same length, they are compared lexicographically. This sorting can be implemented in $O(l_{i+1}\cdot\log l_{i+1})$, where $i$ denotes the index from the algorithm and $l_i$ denotes the number of tasks of $I$ on level $i$. This can be explained as follows:
+\item Concatenating two labels can be done in $O(1)$ (either amortized by e.g. using dynamic arrays or simply using linked lists with some additional information such e.g. a pointer to the last node in the list). Thus, the overal costs arising from line \ref{alg:canonical-intree-concatenate-line} (resp. for the whole inner loop) are $O(n)$ because the label of each task is subject to concatenation at most once. Moreover, note that the predecessors $p_1,\dots,p_r$ are sorted (they have been sorted in the previous iteration of the loop).
+\item Line \ref{alg:canonical-intree-numbering-line} ensures that the labels of tasks do not become very long. To be precise, if level $i$ has exactly $l_i$ tasks, the labels for level $i$ are at most the numbers 0 to $l_1$.
+\item Line \ref{alg:canonical-intree-sorting-line} from algorithm \ref{sec:algorithm-canonical-intree-o-n} shall sort in the following way: Shorter labels come first, and if two labels have the same length, they are compared lexicographically. This sorting can be implemented in $O(l_{i+1}\cdot\log l_{i+1})$, where $i$ denotes the index from the algorithm (i.e. the current level number) and $l_i$ denotes the number of tasks of $I$ on level $i$. This can be explained as follows:
   \begin{itemize}
-  \item First, we use a simple bucketsort to group the strings into buckets according to their lengths (can be done in $(O(l_{n+1}))$ if we store the lengths appropriately).
-  \item Each bucket is then sorted using radix sort. Assume that a bucket $j$ contains $n_j$ strings of length $j$. Then, radix sort can sort in time $O(n_j \cdot j)$.
-  \item Inductively, the labels on level $i+1$ are at most the numbers 0 to $l_{i+1}-1$, thus requiring $O(\log l_{i+1})$ bits per label.
-  \item Thus, each bucket can be sorted in $O(n_j \cdot \log l_{i+1})$, meaning that the whole level can be sorted in $\sum_{j=0}^B O(n_j \cdot \log l_{i+1}) = O(l_{i+1} \cdot \log l_{i+1})$.
+  %\item First, we use a simple bucketsort to group the strings into buckets according to their lengths (can be done in $(O(l_{i+1}))$ if we store the lengths appropriately).
+  \item We use radix sort to sort the tasks according to their labels. The labels for the $l_i$ tasks on level $i$ are composed of the labels on level $i+1$.
+  %\item Each bucket is then sorted using radix sort. Assume that a bucket $j$ contains $n_j$ labels of length $j$. Then, radix sort can sort in time $O(n_j \cdot j)$.
+  \item Inductively, the labels on level $i+1$ are at most the numbers 0 to $l_{i+1}$ (because there are $l_{i+1}$ tasks on level $i+1$ and there might be leaves on that level), thus requiring $O(\log l_{i+1})$ bits per label.
+  %\item Thus, bucket $j$ can be radix-sorted in $O(n_j \cdot \log l_{i+1})$.
+  \item Since we concatenate labels from level $i+1$ (or simply assign them label 0) to obtain the new labels on level $i$, we have $l_i$ labels of total length at most $l_{i+1}\cdot \log(\l_{i+1})$.
+  \item Now, we use a modified radix sort: We first distribute the labels according to their labels into different buckets (can be done in $O(1)$ per label if we e.g. store its length appropriately). 
+    %We now sort each bucket by an ordinary radix sort. Assume bucket $j$ contains $n_j$ labels of length $j$. Then, this bucket can be radix-sorted in $O(n_j \cdot j)$. 
+    We can now radix-sort each bucket. Since each digit of each label of a label is examined \emph{exactly once}, we can sort all labels in $O(l_{i+1}\cdot \log l_{i+1})$ (since this is the total length of all labels on level $i$).
+    %Denote the number of buckets by $B$ (obviously, $B\leq \log(l_{i+1} + 1)$). This means that all buckets can be sorted in $\sum_{j=1}^{\log(l_{i+1}+1)} O(n_j\cdot j)$.
+  %\item that the whole level can be sorted in $\sum_{j=0}^B O(n_j \cdot \log l_{i+1}) = O(l_{i+1} \cdot \log l_{i+1})$.
   \item The tree can be sorted top-down in $\sum_{i=0}^{L-2}O(l_{i+1} \cdot \log l_{i+1})=O(n\cdot \log n)$.
   \end{itemize}
 \item Replacing labels can be done in $O(n)$ in total since each tasks gets assigned a label only once.
@@ -159,6 +166,8 @@ Algorithm \ref{sec:algorithm-canonical-intree-o-n} is a very high level descript
 \begin{proof}
   See considerations above.
 \end{proof}
+
+\emph{Remark:} This algorithm is sometimes said to have runtime $O(n)$ -- assuming that we can express labels as integers and ignoring the fact that the total length of a label is $\log(l_{i+1})$ bits. This is, especially in the case we are considering, a very reasonable assumption because an integer nowadays has at least 32 bit, meaning that the length of a label (i.e. an integer) is only exceeded if a level of the intree contains more than $2^{32}$ tasks.
 
 \subsection{Additional approaches}
 \label{sec:algorithm-canonical-snap-additional-approaches}
@@ -236,7 +245,48 @@ These numbering is inductively defined as follows: A single leaf (resp. a tree c
   \label{fig:matula-illustration}
 \end{figure}
 
-While this description could lead to very elegant algorithms in a theoretical setting, it does not come in handy in practice because the matula numbers can be very big (more than 32 bit needed for matula numbers of 15-node intrees).
+While this description could lead to very elegant algorithms in a theoretical setting, it does not come in handy in practice because the matula numbers can be very big (more than 32 bit needed for matula numbers of 15-node intrees): As shown in \cite{onmatulanumbers}, the largest Matula number for an intree with $n\geq 5$ tasks is $p^{(n-4)}(8)$, where
+\begin{eqnarray*}
+  p^{(0)} (x) &=& x, \\
+  p^{i}(x) &=& p\left(p^{i-1}(x)\right).
+\end{eqnarray*}
+
+The growth of $p^{n-4}(3)$ is immense as $n$ increases. We can see from table \ref{tab:certain-values-pn-2-3-growth} that for intrees with 14 tasks, we exceed the size of a 32-bit unsigned integer, and for intrees with 20 tasks, the largest corresponding matula number even exceeds a 64-bit integer (table \ref{tab:certain-values-pn-2-3-growth} shows the values of $p^{(n-4)}(8)$ for $n$ up to 20 --- if these values were too large, we restricted ourselves to the logarithm (base 2) of the respective values to determine how many bits are needed).
+
+\begin{table}[th]
+  \centering
+  \begin{tabular}[ht]{cr}
+    $n$ & $p^{(n-4)}(8)$ \\
+    \hline
+    5 & 19 \\
+    6 & 67 \\
+    7 & 331 \\
+    8 & 2221 \\
+    9 & 19577 \\
+    10 & 219613 \\
+    11 & 3042161 \\
+    12 & 50729129 \\
+  \end{tabular}
+  \quad
+  \begin{tabular}[ht]{crl}
+    $n$ & $p^{(n-4)}(8)$ & $\log_2\left( p^{(n-4)}(8) \right)$ \\
+    \hline13 & 997525853 & $<30$\\
+    14 & 22742734291 & $>34$ \\
+    15 & $\approx 5.92852 \cdot 10^{11}$ & $> 39$ \\
+    16 & n.a. & $> 43$ \\
+    17 & n.a. & $> 49$ \\
+    18 & n.a. & $> 54$ \\
+    19 & n.a. & $> 59$ \\
+    20 & n.a. & $> 65$ \\
+  \end{tabular}
+  \caption{Values of $p^{(n-2)}(3)$ for certain values of $n$.}
+  \label{tab:certain-values-pn-2-3-growth}
+\end{table}
+
+Note that even intrees with fewer than 20 tasks can have matula numbers greater than $p^{(20-4)}(8)$, thus even worsening the scenario. 
+
+In addition to the huge numbers that would need to be multiplied, computing matula numbers efficiently would require us to quickly compute $p(n)$. This would probably best acchieved using a lookup table, but this would require a huge amount of memory.
+
 \end{description}
 
 \section{Computing all schedules according to a specific scheduling strategy}
@@ -257,15 +307,17 @@ This, on the other hand, requires us to quickly find out whether a snapshot has 
 We went for this solution for several reasons:
 
 \begin{itemize}
-\item The number of intrees grows rapidly, thus possibly exceeding the range of a (32- or even 64-bit) integer.
-\item An encoding of intrees as integers in a way such that we do \emph{not} ``waste'' some encodings may be very cumbersome to implement (we could use the aforementioned Matula numbers, but as said, these are not very handy in practice).
+\item The number of intrees grows rapidly, thus quickly exceeding the range of a (32-bit) integer \cite{oeisrootedtrees}.
+\item An encoding of intrees as integers in a way such that we do \emph{not} ``waste'' some encodings may be very cumbersome to implement (we could use the aforementioned Matula numbers, but as said, these are not very handy in practice --- see table \ref{tab:certain-values-pn-2-3-growth}).
 \end{itemize}
 
 Using a \texttt{vector} of course increases memory consumption compared to e.g. using an ordinary \texttt{long} but is much more convenient when it comes to implementation details and -- at least in theory -- provides a much larger range that a single \texttt{int} or \texttt{long}.
 
 We basically describe the current intree storing the same notation as shown in this work (just stored in a \texttt{vector} of \texttt{unsigned char}s). Of course, there are more memory-efficient solutions, but since we did never experience any problems regarding memory, we went for this solution.
 
-\section{Extending the program}
+
+
+\section{Extensibility of the program}
 \label{sec:implementation-extending-program}
 
 We now describe in short how the program can be extended. We describe the possible adjustments and how complex they are.
@@ -274,7 +326,7 @@ We now describe in short how the program can be extended. We describe the possib
 \label{sec:implementation-extensions-easy}
 
 \begin{description}
-\item[Number representations] As mentioned in section \ref{sec:implementation-numbers}, we already support different possibilities to represent probabilities and expected values, namely \texttt{float}s, \texttt{double}s, and rational numbers using Boost Rational Number Library\todo{Referenz?} or the GNU Multiple Precision Arithmetic Library. These can easily be extended to other data types if they have overloaded operators and can be used like ordinary \emph{float}s.
+\item[Number representations] As mentioned in section \ref{sec:implementation-numbers}, we already support different possibilities to represent probabilities and expected values, namely \texttt{float}s, \texttt{double}s, and rational numbers using Boost Rational Number Library \cite{boostrational} or the GNU Multiple Precision Arithmetic Library \cite{gnumultiprecision}. These can easily be extended to other data types if they have overloaded operators and can be used like ordinary \emph{float}s.
 \item[Scheduling strategies] We provide an interface to implement new scheduling strategies. New scheduling strategies have to provide (most important) two methods: One to generate the initial chioces of tasks to be chosen and one method to determine which task should be the next to be chosen. We thereby focus on non-preemtive schedulers.
 \item[Exporters] An important part of the program consists of code for exporters to various formats (most notably to \LaTeX (in connection with TikZ)) and the program provides a straightforward interface for new exporting methods.
 \end{description}
@@ -301,7 +353,9 @@ We now show an algorithm to generate \emph{all} intrees with a certain number of
 
 \begin{itemize}
   \item The overall root can have any amount of children between 1 and $n-1$. If it has only 1 child, the corresponding predecessor intree must contain exactly $n-1$ vertices. If it has exactly $n-1$ children, each predecessor intree contains exactly 1 vertex. All the cases in between admit several possibilities.
-  \item If the overall root of the intree with $n$ verices has exactly $r$ predecessors (with $r \in \left\{ 1,2,\dots,n-1 \right\}$, as stated before), then the sum of the vertices with in the predecessor intrees is exactly $n-1$. Moreover, let us denote the predecessor intrees by $T_1,T_2,\dots,T_r$ and call $n_i$ the number of vertices in predecessor intree $T_i$ for all $i\in\left\{1,2,\dots,r \right\}$. Without loss of generality, we can assume $1 \leq n_1 \leq n_2 \leq n_3 \leq \dots \leq n_r$\todo{How many of these \emph{partitions} are there?}.
+  \item If the overall root of the intree with $n$ verices has exactly $r$ predecessors (with $r \in \left\{ 1,2,\dots,n-1 \right\}$, as stated before), then the sum of the vertices with in the predecessor intrees is exactly $n-1$. Moreover, let us denote the predecessor intrees by $T_1,T_2,\dots,T_r$ and call $n_i$ the number of vertices in predecessor intree $T_i$ for all $i\in\left\{1,2,\dots,r \right\}$. This implies that $n_1+n_2+\dots+n_r=n-1$. Without loss of generality, we can assume $1 \leq n_1 \leq n_2 \leq n_3 \leq \dots \leq n_r$ (we sort the root's predecessors by the number of tasks).
+
+    \emph{Remark:} It is clear that the number of possibilities $P_n$ to decompose the value $n-1$ into $r$ summands (also called \emph{partition}) grows very fast. While -- according to \cite{concretemathematics} -- there is no closed form for $P_n$, the first values for $P_n$ ($n=0,1,2,\dots$) are $1,1,2,3,5,7,11,15,22,30,42,56,77$ (see \cite{oeispartitionnumbers}).
 \end{itemize}
 
 We can exploit these two facts to construct a recursive algorithm which is described in algorithm \ref{alg:generate-intrees}. This algorithm enumerates all intrees with exactly $n$ vertices. It does so by traversing all tuples $(n_1,\dots,n_r)$ fulfilling
