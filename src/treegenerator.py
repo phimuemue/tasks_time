@@ -117,9 +117,9 @@ def count_leaves(l):
 
 for n in xrange(1,30):
     print "Working with %d tasks."%n
-    with open("../database/%d_no_trivials_3_leaves.txt"%n, "w") as f:
+    with open("../database/%d_trivials.txt"%n, "w") as f:
         for i in generate_trees(n, True):
-            if count_leaves(i) > 3:
+            if count_leaves(i) > 0:
                 for num in i:
                     f.write("%d "%num)
                 f.write("\n")
