@@ -528,6 +528,30 @@ bool Snapshot::has_succs_with_same_run_time() const {
     return cache_has_succs_with_same_run_time[1] = false;
 }
 
+bool Snapshot::has_unscheduled_hlf1_tasks() const {
+    if(cache_has_unscheduled_hlf1_tasks.find(1)!=cache_has_unscheduled_hlf1_tasks.end()){
+        return cache_has_unscheduled_hlf1_tasks[1];
+    }
+    vector<task_id> leaves;
+    intree.get_leaves(leaves);
+    auto depth = intree.longest_chain_length() - 1;
+    int max_s=0, min_s=intree.count_tasks();
+    for(auto t : marked){
+        min_s = min(intree.get_level(t), min_s);
+        max_s = max(intree.get_level(t), max_s);
+    }
+    for(auto t : leaves){
+        if(find(marked.begin(), marked.end(), t) == marked.end()
+                && intree.get_level(t) > min_s
+                && intree.get_level(t) == intree.longest_chain_length() - 2 
+                && intree.get_level(t) < max_s
+          ){
+            return cache_has_unscheduled_hlf1_tasks[1] = true;
+        }
+    }
+    return cache_has_unscheduled_hlf1_tasks[1] = false;
+}
+
 myfloat Snapshot::expected_time_for_n_processors(unsigned int p) const {
     if(cache_expected_runtime_for_n_procs.find(p) != cache_expected_runtime_for_n_procs.end()){
         return cache_expected_runtime_for_n_procs[p];

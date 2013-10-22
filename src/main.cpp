@@ -470,6 +470,13 @@ void generate_stats(const po::variables_map& vm,
         else {
             line.push_back(string(" "));
         }
+        // hlf-1 level tasks unscheduled, but lower ones?
+        if(s[i]->has_unscheduled_hlf1_tasks()){
+            line.push_back(string("2"));
+        }
+        else {
+            line.push_back(string(" "));
+        }
         line.push_back(" ");
         stringstream markedstring("");
         markedstring << "[";

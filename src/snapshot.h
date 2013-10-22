@@ -46,6 +46,7 @@ class Snapshot {
         mutable map<unsigned int, bool> cache_is_hlf_first;
         mutable map<unsigned int, bool> cache_only_one_nonscheduled_sibling;
         mutable map<unsigned int, bool> cache_has_succs_with_same_run_time;
+        mutable map<unsigned int, bool> cache_has_unscheduled_hlf1_tasks;
         bool finalized;
 
         // TODO: combine successors and successor_probs into 1 vector!
@@ -154,6 +155,7 @@ class Snapshot {
         bool is_hlf_first() const;
         bool only_one_nonscheduled_sibling() const;
         bool has_succs_with_same_run_time() const;
+        bool has_unscheduled_hlf1_tasks() const;
 
         bool operator== (const Snapshot& s) const ;
         friend ostream& operator<<(ostream& os, const Snapshot& s);
