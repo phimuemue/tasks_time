@@ -281,7 +281,7 @@ def count_subtrees(it, pool):
 filename = (sys.argv[1])
 print "Working with filename %s"%filename
 database = open(sys.argv[1], "r")
-resultfile = open(filename+".unopt.result.scleaf", "w")
+resultfile = open(filename+".unopt.result.leaf", "w")
 
 def myprint(a):
     #print str(a), 
@@ -292,9 +292,9 @@ for line in database:
     progs = [
                 # ("c0 o0", ["build/tasks_cs0", "-s", "leaf"]),
                 # ("c0 o1", ["build/tasks_cs0", "-s", "leaf", "--optimize"]),
-                # ("c1 o0", ["build/tasks_cs1_20131008", "-s", "leaf"]),
-                # ("c1 o1", ["build/tasks_cs1_20131008", "-s", "leaf", "--optimize"]),
-                ("c1 o0", ["build/tasks_cs1_20131009", "-s", "scleaf"]),
+                ("c1 o0", ["build/tasks_cs1_20131021", "-s", "leaf"]),
+                # ("c1 o1", ["build/tasks_cs1", "-s", "leaf", "--optimize"]),
+                # ("c1 o0", ["build/tasks_cs1_20131009", "-s", "scleaf"]),
             ]
     tmp = Intree([int(x) for x in tree.split()])
     curparts = []
@@ -308,7 +308,7 @@ for line in database:
         tasks.wait()
         output = tasks.communicate()[0]
         for line in output.splitlines():
-            if line.startswith(" ") or line.startswith("*") or line.startswith("Total"):
+            if line.startswith("*") or line.startswith("Total"):
                 myprint(line)
                 myprint("\n")
         #     myprint(line)
