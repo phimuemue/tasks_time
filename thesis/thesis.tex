@@ -27,7 +27,7 @@
 \label{chap:current-questions}
 
 \begin{itemize}
-\item Gibt es situationen, wo im Optimum auf HLF-level tasks geschedult sind, auf (HLF-1)-level ungeschedulte tasks sind, und auf einem niedrigeren level wieder tasks geschedult sind?
+\item Gibt es situationen, wo im Optimum auf HLF-level tasks geschedult sind, auf (HLF-1)-level ungeschedulte tasks sind, und auf einem niedrigeren level wieder tasks geschedult sind?\done{Ja! Siehe suboptimal HLF Beispiele}
 \item Falls bei einer parallel chain oder einem degenerate intree bereits 2 tasks geschedult sind: Ist es dann optimal, einen HLF-task dazu zu nehmen?
 \item Benchmarks: Compare usual LEAF scheduler to SCLEAF and SCLEAF with conjecture that as many topmost tasks as possible shall be sheduled (esp. no. of snapshots is important).\done{Erledigt. Verbesserung von 40\%.}
 \item P3: Is it possible, that there are -- at one level of the optimal snapshot DAG -- multiple snapshots containing the same intree, but a different set of scheduled tasks? \remark{Probably not w.l.o.g.}
@@ -45,7 +45,6 @@
 \begin{itemize}
 \item TikZ export very slow due to \texttt{generate\_tikz\_nodes}.
 \item Appendix containing all tree sequences for which optimal schedule is strictly non-HLF.
-\item Improve program by using arrays instead of maps (only for canonical snapshots). \done{Works for canonical snapshots, ``normal ones'' broken.} \todo{Correct it!}
 \end{itemize}
 
 %\input{../0011123669hlf.tex}
@@ -60,6 +59,7 @@
 
 %\part{Introduction}
 \include{theory/theory}
+\include{schedules/schedules}
 
 %\part{Warmup: The two-processor case}
 \include{p2/p2}

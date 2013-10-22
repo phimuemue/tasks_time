@@ -164,7 +164,7 @@ It is clear that the size of the snapshot DAG for an intree with $n$ tasks is at
 
 We examined all intrees up to 15 tasks and computed for each of them the number of subtrees, the number of snapshots to be examined by an exhaustive search and the number of snapshots in the snapshot DAG for the optimal schedule.
 
-The results are summed up in table \ref{tab:num-subtrees-size-of-dags}\todo{Complete!}.
+The results are summed up in table \ref{tab:num-subtrees-size-of-dags}.
 
 \begin{table}[ht]
   \centering
@@ -230,111 +230,116 @@ To determine the maximum size of the optimal snapshot DAG for the P3 case, it mi
 %   \label{tab:special-classes-dag-sizes}
 % \end{table}
 
+\section{Compressing the snapshot DAG}
+\label{sec:p3-compress-snapshots}
+
+When we considered the two processor case (see chapter \ref{chap:p2}), we mentioned that all intrees with the same profile (see section \ref{sec:p2-profiles}) have -- scheduled on two processors -- the same run time. We then were able to compress the snapshot DAG and to merge certain snapshots into one single snapshot.
+
+Unfortunately, this behaviour does not transfer to the three processor case. The core requirement for two snapshots that could be merged was that they had the same run time. For three processors, we have seen that intrees with the same profile do not necessarily have the same (optimal) run time. As an example, consider the intrees $(0,0,1,1,3,4)$ with optimal run time $4.81482$ and $(0,0,1,2,4,4)$ with optimal run time $4.81944$ (but both having profile $\profile{2,2,2,1}$. Additionally, we saw that HLF might even yield different run times depending on its choices of tasks (see section \ref{sec:p3-suboptimal-hlf-same-profiles-different-run-times}).
+
+However, we still can merge certain snapshots in some rare cases. Consider e.g. the intree $(0,0,0,1,1,2,2,3)$ shown in figure \ref{fig:filling-up-without-loss-of-generality}. This intree has the property that it is irrelevant whether we initially schedule tasks $4,5,8$ or tasks $4,6,8$: The optimal run time is in both cases 4.87243. This comes from the fact that, after the first task finishes, the resulting snapshots are the same and they are reached with the same probability.
+
+That means: If two snapshots reach the same successors with the same probabilities, we can easily merge these snapshots. But this is not the only possibility. Consider the intree $(0,0,1,1,2,3,3,4,4,5,10,10)$ whose optimal schedule is shown in figure \ref{fig:p3-merge-snapshots-00112334451010}. For this schedule, the respective snapshots with run times 6.02418 can be merged because they reach the same successor snapshots with the same probability. \emph{After} merging these two snapshots, the snapshots whose run time is 6.45792 can be merged because \emph{after} the first merge step these two snapshots reach the same snapshots with same probabilities. 
+
+That means, that we have to consider not only whether the direct successors are the same and reached with same probabilities, but we have to recursively examine whether we can merge some successors and whether after merging successors we can finally merge the respective snapshots.
+
+Figure \ref{00112334451010-original-optimal-schedule} shows the optimal schedule for the given intree, while figure \ref{00112334451010-merged-optimal-schedule} shows the snapshot DAG where snapshots are recursively have been merged.
+
+\begin{figure}[th]
+  \centering
+  \begin{subfigure}{.58\textwidth}
+    \centering
+    \input{p3/00112334451010_optimal.tex}
+    \caption{Original schedule with unmerged snapshots.}
+    \label{00112334451010-original-optimal-schedule}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.3\textwidth}
+    \centering
+    \input{p3/00112334451010_optimal_merged.tex}
+    \caption{First three levels of the snapshot DAG with merged snapshots.}
+    \label{00112334451010-merged-optimal-schedule}
+  \end{subfigure}
+  \caption{The optimal schedule for $(0,0,1,1,2,3,3,4,4,5,10,10)$ allows certain snapshots to be merged.}
+  \label{fig:p3-merge-snapshots-00112334451010}
+\end{figure}
+
+It is a notable fact that merging snapshots can not be done easily. Unfortunately, it can not be applied to snapshot DAGs arising from the LEAF scheduler. If we consider the first three levels of the LEAF schedule on the intree $(0,0,1,1,2,3,3,4,4,5,10,10)$ we observe that the corresponding snapshots that could have merged in the optimal schedule can \emph{not} be merged directly in the LEAF snapshot DAG. Figure \ref{fig:p3-00112334451010-leaf-schedule-no-merging} explains why this is the case: If we use use exhaustive search (i.e. a LEAF scheduler), the corresponding snapshots that could be merged in the optimal schedule can not be merged because they have different expected run times.
+
+\begin{figure}[ht]
+  \centering{}
+  \input{p3/00112334451010_leaf_important_parts.tex}
+  \caption{LEAF schedule for the intree $(0,0,1,1,2,3,3,4,4,5,10,10)$. No snapshots can be merged because they all have different run times. Only important snapshots are shown in detail.}
+  \label{fig:p3-00112334451010-leaf-schedule-no-merging}
+\end{figure}
+
+Moreover, we are not always allowed to merge certain snapshots just if their respective expected run times are equal. Consider e.g. the intree $(0,0,1,1,1,2)$ whose LEAF schedule beginning with tasks $4, 5, 6$ contains two snapshots whose run time is 4.05556.
+
+\begin{figure}[th]
+  \centering
+  \begin{subfigure}{.45\textwidth}
+    \centering{}
+    \includegraphics{p3/001112_leaf.pdf}
+    \caption{Two snapshots have run time 4.05556, but they can \emph{not} be merged.}
+  \label{fig:p3-001112-two-snaps-same-run-time-not-mergeable-original}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\textwidth}
+    \centering{}
+    \includegraphics{p3/001112_leaf_opt.pdf}
+    \caption{The reason that the two snapshots shall not be merged is that they result from different tasks being finished.}
+  \label{fig:p3-001112-two-snaps-same-run-time-not-mergeable-optimal}
+  \end{subfigure}
+  \caption{A LEAF schedule for $(0,0,1,1,1,2)$ contains two snapshots with the same run time that can not be merged.}
+  \label{fig:p3-001112-two-snaps-same-run-time-not-mergeable}
+\end{figure}
+
 \section{Degenerate intrees}
 \label{sec:p3-degenerate-intrees}
 
-We now focus one one particular class on intrees, namely \emph{degenerate intrees}. A degenerate intree is an intree that consists of one longest chain from the bottom to one leaf, and all other tasks are direct predecessors to one of the tasks within this longest chain. Another characterization is the following: On each level, \emph{at most one task} has predecessors.\todo{Figure zeigen.}
+We now focus one one particular class on intrees, namely \emph{degenerate intrees}. A degenerate intree is an intree that consists of one longest chain from the bottom to one leaf, and all other tasks are direct predecessors to one of the tasks within this longest chain. Another characterization is the following: On each level, \emph{at most one task} has predecessors. 
 
-\subsection{Intro: Degenerate binary trees}
-\label{sec:p3-degenerate-trees-binary}
+Here is an example for a degenerate intree with four levels and profile $\profile{5,3,4,2}$:
 
-We researched degenerate binary trees, i.e. trees whose sequence has the structure
-\begin{equation*}
-  \left( 0,0,a_0,a_1,a_2,a_3,a_4,\dots,a_n \right),
-\end{equation*}
-for $n+3$ the total number of tasks within the intree. The values $a_i$ can be recursively defined as follows:
-\begin{equation*}
-  a_k =
-  \begin{cases}
-    1, & \text{if } k\leq 1 \\
-    a_{k-1}, & \text{if } k>1 \text{ is odd} \\
-    a_{k-1}+2, & \text{if } k>1 \text{ is even}
-  \end{cases}
-\end{equation*}
+\begin{center}  
+  \begin{tikzpicture}[scale=.4]
+    \draw[fill=black] (0,0) circle (0.3);
+    \foreach \x in {-2,-1,0,1 }{
+      \draw[fill=black] (\x,1) circle (0.3);
+      \draw (\x,1) -- (0,0);
+    };
+    \foreach \x in {-3,...,-1 }{
+      \draw[fill=black] (\x,2) circle (0.3);
+      \draw (\x,2) -- (-2,1);
+    };
+    \foreach \x in {-2,...,1}{
+      \draw[fill=black] (\x,3) circle (0.3);
+      \draw (\x,3) -- (-1,2);
+    };
 
-That is, degenerate binary trees have sequences of the form $(0,0,1,1,3,3,5,5,7,7,9,\dots)$.
+  \end{tikzpicture}
+\end{center}
 
-We now examine how many snapshots are considered if we compute the optimal P3 schedule by considering \emph{all} possibilities and afterwards discarding the bad ones. The results are summed up in table \ref{tab:p3-degenerate-binary-trees-no-snapshots}. We clearly observe that the number of snapshots grows exponentially (at least within the range for $n$ under consideration). A simple pattern that can be observed from table \ref{tab:p3-degenerate-binary-trees-no-snapshots} is that (at least for $n\leq 26$) that the number of snapshots for a degenerate binary tree with $n$ tasks is greater than twice the number of snapshots for a degenerate binary tree with $n-2$ tasks. If $S(n)$ denotes the number of snapshots for a degenerate binary tree, we can formulate $S(n)>S(n-2)$, which we can (by induction) convert to $S(n) > \sqrt 2 ^ n$.
-
-This can be illustrated by the fact that degenerate binary intrees are fully determined by their profile (please see section \ref{sec:p2-profiles} for the definition of profiles). A degenerate binary tree has a profile of the form
-\begin{equation*}
-  \profile{a,2,2,2,2,\dots,2,1},
-\end{equation*}
-where $a$ is either $1$ or $2$. Assume the length of the profile (i.e. the height of the degenerate binary tree) is exactly $l$. Then, we have $2\cdot(l-2)+1+a = 2l-1+a$ tasks in total. Assume for now that $a=2$ (i.e. we are dealing with a complete degenerate binary tree) and $l>2$.
-
-A subtree of a this degenerate binary intree having height $l'$ has a profile of the form
-\begin{equation*}
-  \profile{a_0,a_1,a_2,\dots,a_{l'-2},1},
-\end{equation*}
-where $1\leq a_0\leq a$ and $1\leq a_i \leq 2$ for all $i\in\left\{ 1,2,\dots,l-2 \right\}$. Using basic combinatorics, we can tell that there must be
-\begin{equation*}
-  \sum_{l'=0}^{l-1} 2^{l'} = 2^{l} -1
-\end{equation*}
-distinct subtrees if $a=2$ for profile length (resp. intree depth) $l$.
-
-If $a=1$ and we have a profile length of $l$, we cann argue that there must be as many subtrees as for the profile without the first item (then of length $l-1$) plus the number of profiles of length exactly $l-1$ with one additional 1 prepended. These are exactly $2^{l-2}$.
-
-This, in total leads to our desired bound for $S(n)$.\todo{Genauer machen.}
-
-\begin{table}[t]
-  \centering
-  \begin{tabular}[ht]{ccc}
-    \multirow{2}{*}{Tasks} & \multicolumn{2}{c}{Snapshots} \\
-    & Overall & HLF \\
-    \hline
-    3  &  3       & 3   \\
-    4  &  5       & 5   \\
-    5  &  7       & 7   \\
-    6  &  11      & 11  \\
-    7  &  17      & 14  \\
-    8  &  28      & 21  \\
-    9  &  48      & 25  \\
-    10 &  85      & 36  \\
-  \end{tabular}
-  \begin{tabular}[ht]{ccc}
-    \multirow{2}{*}{Tasks} & \multicolumn{2}{c}{Snapshots} \\
-    & Overall & HLF \\
-    \hline
-    11 &  150     & 41  \\
-    12 &  276     & 57  \\
-    13 &  477     & 63  \\
-    14 &  884     & 85  \\
-    15 &  1477    & 92  \\
-    16 &  2717    & 121 \\
-    17 &  4398    & 129 \\
-    18 &  7991    & 166 \\
-  \end{tabular}
-  \begin{tabular}[ht]{ccc}
-    \multirow{2}{*}{Tasks} & \multicolumn{2}{c}{Snapshots} \\
-    & Overall & HLF \\
-    \hline
-    19 &  12600   & 175 \\
-    20 &  22594   & 221 \\
-    21 &  34883   & 231 \\
-    22 &  61774   & 287 \\
-    23 &  93775   & 298 \\
-    24 &  164187  & 365 \\
-    25 &  245852  & 377 \\
-    26 &  426089  & 456 \\
-  \end{tabular}
-  \caption{Number of snapshots for degenerate binary trees in the P3 case. The first column shows the number of tasks. ``Overall'' denotes the number of distinct snapshots that are explored if an optimal schedule is constructed by examining all schedulings. ``HLF'' denotes the number of distinct snapshots for HLF.}
-  \label{tab:p3-degenerate-binary-trees-no-snapshots}
-\end{table}
-
-Interestingly, degenerate binary intrees, while having a possibly huge amount of snapshots, are probably optimally scheduled by HLF. You can compare the number of HLF snapshots to the number of overal snapshots by looking at table \ref{tab:p3-degenerate-binary-trees-no-snapshots}.
-
-We generalize this fact in the next section.
+Note that \emph{all} degenerate intree with the same profile are isomorphic intrees.
 
 \subsection{HLF is optimal for degenerate intrees}
 \label{sec:p3-degenerate-intrees-hlf-optimal}
 
+We prove that HLF is optimal for degenerate intrees (and three processors). Therefore, we introduce some convenient notation that will later be useful.
+
+\begin{definition}
+  \label{def:optimal-run-time-with-scheduled-tasks-index}
+  Let $I$ be an intree.
+  By $T^*_{t_1,t_2,t_3}(I)$ we denote the optimal expected run time that can be acchieved if we \emph{initially} schedule all tasks from the set $\left\{ t_1,t_2,t_3 \right\}$.
+\end{definition}
+
+Note that the notation from definition   \ref{def:optimal-run-time-with-scheduled-tasks-index} does not necessarily require that we actually have three tasks (e.g. if $t_1=t_2$).
+
 \begin{lemma}
   \label{lem:p3-adding-tasks-level-keep-scheduled-same-inequality}
   Let $I$ be a degenerate intree and $x, y$ two (not necessarily distinct) ready tasks within this intree. Let $z_1, z_2$ be two new tasks that will be added to this intree with $level(z_1) > level(z_2)$ in a manner such that $I_1:=I\cup\left\{ z_1 \right\}$ and $I_2:=I\cup\left\{ z_2 \right\}$ are still degenerate intrees. Moreover, the tasks $z_1$ and $z_2$ shall be added in such a way that neither $x$ nor $y$ is a successor of $z_1$ or $z_2$ (i.e. $x,y$ stay ready in $I_1$ resp. $I_2$). 
-  
-  By $T^*_{t_1,t_2,t_3}(I)$ we denote the optimal expected run time that can be acchieved if we \emph{initially} schedule all tasks from the set $\left\{ t_1,t_2,t_3 \right\}$. \todo{Notation auslagern.} Note that this notation does not necessarily require that we actually have three tasks (e.g. if $t_1=t_2$).
-  
-  Then, if $x,y$ and $z_1$ resp. $z_2$ are used as initial tasks, we have the following for the best acchievable expected run times (for respective initial tasks):
+
+  Then, if $x,y$ and $z_1$ resp. $z_2$ are used as initial tasks (for $I_1$ resp. $I_2$), we have the following for the best acchievable expected run times (for respective initial tasks):
   \begin{equation}
     \label{eq:lemma-p3-adding-tasks-level-keep-scheduled-same-inequality}
     T^{*}_{x,y,z_1}\left(I\cup\left\{ z_1 \right\}\right) > T^{*}_{x,y,z_2}\left( I\cup\left\{ z_2 \right\} \right)
@@ -348,8 +353,8 @@ We generalize this fact in the next section.
 
 \begin{proof}
   We focus first on the case where $level(z_1) > level(z_2)$ and prove the claim by induction over the number of nodes:
-  
-  The induction basis is the case where we have degenerate intrees with 3 tasks\footnote{We start by 3 tasks since these trees are the only ones that allow adding $z_1$ and $z_2$ at different levels such that both $x$ and $y$ stay ready. For an intree with two tasks, the claim can be seen by simply examining that $T(0,0)<T(0,1)$\todo{Improve this footnote.}.} (all of them are depicted in figure \ref{fig:p3-lemma-adding-intrees-induction-start} (only the black nodes)).
+
+  The induction basis is the case where we have degenerate intrees with 3 tasks\footnote{We start with 3 tasks since these trees are the only ones that allow adding $z_1$ and $z_2$ on different levels such that both $x$ and $y$ stay ready. For an intree with two tasks (i.e. for the intree denoted by $(0)$), the claim can be seen by simply examining that $2.5 = T\left( (0,0) \right) < T\left( (0,1) \right) = 3$.} (all of them are depicted in figure \ref{fig:p3-lemma-adding-intrees-induction-start} (only the black nodes)).
   
   \begin{figure}[t]
     \centering
@@ -373,14 +378,8 @@ We generalize this fact in the next section.
         \fill(0,1) circle (0.4);
         \draw(0,0) -- (0,1);
       }
-      % \begin{scope}
-      %   \treeone;
-      % \end{scope}
-      % \begin{scope}[xshift=9cm]
-      %   \treetwo;
-      % \end{scope}
 
-      \begin{scope}[yshift=-5cm, xshift=-20.5cm]
+      \begin{scope}[yshift=-5cm, xshift=-20cm]
         \begin{scope}
           \treethree;
           \draw(0,1) -- (0,2);
@@ -396,7 +395,7 @@ We generalize this fact in the next section.
         \end{scope}
       \end{scope}
 
-      \begin{scope}[yshift=-5cm, xshift=-3.5cm]
+      \begin{scope}[yshift=-5cm, xshift=-7cm]
         \begin{scope}
           \treeone;
           \draw(0,2) -- (0,3);
@@ -420,7 +419,7 @@ We generalize this fact in the next section.
         % \node at (4,-1.5) {$4 > 3.5 > 3.25$};
       \end{scope}
 
-      \begin{scope}[yshift=-5cm, xshift=20cm]
+      \begin{scope}[yshift=-5cm, xshift=12cm]
         \begin{scope}[xshift=0cm]
           \treetwo;
           \draw(-.5,1) -- (-.5,2);
@@ -435,7 +434,136 @@ We generalize this fact in the next section.
           \node at (0,-2) {2.83};
         \end{scope}
       \end{scope}
-      
+
+      \newcommand{\treefour}{
+        \fill(0,0) circle (0.4);
+        \fill(-1,1) circle (0.4);
+        \fill(0,1) circle (0.4);
+        \draw(0,0) -- (-1,1);
+        \draw(0,0) -- (0,1);
+        \draw(0,0) -- (1,1);
+        \fill(1,1) circle (0.4);
+      }
+      \begin{scope}[yshift=-5cm, xshift=25cm]
+        \begin{scope}[xshift=0cm]
+          \treefour;
+          \draw (-1,1) -- (-1,2);
+          \draw[fill=white](-1,2) circle (0.4);
+          \node at (0,-2) {3.44};
+        \end{scope}
+        \node at (2.5,-2) {$>$};
+        \begin{scope}[xshift=5cm]
+          \treefour;
+          \draw(0,0) -- (2,1);
+          \draw[fill=white](2,1) circle (0.4);
+          \node at (0,-2) {3.167};
+        \end{scope}
+      \end{scope}
+
+      \newcommand{\treefive}{
+        \fill(0,0) circle (0.4);
+        \fill(.5,1) circle (0.4);
+        \fill(-.5,1) circle (0.4);
+        \fill(-.5,2) circle (0.4);
+        \draw(0,0) -- (.5,1);
+        \draw(0,0) -- (-.5,1);
+        \draw(-.5,1) -- (-.5,2);
+      }
+      \begin{scope}[yshift=-15cm, xshift=-20cm]
+        \begin{scope}[xshift=0cm]
+          \treefive;
+          \draw (-.50,3) -- (-.5,2);
+          \draw[fill=white](-.5,3) circle (0.4);
+          \node at (0,-2) {4.125};
+        \end{scope}
+        \node at (2.5,-2) {$>$};
+        \begin{scope}[xshift=5cm]
+          \treefive;
+          \draw(-.50,1) -- (.5,2);
+          \draw[fill=white](.5,2) circle (0.4);
+          \node at (0,-2) {3.67};
+        \end{scope}
+        \node at (7.5,-2) {$>$};
+        \begin{scope}[xshift=10cm]
+          \treefive;
+          \draw(-.50,1) -- (-.5,2);
+          \draw[fill=white](-.5,2) circle (0.4);
+          \node at (0,-2) {3.44};
+        \end{scope}
+      \end{scope}
+
+      \newcommand{\treesix}{
+        \fill(0,0) circle (0.4);
+        \fill(0,1) circle (0.4);
+        \fill(-.5,2) circle (0.4);
+        \fill(.5,2) circle (0.4);
+        \draw(0,0) -- (0,1);
+        \draw(0,1) -- (-.5,2);
+        \draw(0,1) -- (.5,2);
+      }
+      \begin{scope}[yshift=-15cm, xshift=-2cm]
+        \begin{scope}[xshift=0cm]
+          \treesix;
+          \draw (-.50,3) -- (-.5,2);
+          \draw[fill=white](-.5,3) circle (0.4);
+          \node at (0,-2) {4.25};
+        \end{scope}
+        \node at (2.5,-2) {$>$};
+        \begin{scope}[xshift=5cm]
+          \treesix;
+          \draw(0,1) -- (1.5,2);
+          \draw[fill=white](1.5,2) circle (0.4);
+          \node at (0,-2) {3.83};
+        \end{scope}
+        \node at (7.5,-2) {$>$};
+        \begin{scope}[xshift=10cm]
+          \treesix;
+          \draw(0,0) -- (1,1);
+          \draw[fill=white](1,1) circle (0.4);
+          \node at (0,-2) {3.67};
+        \end{scope}
+      \end{scope}
+
+      \newcommand{\treeseven}{
+        \fill(0,0) circle (0.4);
+        \fill(0,1) circle (0.4);
+        \fill(0,2) circle (0.4);
+        \fill(0,3) circle (0.4);
+        \draw(0,0) -- (0,1);
+        \draw(0,1) -- (0,2);
+        \draw(0,2) -- (0,3);
+      }
+      \begin{scope}[yshift=-15cm, xshift=16cm]
+        \begin{scope}[xshift=0cm]
+          \treeseven;
+          \draw (0,3) -- (0,4);
+          \draw[fill=white](0,4) circle (0.4);
+          \node at (0,-2) {5};
+        \end{scope}
+        \node at (2.5,-2) {$>$};
+        \begin{scope}[xshift=5cm]
+          \treeseven;
+          \draw(0,2) -- (1,3);
+          \draw[fill=white](1,3) circle (0.4);
+          \node at (0,-2) {4.5};
+        \end{scope}
+        \node at (7.5,-2) {$>$};
+        \begin{scope}[xshift=10cm]
+          \treeseven;
+          \draw(0,1) -- (1,2);
+          \draw[fill=white](1,2) circle (0.4);
+          \node at (0,-2) {4.25};
+        \end{scope}
+        \node at (12.5,-2) {$>$};
+        \begin{scope}[xshift=15cm]
+          \treeseven;
+          \draw(0,0) -- (1,1);
+          \draw[fill=white](1,1) circle (0.4);
+          \node at (0,-2) {4.125};
+        \end{scope}
+      \end{scope}
+
+
     \end{tikzpicture}
     \caption{Adding new tasks to degenerate intrees with less than four nodes such that the resulting intrees are still degenerate. The original (2- resp. 3-node) intrees are drawn black, the newly added tasks are drawn white. Below each intree, we see the corresponding optimal expected run time. The lower the level of the newly added task, the lower the expected run time. This serves as basis for the induction proof for lemma \ref{lem:p3-adding-tasks-level-keep-scheduled-same-inequality}.}
     \label{fig:p3-lemma-adding-intrees-induction-start}
@@ -457,7 +585,9 @@ We generalize this fact in the next section.
     \end{equation*}
 
     By $x'$ we denote the task that is scheduled next in the optimal schedule for intree $I_1^x$. 
-    If there are only two ready tasks left in $I_1^x$ (which then must be $y$ and $z_1$), we set $x'=y$. The expected optimal runtime for $I_1^x$ in this situaion is then given by $T_{x',y,z_1}^*(I_1^x)$.
+    The expected optimal runtime for $I_1^x$ in this situaion is then given by $T_{x',y,z_1}^*(I_1^x)$.
+
+    If there are only two ready tasks left in $I_1^x$ (which then must be $y$ and $z_1$), we set $x'=y$. 
 
     We now examine whether $x'$ is also ready in the intree $I_2^x$:
     \begin{itemize}
@@ -465,11 +595,11 @@ We generalize this fact in the next section.
     \item If $x'$ is the direct successor of $x$, then $x$ must have been the \emph{single topmost task} and the \emph{single predecessor} of $x'$ (since $I_1^x$ is a degenerate tree). However, since we assumed that $level(z_2)<level(z_1)$ and $z_1$ can not be a predecessor of $x'$ (since $x'$ is ready in $I_1$), it can not be the case that $z_2$ blocks $x'$ in $I_2^x$. We conclude that in this case $x'$ is ready in $I_2^x$.
 
       % Moreover, since $x'$ is ready in $I_1^x$, the task $z_1$ can not be a predecessor of $x'$. Since $level(z_2)<level(z_1)$ and since $I_1^x$ and $I_2^x$ are both degenerate intrees, $z_2$ can not block $x'$.\todo{Genauer ausführen. Evtl. auslagern.}
-    \item If $x'$ is not the direct successor of $x$, we recognize the fact that $x'$ must reside on a certain level with in the degenerate intree. 
+    \item If $x'$ is not the direct successor of $x$, we recognize the fact that $x'$ must reside on a certain level within the degenerate intree. 
 
       If $x'$ is \emph{not} in the topmost level, it can not be blocked by $z_2$ because we assumed that $z_2$ is added in a way such that $I\cup\{z_2\}$ is still a degenerate intree.
 
-      Otherwise (if $x'$ is a topmost task), $z_2$ can not be added \emph{above} $x'$ because we assumed $level(z_1)>level(z_2)$.
+      Otherwise (if $x'$ is a topmost task), $z_2$ can not be added \emph{above} (i.e. as a predecessor of) $x'$ because we assumed $level(z_1)>level(z_2)$.
 
       Again, $x'$ is ready in $I_2^x$.
       % we still have two subcases:
@@ -489,11 +619,11 @@ We generalize this fact in the next section.
 
     
     We can now apply the induction hypothesis for the intree $I^x$, since this intree contains only $n-1$ tasks: We have an intree with $n-1$ tasks (namely $I^x$) and two tasks $z_1$ and $z_2$ with $level(z_1)>level(z_2)$, $I^x_1 = I^x\cup\left\{ z_1 \right\}$ and $I^x_2 = I^x\cup\left\{ z_2 \right\}$, implying that $T^*_{x',y,z_1}(I^x_1)>T^*_{x',y,z_2}(I^x_{2})$.
-  \item If $y$ is the first task to finish, we argue similar to the $x$ case, thereby considering $I^y_{1},I^y_{2}$ and $I^y$ which are all defined analogously. This finally yields the following inequality: $T^*_{x,y',z_1}(I^y_{1}) > T^*_{x,y',z_2}(I^y_{2})$.
+  \item If $y$ is the first task to finish, we argue similar to the $x$ case, thereby considering $I^y_{1},I^y_{2}$ and $I^y$ which are all defined analogously. This finally yields the following inequality: $T^*_{x,y',z_1}(I^y_{1}) > T^*_{x,y',z_2}(I^y_{2})$ (where $y'$ denotes the task that is scheduled next after $y$ finishes).
   \end{itemize}
 
   The above considerations are illustrated in figure 
-\ref{fig:p3-adding-tasks-level-keep-scheduled-same-inequality}.\todo{Figure anpassen!}
+\ref{fig:p3-adding-tasks-level-keep-scheduled-same-inequality}.
   
   \begin{figure}[t]
     \centering
@@ -576,8 +706,8 @@ We generalize this fact in the next section.
       \end{scope}
       
       % legend      
-      \draw[decoration=brace,decorate=true](-11,8.25) --node[above]{$I_1$} +(7,0);
-      \draw[decoration=brace,decorate=true](  4,8.25) --node[above]{$I_2$} +(7,0);
+      \draw[decoration=brace,decorate=true](-11,8.25) --node[above]{$I_1=I\cup\left\{ z_1 \right\}$} +(7,0);
+      \draw[decoration=brace,decorate=true](  4,8.25) --node[above]{$I_2=I\cup\left\{ z_2 \right\}$} +(7,0);
       \draw[decoration={brace,mirror},decorate=true](  -18,-9.5) --node[below, yshift=-.2cm]{$I^x_{1}$} +(6,0);
       \draw[decoration={brace,mirror},decorate=true](-10.5,-9.5) --node[below, yshift=-.2cm]{$I^y_{1}$} +(6,0);
       \draw[decoration={brace,mirror},decorate=true](   -3,-9.5) --node[below, yshift=-.2cm]{$I$} +(6,0);
@@ -589,7 +719,7 @@ We generalize this fact in the next section.
     \label{fig:p3-adding-tasks-level-keep-scheduled-same-inequality}
   \end{figure}
   
-  Now we argue that the run times for $I_1$ and $I_2$ can be computed as follows:
+  Now we argue that the (optimal) run times for $I_1$ and $I_2$ can be computed as follows:
   \begin{align*}
     T^*_{x,y,z_1}(I_1) & = 
       \frac{1}{3} + 
@@ -608,7 +738,7 @@ We generalize this fact in the next section.
       \right)
   \end{align*}
 
-  We will now use the aforementioned inequalities $T^*_{x',y,z_1}(I^x_{1}) > T^*_{x',y,z_2}(I^x_{2})$ and $T^*_{x,y',z_1}(I^y_{1}) > T^*_{x,y',z_2}(I^y_{2})$:
+  We will now use the aforementioned inequalities (i.e. $T^*_{x',y,z_1}(I^x_{1}) > T^*_{x',y,z_2}(I^x_{2})$ and $T^*_{x,y',z_1}(I^y_{1}) > T^*_{x,y',z_2}(I^y_{2})$):
 \begin{align*}
     T^*_{x,y,z_1}(I_1) & = 
       \frac{1}{3} + 
@@ -645,29 +775,29 @@ We can now derive the following theorem.
 \begin{proof}
   Consider a degenerate intree with $n=3$ tasks. It is trivially clear that for P3, a HLF schedule is optimal for this intree (see figure \ref{fig:p3-lemma-adding-intrees-induction-start} to see what these intrees look like -- we simply can conclude examine all possible schedules and see that the optimal ones is exactly HLF).
   
-  Consider now a degenerate tree $I$ with $n$ nodes and assume that we know that for all degenerate trees with $n-1$ nodes HLF is optimal for three processors. If $I$ has two or less topmost tasks, it is obvious that we have to use HLF (since we can use at most two processors and HLF is known to be optimal for two processors --- see chapter \ref{chap:p2}).
+  Consider now a degenerate tree $I$ with $n$ nodes and assume that we know that for all degenerate trees with $n-1$ nodes HLF is optimal for three processors. If $I$ has two or less topmost tasks, it is obvious that we have to use HLF (since we can use at most two processors and HLF is known to be optimal for two processors --- see chapter \ref{chap:p2} or refer to \cite{chandyreynoldsshortpaper1975}).
 
   Thus, we only have to focus on the case where $I$ has at least three ready tasks.
 
-  If we choose three topmost tasks $x,y,z$ of $I$, we can argue as follows: If $x$ is the task that finishes first, for the resulting subtree $I\setminus \left\{ x \right\}$, we can be sure that we can choose the next task such that we adhere to HLF, thus choosing the optimal solution for $I\setminus\left\{ x \right\}$ (by induction hypothesis). The same holds if $y$ or $z$ finishes first.
+  If we choose three HLF-conform tasks $x,y,z$ of $I$, we can argue as follows: If $x$ is the task that finishes first, for the resulting subtree $I\setminus \left\{ x \right\}$, we can be sure that we can choose the next task such that we adhere to HLF, thus choosing the optimal solution for $I\setminus\left\{ x \right\}$ (by induction hypothesis). The same holds if $y$ or $z$ finishes first.
   
   We now consider a (possibly) non-HLF schedule for $I$ and compare it to the HLF schedule described before.
-  Let $x',y',z'$ be the tasks to be chosen such that at least $x\neq x'$ or $y\neq y'$ or $z\neq z'$. We can -- without loss of generality -- assume $level(x')\leq level(x)$, $level(y')\leq level(y')$, $level(z')\leq level(z)$. If $x'$ is the first task to finish, we consider the degenerate intree $I\setminus\left\{ x' \right\}$. Since $I \setminus \left\{ x' \right\}$ is a degenerate intree with $n-1$ tasks, it would be optimal to use HLF. However, using HLF may or may not be possible depending on our previous choices of $y'$ and $z'$. That is, the optimum for $I\setminus\left\{ x' \right\}$ \emph{might} be acchieved if we chose $y'$ and $z'$ accordingly. From this we can conclude that the optimal expected run time is at least $T_{HLF}\left( I\setminus\left\{ x' \right\} \right)$, where $T_{HLF}$ denotes the run time for HLF (which we know, by induction, is optimal).
+  Let $x',y',z'$ be the tasks to be chosen such that at least $x\neq x'$ or $y\neq y'$ or $z\neq z'$. We can -- without loss of generality -- assume $level(x')\leq level(x)$, $level(y')\leq level(y')$, $level(z')\leq level(z)$. If $x'$ is the first task to finish, we consider the degenerate intree $I\setminus\left\{ x' \right\}$. Since $I \setminus \left\{ x' \right\}$ is a degenerate intree with $n-1$ tasks, it would be optimal to use HLF. However, using HLF may or may not be possible depending on our previous choices of $y'$ and $z'$. That is, the optimum for $I\setminus\left\{ x' \right\}$ \emph{might} be acchieved if we chose $y'$ and $z'$ accordingly. From this we can conclude that the optimal expected run time -- if we start with $x',y'$ and $z'$ -- is at least $T_{HLF}\left( I\setminus\left\{ x' \right\} \right)$, where $T_{HLF}$ denotes the run time for HLF (which we know, by induction, is optimal).
 
   Now we compare the run time for $I\setminus\left\{ x' \right\}$ to the optimal run time for $I \setminus\left\{ x \right\}$, which is exactly given by $T_{HLF}\left( I \setminus\left\{ x \right\} \right)$. We recognize that $I\setminus\left\{ x' \right\}$ and $I\setminus\left\{ x \right\}$ have a common subtree, namely $I\setminus\left\{ x,x' \right\}$ with $n-2$ tasks.
   
-  Moreover, we know that for both $I\setminus\left\{ x \right\}$ and $I\setminus\left\{ x' \right\}$ HLF is optimal (because of our induction hypothesis) and that for $I\setminus\left\{ x \right\}$ and $I\setminus\left\{ x' \right\}$ both $y$ and $z$ must be in the optimal (i.e. HLF) schedule since $y$ and $z$ are two of the three topmost tasks. At last, we have $level(x) \geq level(x')$.
+  Moreover, we know that for both $I\setminus\left\{ x \right\}$ and $I\setminus\left\{ x' \right\}$ HLF is optimal (because of our induction hypothesis) and that for $I\setminus\left\{ x \right\}$ and $I\setminus\left\{ x' \right\}$ both $y$ and $z$ must be in the optimal (i.e. HLF) schedule since $y$ and $z$ are two of the three HLF-conform tasks. At last, we have $level(x) \geq level(x')$.
   Thus, we can apply lemma \ref{lem:p3-adding-tasks-level-keep-scheduled-same-inequality} for the degenerate tree $I\setminus \{x,x'\}$ with tasks $y$ and $z$ and deduce that
   \begin{equation*}
-    T_{x',y,z}(I\setminus\{x\}) 
+    T^*_{x',y,z}(I\setminus\{x\}) 
     \leq 
-    \underbrace{T_{x,y,z}(I\setminus\{x'\})}_{\text{Optimal for $I\setminus \{x'\}$}}.
+    \underbrace{T^*_{x,y,z}(I\setminus\{x'\})}_{\text{Optimal for $I\setminus \{x'\}$}}.
   \end{equation*}
   Equality holds if $x$ and $x'$ are on the same level.
 
   As stated before, for the intree $I\setminus\{x'\}$, the schedule chosen \emph{might} be a non-HLF schedule. In this case, the schedule performs even worse than $T_{x,y,z}(I\setminus\{ x'  \})$, since the optimal schedule would choose $x,y,z$ as scheduled tasks. This means that
   \begin{equation*}
-    T_{x,y,z}(I\setminus\{x'\})
+    T^*_{x,y,z}(I\setminus\{x'\})
     \leq
     T_{x'',y',z'}(I\setminus\{x'\}),
   \end{equation*}
@@ -675,7 +805,13 @@ We can now derive the following theorem.
   \begin{equation*}
     T_{HLF}(I\setminus\{x\})
     \leq
-    T_{x'',y',z'}(I\setminus\{x'\}).
+    T_{x'',y',z'}(I\setminus\{x'\})
+    \quad
+    \text{ and }
+    T_{x',y,z}(I\setminus\{x\})
+    \leq
+    T_{x'',y',z'}(I\setminus\{x'\})
+    .
   \end{equation*}
   %because the HLF schedule is at least as good as the schedule that starts out with tasks $x',y,z$.
   We argue similar for tasks $y$ and $y'$ resp. $z$ and $z'$ and finally obtain the following:
@@ -717,6 +853,94 @@ We can now derive the following theorem.
 
   This finally shows that a HLF schedule is at least as good as an arbitrary other task, meaning that HLF is optimal for three processors on degenerate trees.
 \end{proof}
+
+\subsection{Comparison of exhaustive search vs. HLF on degenerate binary trees}
+\label{sec:p3-degenerate-trees-binary}
+
+We researched degenerate binary trees, i.e. trees whose sequence has the structure
+\begin{equation*}
+  \left( 0,0,a_0,a_1,a_2,a_3,a_4,\dots,a_n \right),
+\end{equation*}
+for $n+3$ being the total number of tasks within the intree. The values $a_i$ can be recursively defined as follows:
+\begin{equation*}
+  a_k =
+  \begin{cases}
+    1, & \text{if } k\leq 1 \\
+    a_{k-1}, & \text{if } k>1 \text{ is odd} \\
+    a_{k-1}+2, & \text{if } k>1 \text{ is even}
+  \end{cases}
+\end{equation*}
+
+That is, degenerate binary trees have sequences of the form $(0,0,1,1,3,3,5,5,7,7,9,\dots)$.
+
+We now examine how many snapshots are considered if we compute the optimal P3 schedule by considering \emph{all} possibilities and afterwards discarding the bad ones. The results are summed up in table \ref{tab:p3-degenerate-binary-trees-no-snapshots}. We clearly observe that the number of snapshots grows exponentially (at least within the range for $n$ under consideration). A simple pattern that can be observed from table \ref{tab:p3-degenerate-binary-trees-no-snapshots} is that (at least for $n\leq 26$) that the number of snapshots for a degenerate binary tree with $n$ tasks is greater than twice the number of snapshots for a degenerate binary tree with $n-2$ tasks. If $S(n)$ denotes the number of snapshots for a degenerate binary tree, we can formulate $S(n)>S(n-2)$, which we can (by induction) convert to $S(n) > \sqrt 2 ^ n$.
+
+This can be illustrated by the fact that degenerate binary intrees are fully determined by their profile (please see section \ref{sec:p2-profiles} for the definition of profiles). A degenerate binary tree has a profile of the form
+\begin{equation*}
+  \profile{a,2,2,2,2,\dots,2,1},
+\end{equation*}
+where $a$ is either $1$ or $2$. Assume the length of the profile (i.e. the height of the degenerate binary tree) is exactly $l$. Then, we have $2\cdot(l-2)+1+a = 2l-1+a$ tasks in total. Assume for now that $a=2$ (i.e. we are dealing with a complete degenerate binary tree) and $l>2$.
+
+A subtree of a this degenerate binary intree having height $l'$ has a profile of the form
+\begin{equation*}
+  \profile{a_0,a_1,a_2,\dots,a_{l'-2},1},
+\end{equation*}
+where $1\leq a_0\leq a$ and $1\leq a_i \leq 2$ for all $i\in\left\{ 1,2,\dots,l-2 \right\}$. Using basic combinatorics, we can tell that there must be
+\begin{equation*}
+  \sum_{l'=0}^{l-1} 2^{l'} = 2^{l} -1
+\end{equation*}
+distinct subtrees if $a=2$ for profile length (resp. intree depth) $l$.
+
+If $a=1$ and we have a profile length of $l$, we cann argue that there must be as many subtrees as for the profile without the first item (then of length $l-1$) plus the number of profiles of length exactly $l-1$ with one additional 1 prepended. These are exactly $2^{l-2}$. This, in total, leads to our desired bound for $S(n)$.
+
+\begin{table}[t]
+  \centering
+  \begin{tabular}[ht]{ccc}
+    \multirow{2}{*}{Tasks} & \multicolumn{2}{c}{Snapshots} \\
+    & Overall & HLF \\
+    \hline
+    3  &  3       & 3   \\
+    4  &  5       & 5   \\
+    5  &  7       & 7   \\
+    6  &  11      & 11  \\
+    7  &  17      & 14  \\
+    8  &  28      & 21  \\
+    9  &  48      & 25  \\
+    10 &  85      & 36  \\
+  \end{tabular}
+  \begin{tabular}[ht]{ccc}
+    \multirow{2}{*}{Tasks} & \multicolumn{2}{c}{Snapshots} \\
+    & Overall & HLF \\
+    \hline
+    11 &  150     & 41  \\
+    12 &  276     & 57  \\
+    13 &  477     & 63  \\
+    14 &  884     & 85  \\
+    15 &  1477    & 92  \\
+    16 &  2717    & 121 \\
+    17 &  4398    & 129 \\
+    18 &  7991    & 166 \\
+  \end{tabular}
+  \begin{tabular}[ht]{ccc}
+    \multirow{2}{*}{Tasks} & \multicolumn{2}{c}{Snapshots} \\
+    & Overall & HLF \\
+    \hline
+    19 &  12600   & 175 \\
+    20 &  22594   & 221 \\
+    21 &  34883   & 231 \\
+    22 &  61774   & 287 \\
+    23 &  93775   & 298 \\
+    24 &  164187  & 365 \\
+    25 &  245852  & 377 \\
+    26 &  426089  & 456 \\
+  \end{tabular}
+  \caption{Number of snapshots for degenerate binary trees in the P3 case. The first column shows the number of tasks. ``Overall'' denotes the number of distinct snapshots that are explored if an optimal schedule is constructed by examining all schedulings. ``HLF'' denotes the number of distinct snapshots for HLF.}
+  \label{tab:p3-degenerate-binary-trees-no-snapshots}
+\end{table}
+
+On the other hand, the number of snapshots needed by HLF seems to concide with the sequence \cite{oeisA055803}.
+
+We have seen that degenerate binary intrees, while having a possibly huge amount of snapshots, can be examined by considering much less snapshots because we know we can process them optimally by HLF. You can compare the number of HLF snapshots to the number of overal snapshots by looking at table \ref{tab:p3-degenerate-binary-trees-no-snapshots}.
 
 \section{Parallel chains}
 \label{sec:p3-parallel-chains}

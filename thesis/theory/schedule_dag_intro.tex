@@ -9,28 +9,27 @@
 \renewcommand{\leveltopIIIIIIIII}{-12cm + \leveltopIIIIIIII}
 \renewcommand{\leveltopIIIIIIIIII}{-12cm + \leveltopIIIIIIIII}
 \renewcommand{\leveltopIIIIIIIIIII}{-12cm + \leveltopIIIIIIIIII}
-\begin{tikzpicture}[scale=.2, anchor=south]
-  % "key"
-  \fill[fill=gray!10!white] (-35, -24) rectangle +(72, 9.5);
-  \draw[dashed] (-35, -14.5) -- +(72, 0);
-  \draw[dashed] (-35, -24) -- +(72, 0);
-  \node at (27, -21) {Intermediate snapshots};
+\begin{tikzpicture}[scale=.13333, anchor=south]
+  % legende
+  \fill[fill=gray!10!white] (-50, -24) rectangle +(100, 11);
+  \draw[dashed] (-50, -13) -- +(100, 0);
+  \draw[dashed] (-50, -24) -- +(100, 0);
+  \node at (40, -21) {Intermediate snapshots};
   \begin{scope}[yshift=\leveltopI cm]
-    \node at (-7.5,3) {\huge $A$};
     \matrix (line1)[column sep=0.5cm] {
       \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x17d67b0){
-        \begin{tikzpicture}[scale=.2]
-          \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
-          \node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
-          \node[circle, scale=0.75, fill, task_scheduled] (tid4) at (2.25,4.5){};
+        \begin{tikzpicture}[scale=.13333]
+          \node[circle, scale=0.5, fill] (tid0) at (4.5,1.5){};
+          \node[circle, scale=0.5, fill] (tid2) at (2.25,3){};
+          \node[circle, scale=0.5, fill, task_scheduled] (tid4) at (2.25,4.5){};
           \draw[](tid2) -- (tid4);
-          \node[circle, scale=0.75, fill] (tid3) at (6,3){};
-          \node[circle, scale=0.75, fill] (tid5) at (3.75,4.5){};
-          \node[circle, scale=0.75, fill] (tid6) at (5.25,4.5){};
-          \node[circle, scale=0.75, fill] (tid7) at (7.5,4.5){};
-          \node[circle, scale=0.75, fill] (tid8) at (6.75,6){};
-          \node[circle, scale=0.75, fill] (tid9) at (8.25,6){};
-          \node[circle, scale=0.75, fill, task_scheduled] (tid10) at (8.25,7.5){};
+          \node[circle, scale=0.5, fill] (tid3) at (6,3){};
+          \node[circle, scale=0.5, fill] (tid5) at (3.75,4.5){};
+          \node[circle, scale=0.5, fill] (tid6) at (5.25,4.5){};
+          \node[circle, scale=0.5, fill] (tid7) at (7.5,4.5){};
+          \node[circle, scale=0.5, fill] (tid8) at (6.75,6){};
+          \node[circle, scale=0.5, fill] (tid9) at (8.25,6){};
+          \node[circle, scale=0.5, fill, task_scheduled] (tid10) at (8.25,7.5){};
           \draw[](tid9) -- (tid10);
           \draw[](tid7) -- (tid8);
           \draw[](tid7) -- (tid9);
@@ -40,7 +39,8 @@
           \draw[](tid0) -- (tid2);
           \draw[](tid0) -- (tid3);
         \end{tikzpicture}
-      };
+      }
+      node[left, xshift=-25, yshift=18]{\huge $A$};
       & 
       \\
     };
@@ -48,16 +48,16 @@
   \begin{scope}[yshift=\leveltopII cm]
     \matrix (line2)[column sep=0.5cm] {
       \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x17d65a0){
-        \begin{tikzpicture}[scale=.2]
-          \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
-          \node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
-          \node[circle, scale=0.75, fill] (tid3) at (6,3){};
-          \node[circle, scale=0.75, fill] (tid5) at (3.75,4.5){};
-          \node[circle, scale=0.75, fill] (tid6) at (5.25,4.5){};
-          \node[circle, scale=0.75, fill] (tid7) at (7.5,4.5){};
-          \node[circle, scale=0.75, fill] (tid8) at (6.75,6){};
-          \node[circle, scale=0.75, fill] (tid9) at (8.25,6){};
-          \node[circle, scale=0.75, fill, task_scheduled] (tid10) at (8.25,7.5){};
+        \begin{tikzpicture}[scale=.13333]
+          \node[circle, scale=0.5, fill] (tid0) at (4.5,1.5){};
+          \node[circle, scale=0.5, fill] (tid2) at (2.25,3){};
+          \node[circle, scale=0.5, fill] (tid3) at (6,3){};
+          \node[circle, scale=0.5, fill] (tid5) at (3.75,4.5){};
+          \node[circle, scale=0.5, fill] (tid6) at (5.25,4.5){};
+          \node[circle, scale=0.5, fill] (tid7) at (7.5,4.5){};
+          \node[circle, scale=0.5, fill] (tid8) at (6.75,6){};
+          \node[circle, scale=0.5, fill] (tid9) at (8.25,6){};
+          \node[circle, scale=0.5, fill, task_scheduled] (tid10) at (8.25,7.5){};
           \draw[](tid9) -- (tid10);
           \draw[](tid7) -- (tid8);
           \draw[](tid7) -- (tid9);
@@ -68,22 +68,22 @@
           \draw[](tid0) -- (tid3);
         \end{tikzpicture}
       }
-      node[left, xshift=-25, yshift=25]{\huge $B$};
+      node[left, xshift=-25, yshift=18]{\huge $B$};
       & 
       \node[minimum width=1cm]{};
       &
       \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x17d57c0){
-        \begin{tikzpicture}[scale=.2]
-          \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
-          \node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
-          \node[circle, scale=0.75, fill, task_scheduled] (tid4) at (2.25,4.5){};
+        \begin{tikzpicture}[scale=.13333]
+          \node[circle, scale=0.5, fill] (tid0) at (4.5,1.5){};
+          \node[circle, scale=0.5, fill] (tid2) at (2.25,3){};
+          \node[circle, scale=0.5, fill, task_scheduled] (tid4) at (2.25,4.5){};
           \draw[](tid2) -- (tid4);
-          \node[circle, scale=0.75, fill] (tid3) at (6,3){};
-          \node[circle, scale=0.75, fill] (tid5) at (3.75,4.5){};
-          \node[circle, scale=0.75, fill] (tid6) at (5.25,4.5){};
-          \node[circle, scale=0.75, fill] (tid7) at (7.5,4.5){};
-          \node[circle, scale=0.75, fill] (tid8) at (6.75,6){};
-          \node[circle, scale=0.75, fill] (tid9) at (8.25,6){};
+          \node[circle, scale=0.5, fill] (tid3) at (6,3){};
+          \node[circle, scale=0.5, fill] (tid5) at (3.75,4.5){};
+          \node[circle, scale=0.5, fill] (tid6) at (5.25,4.5){};
+          \node[circle, scale=0.5, fill] (tid7) at (7.5,4.5){};
+          \node[circle, scale=0.5, fill] (tid8) at (6.75,6){};
+          \node[circle, scale=0.5, fill] (tid9) at (8.25,6){};
           \draw[](tid7) -- (tid8);
           \draw[](tid7) -- (tid9);
           \draw[](tid3) -- (tid5);
@@ -93,7 +93,7 @@
           \draw[](tid0) -- (tid3);
         \end{tikzpicture}
       }
-      node[left, xshift=-25, yshift=25]{\huge $C$};
+      node[left, xshift=-25, yshift=18]{\huge $C$};
       & 
       \\
     };
@@ -101,16 +101,16 @@
   \begin{scope}[yshift=\leveltopIII cm]
     \matrix (line3)[column sep=0.5cm] {
       \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x17d55b0){
-        \begin{tikzpicture}[scale=.2]
-          \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
-          \node[circle, scale=0.75, fill, task_scheduled] (tid2) at (2.25,3){};
-          \node[circle, scale=0.75, fill] (tid3) at (6,3){};
-          \node[circle, scale=0.75, fill] (tid5) at (3.75,4.5){};
-          \node[circle, scale=0.75, fill] (tid6) at (5.25,4.5){};
-          \node[circle, scale=0.75, fill] (tid7) at (7.5,4.5){};
-          \node[circle, scale=0.75, fill] (tid8) at (6.75,6){};
-          \node[circle, scale=0.75, fill] (tid9) at (8.25,6){};
-          \node[circle, scale=0.75, fill, task_scheduled] (tid10) at (8.25,7.5){};
+        \begin{tikzpicture}[scale=.13333]
+          \node[circle, scale=0.5, fill] (tid0) at (4.5,1.5){};
+          \node[circle, scale=0.5, fill, task_scheduled] (tid2) at (2.25,3){};
+          \node[circle, scale=0.5, fill] (tid3) at (6,3){};
+          \node[circle, scale=0.5, fill] (tid5) at (3.75,4.5){};
+          \node[circle, scale=0.5, fill] (tid6) at (5.25,4.5){};
+          \node[circle, scale=0.5, fill] (tid7) at (7.5,4.5){};
+          \node[circle, scale=0.5, fill] (tid8) at (6.75,6){};
+          \node[circle, scale=0.5, fill] (tid9) at (8.25,6){};
+          \node[circle, scale=0.5, fill, task_scheduled] (tid10) at (8.25,7.5){};
           \draw[](tid9) -- (tid10);
           \draw[](tid7) -- (tid8);
           \draw[](tid7) -- (tid9);
@@ -121,19 +121,19 @@
           \draw[](tid0) -- (tid3);
         \end{tikzpicture}
       }
-      node[left, xshift=-25, yshift=25]{\huge $B_1$};
+      node[left, xshift=-25, yshift=18]{\huge $B_1$};
       & 
       \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x17d6160){
-        \begin{tikzpicture}[scale=.2]
-          \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
-          \node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
-          \node[circle, scale=0.75, fill] (tid3) at (6,3){};
-          \node[circle, scale=0.75, fill, task_scheduled] (tid5) at (3.75,4.5){};
-          \node[circle, scale=0.75, fill] (tid6) at (5.25,4.5){};
-          \node[circle, scale=0.75, fill] (tid7) at (7.5,4.5){};
-          \node[circle, scale=0.75, fill] (tid8) at (6.75,6){};
-          \node[circle, scale=0.75, fill] (tid9) at (8.25,6){};
-          \node[circle, scale=0.75, fill, task_scheduled] (tid10) at (8.25,7.5){};
+        \begin{tikzpicture}[scale=.13333]
+          \node[circle, scale=0.5, fill] (tid0) at (4.5,1.5){};
+          \node[circle, scale=0.5, fill] (tid2) at (2.25,3){};
+          \node[circle, scale=0.5, fill] (tid3) at (6,3){};
+          \node[circle, scale=0.5, fill, task_scheduled] (tid5) at (3.75,4.5){};
+          \node[circle, scale=0.5, fill] (tid6) at (5.25,4.5){};
+          \node[circle, scale=0.5, fill] (tid7) at (7.5,4.5){};
+          \node[circle, scale=0.5, fill] (tid8) at (6.75,6){};
+          \node[circle, scale=0.5, fill] (tid9) at (8.25,6){};
+          \node[circle, scale=0.5, fill, task_scheduled] (tid10) at (8.25,7.5){};
           \draw[](tid9) -- (tid10);
           \draw[](tid7) -- (tid8);
           \draw[](tid7) -- (tid9);
@@ -144,20 +144,20 @@
           \draw[](tid0) -- (tid3);
         \end{tikzpicture}
       }
-      node[left, xshift=-25, yshift=25]{\huge $B_2$};
+      node[left, xshift=-25, yshift=18]{\huge $B_2$};
       & 
       \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x17d5380){
-        \begin{tikzpicture}[scale=.2]
-          \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
-          \node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
-          \node[circle, scale=0.75, fill, task_scheduled] (tid4) at (2.25,4.5){};
+        \begin{tikzpicture}[scale=.13333]
+          \node[circle, scale=0.5, fill] (tid0) at (4.5,1.5){};
+          \node[circle, scale=0.5, fill] (tid2) at (2.25,3){};
+          \node[circle, scale=0.5, fill, task_scheduled] (tid4) at (2.25,4.5){};
           \draw[](tid2) -- (tid4);
-          \node[circle, scale=0.75, fill] (tid3) at (6,3){};
-          \node[circle, scale=0.75, fill] (tid5) at (3.75,4.5){};
-          \node[circle, scale=0.75, fill] (tid6) at (5.25,4.5){};
-          \node[circle, scale=0.75, fill] (tid7) at (7.5,4.5){};
-          \node[circle, scale=0.75, fill] (tid8) at (6.75,6){};
-          \node[circle, scale=0.75, fill, task_scheduled] (tid9) at (8.25,6){};
+          \node[circle, scale=0.5, fill] (tid3) at (6,3){};
+          \node[circle, scale=0.5, fill] (tid5) at (3.75,4.5){};
+          \node[circle, scale=0.5, fill] (tid6) at (5.25,4.5){};
+          \node[circle, scale=0.5, fill] (tid7) at (7.5,4.5){};
+          \node[circle, scale=0.5, fill] (tid8) at (6.75,6){};
+          \node[circle, scale=0.5, fill, task_scheduled] (tid9) at (8.25,6){};
           \draw[](tid7) -- (tid8);
           \draw[](tid7) -- (tid9);
           \draw[](tid3) -- (tid5);
@@ -167,20 +167,20 @@
           \draw[](tid0) -- (tid3);
         \end{tikzpicture}
       }
-      node[left, xshift=-25, yshift=25]{\huge $C_1$};
+      node[left, xshift=-25, yshift=18]{\huge $C_1$};
       & 
       \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x17d2f50){
-        \begin{tikzpicture}[scale=.2]
-          \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
-          \node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
-          \node[circle, scale=0.75, fill, task_scheduled] (tid4) at (2.25,4.5){};
+        \begin{tikzpicture}[scale=.13333]
+          \node[circle, scale=0.5, fill] (tid0) at (4.5,1.5){};
+          \node[circle, scale=0.5, fill] (tid2) at (2.25,3){};
+          \node[circle, scale=0.5, fill, task_scheduled] (tid4) at (2.25,4.5){};
           \draw[](tid2) -- (tid4);
-          \node[circle, scale=0.75, fill] (tid3) at (6,3){};
-          \node[circle, scale=0.75, fill] (tid5) at (3.75,4.5){};
-          \node[circle, scale=0.75, fill] (tid6) at (5.25,4.5){};
-          \node[circle, scale=0.75, fill] (tid7) at (7.5,4.5){};
-          \node[circle, scale=0.75, fill, task_scheduled] (tid8) at (6.75,6){};
-          \node[circle, scale=0.75, fill] (tid9) at (8.25,6){};
+          \node[circle, scale=0.5, fill] (tid3) at (6,3){};
+          \node[circle, scale=0.5, fill] (tid5) at (3.75,4.5){};
+          \node[circle, scale=0.5, fill] (tid6) at (5.25,4.5){};
+          \node[circle, scale=0.5, fill] (tid7) at (7.5,4.5){};
+          \node[circle, scale=0.5, fill, task_scheduled] (tid8) at (6.75,6){};
+          \node[circle, scale=0.5, fill] (tid9) at (8.25,6){};
           \draw[](tid7) -- (tid8);
           \draw[](tid7) -- (tid9);
           \draw[](tid3) -- (tid5);
@@ -190,20 +190,20 @@
           \draw[](tid0) -- (tid3);
         \end{tikzpicture}
       }
-      node[left, xshift=-25, yshift=25]{\huge $C_2$};
+      node[left, xshift=-25, yshift=18]{\huge $C_2$};
       & 
       \node[draw=black, rectangle split,  rectangle split parts=1] (sn0x17d3a00){
-        \begin{tikzpicture}[scale=.2]
-          \node[circle, scale=0.75, fill] (tid0) at (4.5,1.5){};
-          \node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
-          \node[circle, scale=0.75, fill, task_scheduled] (tid4) at (2.25,4.5){};
+        \begin{tikzpicture}[scale=.13333]
+          \node[circle, scale=0.5, fill] (tid0) at (4.5,1.5){};
+          \node[circle, scale=0.5, fill] (tid2) at (2.25,3){};
+          \node[circle, scale=0.5, fill, task_scheduled] (tid4) at (2.25,4.5){};
           \draw[](tid2) -- (tid4);
-          \node[circle, scale=0.75, fill] (tid3) at (6,3){};
-          \node[circle, scale=0.75, fill, task_scheduled] (tid5) at (3.75,4.5){};
-          \node[circle, scale=0.75, fill] (tid6) at (5.25,4.5){};
-          \node[circle, scale=0.75, fill] (tid7) at (7.5,4.5){};
-          \node[circle, scale=0.75, fill] (tid8) at (6.75,6){};
-          \node[circle, scale=0.75, fill] (tid9) at (8.25,6){};
+          \node[circle, scale=0.5, fill] (tid3) at (6,3){};
+          \node[circle, scale=0.5, fill, task_scheduled] (tid5) at (3.75,4.5){};
+          \node[circle, scale=0.5, fill] (tid6) at (5.25,4.5){};
+          \node[circle, scale=0.5, fill] (tid7) at (7.5,4.5){};
+          \node[circle, scale=0.5, fill] (tid8) at (6.75,6){};
+          \node[circle, scale=0.5, fill] (tid9) at (8.25,6){};
           \draw[](tid7) -- (tid8);
           \draw[](tid7) -- (tid9);
           \draw[](tid3) -- (tid5);
@@ -213,7 +213,7 @@
           \draw[](tid0) -- (tid3);
         \end{tikzpicture}
       }
-      node[left, xshift=-25, yshift=25]{\huge $C_3$};
+      node[left, xshift=-25, yshift=18]{\huge $C_3$};
       & 
       \\
     };

@@ -1,7 +1,7 @@
 \chapter{Implementation details}
 \label{sec:additional-algs}
 
-This chapter sums up some information about the implementation. We explain why we chose C++ and Python to implement the project and present some central algorithms that were developed during this project.
+While chapter \ref{chap:introduction-schedules} focussed more on theoretical aspects, this chapter sums up some information about the implementation. We explain why we chose C++ and Python to implement the project and present some central algorithms that were developed during this project. In addition, we provide asymptotic run times for the single algorithms.
 
 \section{Choice or programming language(s)}
 \label{sec:implementation-prog-lang}
@@ -315,7 +315,9 @@ Using a \texttt{vector} of course increases memory consumption compared to e.g. 
 
 We basically describe the current intree storing the same notation as shown in this work (just stored in a \texttt{vector} of \texttt{unsigned char}s). Of course, there are more memory-efficient solutions, but since we did never experience any problems regarding memory, we went for this solution.
 
+As mentioned in section \ref{sec:intro-computing-optimal-schedule} we have $O\left(|\left\{ T \mid T\subseteq I \right\}|\cdot n^p\right)$ snapshots for an intree with $n$ tasks scheduled on $p$ processors. We can simply call this $O\left(|D|\right)$ where $D$ denotes the snapshot DAG for a certain scheduler. Since we compute the \emph{canonical snapshot} for each of those snapshots and the run time to compute the canonical snapshot is $O(n \log n)$, we can deduce that the overall run time to compute all schedules for a given scheduler is bounded by $O(|D| \cdot n \log n)$.
 
+\emph{Remark:} The run time for the version \emph{without} canonical snapshots could be denoted by $O(|D_{\text{non-canonical}}|)$, i.e. without the term $n\log n$ introduced by computing the canonical snapshots. Note that in this case, the size of the snapshot DAG (denoted by $|D_{\text{non-canonical}}|$) is remarkably bigger than the size of the snapshot DAG after merging equivalent snapshots. In practice, this behaviour became evident quite quickly.\todo{Benchmarks: Canonical vs. non-canonical!}
 
 \section{Extensibility of the program}
 \label{sec:implementation-extending-program}
@@ -328,7 +330,7 @@ We now describe in short how the program can be extended. We describe the possib
 \begin{description}
 \item[Number representations] As mentioned in section \ref{sec:implementation-numbers}, we already support different possibilities to represent probabilities and expected values, namely \texttt{float}s, \texttt{double}s, and rational numbers using Boost Rational Number Library \cite{boostrational} or the GNU Multiple Precision Arithmetic Library \cite{gnumultiprecision}. These can easily be extended to other data types if they have overloaded operators and can be used like ordinary \emph{float}s.
 \item[Scheduling strategies] We provide an interface to implement new scheduling strategies. New scheduling strategies have to provide (most important) two methods: One to generate the initial chioces of tasks to be chosen and one method to determine which task should be the next to be chosen. We thereby focus on non-preemtive schedulers.
-\item[Exporters] An important part of the program consists of code for exporters to various formats (most notably to \LaTeX (in connection with TikZ)) and the program provides a straightforward interface for new exporting methods.
+\item[Exporters] An important part of the program consists of code for exporters to various formats (most notably to \LaTeX{} (in connection with TikZ)) and the program provides a straightforward interface for new exporting methods.
 \end{description}
 
 \subsection{Complex adjustments}
@@ -341,7 +343,7 @@ We now describe in short how the program can be extended. We describe the possib
   \item While it is not particularly difficult to \emph{implement} other distributions, it might still be difficult to \emph{calculate} the corresponding expected values and probabilities which task finishes first.
   \end{itemize}
 \item[Preemtive scheduling] While our schedulers focus on preemtive scheduling, it is possible to adapt the program for non-preemtive scheduling. However, this would require to rewrite some interfaces and to adjust the schedulers.
-\item[General DAGs instead of intrees] It should be possible to adapt the program to work with arbitrary DAGs instead of simple intrees. While it would probably still be possible to exclude equivalent snapshots \todo{Ist rooted-DAG-isomorphismus effizient machbar?}, it would probably require some tuning
+\item[General DAGs instead of intrees] It should be possible to adapt the program to work with arbitrary DAGs instead of simple intrees. However, isomorphism for directed acyclic graphs is GI-complete, meaning that it is at least as hard as the general graph isomorphism problem \cite{graphisomorphismproblem}. While it \emph{might} still be possible to exclude equivalent snapshots (because we have some information about the isomorphism we are looking for by the currently scheduled DAGs), it would probably require some tuning.
 \end{description}
 
 \section{Enumerating all intrees with a certain number of nodes}
