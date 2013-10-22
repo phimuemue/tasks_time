@@ -992,55 +992,51 @@ We start out by a lemma that we will use later. This lemma is an analogue varian
 \begin{proof}
   \newcommand{\iminus}[1]{I\setminus\{#1\}}
 
-  We prove the claim by induction. For parallel chains with fewer than 6 tasks (all parallel chains with fewer than 5 tasks are trivially optimally scheduled by HLF), the fact can be easily proven. Note that it suffices to examine all parallel chains with at least 3 ready tasks, since intrees with two or less tasks are optimally scheduled by HLF (according to the fact that only two processors can be used for those intrees and the fact that for two processors HLF is optimal). The only parallel chain with fewer than 6 tasks is the intree $(0,0,0,1)$. This parallel chain (and its resulting parallel chains after removing topmost tasks) are shown in figure       \ref{fig:parallel-intrees-lemma-induction-start-concrete}.
+  We prove the claim by induction. For parallel chains with fewer than 6 tasks (all parallel chains with fewer than 5 tasks are trivially optimally scheduled by HLF), the fact can be easily proven. Note that it suffices to examine all parallel chains with at least 3 ready tasks, since intrees with two or less tasks are optimally scheduled by HLF (according to the fact that only two processors can be used for those intrees and the fact that for two processors HLF is optimal). The only parallel chain with fewer than 6 tasks with more than 2 ready tasks is the intree $(0,0,0,1)$. This parallel chain (and its resulting parallel chains after removing HLF-conform tasks) are shown in figure       \ref{fig:parallel-intrees-lemma-induction-start-concrete}.
 
   \begin{figure}[th]
     \centering
-    \begin{subfigure}{.38\textwidth}
-      \centering
-      \begin{tikzpicture}[scale=.4]
+    \begin{tikzpicture}[scale=.4]
+      \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+      \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+      \node[circle, scale=0.75, draw] (tid2) at (2.25,3){$y$};
+      \node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
+      \node[circle, scale=0.75, draw] (tid4) at (3.75,4.5){$x$};
+      \draw[](tid3) -- (tid4);
+      \draw[](tid0) -- (tid1);
+      \draw[](tid0) -- (tid2);
+      \draw[](tid0) -- (tid3);
+      \draw[->, decorate, decoration=snake](5,3) -- (7,3);
+      \begin{scope}[xshift=8cm, scale=.5, yshift=2.5cm]
         \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
         \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
-        \node[circle, scale=0.75, draw] (tid2) at (2.25,3){$y$};
+        \node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
         \node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
-        \node[circle, scale=0.75, draw] (tid4) at (3.75,4.5){$x$};
-        \draw[](tid3) -- (tid4);
         \draw[](tid0) -- (tid1);
         \draw[](tid0) -- (tid2);
         \draw[](tid0) -- (tid3);
-        \draw[->, decorate, decoration=snake](5,3) -- (7,3);
-        \begin{scope}[xshift=8cm, scale=.5, yshift=2.5cm]
-          \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
-          \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
-          \node[circle, scale=0.75, fill] (tid2) at (2.25,3){};
-          \node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
-          \draw[](tid0) -- (tid1);
-          \draw[](tid0) -- (tid2);
-          \draw[](tid0) -- (tid3);
-          \node at (2.25,-2){2.83333};
-        \end{scope}
-        \begin{scope}[xshift=11cm, scale=.5, yshift=2.5cm]
-          \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
-          \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
-          \node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
-          \node[circle, scale=0.75, fill] (tid4) at (3.75,4.5){};
-          \draw[](tid3) -- (tid4);  
-          \draw[](tid0) -- (tid1);
-          \draw[](tid0) -- (tid3);
-          \node at (2.25,-2){3.25};
-        \end{scope}
-      \end{tikzpicture}
-      \caption{Original parallel chain $(0,0,0,1)$, and the parallel chains resulting from removing $x$ resp. $y$ with their respective expected HLF run times. This serves as base case for the induction in the proof of lemma \ref{lemma:parallel-chains-flatness}.}
-      \label{fig:parallel-intrees-lemma-induction-start-concrete}
-    \end{subfigure}
-    \quad
-    \caption{Removing tasks on lower levels from parallel chains results in higher run times than removing tasks on higher levels.}
+        \node at (2.25,-2){2.83333};
+      \end{scope}
+      \begin{scope}[xshift=11cm, scale=.5, yshift=2.5cm]
+        \node[circle, scale=0.75, fill] (tid0) at (2.25,1.5){};
+        \node[circle, scale=0.75, fill] (tid1) at (0.75,3){};
+        \node[circle, scale=0.75, fill] (tid3) at (3.75,3){};
+        \node[circle, scale=0.75, fill] (tid4) at (3.75,4.5){};
+        \draw[](tid3) -- (tid4);  
+        \draw[](tid0) -- (tid1);
+        \draw[](tid0) -- (tid3);
+        \node at (2.25,-2){3.25};
+      \end{scope}
+    \end{tikzpicture}
+    \caption{Removing tasks on lower levels from parallel chains results in higher run times than removing tasks on higher levels. Original parallel chain $(0,0,0,1)$, and the parallel chains resulting from removing $x$ resp. $y$ with their respective expected HLF run times. This serves as base case for the induction in the proof of lemma \ref{lemma:parallel-chains-flatness}.}
+    \label{fig:parallel-intrees-lemma-induction-start-concrete}
     \label{fig:parallel-intrees-lemma-induction-start}
   \end{figure}
 
   We consider the HLF schedules on the intrees $I\setminus \{x\}$ and $I \setminus \{y\}$, with variable names as aforementioned. Note that the intrees $I\setminus \{x\}$ and $\setminus \{y\}$ have at least two common HLF-tasks (i.e. tasks that are scheduled by HLF). We call these two tasks $x_1$ and $x_2$. For the intree $\iminus{x}$, we call the third HLF-task $x_3$ and can compute its expected run time (for HLF) by
   \begin{equation*}
     T_{HLF}(\iminus{x}) = 
+    \frac{1}{3} +
     \frac{1}{3} \cdot T(\iminus{x, x_1}) +
     \frac{1}{3} \cdot T(\iminus{x, x_2}) +
     \frac{1}{3} \cdot T(\iminus{x, x_3})
@@ -1049,6 +1045,7 @@ We start out by a lemma that we will use later. This lemma is an analogue varian
   On the other hand, for the intree $\iminus{y}$, we call the third HLF-task $x'$ and can compute its expected run time analogously by
   \begin{equation*}
     T_{HLF}(\iminus{y}) = 
+    \frac{1}{3} +
     \frac{1}{3} \cdot T(\iminus{y, x_1}) +
     \frac{1}{3} \cdot T(\iminus{y, x_2}) +
     \frac{1}{3} \cdot T(\iminus{y, x'})
@@ -1056,7 +1053,7 @@ We start out by a lemma that we will use later. This lemma is an analogue varian
   \end{equation*}
   We can now compare $T(\iminus{x, x_1})$ with $T(\iminus{y, x_1})$, $T(\iminus{x, x_2})$ with $T(\iminus{x, x_2})$ and $T(\iminus{x, x_3})$ with $T(\iminus{y, x'})$.
   
-  The intrees $\iminus{x,x_1}$ and $\iminus{y,x_1}$ have a common subtree, namely $\iminus{x_1}$. By induction ($\iminus{x_1}$ has $n-1$ tasks, $level(x) > level(y)$), we know that the expected HLF run time for $\iminus{x,x_1}$ is less than the expected run time for $\iminus{y,x_1}$. Note that $\iminus{x, x_1}$ has at least as many ready tasks as $\iminus{y,x_1}$. So, if $\iminus{y,x_1}$ has two or less ready tasks, the claim is true, because it has been shown for two processors in \cite{chandyreynoldsshortpaper1975} and we -- moreover -- can use a third processor for$\iminus{x,x_1}$. This consideration can be done for $x_2$ in the same manner. 
+  The intrees $\iminus{x,x_1}$ and $\iminus{y,x_1}$ have a common subtree, namely $\iminus{x_1}$. By induction ($\iminus{x_1}$ has $n-1$ tasks, $level(x) > level(y)$), we know that the expected HLF run time for $\iminus{x,x_1}$ is less than the expected run time for $\iminus{y,x_1}$. Note that $\iminus{x, x_1}$ has at least as many ready tasks as $\iminus{y,x_1}$. So, if $\iminus{y,x_1}$ has two or less ready tasks, the claim is true, because it has been shown for two processors in \cite{chandyreynoldsshortpaper1975} and we -- moreover -- can use a third processor for $\iminus{x,x_1}$. This consideration can be done for $x_2$ in the same manner. 
 
   It remains to compare $T(\iminus{x, x_3})$ and $T(\iminus{y, x'})$. If $\iminus{y,x'}$ has fewer ready tasks than $T(\iminus{x, x_3})$, then we trivially have $T(\iminus{x, x_3}) \leq T(\iminus{y, x'})$ (similar to the case before, it has been shown for two processors, and we additionally can use a third processor for $\iminus{x,x_3}$). We, thus, focus on other cases.
 
