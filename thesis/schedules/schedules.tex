@@ -3,7 +3,7 @@
 
 We will now combine the knowledge from chapter \ref{chap:theoretical-foundations} and introduce the problem we will be working on. 
 
-\section{Computational setting \todo{Better title.}}
+\section{Computational setting}
 \label{sec:schedules-problem-setting}
 
 We now describe our assumptions concerning the tasks to be processed and our machines.
@@ -48,7 +48,11 @@ That is, we assign some (at most $p$) ready tasks to processors, wait until the 
   \end{itemize}
 \end{definition}
 
-While the above definition is well suited for theoretical considerations, we -- most of the time -- are satisfied with a concise graphical representation, that will look as shown in figure \ref{fig:intro-snapshot-graphical-representation}, i.e. it is depicted as an intree, whose scheduled tasks are marked by a cross\todo{Schauen, ob ich das geändert habe!}.
+While the above definition is well suited for theoretical considerations, we -- most of the time -- are satisfied with a concise graphical representation, that will look as shown in figure \ref{fig:intro-snapshot-graphical-representation}, i.e. it is depicted as an intree, whose scheduled tasks are marked drawn by a 
+\tikz{\node[circle, scale=0.75, fill, task_scheduled] (tid7) at (2.25,6){};} 
+while the non-scheduled tasks are drawn as
+\tikz{\node[circle, scale=0.75, fill] (tid7) at (2.25,6){};}
+.
 
 \begin{figure}[t]
   \centering
@@ -901,7 +905,7 @@ To sum up, we consider the scheduling problems described by
   P2 \mid intree, exp \mid \E{C_{max}} 
   \quad \text{ and } \quad
   P3 \mid intree, exp \mid \E{C_{max}}
-  .
+  j.
 \end{equation*}
 
 

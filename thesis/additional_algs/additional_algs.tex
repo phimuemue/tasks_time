@@ -83,11 +83,165 @@ The algorithm basically relies on an ordering of intrees (there are of course ma
   \begin{itemize}
   \item If both $I_1$ and $I_2$ consist only of a root, we have $I_1 \treegeq I_2$ if and only if the root of $I_2$ is not in $X$ or the root of $I_1$ is in $X$.
   \item If the root of $I_1$ has more predecessors than the root of $I_2$, then $I_1 \treegeq I_2$.
-  \item If the root of $I_1$ has the same number $r$ of predecessors as the root of $I_2$, we sort the corresponding predecessors $p_1,\dots,p_r$ resp. $q_1,\dots,q_r$ (in $I_1$ resp. $I_2$) according to $\treegeq$. Then, if $p_i \treegeq q_i \forall i\in\{1,2,\dots,r \}$, we have $I_1 \treegeq I_2$.
+  \item If the root of $I_1$ has the same number $r$ of predecessors as the root of $I_2$, we sort the corresponding predecessors $p_1,\dots,p_r$ resp. $q_1,\dots,q_r$ (in $I_1$ resp. $I_2$) according to $\treegeq$. Then, if $\forall i\in\{1,2,\dots,r \}:\ p_i \treegeq q_i$, we have $I_1 \treegeq I_2$.
   \end{itemize}
 \end{definition}
 
-\todo{Examples!}
+Figure \ref{fig:comparingintreestreeeq} illustrates the ordering of intrees for $X=\emptyset$.
+
+\begin{figure}[th]
+  \centering
+  \begin{tikzpicture}[scale=.4]
+    \begin{scope}
+      \fill[black] (0,0) circle (0.4);
+      \foreach \x in {-1, 0, 1}{
+        \fill[black] (\x,1) circle (0.4);
+        \draw (\x,1) -- (0,0);
+      }
+    \end{scope}
+    \node at (2,.5) {$\treegeq$};
+    \begin{scope}[xshift=3.5cm]
+      \fill[black] (0,0) circle (0.4);
+      \foreach \x in {-.5, 0.5}{
+        \fill[black] (\x,1) circle (0.4);
+        \draw (\x,1) -- (0,0);
+      }
+      \fill[black] (-.5,2) circle (0.4);
+      \draw (-.5,2) -- (-.5,1);
+    \end{scope}
+    \node at (5.5, .5) {$\treegeq$};
+    \begin{scope}[xshift=7.5cm]
+      \fill[black] (0,1) circle (0.4);
+      \foreach \x in {-1.5, -.5, 0.5, 1.5}{
+        \fill[black] (\x,2) circle (0.4);
+        \draw (\x,2) -- (0,1);
+      }
+      \fill[black] (0,0) circle (0.4);
+      \draw (0,0) -- (0,1);
+    \end{scope}
+
+    \begin{scope}[xshift=12cm]
+      \begin{scope}[yshift=1cm]
+        \begin{scope}
+          \fill[black] (0,0) circle (0.4);
+          \foreach \x in {-1, 0, 1}{
+            \fill[black] (\x,1) circle (0.4);
+            \draw (\x,1) -- (0,0);
+          }
+        \end{scope}
+        \begin{scope}[xshift=2.5cm]
+          \fill[black] (0,0) circle (0.4);
+          \foreach \x in {-.5, 0.5}{
+            \fill[black] (\x,1) circle (0.4);
+            \draw (\x,1) -- (0,0);
+          }
+          \fill[black] (-.5,2) circle (0.4);
+          \draw (-.5,2) -- (-.5,1);
+        \end{scope}
+      \end{scope}
+      \fill[black] (1.25,0) circle (0.4);
+      \draw (1.25,0) -- (0, 1);
+      \draw (1.25,0) -- (2.5, 1);
+    \end{scope}
+    \node at (16.255, 1.5){$\treegeq$};
+    \begin{scope}[xshift=18cm]
+      \begin{scope}[yshift=1cm]
+        \begin{scope}[xshift=0cm]
+          \fill[black] (0,0) circle (0.4);
+          \foreach \x in {-.5, 0.5}{
+            \fill[black] (\x,1) circle (0.4);
+            \draw (\x,1) -- (0,0);
+          }
+          \fill[black] (-.5,2) circle (0.4);
+          \draw (-.5,2) -- (-.5,1);
+        \end{scope}
+        \begin{scope}[xshift=2.5cm]
+          \fill[black] (0,1) circle (0.4);
+          \foreach \x in {-1.5, -.5, 0.5, 1.5}{
+            \fill[black] (\x,2) circle (0.4);
+            \draw (\x,2) -- (0,1);
+          }
+          \fill[black] (0,0) circle (0.4);
+          \draw (0,0) -- (0,1);
+        \end{scope}
+      \end{scope}
+      \fill[black] (1.25,0) circle (0.4);
+      \draw (1.25,0) -- (0, 1);
+      \draw (1.25,0) -- (2.5, 1);
+    \end{scope}
+  \end{tikzpicture}
+  \caption{Comparing intrees according to $\treegeq$ with $X=\emptyset$.}
+  \label{fig:comparingintreestreeeq}
+\end{figure}
+
+Note that the ordering $\treegeq$ is not the only possible ordering of intrees. For the algorithm it is only important that the ordering can be used to sort the intrees in a non-ambiguous way. Another (very natural, but probably more expensive to compute) ordering relies on a ``string representation'' of intrees:
+
+\begin{definition}[Ordering of intrees by parenthesized expressions]
+  Let $X$ be a (possibly empty) set of tasks from an intree $I$.
+  We define the parenthesized expression $PE_X(I)$ (for a set $X$) for an intree $I$ inductively:
+  \begin{itemize}
+  \item If $I$ consists of a single root, then 
+    $
+    PE_X =
+    \begin{cases}
+      (0), & \text{if the root is an element of } X \\
+      (1), & \text{otherwise}
+    \end{cases}
+    $
+  \item If $I$ consists of a root with predecessors $p_1,\dots,p_r$, then $PE_x = sorted(\left( PE_X(p_1) \circ \dots \circ PE_X(p_r) \right))$,
+    where $sorted$ sorts a list of strings and $\circ$ denotes concatenation.
+  \end{itemize}
+\end{definition}
+
+As an example, consider the following intree, whose parenthesized expression (again for the empty set $X=\empty$) is given by 
+$
+\left(  
+  \left( 
+    \left(
+      \left( 0 \right)
+      \left( 0 \right)
+      \left( 0 \right)
+      \left( 0 \right)
+    \right)
+  \right)
+  \left( 
+    \left( 
+      \left( 0 \right)
+    \right)
+    \left( 0 \right)
+  \right)
+\right)
+$:
+
+\begin{center}
+  \begin{tikzpicture}[scale=.4]
+    \begin{scope}[yshift=1cm]
+      \begin{scope}[xshift=0cm]
+        \fill[black] (0,0) circle (0.4);
+        \foreach \x in {-.5, 0.5}{
+          \fill[black] (\x,1) circle (0.4);
+          \draw (\x,1) -- (0,0);
+        }
+        \fill[black] (-.5,2) circle (0.4);
+        \draw (-.5,2) -- (-.5,1);
+      \end{scope}
+      \begin{scope}[xshift=2.5cm]
+        \fill[black] (0,1) circle (0.4);
+        \foreach \x in {-1.5, -.5, 0.5, 1.5}{
+          \fill[black] (\x,2) circle (0.4);
+          \draw (\x,2) -- (0,1);
+        }
+        \fill[black] (0,0) circle (0.4);
+        \draw (0,0) -- (0,1);
+      \end{scope}
+    \end{scope}
+    \fill[black] (1.25,0) circle (0.4);
+    \draw (1.25,0) -- (0, 1);
+    \draw (1.25,0) -- (2.5, 1);
+  \end{tikzpicture}
+\end{center}
+
+The ordering of intrees by parenthesized expressions is much more intuitive and easier to implement because it can probably rely directly on the programming language's string facilities --- but it is a bit slower.
 
 An algorithm to compute a \emph{canonical form} of a snapshot, can recursively sort the tasks in the intree according to the ordering $\treegeq$. It is shown in algorithm \ref{alg:compute-canonical-snapshot}.
 
@@ -107,7 +261,7 @@ An algorithm to compute a \emph{canonical form} of a snapshot, can recursively s
     \EndProcedure
     \Statex
   \end{algorithmic}
-  \caption{Computing canonical snapshots for a snapshot $s$ containing the corresponding intree and the tasks that are currently scheduled (as defined in section \ref{sec:processing-an-intree-of-tasks}).\todo{Algorithmus verbessern.}}
+  \caption{Computing canonical snapshots for a snapshot $s$ containing the corresponding intree and the tasks that are currently scheduled (as defined in section \ref{sec:processing-an-intree-of-tasks}).}
   \label{alg:compute-canonical-snapshot}
 \end{algorithm}
 
@@ -317,7 +471,7 @@ We basically describe the current intree storing the same notation as shown in t
 
 As mentioned in section \ref{sec:intro-computing-optimal-schedule} we have $O\left(|\left\{ T \mid T\subseteq I \right\}|\cdot n^p\right)$ snapshots for an intree with $n$ tasks scheduled on $p$ processors. We can simply call this $O\left(|D|\right)$ where $D$ denotes the snapshot DAG for a certain scheduler. Since we compute the \emph{canonical snapshot} for each of those snapshots and the run time to compute the canonical snapshot is $O(n \log n)$, we can deduce that the overall run time to compute all schedules for a given scheduler is bounded by $O(|D| \cdot n \log n)$.
 
-\emph{Remark:} The run time for the version \emph{without} canonical snapshots could be denoted by $O(|D_{\text{non-canonical}}|)$, i.e. without the term $n\log n$ introduced by computing the canonical snapshots. Note that in this case, the size of the snapshot DAG (denoted by $|D_{\text{non-canonical}}|$) is remarkably bigger than the size of the snapshot DAG after merging equivalent snapshots. In practice, this behaviour became evident quite quickly.\todo{Benchmarks: Canonical vs. non-canonical!}
+\emph{Remark:} The run time for the version \emph{without} canonical snapshots could be denoted by $O(|D_{\text{non-canonical}}|)$, i.e. without the term $n\log n$ introduced by computing the canonical snapshots. Note that in this case, the size of the snapshot DAG (denoted by $|D_{\text{non-canonical}}|$) is remarkably bigger than the size of the snapshot DAG after merging equivalent snapshots. In practice, this behaviour became evident quite quickly.
 
 \section{Extensibility of the program}
 \label{sec:implementation-extending-program}
