@@ -60,8 +60,6 @@ map<string, Scheduler*> schedulers =
     {"hlfdet", new HLFDeterministicScheduler()},
     {"hlfrand", new HLFRandomScheduler()},
 };
-// TODO: can we solve this more elegant?
-#define SCHEDULERS_AVAILABLE "leaf, scleaf, hlf, hlfnfc, hlfdet, hlfrand"
 
 void randomEdges(int n, vector<pair<Task,Task>>& target){
     mt19937 rng;
@@ -210,12 +208,22 @@ int read_variables_map_from_args(int argc,
         ("randp", po::value<string>(), 
          "Specify the number of tasks level wise. Bottom level is implicitly 0.");
     // configurational things
+    string schedulers_available("");
+    for(auto it = schedulers.begin(); it!=schedulers.end(); ++it){
+        schedulers_available += it->first;
+        auto tmp = it;
+        tmp++;
+        if (tmp != schedulers.end()){
+            schedulers_available += ", ";
+        }
+    }
+    schedulers_available = "Scheduler type to use (" + schedulers_available + ").";
     po::options_description config_options("Config", LINE_LENGTH);
     config_options.add_options()
         ("processors,p", po::value<int>()->default_value(2), 
          "Number of processors to use.")
         ("scheduler,s", po::value<string>()->default_value("hlf"), 
-         "Scheduler type to use (" SCHEDULERS_AVAILABLE ").")
+         schedulers_available.c_str())
         ("optimize", po::value<bool>()->default_value(false)->zero_tokens(), 
          "Generate optimal schedule out of computed schedule by picking best successors.");
     po::options_description desc("Options", LINE_LENGTH);
