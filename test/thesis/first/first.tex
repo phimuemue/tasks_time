@@ -1,0 +1,30 @@
+\chapter{First thoughts on implementation}
+\label{chap:first-thoughts-on-implementation}
+
+\section{Configuration DAG}
+\label{sec:configuration-dag}
+
+Initially we are dealing with an intree (i.e. each node has at most one successor) of tasks that have to be processed by a certain number of processors.
+
+We will call the set of \emph{all} tasks $\alltasks$. If task $t_2$ can only be executed if $t_1$ already has been processed, we write $t_1 \neededfor t_2$. Moreover, we introduce a shorthand notation that allows us to ``chain'' several of these symbols: If there exist tasks $s_1,\dots,s_m$ ($m\in\mathbb N$), we write $t_1 \neededfor* t_2$ if we have $t_1 \neededfor s_1$ and $s_1 \neededfor s_2, s_2 \neededfor s_3, \dots, s_{m-1} \neededfor s_m$ and $s_m \neededfor t_2$ or if $t_1\neededfor t_2$ or if $t_1=t_2$.
+
+\begin{definition}
+  Let $\alltasks$ be a set of tasks, and $T \subseteq \alltasks$. We call $T$ an intree (of tasks) if there is one designated task $t_0\in\alltasks$ such that the following two conditions hold:
+  \begin{eqnarray*}
+    \forall  t \in T. & \quad t \neededfor* t_0 \\
+    \forall  t \in T. & \quad t\neededfor s \Rightarrow s\in T
+  \end{eqnarray*}
+\end{definition}
+
+\begin{definition}
+  Let $T$ be an intree of tasks. Let $M\subseteq\alltasks$ be a set of tasks such that the following two conditions hold:
+  \begin{itemize}
+  \item $\forall t\in M.\, t \in T$
+  \item $\forall t\in M.\, \nexists u \in T.\, u\neededfor t $
+  \end{itemize}
+  We then call the tuple $\left( T, M \right)$ a \emph{configuration}.
+\end{definition}
+
+%%% Local Variables:
+%%% TeX-master: "../thesis.tex"
+%%% End: 

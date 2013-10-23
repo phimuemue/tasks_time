@@ -1,0 +1,141 @@
+%%% hugegraph.tex --- 
+
+%% Author: philipp@pmpc
+%% Version: $Id: thesis.tex,v 0.0 2013/04/08 12:19:13 philipp Exp$
+
+%%\revision$Header: /home/philipp/Documents/Uni/masterarbeit/thesis/thesis.tex,v 0.0 2013/04/08 12:19:13 philipp Exp$
+
+\documentclass{report}
+
+\usepackage[english]{babel}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{suffix}
+\usepackage{multicol}
+\usepackage[left=3.5cm,right=3.5cm,a0paper]{geometry}
+
+\usetikzlibrary{shapes.multipart,chains}
+\usetikzlibrary{positioning}
+\usetikzlibrary{matrix}
+\usetikzlibrary{external} 
+%\tikzexternalize
+
+
+\tikzstyle{task_cross}=[
+    {path picture={ 
+        \draw[black]
+        (path picture bounding box.south east) -- 
+        (path picture bounding box.north west) 
+        (path picture bounding box.south west) -- 
+        (path picture bounding box.north east);
+      }
+    }
+]
+
+\tikzstyle{task_scheduled}=[fill=white, draw=black, task_cross]
+
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{theorem}{Theorem}[chapter]
+
+\newcommand{\p}[1]{Pr\left[#1\right]}
+\newcommand{\alltasks}{{\mathbb T}}
+\newcommand{\neededfor}{\rightarrow}
+\WithSuffix\newcommand\neededfor*{\stackrel{*}{\rightarrow}}
+
+% \getwidthofnode will measure the width of the node given as its second
+% parameter and store it into the first parameter.
+\makeatletter
+\newcommand\getwidthofnode[2]{%
+    \pgfextractx{#1}{\pgfpointanchor{#2}{east}}%
+    \pgfextractx{\pgf@xa}{\pgfpointanchor{#2}{west}}% \pgf@xa is a length defined by PGF for temporary storage. No need to create a new temporary length.
+    \addtolength{#1}{-\pgf@xa}%
+}
+\makeatother
+
+\begin{document}
+
+% stuff to draw diagrams levelwise
+\newcommand{\leveltop}{0}
+\newcommand{\leveltopI}{0}
+\newcommand{\leveltopII}{0}
+\newcommand{\leveltopIII}{0}
+\newcommand{\leveltopIIII}{0}
+\newcommand{\leveltopIIIII}{0}
+\newcommand{\leveltopIIIIII}{0}
+\newcommand{\leveltopIIIIIII}{0}
+\newcommand{\leveltopIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIIIIIIIIIIIIIIIII}{0}
+
+\section{P2: A whole intree-DAG and its condensed counterpart}
+
+\input{../0011123669hlf.tex}
+
+\hrule
+
+
+
+\section{Several proofs that HLF is not optimal for P3}
+\frame{
+  \begin{minipage}{.25\textwidth}
+    \subsection{Different runs of P3-HLF yield diffe\-rent results on 001112}
+    \centering{}
+    \input{../001112hlf.tex}
+  \end{minipage}
+}
+\frame{
+  \begin{minipage}{.25\textwidth}
+    \subsection{P3-HLF not optimal for 0012346688}
+    \input{../0012346688hlf.tex}
+    \input{../0012346688opt.tex}
+  \end{minipage}
+}
+\frame{
+  \begin{minipage}{.25\textwidth}
+    \subsection{P3-HLF not optimal  for 0012446788}
+    \input{../0012446788hlf.tex}
+    \input{../0012446788opt.tex}
+  \end{minipage}
+}
+\frame{
+  \begin{minipage}{.25\textwidth}
+    \subsection{P3-HLF not optimal for 00123455799}
+    \input{../00123455799hlf.tex}
+    \input{../00123455799opt.tex}
+  \end{minipage}
+}
+
+\input{../default_unoptimized}
+\input{../default_optimized}
+
+\input{../default}
+
+% \input{../000111223hlf.tex}
+% \input{../000111223opt.tex}
+
+\end{document}
