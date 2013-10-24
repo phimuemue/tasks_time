@@ -1,11 +1,8 @@
 \chapter{Suboptimal strategies for P3}
 \label{chap:p3-suboptimal}
 
-In this section, we take a look at some strategies and use them for scheduling with three processors. We will do so very exemplarily and inspect counterexamples for the respective strategies.
-
+In this section, we take a look at some strategies and use them for scheduling with three processors. We will do this very exemplarily and inspect counterexamples for the respective strategies. In particular we will see examples illustrating that HLF does not work in all cases.
 Finally, we conclude some properties that \emph{optimal} scheduling strategies seem to fulfill.
-
-\todo{Introductory text}
 
 \section{HLF}
 \label{sec:hlf-p3-suboptimal}
@@ -15,7 +12,7 @@ First of all, we take look at some examples that show that HLF is not optimal fo
 \subsection{HLF does not behave the same for intrees with same profile}
 \label{sec:p3-suboptimal-hlf-same-profiles-different-run-times}
 
-In the two-processor case it is known that trees with the same level profile (see section \ref{sec:p2-profiles}) have the same run time. This is not the case for three processors \todo{Erklären, warum der Beweis nicht mehr hinhaut!} Figure \ref{fig:hlf-001112} shows an intree, where HLF can choose at some points, and different choices result in different runtimes.
+In the two-processor case it is known that trees with the same level profile (see section \ref{sec:p2-profiles}) have the same run time. This is not the case for three processors. Figure \ref{fig:hlf-001112} shows an intree, where HLF can choose at some points, and different choices result in different runtimes.
 
 \begin{figure}[ht]
   \centering

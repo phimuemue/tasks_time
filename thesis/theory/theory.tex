@@ -302,38 +302,6 @@ Note that this representation still is not the most concise one in the sense tha
 
 However, we will most of the time use a notion where we assume that for a tree sequence $(x_1,x_2,\dots, x_n)$ we have $\forall i \in \left\{ 1,2,\dots,n \right\}x_i\leq i$. This is always possible because we can start a breadth-first search (BFS) at task 0 and assign numbers to the tasks representing the order in which BFS visits the tasks.
 
-That means that there are $n!$ possibilities for tree sequences with exactly $n$ tasks. On the other hand, there are less (distinct) intrees of size $n$:
-
-\begin{theorem}
-  Let $T_n$ denote the number of intrees containing $n$ tasks. Then,
-  \begin{equation*}
-    T_n \sim C\cdot r^{-n}\cdot n^{-1.5} 
-    \quad \text{ as } n\rightarrow \infty,
-  \end{equation*}
-  where $C=0.4399237\dots$ and $r=0.3383219\dots$.
-\end{theorem}
-
-\begin{proof}
-  See \cite{asymptotic_enum_odlyzko}.
-\end{proof}
-
-The first values for $T_n$ are $0, 1, 1, 2, 4, 9, 20, 48, 115, 286, 719, 1842, 4766, 12486, 32973, \dots$ \cite{oeisrootedtrees}.
-
-%\todo{Sollten auch andere Repräsentation erwähnt werden? We can represent an intree by a properly parenthesized expression, where leaves are denoted by 1 resp. 0 depending on whether they are scheduled resp. non-scheduled. We call the corresponding string the \emph{parenthesized expression} of an intree.}
-
-\subsection{Interpretation as dependency graphs}
-\label{sec:intrees-interpreted-as-dependency-graphs}
-
-Those intrees can naturally be used to describe dependencies between different tasks, as long as each task is the requirement for \emph{at most one} other task. Each vertex in an intree then represents a task. If $t_1$ is a (direct) predecessor of $t_2$, this means that the task associated with $t_1$ must be executed before the task associated with $t_2$. Since we represent tasks by vertices, we will often use the terms task and vertex interchangeably.
-
-\todo{Vielleicht ein Beispiel aus der echten Welt.}
-
-\begin{definition}[Ready tasks]
-  Let $I$ be an intree of tasks (represented by vertices) and. If $t$ is a leaf of $I$, we call the corresponding task (resp. -- for simplicity -- the whole vertex) \emph{ready}.
-\end{definition}
-
-The intree $(0,0,1,1,2,3,3,3,6,8)$ (see figure \ref{fig:intree-example-task-names-directed-edges}) has the ready tasks 4, 5, 7, 9 and 10.
-
 \subsection{Labelled and unlabelled intrees}
 \label{sec:intrees-labelled-unlabelled}
 
@@ -418,9 +386,55 @@ The mathematical concept behind unlabelled trees can be described by the notion 
   We call two intrees $I_1$ and $I_2$ \emph{isomorphic}, if there exists a bijective function that maps vertices of $I_1$ onto vertices of $I_2$ such that $(v,t)$ is an edge in $I_1$ if and only if $(f(v), f(t))$ is an edge in $I_2$ and the root of $I_1$ is mapped onto the root of $I_2$.
 \end{definition}
 
-\emph{Remark:} The above definition of isomorphisms is somwhat non-standard in the sense that usually isomorphisms are defined for undirected trees. For this work, we restrict ourselves onto our definition (except where explicitly stated otherwise).
+\emph{Remark:} The above definition of isomorphisms is somewhat non-standard in the sense that usually isomorphisms are defined for undirected trees. For this work, we restrict ourselves onto our definition (except where explicitly stated otherwise).
 
 As an example for isomorphic intrees, consider $(0,0,1,1,2,3,3,3,6,8)$, $(0,1,2,3,0,5,1,2,2,9)$ and $(0,1,0,3,3,4,4,7,4,9)$.
+
+Since we are using a notion of intrees as aforementioned (i.e. with $\forall i \in \left\{ 1,2,\dots,n \right\}.\ x_i \leq i$), this means that there are $n!$ possibilities for tree sequences with exactly $n$ tasks. On the other hand, there are less (distinct) intrees of size $n$:
+
+\begin{theorem}
+  Let $T_n$ denote the number of intrees containing $n$ tasks. Then,
+  \begin{equation*}
+    T_n \sim C\cdot r^{-n}\cdot n^{-1.5} 
+    \quad \text{ as } n\rightarrow \infty,
+  \end{equation*}
+  where $C=0.4399237\dots$ and $r=0.3383219\dots$.
+\end{theorem}
+
+\begin{proof}
+  See \cite{asymptotic_enum_odlyzko}.
+\end{proof}
+
+The first values for $T_n$ are $0, 1, 1, 2, 4, 9, 20, 48, 115, 286, 719, 1842, 4766, 12486, 32973, \dots$ \cite{oeisrootedtrees}.
+
+In some cases it is useful to consider only intrees with a certain number of \emph{leaves}. If we consider the set of all intrees with $n$ tasks it is clear that \emph{all but one} intree have more than one leaf (the only intree having exactly one leaf is a chain of $n$ tasks). For us, especially the number of intrees with at least 4 leaves might be of interest \footnote{Because all other intrees -- with 3 or less leaves -- are trivially optimally scheduled by HLF (see section \ref{sec:intro-two-scheduling-strategies}).}. Moreover, an optimal schedule for an intree whose root has exactly one predecessor (meaning that the degree of the root is 1 or -- more mathematically -- $\deg (0) = 1$) looks the same as if we omitted the root and scheduled it after the whole intree \emph{without} the root. Table \ref{tab:number-of-intrees-summary} sums up the number of intrees fulfilling the respective properties.
+
+\begin{table}[th]
+  \centering
+  \begin{tabular}[ht]{r|cccccccccccccc}
+    Tasks & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 \\
+    \hline
+    Intrees & 2 & 4 & 9 & 20 & 48 & 115 & 286 & 719 & 1842 & 4766 & 12486 & 32973 & 87811 \\
+    $\geq 4$ leaves & 0& 0& 1& 5& 20& 67& 207& 595& 1655& 4494& 12101& 32443& 87097 \\
+    $\deg (0) > 1$ & 1 & 2 & 5 & 11 & 28 & 67 & 171 & 433 & 1123 & 2924 & 7720 & 20487 & 54838 \\
+    $\geq 4$ leaves; $\deg{0} > 1$ & 0 & 0 & 1 & 4 & 15 & 47 & 140 & 388 & 1060 & 2839 & 7607 & 20342 & 54654 \\
+  \end{tabular}
+  \caption{Number of intrees with a certain number of tasks and certain properties (namely if they have at least 4 leaves and/or if their root has more than one predecessor).}
+  \label{tab:number-of-intrees-summary}
+\end{table}
+
+\subsection{Interpretation as dependency graphs}
+\label{sec:intrees-interpreted-as-dependency-graphs}
+
+Those intrees can naturally be used to describe dependencies between different tasks, as long as each task is the requirement for \emph{at most one} other task. Each vertex in an intree then represents a task. If $t_1$ is a (direct) predecessor of $t_2$, this means that the task associated with $t_1$ must be executed before the task associated with $t_2$. Since we represent tasks by vertices, we will often use the terms task and vertex interchangeably.
+
+\todo{Vielleicht ein Beispiel aus der echten Welt.}
+
+\begin{definition}[Ready tasks]
+  Let $I$ be an intree of tasks (represented by vertices) and. If $t$ is a leaf of $I$, we call the corresponding task (resp. -- for simplicity -- the whole vertex) \emph{ready}.
+\end{definition}
+
+The intree $(0,0,1,1,2,3,3,3,6,8)$ (see figure \ref{fig:intree-example-task-names-directed-edges}) has the ready tasks 4, 5, 7, 9 and 10.
 
 \subsection{Extension to in-forests}
 \label{sec:intrees-extension-to-forests}

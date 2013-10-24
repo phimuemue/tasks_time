@@ -104,7 +104,7 @@ It is intuitively clear that more processors should be able to process an intree
 
   We can now compare the run times of $S_p$ and $S_{p+1}$. First of all, note that the tasks $x_1,\dots,x_p$ are independent (one of our basic assumptions) and do not know whether they are currently scheduled by $S_p$ or by $S_{p+1}$. This means, they all finish at the same respective times in $S_p$ and $S_{p+1}$. 
 
-  Of course, the task $y$ finishes at some point in $S_p$, but it finishes \emph{earlier} in $S_{p+1}$ because it has been scheduled from the beginning. We now use induction to prove the claim: For small intrees (with, say, fewer than six tasks) we can easily test that the claim is true.
+  Of course, task $y$ finishes at some point in $S_p$, but it finishes \emph{earlier} in $S_{p+1}$ because it has been scheduled from the beginning. We now use induction to prove the claim: For small intrees (with, say, fewer than six tasks) we can easily test that the claim is true.
 
   % \begin{figure}[th]
   %   \centering
