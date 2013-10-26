@@ -403,6 +403,10 @@ int Intree::get_level(const Task& t) const{
     return get_level(t.get_id());
 }
 
+task_id Intree::get_successor(const task_id t) const{
+    return edges[t];
+}
+
 void Intree::get_predecessors(const Task& t, vector<task_id>& target) const{
     get_predecessors(t.get_id(), target);
 }

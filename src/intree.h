@@ -87,6 +87,7 @@ class Intree {
         int get_level(const Task& t) const;
         int get_level(const task_id t) const;
 
+        task_id get_successor(const task_id t) const;
         void get_predecessors(const Task& t, vector<task_id>& target) const;
         void get_predecessors(const task_id t, vector<task_id>& target) const;
         void get_siblings(const task_id t, vector<task_id>& target) const;

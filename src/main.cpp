@@ -35,6 +35,14 @@
 #include "dagviewexporter.h"
 #include "commandlineexporter.h"
 
+//testers
+#include "tester.h"
+#include "hlftester.h"
+#include "onlyonenonscheduledsiblingtester.h"
+#include "sameruntimetester.h"
+#include "unscheduledhlf1tester.h"
+#include "runtimetester.h"
+
 #include "tikztopdf.h"
 
 #include "alltrees.h"
@@ -407,12 +415,15 @@ void generate_output(const po::variables_map& vm,
 }
 
 string get_processor_time_string(const Snapshot* s, unsigned int n){
-    // TODO: make it recognize the second argument
     stringstream ss;
+    RuntimeTester rtt;
     ss << "(";
-    ss << s->expected_time_for_n_processors(3) << "|";
-    ss << s->expected_time_for_n_processors(2) << "|";
-    ss << s->expected_time_for_n_processors(1);
+    for(unsigned int procs = n; procs>0; --procs){
+        ss << rtt.test_string(s, procs);
+        if (procs > 1){
+            ss << "|";
+        }
+    }
     ss << ")";
     return ss.str();
 }
@@ -441,7 +452,6 @@ void generate_stats(const po::variables_map& vm,
     assert(s.size() == initial_settings.size());
     for(unsigned int i= 0; i<s.size(); ++i){
         lines.push_back(vector<string>());
-        //
         vector<string>& line = lines.back();
         // best snapshot?
         if(find(best.begin(), best.end(), s[i]) != best.end()){
@@ -450,42 +460,22 @@ void generate_stats(const po::variables_map& vm,
         else{
             line.push_back(string(" "));
         }
+        // Test Suite:
         // is HLF?
-        if(s[i]->is_hlf()){
-            line.push_back(string("H"));
-        }
-        else{
-            line.push_back(string(" "));
-        }
-        // is HLF in the first snapshot?
-        if(s[i]->is_hlf_first()){
-            line.push_back(string(" "));
-        }
-        else {
-            line.push_back(string("!"));
-        }
+        HLFTester hlftester;
+        line.push_back(hlftester.test_string(s[i]));
         // at most one task with unscheduled siblings?
-        if(s[i]->only_one_nonscheduled_sibling()){
-            line.push_back(string(" "));
-        }
-        else {
-            line.push_back(string("U"));
-        }
+        OnlyOneNonScheduledSiblingTester oonsst;
+        line.push_back(oonsst.test_string(s[i]));
         // can snapshots be aggregated?
-        if(s[i]->has_succs_with_same_run_time()){
-            line.push_back(string("S"));
-        }
-        else {
-            line.push_back(string(" "));
-        }
+        SameRunTimeTester srtt;
+        line.push_back(srtt.test_string(s[i]));
         // hlf-1 level tasks unscheduled, but lower ones?
-        if(s[i]->has_unscheduled_hlf1_tasks()){
-            line.push_back(string("2"));
-        }
-        else {
-            line.push_back(string(" "));
-        }
+        UnscheduledHlf1Tester uh1t;
+        line.push_back(uh1t.test_string(s[i]));
         line.push_back(" ");
+        // Initially scheduled tasks
+        // TODO: This does not work all the time.
         stringstream markedstring("");
         markedstring << "[";
         for(unsigned int midx = 0; midx < initial_settings[i].size(); ++midx){
@@ -496,7 +486,6 @@ void generate_stats(const po::variables_map& vm,
         }
         markedstring << "]";
         line.push_back(markedstring.str());
-        // line.push_back(s[i]->markedstring());
         line.push_back("  ");
         line.push_back(get_expected_runtime_string(s[i]));
         line.push_back("  ");
@@ -505,7 +494,9 @@ void generate_stats(const po::variables_map& vm,
         // cout << "(" << s[i]->expected_runtime().get_d() << ")";
         // line.push_back(" ");
 #endif
-        line.push_back(get_processor_time_string(s[i], 3));
+        line.push_back(get_processor_time_string(s[i], 
+                    vm["processors"].as<int>()
+                    ));
         line.push_back("  ");
         line.push_back(get_count_snaps_string(s[i]));
     }
