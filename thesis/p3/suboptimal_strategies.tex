@@ -193,22 +193,22 @@ We examined all intrees with up to 13 tasks, especially the cases where HLF is n
 \subsection{Only highest or lowest leaves}
 \label{sec:disproving-only-highest-or-lowest-leaves}
 
-The trees we examined so far resulted in schedules that picked only combinations \emph{highest leaves and lowest leaves} possible. Thus, we were tempted to think that an optimal schedule chooses only topmost tasks or leaves whose level is minimal (among all leaves). However, this is not a criterion for an optimal schedule, as we can observe by scheduling the 14-tasks-intree $(0,0,0,2,3,4,5,7,7,9,10,10,12)$, which is shown in figure \ref{fig:only-high-or-low-not-optimal}. For this intree, we have to schedule two topmost tasks and one task on level 3, but there is one unscheduled task remaining on level 1.
+The trees we examined so far resulted in schedules that picked only combinations \emph{highest leaves and lowest leaves} possible. Thus, we were tempted to think that an optimal schedule chooses only topmost tasks or leaves whose level is minimal (among all leaves). However, this is not a criterion for an optimal schedule, as we can observe by scheduling the 13-tasks-intree $(0,0,0,2,3,4,5,7,7,9,10,10)$, which is shown in figure \ref{fig:only-high-or-low-not-optimal}. For this intree, we have to schedule two topmost tasks and one task on level 3, but there is one unscheduled task remaining on level 1.
 
 \begin{figure}[ht]
   \centering
   \begin{subfigure}{.45\textwidth}
     \centering
-    \includegraphics{p3/only_high_or_low/0002345779101012_opt.pdf}
+    \includegraphics{p3/only_high_or_low/00023457791010_opt.pdf}
     \caption{Optimal schedule picking a non-HLF task that is also not the lowest possible.}
   \end{subfigure}
   \quad
   \begin{subfigure}{.45\textwidth}
     \centering
-    \includegraphics{p3/only_high_or_low/0002345779101012_subopt.pdf}
+    \includegraphics{p3/only_high_or_low/00023457791010_subopt.pdf}
     \caption{Suboptimal HLF-Schedule.}
   \end{subfigure}
-  \caption{Intree $(0,0,0,2,3,4,5,7,7,9,10,10,12)$ shows that there are intrees where an optimal schedule has to choose a non-HLF task that has a higher level than some non-chosen task.}
+  \caption{Intree $(0,0,0,2,3,4,5,7,7,9,10,10)$ shows that there are intrees where an optimal schedule has to choose a non-HLF task that has a higher level than some non-chosen task.}
   \label{fig:only-high-or-low-not-optimal}
 \end{figure}
 
