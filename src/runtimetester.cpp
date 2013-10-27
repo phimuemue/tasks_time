@@ -1,9 +1,17 @@
 #include "runtimetester.h"
 
 string RuntimeTester::test_string(const Snapshot* s, unsigned int p){
-    string result = "";
-    result += to_string(test_first(s, p));
-    return result;
+    stringstream ss;
+    RuntimeTester rtt;
+    ss << "(";
+    for(unsigned int procs = p; procs>0; --procs){
+        ss << to_string(test_first(s, procs)); 
+        if (procs > 1){
+            ss << "|";
+        }
+    }
+    ss << ")";
+    return ss.str();
 }
 
 myfloat RuntimeTester::test(const Snapshot* s, unsigned int p){

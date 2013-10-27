@@ -414,20 +414,6 @@ void generate_output(const po::variables_map& vm,
     }
 }
 
-string get_processor_time_string(const Snapshot* s, unsigned int n){
-    stringstream ss;
-    RuntimeTester rtt;
-    ss << "(";
-    for(unsigned int procs = n; procs>0; --procs){
-        ss << rtt.test_string(s, procs);
-        if (procs > 1){
-            ss << "|";
-        }
-    }
-    ss << ")";
-    return ss.str();
-}
-
 string get_expected_runtime_string(const Snapshot* s){
     stringstream ss;
     ss << s->expected_runtime();
@@ -494,11 +480,10 @@ void generate_stats(const po::variables_map& vm,
         // cout << "(" << s[i]->expected_runtime().get_d() << ")";
         // line.push_back(" ");
 #endif
-        line.push_back(get_processor_time_string(s[i], 
-                    vm["processors"].as<int>()
-                    ));
-        line.push_back("  ");
-        line.push_back(get_count_snaps_string(s[i]));
+    RuntimeTester rtt;
+    line.push_back(rtt.test_string(s[i], vm["processors"].as<int>()));
+    line.push_back("  ");
+    line.push_back(get_count_snaps_string(s[i]));
     }
     vector<unsigned int> column_widths(lines[0].size());
     for(auto line : lines){
