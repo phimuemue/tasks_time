@@ -28,11 +28,6 @@ bool SameRunTimeTester::test(const Snapshot* s){
             }
         }
     }
-    for(auto suc : s->Successors){
-        if(test(suc)){
-            return true;
-        }
-    }
     return false;
 }
 

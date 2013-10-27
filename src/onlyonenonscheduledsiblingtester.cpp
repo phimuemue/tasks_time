@@ -35,14 +35,7 @@ bool OnlyOneNonScheduledSiblingTester::test(const Snapshot* s){
             a = b;
         }
     }
-    if(!(count > 1)){
-        return !(count > 1);
-    }
-    bool result = !(count > 1);
-    for(auto it : s->Successors){
-        result = result && test(it);
-    }
-    return result;
+    return count<=1;
 }
 
 bool OnlyOneNonScheduledSiblingTester::combine_function(const Snapshot* s, bool result, vector<bool> values){
