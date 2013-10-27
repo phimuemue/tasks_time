@@ -149,7 +149,7 @@ It is intuitively clear that more processors should be able to process an intree
 \label{sec:p3-size-of-snapshot-dag-first-attempts}
 
 Similar to the reasoning in section \ref{sec:p2-snapshot-dag}, we can research the size of a snapshot DAG for the P3 case. 
-We conducted an experiment and examined the size for snapshot DAGs of intrees containing up to 14 tasks. 
+We conducted an experiment and examined the size for snapshot DAGs of intrees containing up to 15 tasks. 
 Therefore, we generated all intrees (up to isomorphism) with a certain number of tasks (see section \ref{sec:enumerating-all-intrees} for an algorithm).
 Then we computed the following for each intree:
 \begin{itemize}
@@ -162,7 +162,7 @@ We do so because of the following: It is easily possible to construct an optimal
 
 It is clear that the size of the snapshot DAG for an intree with $n$ tasks is at most $n^3$ times as large as the number of subtrees of that particular intree. This can be easily seen by an argument similar to the one in section \ref{sec:p2-snapshot-dag}, where we said that each subtree has three scheduled tasks and we have at most $\binom{n}{3} \leq n^3$ possibilities to choose three tasks from each intree.
 
-We examined all intrees up to 15 tasks and computed for each of them the number of subtrees, the number of snapshots to be examined by an exhaustive search and the number of snapshots in the snapshot DAG for the optimal schedule.
+%We examined all intrees up to 15 tasks and computed for each of them the number of subtrees, the number of snapshots to be examined by an exhaustive search and the number of snapshots in the snapshot DAG for the optimal schedule.
 
 The results are summed up in table \ref{tab:num-subtrees-size-of-dags}.
 
@@ -192,9 +192,11 @@ The results are summed up in table \ref{tab:num-subtrees-size-of-dags}.
   \label{tab:num-subtrees-size-of-dags}
 \end{table}
 
-As we can see in table \ref{tab:num-subtrees-size-of-dags}, the number of subtrees is (at least for $n\geq  9$) significantly larger than the number of snapshots in the snapshot DAG for the optimal schedule. However, the overall number of snapshots is strictly higher than the number of subtrees.
+As we can see in table \ref{tab:num-subtrees-size-of-dags}, the number of subtrees is (at least for $n\geq  9$) significantly larger than the number of snapshots in the snapshot DAG for the optimal schedule. However, the (maximal) overall number of snapshots is (for $n\geq 7$) strictly higher than the (maximal) number of subtrees.
 
-Another interesting fact is that there is no ``strict correlation'' between the number of subtrees and the number of snapshots in the optimal snapshot DAG. That is, there are certain DAGs that have more non-isomorphic subtrees than another DAG, yet -- on the other hand -- more snapshots in the optimal snapshot DAG. As an example, consider the intrees $T_1$ described by 00011111 and $T_2$ described by 00001234: $T_1$ has 19 subtrees and its optimal snapshot DAG contains 13 snapshots, while $T_2$ has only 15 subtrees, but an optimal snapshot DAG containing 14 snapshots.
+While both the number of subtrees and (probably also) the number of snapshots in the LEAF DAG grow exponentially, the number of snapshots in the optimal DAG may be polynomial. However, it is quite difficult to make exact claims here because we have too few numbers to predict anything with high confidence.
+
+Another interesting fact is that there is no ``strict correlation'' between the number of subtrees and the number of snapshots in the optimal snapshot DAG. That is, there are certain DAGs that have more non-isomorphic subtrees than another DAG, yet -- on the other hand -- more snapshots in the optimal snapshot DAG. As an example, consider the intrees $T_1$ described by $(0,0,0,1,1,1,1,1)$ and $T_2$ described by $(0,0,0,0,1,2,3,4)$: $T_1$ has 19 subtrees and its optimal snapshot DAG contains 13 snapshots, while $T_2$ has only 15 subtrees, but an optimal snapshot DAG containing 14 snapshots.
 
 Moreover, intrees containing $n$ tasks and having the maximal number of subtrees are (at least for $8\leq n \leq 17$) are not the ones having the largest optimal snapshot DAG.
 
@@ -1190,27 +1192,29 @@ If we recognize that this improved exhaustive search performs significantly bett
     &  Max & Avg & Max & Avg & Max & Avg\\
     \hline
     5 & 7 & 5.89 & 7 & 5.89 & 1 & 1\\
-    6 & 11 & 8.25 & 11 & 8.25 & 1 & 1\\
-    7 & 19 & 11.75 & 19 & 11.60 & 1 & 0.99 \\
-    8 & 34 & 17.39 & 32 & 16.74 & 0.94 & 0.96 \\
-    9 & 63 & 26.53 & 52 & 24.65 & 0.82 & 0.93 \\
-    10 & 119 & 41.85 & 96 & 37.56 &0.81 & 0.90 \\
-    11 & 230 & 67.48 & 195 & 58.96 & 0.85 & 0.87 \\
-    12 & 437 & 112.68 & 405 & 95.18 & 0.93 & 0.84 \\
-    13 & 812 & 184.95 & 738 & 156.44 & 0.91 & 0.85 \\
-    14 & 1510 & 304.41 &1393 & 259.95 & 0.92 & 0.85
+    6 & 11 & 8.25 & 11 & 8.05 & 1 & 0.98 \\
+    7 & 19 & 11.75 & 16 & 10.90 & 0.84 & 0.93 \\
+    8 & 34 & 17.39 & 29 & 15.10 & 0.85 & 0.87 \\
+    9 & 63 & 26.53 & 52 & 21.75 & 0.82 & 0.82 \\
+    10 & 119 & 41.85 & 96 & 33.09 & 0.81 & 0.79 \\
+    11 & 230 & 67.48 & 195 & 52.77 & 0.85 & 0.78 \\
+    12 & 437 & 112.68 & 405 & 87.24 & 0.93 & 0.77 \\
+    13 & 812 & 184.95 & 738 & 146.87 & 0.91 & 0.79 \\
+    14 & 1510 & 304.41 & 1393 & 248.98 & 0.92 & 0.82
   \end{tabular}
   \caption{``Improved'' LEAF scheduling with HLF when encountering a degenerate intree or a parallel chain}
   \label{tab:improving-leaf-scheduler-benchmark}
 \end{table}
 
-Table \ref{tab:improving-leaf-scheduler-benchmark} compares the number of snapshots that are needed by exhaustive search (LEAF) to the number of snapshots needed by improved (HLF for degenerate intrees and parallel chains) exhaustive search. It shows that we could not reduce the number of snapshots to under 80\% in the average which is somewhat dissappointing because the tables \ref{tab:p3-degenerate-binary-trees-no-snapshots}, \ref{tab:parallel-chains-comparison-leaf-hlf} and \ref{tab:selected-parallel-chains-comparison} suggested a more remarkable performance gain.
+Table \ref{tab:improving-leaf-scheduler-benchmark} compares the number of snapshots that are needed by exhaustive search (LEAF) to the number of snapshots needed by improved exhaustive search (HLF for degenerate intrees and parallel chains, otherwise LEAF). It shows that we could not reduce the number of snapshots to under 70\% in the average which is somewhat dissappointing because tables \ref{tab:p3-degenerate-binary-trees-no-snapshots}, \ref{tab:parallel-chains-comparison-leaf-hlf} and \ref{tab:selected-parallel-chains-comparison} suggested a more remarkable performance gain.
 
 We have seen that working with HLF for degenerate intrees and parallel chains has -- in contrast to the benchmarks described in tables \ref{tab:p3-degenerate-binary-trees-no-snapshots} and \ref{tab:parallel-chains-comparison-leaf-hlf} -- only a minor impact on the total number of snapshots needed. It is an interesting question why we do not observe an improvement as strong as it was when the \emph{original} intree was already a degenerate intree or a parallel chain. The reason for this behaviour is that, if we reach a degenerate intree or a parallel chain, we can possibly reach it in \emph{many different ways}, requiring the algorithm to examine HLF for each of the reached intrees. 
 
-As an example, consider the intree $(0,0,1,1,3,3,5,1,2)$. Note that this intree is neither a degenerate intree nor a parallel chain. However, it is quite close to being a degenerate intree (by simply removing one task 9). However, since an exhaustive search (even the improved one) has to start out by ordinarily examining all combinations of settings for the original intree. Only under certain circumstances, it reaches a situation where it can apply HLF for a degenerate intree. But, as you can see from figure \ref{fig:improving-leaf-not-that-useful-in-some-cases}, it is clear from the beginning which degenerate intrees we reach. 
+As an example, consider the intree $(0,0,1,1,3,3,5,1,2)$. Note that this intree is neither a degenerate intree nor a parallel chain. However, it is quite close to being a degenerate intree (by simply removing one task, namely task 9). However, since an exhaustive search (even the improved one) has to start out by ordinarily examining all combinations of settings for the original intree, it reaches situations where it can apply HLF for degenerate intrees \emph{via several possible paths}.
 
-Each degenerate intree that is reached still has to be examined seperately by HLF. This explains why this improvement, while still reducing the number of required snapshots, is not as useful if only a subtree of the original intree is a degenerate intree (or a parallel chain). Note that in figure \ref{fig:improving-leaf-not-that-useful-in-some-cases}, there are certain intrees  that occur in both schedules, but \emph{with different sets of scheduled tasks} in each schedule (see figure \ref{fig:improving-leaf-duplicate-task} for the respective intree). This requires us to examine both of these snapshots seperately by HLF to compute the optimal run time.
+Still, as you can see from figure \ref{fig:improving-leaf-not-that-useful-in-some-cases}, it is clear from the beginning \emph{which} degenerate intrees we reach. 
+
+Each degenerate intree that is reached then has to be examined seperately by HLF. This explains why this improvement, while still reducing the number of required snapshots, is not as useful if only a subtree of the original intree is a degenerate intree (or a parallel chain). Note that in figure \ref{fig:improving-leaf-not-that-useful-in-some-cases}, there are certain intrees  that occur in both schedules, but \emph{with different sets of scheduled tasks} in each schedule (see figure \ref{fig:improving-leaf-duplicate-task} for the respective intree). This requires us to examine both of these snapshots seperately by HLF to compute the optimal run time.
 
 \begin{figure}[th]
   \centering
@@ -1248,7 +1252,7 @@ Each degenerate intree that is reached still has to be examined seperately by HL
   \label{fig:improving-leaf-not-that-useful-in-some-cases}
 \end{figure}
 
-\emph{Remark:} Even if -- at the point of computation -- there are different snapshots containing the same (or an isomorphic) intree, we did not observe one single instance where the \emph{optimal schedule} contained two distinct snapshots with two isomorphic intrees. This lead us to the following conjecture:
+\emph{Remark:} Even if -- at the point of computation -- there are different snapshots containing the same (or an isomorphic) intree, we did not observe one single instance where the \emph{optimal schedule} contained two distinct snapshots with two isomorphic intrees (but different sets of scheduled tasks). This lead us to the following conjecture:
 
 \begin{conjecture}
   Let $x$ and $y$ be two distinct snapshots in an optimal snapshot DAG. Then, their respective intrees are not isomorphic.
