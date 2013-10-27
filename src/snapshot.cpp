@@ -386,10 +386,8 @@ myfloat Snapshot::expected_runtime() const {
     }
     assert(successor_probs.size() == successors.size());
     assert(finished_task.size() == successors.size());
-    // TODO: compute expected minimum runtime of marked 
-    // threads dynamically
     myfloat expected_runtime_of_min_task = 
-        ((myfloat)1)/(myfloat)marked.size();
+        Probability_Computer().expected_runtime_of_min_task(intree, marked);
     myfloat result = expected_runtime_of_min_task;
     myfloat suc_expected_runtimes[successors.size()];
     for(unsigned int i=0; i<successors.size(); ++i){

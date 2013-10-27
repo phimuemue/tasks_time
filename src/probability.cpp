@@ -131,3 +131,7 @@ void Probability_Computer::compute_finish_probs(const Intree& intree, const vect
     }
 #endif
 }
+
+myfloat Probability_Computer::expected_runtime_of_min_task(const Intree& intree, const vector<task_id>& marked) const {
+    return ((myfloat)1) / ((myfloat)marked.size());
+}
