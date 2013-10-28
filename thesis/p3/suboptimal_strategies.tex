@@ -1,7 +1,7 @@
 \chapter{Suboptimal strategies for P3}
 \label{chap:p3-suboptimal}
 
-In this section, we take a look at some strategies and use them for scheduling with three processors. We will do this very exemplarily and inspect counterexamples for the respective strategies. In particular we will see examples illustrating that HLF does not work in all cases.
+In this section, we take a look at some strategies and use them for scheduling with three processors. We will do this very exemplarily and inspect counterexamples for the respective strategies. In particular we will see examples illustrating that HLF does not work in all cases. All the examples for the devised strategies are minimal in the sense that there are no intrees containing fewer tasks that could serve as a counter example for the respective strategy.
 Finally, we conclude some properties that \emph{optimal} scheduling strategies seem to fulfill.
 
 \section{HLF}
@@ -310,7 +310,7 @@ A strategy for cases where HLF is can-optimal now might be to resolve HLF-ambigu
 
 The last step in the above explanation can be viewed as follows: We first create all possible choices of topmost tasks and then only pursue those, where there is no topmost-maximal subtree that has unscheduled topmost tasks.
 
-This strategy seems to do a good job in many cases, but can be seen to be false by examining the optimal schedule for the following intree with 18 tasks: $(0,0,0,1,2,2,4,4,4,5,5)$. It is shown in figure \ref{fig:subtree-with-fewest-toptasks-suboptimal}.
+This strategy seems to do a good job in many cases, but can be seen to be false by examining the optimal schedule for the following intree with 18 tasks: $(0,0,1,2,2,2,3,3,3,4)$. It is shown in figure \ref{fig:subtree-with-fewest-toptasks-suboptimal}.
 
 \emph{Remark:} We did not specify what should be done if there are several maximal subtrees with the same number of topmost tasks, but our counterexample suffices that this strategy does not work optimally even if there are no maximal subtrees with the same number of nodes.
 
@@ -327,7 +327,7 @@ This strategy seems to do a good job in many cases, but can be seen to be false 
     \input{p3/subtree_with_fewest_toptasks/subtree_with_fewest_toptasks_opt}
     \caption{Optimal schedule picking a subtree with three topmost tasks.}
   \end{subfigure}
-\caption{Intree $(0,0,0,1,2,2,4,4,4,5,5)$: For this intree, the optimal schedule chooses all tasks from a subtree with three topmost tasks and chooses none of the subtree with only one topmost tasks.}
+\caption{Intree $(0,0,1,2,2,2,3,3,3,4)$: For this intree, the optimal schedule chooses all tasks from a subtree with three topmost tasks and chooses none of the subtree with only one topmost tasks.}
   \label{fig:subtree-with-fewest-toptasks-suboptimal}
 \end{figure}
 
@@ -344,7 +344,7 @@ It can be quickly seen that slightly altering the strategy given in section \ref
 
 \begin{description}
 \item [Preferring leaf-maximal subtrees with fewer leaves] Figure \ref{fig:subtree-with-fewest-toptasks-suboptimal} shows that this strategy is not optimal, since the optimal solution prefers a subtree with four leaves over one with only three leaves.
-  \emph{Remark:} The tree $(0,0,0,1,2,2,4,4,4,5,5)$ in particular shows that there are situations where a topmost task that is the \emph{only} requirement for its predecessor is initially \emph{not} scheduled in the optimal case. During our research we have experienced that this is a very rare situation.
+  \emph{Remark:} The tree $(0,0,1,2,2,2,3,3,3,4)$ in particular shows that there are situations where a topmost task that is the \emph{single} requirement for its successor is initially \emph{not} scheduled in the optimal case. During our research we have experienced that this is a very rare situation.
 \item [Preferring leaf-maximal subtrees with more leaves] One of our first examples, the intree $(0,0,0,1,1,1,2,2,3)$ (see figure \ref{fig:hlfnfc-is-not-optimal}) already shows that this strategy is not optimal in general.
 \end{description}
 
