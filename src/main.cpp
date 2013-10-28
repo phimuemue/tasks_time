@@ -42,6 +42,7 @@
 #include "sameruntimetester.h"
 #include "unscheduledhlf1tester.h"
 #include "runtimetester.h"
+#include "singlesuccessortester.h"
 
 #include "tikztopdf.h"
 
@@ -459,6 +460,10 @@ void generate_stats(const po::variables_map& vm,
         // hlf-1 level tasks unscheduled, but lower ones?
         UnscheduledHlf1Tester uh1t;
         line.push_back(uh1t.test_string(s[i]));
+        // singlepredecessor task unscheduled?
+        SingleSuccessorTester sst;
+        line.push_back(sst.test_string(s[i]));
+        // Delimitter
         line.push_back(" ");
         // Initially scheduled tasks
         // TODO: This does not work all the time.

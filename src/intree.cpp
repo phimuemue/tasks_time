@@ -422,7 +422,7 @@ void Intree::get_predecessors(const task_id t, vector<task_id>& target) const{
 void Intree::get_siblings(const task_id t, vector<task_id>& target) const {
     task_id successor = edges[t];
     for(task_id it = 0; it < edges.size(); ++it){
-        if(edges[it] == successor){
+        if(edges[it] == successor && it != t){
             target.push_back(it);
         }
     }
