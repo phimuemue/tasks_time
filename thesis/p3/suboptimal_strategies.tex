@@ -310,7 +310,7 @@ A strategy for cases where HLF is can-optimal now might be to resolve HLF-ambigu
 
 The last step in the above explanation can be viewed as follows: We first create all possible choices of topmost tasks and then only pursue those, where there is no topmost-maximal subtree that has unscheduled topmost tasks.
 
-This strategy seems to do a good job in many cases, but can be seen to be false by examining the optimal schedule for the following intree with 18 tasks: $(0,0,1,1,2,3,3,4,5,7,8,9,9,11,13,13,13)$. It is shown in figure \ref{fig:subtree-with-fewest-toptasks-suboptimal}.
+This strategy seems to do a good job in many cases, but can be seen to be false by examining the optimal schedule for the following intree with 18 tasks: $(0,0,0,1,2,2,4,4,4,5,5)$. It is shown in figure \ref{fig:subtree-with-fewest-toptasks-suboptimal}.
 
 \emph{Remark:} We did not specify what should be done if there are several maximal subtrees with the same number of topmost tasks, but our counterexample suffices that this strategy does not work optimally even if there are no maximal subtrees with the same number of nodes.
 
@@ -318,16 +318,16 @@ This strategy seems to do a good job in many cases, but can be seen to be false 
   \centering
   \begin{subfigure}{.45\textwidth}
     \centering
-    \includegraphics{p3/subtree_with_fewest_toptasks/subtree_with_fewest_toptasks_opt.pdf}
-    \caption{Optimal schedule picking a subtree with three topmost tasks.}
+    \input{p3/subtree_with_fewest_toptasks/subtree_with_fewest_toptasks_subopt}
+    \caption{If we initially start with tasks as shown, this is the best schedule that can be obtained.}
   \end{subfigure}
   \quad
   \begin{subfigure}{.45\textwidth}
     \centering
-    \includegraphics{p3/subtree_with_fewest_toptasks/subtree_with_fewest_toptasks_subopt.pdf}
-    \caption{If we initially start with tasks as shown, this is the best schedule that can be obtained.}
+    \input{p3/subtree_with_fewest_toptasks/subtree_with_fewest_toptasks_opt}
+    \caption{Optimal schedule picking a subtree with three topmost tasks.}
   \end{subfigure}
-  \caption{Intree $(0,0,1,1,2,3,3,4,5,7,8,9,9,11,13,13,13)$: For this intree, the optimal schedule chooses all tasks from a subtree with three topmost tasks and chooses none of the subtree with only one topmost tasks.}
+\caption{Intree $(0,0,0,1,2,2,4,4,4,5,5)$: For this intree, the optimal schedule chooses all tasks from a subtree with three topmost tasks and chooses none of the subtree with only one topmost tasks.}
   \label{fig:subtree-with-fewest-toptasks-suboptimal}
 \end{figure}
 
@@ -344,7 +344,7 @@ It can be quickly seen that slightly altering the strategy given in section \ref
 
 \begin{description}
 \item [Preferring leaf-maximal subtrees with fewer leaves] Figure \ref{fig:subtree-with-fewest-toptasks-suboptimal} shows that this strategy is not optimal, since the optimal solution prefers a subtree with four leaves over one with only three leaves.
-  \emph{Remark:} The tree $(0,0,1,1,2,3,3,4,5,7,8,9,9,11,13,13,13)$ in particular shows that there are situations where a topmost task that is the \emph{only} requirement for its predecessor is initially \emph{not} scheduled in the optimal case. During our research we have experienced that this is a very rare situation.
+  \emph{Remark:} The tree $(0,0,0,1,2,2,4,4,4,5,5)$ in particular shows that there are situations where a topmost task that is the \emph{only} requirement for its predecessor is initially \emph{not} scheduled in the optimal case. During our research we have experienced that this is a very rare situation.
 \item [Preferring leaf-maximal subtrees with more leaves] One of our first examples, the intree $(0,0,0,1,1,1,2,2,3)$ (see figure \ref{fig:hlfnfc-is-not-optimal}) already shows that this strategy is not optimal in general.
 \end{description}
 
@@ -582,6 +582,35 @@ Note that $T$ actually describes an \emph{expected value}. Because of the linear
 \end{description}
 
 Surprisingly, \emph{both} of them are wrong (at least if considered separately).
+
+\subsection{Comparing $T_1$, $T_2$ and $T_3$ for particular intrees}
+\label{sec:comparing-t1-t2-t3-particular-intrees}
+
+We compare the times where exactly one, two resp. three precessors are busy for selected intrees. In particular, we will compare the respective intrees that were investigated so far and whose optimal schedule is non-HLF. The results are shown in table \ref{tab:comparing-t1-t2-t3-selected-intrees}.
+
+\begin{table}[th]
+  \centering
+  \begin{tabular}[ht]{l|ccc|ccc}
+    \multirow{2}{*}{Intree} & \multicolumn{3}{c|}{(Suboptimal) HLF} & \multicolumn{3}{c}{Optimal schedule} \\
+    & $T_3$ & $T_2$ & $T_1$ & $T_3^*$ & $T_2^*$ & $T_1^*$ \\
+    \hline
+    $(0,0,1,1,1,2)$ & 0.7778 & 1.0556 & 2.5556 & 0.8519 & 0.9259 & 2.5926 \\
+    $(0,0,1,2,3,4,6,6,8,8)$ & 0.9630 & 2.1061 & 3.8989 & 1.1029 & 1.8267 & 4.0379 \\
+    $(0,0,1,2,4,4,6,7,8,8)$ & 0.9698 & 1.4520 & 5.1865 & 1.0796 & 1.2329 & 5.2955 \\
+    $(0,0,1,2,3,4,5,5,7,9,9)$ & 1.0288 & 2.1691 & 4.5754 & 1.1852 & 1.8628 & 4.7189 \\
+    $(0,0,1,2,2,3,3,6,8,9,10,11,12)$ & 1.1231 & 1.7182 & 7.1942 & 1.2466 & 1.4713 & 7.3176 \\
+    $(0,0,0,2,3,4,5,7,7,9,10,10)$ & 1.7905 & 1.6275 & 4.3736 & 1.8899 & 1.4323 & 4.4658 \\
+    % the following needs some comment on "suboptimal hlf"
+    $(0,0,0,1,1,1,2,2,3)$ & 2.0069 & 0.7843 & 2.4108 & 2.0137 & 0.7723 & 2.4143 \\ 
+    $(0,0,1,1,2,3,3,4,5,7,8,9,9,11,(13)^3)$ 
+      & 3.8694 & 1.6105 & 3.1709 & 3.8783 & 1.5927 & 3.1796 \\
+    $(0,0,0,2,2,3,5,5,6,6,6)$ & 2.4127 & 1.0310 & 2.7000 & 2.4171 & 1.0224 & 2.7040
+  \end{tabular}
+  \caption{Comparing times where exactly one, two resp. three processors are busy.}
+  \label{tab:comparing-t1-t2-t3-selected-intrees}
+\end{table}
+
+We observe -- for the intrees considered here -- that $T_3^* \geq T_3$ and (surprisingly) also $T_1^* \geq T_1$. As a consequence, we always have $T_2^* \leq T_2$. In the following, we will inspect some examples that show that this is not always the case.
 
 \subsection{Maximizing $T_3$}
 \label{sec:p3-disproving-long-p3}
