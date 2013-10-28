@@ -463,9 +463,13 @@ void generate_stats(const po::variables_map& vm,
         // Initially scheduled tasks
         // TODO: This does not work all the time.
         stringstream markedstring("");
+        map<task_id, task_id> isomorphism;
+        tree_id tid;
+        auto normalized_intree = 
+            Intree::canonical_intree(s[i]->intree, vector<task_id>(), isomorphism, tid);
         markedstring << "[";
         for(unsigned int midx = 0; midx < initial_settings[i].size(); ++midx){
-            markedstring << initial_settings[i][midx];
+            markedstring << isomorphism[initial_settings[i][midx]];
             if(midx < initial_settings[i].size() - 1){
                 markedstring << ", ";
             }
@@ -491,8 +495,11 @@ void generate_stats(const po::variables_map& vm,
             column_widths[i] = max(column_widths[i], (unsigned int)(line[i].size()));
         }
     }
+    //auto asdf = s.begin();
     for(auto line : lines){
         assert(line.size() == column_widths.size());
+        // cout << **asdf << endl;
+        // asdf++;
         for(unsigned int i=0; i<line.size(); ++i){
             cout << line[i];
             for(unsigned int l=0; l<column_widths[i]-line[i].size(); ++l){
@@ -524,12 +531,9 @@ int main(int argc, char** argv){
             cout << "Raw form:\t" << t << endl;
             map<task_id, task_id> isomorphism;
             tree_id tid;
-            cout << "Normalized:  \t" 
-                << Intree::canonical_intree(t, 
-                        vector<task_id>(),
-                        isomorphism, tid) 
-                << endl;
-
+            auto normalized_intree = 
+                Intree::canonical_intree(t, vector<task_id>(), isomorphism, tid);
+            cout << "Normalized:  \t" << normalized_intree << endl;
             CommandLineExporter cle;
             cle.export_tree(cout, t);
 
