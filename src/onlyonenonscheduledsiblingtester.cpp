@@ -8,9 +8,25 @@ string OnlyOneNonScheduledSiblingTester::test_string(const Snapshot* s){
 
 bool OnlyOneNonScheduledSiblingTester::test(const Snapshot* s){
     unsigned int count = 0;
+    for(auto it : s->marked){
+        if(s->intree.get_level(it) != s->intree.get_level(s->marked[0])){
+            return true;
+        }
+    }
     set<task_id> marked_successors;
     for(task_id it : s->marked){
         marked_successors.insert(s->intree.get_successor(it));
+    }
+    bool threechildren = false;
+    for(auto it : marked_successors){
+        vector<task_id> preds;
+        s->intree.get_predecessors(it, preds);
+        if(preds.size() >= 3){
+            threechildren = true;
+        }
+    }
+    if(threechildren == false){
+        return true;
     }
     for(task_id suc : marked_successors){
         vector<task_id> preds;
