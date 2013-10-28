@@ -353,7 +353,7 @@ It can be quickly seen that slightly altering the strategy given in section \ref
 
 We also tried a recursive approach that decomposed an intree as follows: We separate the intrees rooted at the predecessors of the root. This way, we get a whole set of intrees. For each subtree, we now compute the optimal schedule and, moreover, the expected processing time -- assuming three processors in each individual subtree. The schedule for the whole intree then shall prefer subtrees whose expected processing time is the longest.
 
-We were tempted to conjecture this because of the intree $(0,0,1,1,2,3,3,4,5,7,8,9,9,11,13,13,13)$ whose optimal schedule starts shown in figure \ref{fig:subtree-with-fewest-toptasks-suboptimal}. If we decompose this intree into its parts, we see that the subtree whose expected run time is maximal is the one whose tasks are initially scheduled in the optimal schedule (see figure \ref{fig:reasoning-for-longest-root-subtree}).
+We were tempted to conjecture this because of the intree $(0,0,1,1,2,3,3,4,5,7,8,9,9,11,13,13,13)$ whose optimal schedule starts as shown in figure \ref{fig:preferring-root-predecessors-optimal-choice-example}. If we decompose this intree into its parts, we see that the subtree whose expected run time is maximal is the one whose tasks are initially scheduled in the optimal schedule (see figure \ref{fig:reasoning-for-longest-root-subtree}).
 
 \begin{figure}[ht]
   \centering
@@ -396,7 +396,8 @@ We were tempted to conjecture this because of the intree $(0,0,1,1,2,3,3,4,5,7,8
       \draw[](tid0) -- (tid1);
       \draw[](tid0) -- (tid2);
     \end{tikzpicture}  
-    \caption{Intree with initially scheduled tasks (for optimal schedule).}
+    \caption{Optimal choice of initially scheduled tasks.}
+    \label{fig:preferring-root-predecessors-optimal-choice-example}
   \end{subfigure}
   \quad
   \begin{subfigure}{.45\textwidth}
@@ -476,7 +477,9 @@ Once again, this strategy can be shown to be suboptimal by considering $(0,0,0,1
   \end{tikzpicture}
 \end{center}
 
-For $(0,0,0,1,1,1,2,2,3)$ the optimal schedule initially chooses the tasks 7,8 and 9 (the respective subtrees have run times 2.5 and 2).
+For the intree $(0,0,0,1,1,1,2,2,3)$ the optimal schedule initially chooses the tasks 7,8 and 9 (the respective subtrees have run times 2.5 and 2).
+
+\emph{Remark:} This intree \emph{might} not be the minimal intree serving as a counter example. Still, it is small and simple enough to be easily comprehensible.
 
 \subsection{Preferring root's predecessors with shortest processing time}
 \label{sec:suboptimal-preferring-root-predecessors-shortest-time}
