@@ -21,9 +21,12 @@ void TikzToPdf::convertTikzToPdf(string infile, string outfile){
         R"(\input{)" + infile + R"(})"
         R"(\end{document})"
         ;
-    string command = "pdflatex -interaction=batchmode -jobname='" + outfile + "' \"" + tex_code + "\"";
+    string command = "pdflatex -interaction=nonstopmode -jobname='" + outfile + "' \"" + tex_code + "\"";
     cout << command << endl;
     FILE* pdflatex = popen(command.c_str(), "r");
+    if(!pdflatex){
+        cout << "Fehler" << endl;
+    }
     pclose(pdflatex);
     FILE* pdfcrop = popen(("pdfcrop " + outfile + ".pdf " + outfile + ".pdf").c_str(), "r");
     pclose(pdfcrop);
