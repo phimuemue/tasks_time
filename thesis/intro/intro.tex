@@ -1,0 +1,36 @@
+\chapter{Introduction}
+\label{chap:introduction}
+
+An important part of many today's industrial services is \emph{scheduling}: allocating (limited) resources to certain tasks over time. These tasks can be activities of a broad spectrum such as lessons in school, lectures in universities, steps during a production process or tasks in a computer environment. Similarily, the resources might be teachers and professors, rooms, machines or processors. In this theory, we use the example of computer science: We have certain tasks that shall be processed by some processors.
+
+Since scheduling is needed in such a variety of areas, it has already been subject to research. Since the beginning of the 20th century it has been investigated more deeply \cite{pinedo2008scheduling}. As in many areas, the invention of computers made scheduling problems more comfortable to investigate --- and also brought up new scheduling problems specifically for computers. The problem statements in scheduling vary as strongly as the application areas, and an extensive notation has been developed to describe scheduling problems properly and concise \cite{schedulingclassification,pinedo2008scheduling}.
+
+This de-facto notation describes (among other things) the following parameters of a scheduling problem: In addition to the plain resources (e.g. the amount and capability or processing speed of processors) there might be certain restrictions on them (e.g. certain processors can process only a specific subset of tasks). Similarily, for the set of tasks there might hold specific constraings (e.g. dependencies or precedence relationships between tasks, due dates, arrival dates). Last, there is a so-called \emph{objective} to optimize. In some cases the objective is to minimize the overall run time while in other cases it might be advantageous to bound the maximum lateness of a task.
+
+In the beginning, research mainly focussed on scheduling problems where all information were known \emph{before} work even began. It quickly became evident that many of those problems were NP-hard or even NP-complete
+\cite{Ullman:1975:NSP:1739944.1740138,
+  computers-intractability,
+  short-shop-schedules-np,
+  flowshop-jobshop-garey-np}
+.
+Still, for a few special cases there are known polynomial time algorithms that solve the problem either optimal or approximate a solution quite well \cite{pinedo2008scheduling}.
+
+Dealing with precedence relations between tasks is in many cases crucial and can be modeled by directed acyclic graphs (an edge $(x,y)$ in this graph corresponds to the fact that task $x$ has to be completed before task $y$ can start). The problem of scheduling a set of tasks with same processing time with general precedence relations using several processors and deciding whether there is a schedule such that the total makespan is lower than a certain deadline is already NP-complete (\cite{Ullman:1975:NSP:1739944.1740138} via a transformation of 3SAT). The problem can be solved in polynomial time for 2 processors \cite{coffman-graham-famous-two-proc-result} or for an arbitrary number of processors if the precedence constraints do not form a DAG, but a forest, where the famous highest-level-first (HLF) rule can be applied \cite{hu:1961:hlfoptimalforknowntimesintree}. Even the (seemingly) very strongly simplified question that asks whether such a set of tasks (each task having processing time 1) can be scheduled with an overall deadline of 3 is NP-complete \cite{lenstra-kan-1978}.
+
+As time went by, researchers also incorporated \emph{stochastic} models into their scheduling investigations. A prominent example of this is that in reality task execution times are not necessarily known a priori. Thus, they are assumed to behave according to a particular probability distribution, such as the expoentiall distribution. Choosing exponentially distributed variables has the advantage that calculations can be simplified because exponentially distributed variables are memoryless. Of course, there are other distributions possible, but they often result in far more complicated calculations.
+
+The problem of scheduling tasks whose processing times are exponentially distributed (with same parameter) and whose precedence relations can be modelled by an in-forest has been investigated by \cite{chandyreynoldsshortpaper1975} who proved that HLF (and only HLF) for two processors minimizes the expected makespan (for both preemtive and non-preemtive scheduling). They also explained why HLF does not work for three processors anymore by giving counter examples where HLF yields suboptimal results. Later \cite{bruno-1985} showed that HLF (and again only HLF) maximizes both the probability that all tasks finish by some time $t\geq 0$ and the probability that the sum of the finishing times of all the tasks is less than some value $s\geq 0$. The result of \cite{chandyreynoldsshortpaper1975} could later be extended for two processors, intree precedence constraints and tasks whose parameter for the exponential distribution is the same if the tasks are on the same level \cite{pinedo-weiss}. Even if HLF is known to be suboptimal (for more than two processors), \cite{journals/siamcomp/PapadimitriouT87} proved that it is \emph{asymptotically} (i.e. as the number of tasks grows) optimal.
+
+For more than two processors, we do not know of any efficient strategy that computes an optimal schedule on intree precedence constraints. Moritz Maaß already wrote a thesis about this topic \cite{MoritzMaasDiploma} and concentrated on Monte Carlo scheduling methods. Moreover, he concentrated on certain substructures of the intree. This thesis again addresses the problem for three processors, but prioritizes other points. It is structured as follows:
+
+\begin{itemize}
+\item Chapters \ref{chap:theoretical-foundations} and \ref{chap:introduction-schedules} mostly introduce notation that will be used throughout this work. 
+\item Chapter \ref{chap:p2} showcases some facts about the two-processor case that can be used to get a feeling for the topic.
+\item Chapter \ref{sec:additional-algs} derives an algorithm that computes an optimal schedule in exponential time. Moreover, we highlight certain steps that were taken to make the algorithm more efficient. Chapter \ref{chap:benchmarks} shows how the algorithm performs in practice and explains some practical implementation details.
+\item In chapter \ref{chap:p3-suboptimal} we investigate some suboptimal scheduling strategies that could be used for three processors. We therefore consider non-HLF strategies and refinements of HLF and focus on the initially chosen tasks. We show why these strategies are suboptimal and counter examples for some seemingly intuitive conjectures about optimal schedules. Finally, we formulate conjectures about \emph{optimal} strategies.
+\item Chapter \ref{chap:p3} examines several properties of snapshot DAGs and considers particular classes of intrees for which HLF is optimal. Additionally, we benchmark by how far we could reduce the number of snapshots if we use our conjectures from chapter \ref{chap:p3-suboptimal} for new schedulers.
+\end{itemize}
+
+%%% Local Variables:
+%%% TeX-master: "../thesis.tex"
+%%% End: 

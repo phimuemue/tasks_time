@@ -3,22 +3,26 @@
 \input{packages}
 \input{commands_and_environments}
 
-%\includeonly{theory/theory}
+\includeonly{intro/intro}
 
 \bibliography{bib}
 \addbibresource{bib.bib}
 
 \hyphenation{ma-the-ma-tics}
 
+\title{Investigation of some Stochastic Scheduling Problems}
+\author{Philipp Müller}
+\date{\today}
+
 \begin{document}
 
-% \frontmatter
+\frontmatter
 % \input{formalities/cover}
 % \input{formalities/titlepage}
 % \input{formalities/affidavit}
 
 % \tableofcontents
-% \mainmatter
+\mainmatter
 
 \chapter{TODO-Lists}
 \label{chap:todo}
@@ -27,7 +31,7 @@
 \label{sec:strict-todos}
 
 \begin{itemize}
-\item Titel bei Herrn Mayr anfragen.
+\item Figure mit allen Intrees mit $\leq 15$ tasks für die HLF strictly suboptimal ist.
 \item Show that more processors can not be worse.\done{Ok.}
 \item Show that static and dynamic list-scheduling can not be optimal.\done{}
 \end{itemize}
@@ -67,6 +71,7 @@
 % here, the document actually starts to get useful
 
 %\part{Introduction}
+\include{intro/intro}
 \include{theory/theory}
 \include{schedules/schedules}
 
