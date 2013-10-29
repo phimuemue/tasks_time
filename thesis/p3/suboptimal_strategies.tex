@@ -563,6 +563,22 @@ For trees with fewer than 12 tasks, we could not find any tree that violated our
 
 \emph{Remark:} Surprisingly, every subtree of $(0,0,0,2,2,3,5,5,6,6,6)$ fulfills the conjecture that there is at most one task that has both scheduled and non-scheduled leaves as predecessors (during the whole schedule). This shows that even task that \emph{might seem} of minor impact for the first choices, might be relevant to the question which tasks are chosen in the optimal schedule.
 
+\subsection{As many topmost tasks as possible}
+\label{sec:suboptimal-hlf-refinement-as-many-topmost-possible}
+
+During our research, we recognized that in many cases, the optimal schedule consists only of snapshots where \emph{as many topmost tasks} as possible are scheduled. This is true for all intrees with up to 12 tasks.
+
+However, there is an optimal schedule for an intree with 13 tasks that violates this condition ---  the intree $(0,0,1,2,3,4,5,5,5,7,10,11)$ (shown in figure \ref{fig:as-many-topmost-tasks-as-possible-false}). This intree comes into a situation where it has -- \emph{due to previous choices} -- three topmost tasks, of which only two are scheduled.
+
+\begin{figure}[th]
+  \centering
+  \input{p3/always_as_many_topmost_as_possible_false}
+  \caption{Optimal schedule for intree $(0,0,1,2,3,4,5,5,5,7,10,11)$: This intree is an example illustrating that an optimal schedule does not necessarily have as many topmost tasks as possible scheduled in each step.}
+  \label{fig:as-many-topmost-tasks-as-possible-false}
+\end{figure}
+
+\emph{Remark:} Even if it is not true that an optimal schedule has as many topmost tasks as possible scheduled \emph{in each step}, we did not find a single example whose \emph{initial} choice violated the conjecture that as many topmost tasks as possible should be scheduled. This is later summarized in conjecture \ref{conj:as-many-topmost-as-possibly}.
+
 \section{Maximizing 3-processor-time, minimizing 1-processor time}
 \label{sec:p3-disproving-long-p3-and-short-p1-time}
 
@@ -726,7 +742,8 @@ This section shows the most important conjectures we found.
 
 \begin{conjecture}
   \label{conj:as-many-topmost-as-possibly}
-  An optimal schedule always schedules as many topmost tasks as possible.
+  An optimal schedule initially schedules as many topmost tasks as possible. 
+  In intermediate steps, if possible, it chooses a topmost task as the next task to be scheduled.
 \end{conjecture}
 
 Please note that the above conjecture does not state anything about \emph{which} topmost tasks should be chosen in order to generate a schedule that is as good as possible. It can -- however -- drastically reduce the number of choices for the tasks to be scheduled. As an example, consider the following tree:
