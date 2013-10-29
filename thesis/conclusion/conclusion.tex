@@ -1,0 +1,19 @@
+
+\chapter{Conclusion and future work}
+\label{chap:conclusion-outlook}
+
+This thesis addressed the problem of non-preemtively scheduling tasks with independent, identically exponentially distributed processing times and intree precedence constraints on three processors. We already knew that HLF is not strictly optimal \cite{chandyreynoldsshortpaper1975} but asymptotically optimal \cite{journals/siamcomp/PapadimitriouT87}.
+
+We found an algorithm to compute the optimal schedule (basically relying on exhaustive search as described in chapter \ref{sec:additional-algs}) in exponential time, even after we tweaked it by excluding equivalent snapshots, thereby avoiding (basically) recomputing the same things over and over. We saw that the algorithm performs reasonably well in practice for small intrees (i.e. fewer than 20 tasks).
+
+We investigated a collection of strategies and confirmed that they are suboptimal. From these strategies we deduced certain conjectures that we suspect to be true for \emph{optimal} schedules, most important that as many topmost tasks as possible are scheduled by an optimal schedule. If this conjecture was true, it could be exploited by an algorithm whose running time is remarkably smaller than exhaustive search. It would probably be a step in the right direction to prove (or even disprove) this conjecture. In addition to that, we classified degenerate intrees and parallel chains as particular structures that are optimally scheduled by HLF. This might be useful in a new scheduling strategy.
+
+Moreover, we considered the size of snapshot DAGs and observed that the number of snapshots in the LEAF snapshot DAG is larger than the number of subtrees (on average). Still we saw that, on average, the size of the \emph{optimal} snapshot DAG was drastically smaller than the number of subtrees (possibly even polynomial in the number of tasks, whereas the number of subtrees grows exponentially). We researched whether we could find any pattern for intrees whose snapshot DAG has the maximal size, but were not able to deduce any.
+
+The program we developed may serve as a starting point for further examinations of the problem. Due to its modular architecture, it should be simple to introduce new checks that can be applied to the single snapshots, thereby hopefully simplifying further work. It may even be extended for more general scenarios, among them foremost an even higher amount of processors, support for other probability distributions, generalization to general DAGs instead of only intrees, etc.
+
+The bottleneck of the program is currently the computation of a canonical snapshot, which is where we suspect some potential for further optimizations. However, we were not able to find another paradigm that is able to compute equivalent snapshots considerably faster than the current technique based on the isomorphism algorithm for rooted trees from \cite{aho1974design}.
+
+%%% Local Variables:
+%%% TeX-master: "../thesis.tex"
+%%% End: 
