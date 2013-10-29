@@ -43,6 +43,7 @@
 #include "unscheduledhlf1tester.h"
 #include "runtimetester.h"
 #include "singlesuccessortester.h"
+#include "topmosttester.h"
 
 #include "tikztopdf.h"
 
@@ -463,6 +464,9 @@ void generate_stats(const po::variables_map& vm,
         // singlepredecessor task unscheduled?
         SingleSuccessorTester sst;
         line.push_back(sst.test_string(s[i]));
+        // as many topmost tasks as possible scheduled?
+        TopmostTester tmt;
+        line.push_back(tmt.test_string(s[i]));
         // Delimitter
         line.push_back(" ");
         // Initially scheduled tasks
