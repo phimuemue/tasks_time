@@ -595,9 +595,10 @@ void Intree::get_chains(vector<vector<task_id>>& target) const {
 }
 
 unsigned int Intree::longest_chain_length() const{
-    if(edges.size()==0){
-        return 1;
+    if(edges.size()<=1){
+        return edges.size()+1;
     }
+#ifndef USE_CANONICAL_SNAPSHOT
     vector<vector<task_id>> chains;
     get_chains(chains);
     unsigned int result = 0;
@@ -606,6 +607,13 @@ unsigned int Intree::longest_chain_length() const{
                 result = max(result, (unsigned int)c.size());
             }
             );
+#else
+    unsigned int result = 1;
+    for(unsigned int idx = edges.size() - 1; idx > 0; idx = edges[idx]){
+        result++;
+    }
+    result = max(result, 1u);
+#endif
     return result;
 }
 

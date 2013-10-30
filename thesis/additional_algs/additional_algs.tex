@@ -280,7 +280,7 @@ Algorithm \ref{alg:compute-canonical-snapshot} is good for visualizing how the a
         \EndFor
         \State{Sort tasks on level $i$ according to their label}
         \label{alg:canonical-intree-sorting-line}
-        \State{Replace labels for tasks on level $i$ by integers $geq 1$ such that same labels obtain same numbers}
+        \State{Replace labels for tasks on level $i$ by integers $\geq 0$ so that same labels obtain same numbers}
         \label{alg:canonical-intree-numbering-line}
       \EndFor
     \EndProcedure
@@ -294,7 +294,7 @@ Algorithm \ref{sec:algorithm-canonical-intree-o-n} is a very high level descript
 \begin{itemize}
 \item For this algorithm, it is convenient to have a canonical intree structure in which each task directly knows its predecessors. We can transform our representation (as explained in section \ref{sec:implementation-repr-intrees-snapshots}) into this one in $O(n)$.
 \item Concatenating two labels can be done in $O(1)$ (either amortized by e.g. using dynamic arrays or simply using linked lists with some additional information such e.g. a pointer to the last node in the list). Thus, the overal costs arising from line \ref{alg:canonical-intree-concatenate-line} (resp. for the whole inner loop) are $O(n)$ because the label of each task is subject to concatenation at most once. Moreover, note that the predecessors $p_1,\dots,p_r$ are sorted (they have been sorted in the previous iteration of the loop).
-\item Line \ref{alg:canonical-intree-numbering-line} ensures that the labels of tasks do not become very long. To be precise, if level $i$ has exactly $l_i$ tasks, the labels for level $i$ are at most the numbers 0 to $l_1$.
+\item Line \ref{alg:canonical-intree-numbering-line} ensures that the labels of tasks do not become very long. To be precise, if level $i$ has exactly $l_i$ tasks, the labels for level $i$ are at most the numbers 0 to $l_i$.
 \item Line \ref{alg:canonical-intree-sorting-line} from algorithm \ref{sec:algorithm-canonical-intree-o-n} shall sort in the following way: Shorter labels come first, and if two labels have the same length, they are compared lexicographically. This sorting can be implemented in $O(l_{i+1}\cdot\log l_{i+1})$, where $i$ denotes the index from the algorithm (i.e. the current level number) and $l_i$ denotes the number of tasks of $I$ on level $i$. This can be explained as follows:
   \begin{itemize}
   %\item First, we use a simple bucketsort to group the strings into buckets according to their lengths (can be done in $(O(l_{i+1}))$ if we store the lengths appropriately).
@@ -448,6 +448,9 @@ In addition to the huge numbers that would need to be multiplied, computing matu
 
 We have seen how we can compute equivalent snapshots resp. a canonical representation of a snapshot. We now describe in short how this can be used to generate all schedules according to a specific scheduling policy.
 
+\subsection{Implementation details}
+\label{sec:implementation-computein-all-schedules-details}
+
 The program starts out with a given intree and the scheduler generates a list of possible initial settings describing which tasks shall be chosen. This gives us a list of \emph{initial snapshots} where each snapshot contains the original intree and a set of tasks that shall be scheduled initially. We then process one initial snapshot after another. We describe now what we have to do for each initial snapshot.
 
 When we have a snapshot with a certain set of scheduled tasks, the program computes the intrees that occur if one of the tasks finishes. This has to be done for every currently scheduled task. That means, that for every currently scheduled task that could finish, we obtain a new intree \emph{and} also a set of tasks that are scheduled (since we are considering non-preemtive scheduling, we have to keep the other tasks scheduled).
@@ -469,7 +472,75 @@ Using a \texttt{vector} of course increases memory consumption compared to e.g. 
 
 We basically describe the current intree storing the same notation as shown in this work (just stored in a \texttt{vector} of \texttt{unsigned char}s). Of course, there are more memory-efficient solutions, but since we did never experience any problems regarding memory, we went for this solution.
 
-As mentioned in section \ref{sec:intro-computing-optimal-schedule} we have $O\left(|\left\{ T \mid T\subseteq I \right\}|\cdot n^p\right)$ snapshots for an intree with $n$ tasks scheduled on $p$ processors. We can simply call this $O\left(|D|\right)$ where $D$ denotes the snapshot DAG for a certain scheduler. Since we compute the \emph{canonical snapshot} for each of those snapshots and the run time to compute the canonical snapshot is $O(n \log n)$, we can deduce that the overall run time to compute all schedules for a given scheduler is bounded by $O(|D| \cdot n \log n)$.
+\subsection{Run time of the algorithm}
+\label{sec:implementation-computing-all-schedules-runtime}
+
+As mentioned in section \ref{sec:intro-computing-optimal-schedule} we have $O\left(|\left\{ T \mid T\subseteq I \right\}|\cdot n^p\right)$ snapshots for an intree with $n$ tasks scheduled on $p$ processors. Thus, we are interested in the number of subtrees of a particular intree. We are interested only in those intrees that still contain the root (since intrees without the root will never show up in the snapshot DAG). We show that there are intrees that have exponentially many subtrees containing the root.
+
+\begin{theorem}
+\label{thm:exponentially-many-subtrees}
+Let $r=\lfloor\sqrt{n-1}\rfloor$. If $r\geq 3$, the intree described by
+\begin{equation*}
+  (
+  \underbrace{0,0,\dots,0}_{r \text{ times}},
+  \ 
+  \underbrace{1,2,3,\dots, r \cdot (r-1)}_{\text{Chains of length } r},
+  \ 
+  \underbrace{0,0,\dots,0}_{n-r^2 \text{ times}}
+  )
+\end{equation*}
+has more than $2^r$ \emph{distinct} subtrees that contain the root of the intree.
+\end{theorem}
+
+\emph{Remark:} The intree in theorem \ref{thm:exponentially-many-subtrees} is basically an intree whose root has at least $r = \lfloor \sqrt{n-1} \rfloor$ predecessors and where exactly $r$ of these predecessors form chains of length $r$.
+
+\begin{proof}
+  We present a short argument that shows that the number of subtrees for this kind of intree is exponential in the number of tasks. A tree of this kind can be uniquely described by its profile (up to isomorphic trees): At the beginning, the corresponding profile looks as follows:
+
+\begin{equation*}
+  \profile{
+    \underbrace{r, r, \dots, r}_{r-1 \text{ times}},
+    \ 
+    r+(n-1-r^2),
+    \ 
+    1
+  }
+\end{equation*}
+
+All subtrees (that still contain the root) can be (up to equivalence) uniquely described as a profile whose first $r-1$ entries are non-decreasing and whose first $r-1$ elements are less than or equal to $r$. That is, if we count the number of $(r-1)$-element sequences whose elements are all non-negative integers less than or equal to $r$, we get a lower bound for the number of distinct subtrees (that still contain the root).
+
+There are exactly $\binom{r+(r-1)}{r}=\binom{2r-1}{r}$ possible sequences fulfilling these properties. This can be seen because these sequences can be obtained by the well-known experiment of $r-1$ times drawing a ball from an urn with balls numbered 0 to $r$ with repetition and where the order does not play a role.
+
+It is clear that $\binom{2r-1}{r} > 2^r$ for $r\geq 3$. This can be quickly proven inductively: For $n=3$ we can confirm that the claim holds:
+\begin{equation*}
+  \binom{2\cdot 3 - 1}{3} =\binom{5}{2} = 10 > 8 = 2^3
+\end{equation*}
+
+The induction step (from $r$ to $r+1$) can be seen as follows:
+\begin{equation*}
+  \binom{2(r+1) - 1}{r+1} =
+  \binom{2r+1}{r+1} = 
+  \binom{2r}{r+1} + \binom{2r}{r} =
+  \binom{2r-1}{r+1} + \binom{2r-1}{r} + \binom{2r-1}{r} + \binom{2r-1}{r-1}
+\end{equation*}
+We get a lower bound for the above term by omitting two positive summands and afterwards applying the induction hypothesis:
+\begin{equation*}
+  \binom{2r-1}{r+1} + \binom{2r-1}{r} + \binom{2r-1}{r} + \binom{2r-1}{r-1} >
+  \binom{2r-1}{r} + \binom{2r-1}{r} >
+  2^r + 2^r =
+  2^{r+1}
+\end{equation*}
+
+This finally proves that $\binom{2r-1}{r} > 2^r$ for $r\geq 3$.
+
+Going back to our initial choice for $r=\lfloor\sqrt{n-1}\rfloor$, we obtain that there are more than $2^{r} = 2^{\lfloor\sqrt{n-1}\rfloor}$ subtrees containing the root for this particular class of intrees if one intree has $n$ tasks. This bound is, of course, non-polynomial, but \emph{exponential} in $n$.
+\end{proof}
+
+Note that the class of intrees we described is not the only class that offers exponentially many subtrees.
+
+We now use $D$ to denote the the snapshot DAG for a certain scheduler. As explained before, we have for the size of the snapshot DAG $|D|\in O\left(|\left\{ T \mid T\subseteq I \right\}|\cdot n^p\right)$ if we have an intree with $n$ tasks and $p$ processors.
+
+Since we compute the \emph{canonical snapshot} for each of those snapshots and the run time to compute the canonical snapshot is $O(n \log n)$, we can deduce that the overall run time to compute all schedules for a given scheduler is bounded by $O(|D| \cdot n \log n)$.
 
 \emph{Remark:} The run time for the version \emph{without} canonical snapshots could be denoted by $O(|D_{\text{non-canonical}}|)$, i.e. without the term $n\log n$ introduced by computing the canonical snapshots. Note that in this case, the size of the snapshot DAG (denoted by $|D_{\text{non-canonical}}|$) is remarkably bigger than the size of the snapshot DAG after merging equivalent snapshots. In practice, this behaviour became evident quite quickly.
 
@@ -485,6 +556,7 @@ We now describe in short how the program can be extended. We describe the possib
 \item[Number representations] As mentioned in section \ref{sec:implementation-numbers}, we already support different possibilities to represent probabilities and expected values, namely \texttt{float}s, \texttt{double}s, and rational numbers using Boost Rational Number Library \cite{boostrational} or the GNU Multiple Precision Arithmetic Library \cite{gnumultiprecision}. These can easily be extended to other data types if they have overloaded operators and can be used like ordinary \emph{float}s.
 \item[Scheduling strategies] We provide an interface to implement new scheduling strategies. New scheduling strategies have to provide (most important) two methods: One to generate the initial chioces of tasks to be chosen and one method to determine which task should be the next to be chosen. We thereby focus on non-preemtive schedulers.
 \item[Exporters] An important part of the program consists of code for exporters to various formats (most notably to \LaTeX{} (in connection with TikZ)) and the program provides a straightforward interface for new exporting methods.
+\item[New checks] We provide an easy-to-use interface that enables the programmer to quickly write new tests that can be used to automatically research properties of snapshots.
 \end{description}
 
 \subsection{Complex adjustments}
