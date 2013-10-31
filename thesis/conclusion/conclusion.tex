@@ -14,6 +14,8 @@ The program we developed may serve as a starting point for further examinations 
 
 The bottleneck of the program is currently the computation of a canonical snapshot, which is where we suspect some potential for further optimizations. However, we were not able to find another paradigm that is able to compute equivalent snapshots considerably faster than the current technique based on the isomorphism algorithm for rooted trees from \cite{aho1974design}.
 
+We also saw that optimal schedules -- in some situations -- lead to snapshots whose intrees would be scheduled in another way by a preemtive scheduler which \emph{might} be interpreted as a hint that non-preemtive scheduling may be somewhat more difficult to compute because it can not rely only on the structure of subtrees.
+
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"
 %%% End: 
