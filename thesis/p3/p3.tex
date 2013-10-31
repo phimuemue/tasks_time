@@ -1,7 +1,7 @@
 \chapter{Properties of schedule DAGs and optimal schedules}
 \label{chap:p3}
 
-We now researching some properties of snapshot DAGs and optimal schedules. In particular, we will look at a particular non-trivial class of intrees, for which HLF is optimal.
+We will now research some properties of snapshot DAGs and optimal schedules. In particular, we will look at two particular non-trivial classes of intrees, for which HLF is optimal.
 
 \section{Properties of optimal schedules}
 \label{sec:optimal-schedules-properties}
@@ -32,18 +32,18 @@ In section \ref{sec:schedules-problem-setting}, we mentioned that preemptive sch
     \includegraphics{p3/preemtive/0012233345_preemtive.pdf}
     \caption{A better preemtive schedule.}
   \end{subfigure}
-  \caption{Preemtive vs. non-preemtive scheduling for $(0,0,1,1,1,2,2,2)$. Note that the snapshots in the second line are the same, but they are reached with different probabilities due to the fact that we can reschedule in the preemtive case.}
+  \caption{Preemtive vs. non-preemtive scheduling for $(0,0,1,2,2,3,3,3,4,5)$. Note that the snapshots in the second line are the same, but they are reached with different probabilities due to the fact that we can reschedule in the preemtive case.}
   \label{fig:preemtive-example-00111222}
 \end{figure}
 
-Another example that shows nicely that preemtive scheduling yields better results in some cases is the intree $(0,0,1,2,2,3,3,6,8,9,10,11,12,13)$ shown in figure \ref{fig:2-hlf-plus-one-not-optimal}. It is clear that -- if the first 6 steps, always the topmost task is the first task to finish, we at some point reach the intree shown in figure \ref{fig:preemtive-better-bad-case}. If we allowed to reschedule (by possibly interrupting the execution of some tasks) and chose a schedule as shown in figure \ref{fig:preemtive-better-good-case}, we would obviously acchieve a better overal run time. 
+Another example that shows nicely that preemtive scheduling yields better results in some cases is the intree $(0,0,1,2,2,3,6,8,9,10,11,12)$ shown in figure \ref{fig:2-hlf-plus-one-not-optimal}. It is clear that, if the first 5 steps always the topmost task is the first task to finish, we at some point reach the intree shown in figure \ref{fig:preemtive-better-bad-case}. If we allowed to reschedule (by possibly interrupting the execution of some tasks) and chose a schedule as shown in figure \ref{fig:preemtive-better-good-case}, we would obviously acchieve a better overal run time. 
 
 \begin{figure}[ht]
   \centering
   \begin{subfigure}{.46\textwidth}
     \centering
     \includegraphics{p3/preemtive/00112556subopt.pdf}
-    \caption{Suboptimal schedule. These snapshots are part of the optimal schedule for the intree $(0,0,0,2,3,4,5,7,7,9,10,10,12)$, shown in figure \ref{fig:2-hlf-plus-one-not-optimal}.}
+    \caption{Suboptimal schedule. These snapshots are part of the optimal schedule for the intree $(0,0,1,2,2,3,3,6,8,9,10,11,12)$, shown in figure \ref{fig:2-hlf-plus-one-not-optimal}.}
     \label{fig:preemtive-better-bad-case}
   \end{subfigure}
   \quad
@@ -59,7 +59,7 @@ Another example that shows nicely that preemtive scheduling yields better result
 
 \paragraph{Rescheduling only at certain points in time}
 
-We have seen that preemtive scheduling might result in lower expected run times than non-preemtive scheduling. However, it has been proven in \cite{chandyreynoldslargepaper1979} that -- without loss of generality -- that rescheduling is only necessary -- if at all -- when one task finishes. I.e. as long as no task on any processor has finished, we can leave them working until the first task finishes.
+We have seen that preemtive scheduling might result in lower expected run times than non-preemtive scheduling. However, it has been proven in \cite{chandyreynoldslargepaper1979} that -- without loss of generality -- rescheduling is only necessary -- if at all -- when one task finishes. I.e. as long as no task on any processor has finished, we can leave them working until the first task finishes.
 
 \subsection{Considerations about subtrees}
 \label{sec:properties-optimal-schedules-no-implications}
@@ -74,7 +74,24 @@ It can be easily seen by examining any of the intrees for which HLF is strictly 
   See considerations and examples in chapter \ref{chap:p3-suboptimal}.
 \end{proof}
 
-The other way around can be examined by looking at the intree $(0,0,1,2,2,3,3,6,8,9,10,11,12,13)$ that we have considered before. From another point of view, the intree $(0,0,1,2,2,3,3,6,8,9,10,11,12,13)$ shows that an optimal schedule may be forced at some time to process a subtree in a way that it would not process it if the subtree was processed for itself. This means that we can formulate the following:
+The other way around can be examined by looking at the intree $(0,0,1,2,2,3,3,6,8,9,10,11,12)$ that we have considered before. It can be quickly seen that this intree, augmented by one task whose direct successor is 4, is optimally scheduled by HLF. The corresponding schedules are shown in figure \ref{fig:supertree-hls-subtree-non-hlf}.
+
+\begin{figure}[th]
+  \centering
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \input{p3/001223346910111213_opt}
+    \caption{Intree $(0,0,1,2,2,3,3,6,8,9,10,11,12,4)$ is optimally scheduled by HLF.}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \input{p3/0012233689101112_opt}
+    \caption{Intree $(0,0,1,2,2,3,3,6,8,9,10,11,12)$ is optimally scheduled by a non-HLF strategy.}
+  \end{subfigure}
+  \caption{Intree $(0,0,1,2,2,3,3,6,8,9,10,11,12,4)$ and its subtree $(0,0,1,2,2,3,3,6,8,9,10,11,12)$. While the supertree is optimally scheduled by HLF, the subtree is optimally scheduled by non-HLF.}
+  \label{fig:supertree-hls-subtree-non-hlf}
+\end{figure}
 
 \begin{theorem}
   There are intrees $T$ and $S$ such that $T$ is a subtree of $S$ and both $T$ and $S$ have the same root such that the optimal (non-preemtive) schedule for $S$ is HLF, but the optimal (non-preemtive) schedule for $T$ is non-HLF.
@@ -86,16 +103,17 @@ The other way around can be examined by looking at the intree $(0,0,1,2,2,3,3,6,
 
 That is, the fact that we consider non-preemtive scheduling only results in the fact that we can not conclude anything about the (non-)optimality of HLF within subtrees even if we know the optimal schedule for a whole intree.
 
+Moreover, the two theorems tell us that an optimal schedule has -- in some situations -- to schedule a set of tasks for a certain intree, that would not be scheduled in the optimal schedule if the respective intree was the \emph{initial} intree. That is, non-preemtive scheduling is worse than preemtive scheduling in some cases.
+
 \subsection{More processors do not worsen the run time}
 \label{sec:properties-more-processors-are-better}
 
-It is intuitively clear that more processors should be able to process an intree faster (if appropriately scheduled). We show a short proof why this is the case.
+It is intuitively clear that more processors should be able to process an intree faster (if appropriately scheduled). We offer a short explanation why this is the case.
 
 \begin{theorem}
   Let $I$ be an intree that is processed by $p$ processors according to a specific scheduling strategy. Then we can construct a scheduling strategy for $p+1$ processors whose expected run time is at least as good as the run time for $p$ processors.
 \end{theorem}
 
-\begin{proof}
   We consider a schedule $S_p$ that works for $p$ processors and construct a new schedule $S_{p+1}$ working for $p+1$ processors. We show that the expected run time for $S_{p+1}$ is not longer than the expected run time for $S_p$:
 
   If the intree $I$ has at the beginning at most $p$ ready tasks, then a new processor can not help any further because we then can at most keep $p$ processors busy. In this case $S_{p+1}$ shall work exactly like $S_p$, implying that the run times for $S_p$ and $S_{p+1}$ are the same.
@@ -104,7 +122,7 @@ It is intuitively clear that more processors should be able to process an intree
 
   We can now compare the run times of $S_p$ and $S_{p+1}$. First of all, note that the tasks $x_1,\dots,x_p$ are independent (one of our basic assumptions) and do not know whether they are currently scheduled by $S_p$ or by $S_{p+1}$. This means, they all finish at the same respective times in $S_p$ and $S_{p+1}$. 
 
-  Of course, task $y$ finishes at some point in $S_p$, but it finishes \emph{earlier} in $S_{p+1}$ because it has been scheduled from the beginning. We now use induction to prove the claim: For small intrees (with, say, fewer than six tasks) we can easily test that the claim is true.
+  % Of course, task $y$ finishes at some point in $S_p$, but it finishes \emph{earlier} in $S_{p+1}$ because it has been scheduled from the beginning. We now use induction to prove the claim: For small intrees (with, say, fewer than six tasks) we can easily test that the claim is true.
 
   % \begin{figure}[th]
   %   \centering
@@ -140,10 +158,12 @@ It is intuitively clear that more processors should be able to process an intree
 
 % thus allowing $z_1,z_2,z_3,\dots$ to be scheduled earlier because $y$ is already processed. This shows that the overall run time for $S_{p+1}$ is less than the overall run time for $S_p$.
   
-  For $S_{p+1}$, we can argue as follows: If $y$ is the first task to finish, we basically have the same situation as for $S_p$, but with the modification that we do not have to process the whole intree $I$ but instead only a subtree, namely $I\setminus\left\{ y \right\}$. It is clear that processing this subtree requires less time than processing the original intree.
+  For $S_{p+1}$, we argue as follows: If $y$ is the first task to finish, we basically have the same situation as for $S_p$, but with the modification that we do not have to process the whole intree $I$ but instead only a subtree, namely $I\setminus\left\{ y \right\}$. It is clear that processing this subtree requires less time than processing the original intree.
 
-  If, on the other hand, one of the tasks $x_1,\dots,x_p$ finishes first, we continue like $S_p$ would have continued. If $S_p$ chose $y$ as next task, we can argue that the resulting run time for $S_{p+1}$ is at most the run time for $S_p$ because then $y$ finishes earlier in $S_{p+1}$ than in $S_p$. Otherwise, the expected run time for $S_{p+1}$ still is smaller than the expected run time for $S_{p+1}$ by induction.\todo{Improve this}
-\end{proof}
+  If, on the other hand, one of the tasks $x_1,\dots,x_p$ finishes first, we continue like $S_p$ would have continued. If $S_p$ chose $y$ as next task, we can argue that the resulting run time for $S_{p+1}$ is at most the run time for $S_p$ because then $y$ finishes earlier in $S_{p+1}$ than in $S_p$. 
+  If $S_p$ chose another task than $y$, the expected run time for $S_{p+1}$ still is smaller than the expected run time for $S_{p+1}$ by induction.
+
+  The basic intuition behind this is that at the point when $S_p$ schedules $y$, $S_{p+1}$ has already (at least partially) processed $y$. For this reason, $y$ finishes earlier in $S_{p+1}$ thereby allowing the subsequent tasks to be scheduled earlier. For a more detailed proof, we refer to \cite{MoritzMaasDiploma}.
 
 \section{Size of the snapshot DAG}
 \label{sec:p3-size-of-snapshot-dag-first-attempts}
@@ -194,13 +214,15 @@ The results are summed up in table \ref{tab:num-subtrees-size-of-dags}.
 
 As we can see in table \ref{tab:num-subtrees-size-of-dags}, the number of subtrees is (at least for $n\geq  9$) significantly larger than the number of snapshots in the snapshot DAG for the optimal schedule. However, the (maximal) overall number of snapshots is (for $n\geq 7$) strictly higher than the (maximal) number of subtrees.
 
-While both the number of subtrees and (probably also) the number of snapshots in the LEAF DAG grow exponentially, the number of snapshots in the optimal DAG may be polynomial. However, it is quite difficult to make exact claims here because we have too few numbers to predict anything with high confidence.
+While both the number of subtrees and (very likely) the number of snapshots in the LEAF DAG grow exponentially, the number of snapshots in the optimal DAG may be polynomial. However, it is quite difficult to make exact claims here because we have too few numbers to predict anything with high confidence.
 
 Another interesting fact is that there is no ``strict correlation'' between the number of subtrees and the number of snapshots in the optimal snapshot DAG. That is, there are certain DAGs that have more non-isomorphic subtrees than another DAG, yet -- on the other hand -- more snapshots in the optimal snapshot DAG. As an example, consider the intrees $T_1$ described by $(0,0,0,1,1,1,1,1)$ and $T_2$ described by $(0,0,0,0,1,2,3,4)$: $T_1$ has 19 subtrees and its optimal snapshot DAG contains 13 snapshots, while $T_2$ has only 15 subtrees, but an optimal snapshot DAG containing 14 snapshots.
 
-Moreover, intrees containing $n$ tasks and having the maximal number of subtrees are (at least for $8\leq n \leq 17$) are not the ones having the largest optimal snapshot DAG.
+Moreover, intrees containing $n$ tasks and having the maximal number of subtrees are (at least for $8\leq n \leq 17$) not necessarily the ones having the largest optimal snapshot DAG. As an example, consider the intree $(0,0,0,1,1,1,2,4,4,5,8,8,11)$ that has 269 subtrees, but whose optimal snapshot DAG has only 58 snapshots (and therefore is just in the average).
 
-To determine the maximum size of the optimal snapshot DAG for the P3 case, it might be useful to investigate whether the trees that have a large snapshot DAG can be constructed according to a specific pattern. The intrees resulting in snapshot DAGs of maximum size are depicted in figure \ref{fig:intrees-maximum-snapshot-dag-size-p3}. The intrees in this figure seem to behave quite chaotic and we were not able to deduce any pattern according to which they could be generated for general $n$.
+To determine the maximum size of the optimal snapshot DAG for the P3 case, it might be useful to investigate whether the trees that have a large snapshot DAG can be constructed according to a specific pattern. The intrees resulting in LEAF snapshot DAGs of maximum size (i.e. whose exhaustive exploration is most expensive in terms of snapshots) are depicted in figure \ref{fig:intrees-maximum-unoptimized-p3}. The intrees in this figure seem to behave quite chaotic and we were not able to deduce any pattern according to which they could be generated for general $n$.
+
+Figure \ref{fig:intrees-maximum-snapshot-dag-size-p3} shows the intrees whose \emph{optimal} snapshot DAG has maximum size (among all intrees with the same number of tasks). These intrees also seem to conform to no simple pattern.
 
 \begin{figure}[t]
   \centering
@@ -245,6 +267,8 @@ That means: If two snapshots reach the same successors with the same probabiliti
 
 That means, that we have to consider not only whether the direct successors are the same and reached with same probabilities, but we have to recursively examine whether we can merge some successors and whether after merging successors we can finally merge the respective snapshots.
 
+As mentioned in section \ref{sec:algorithm-computing-optimal-schedule}, we can already construct the optimization routine in a way that excludes these snapshots.
+
 Figure \ref{00112334451010-original-optimal-schedule} shows the optimal schedule for the given intree, while figure \ref{00112334451010-merged-optimal-schedule} shows the snapshot DAG where snapshots are recursively have been merged.
 
 \begin{figure}[th]
@@ -266,7 +290,7 @@ Figure \ref{00112334451010-original-optimal-schedule} shows the optimal schedule
   \label{fig:p3-merge-snapshots-00112334451010}
 \end{figure}
 
-It is a notable fact that merging snapshots can not be done easily. Unfortunately, it can not be applied to snapshot DAGs arising from the LEAF scheduler. If we consider the first three levels of the LEAF schedule on the intree $(0,0,1,1,2,3,3,4,4,5,10,10)$ we observe that the corresponding snapshots that could have merged in the optimal schedule can \emph{not} be merged directly in the LEAF snapshot DAG. Figure \ref{fig:p3-00112334451010-leaf-schedule-no-merging} explains why this is the case: If we use use exhaustive search (i.e. a LEAF scheduler), the corresponding snapshots that could be merged in the optimal schedule can not be merged because they have different expected run times.
+It is a notable fact that merging snapshots can not be done easily. Unfortunately, it can not directly be applied to snapshot DAGs arising from the LEAF scheduler. If we consider the first three levels of the LEAF schedule on the intree $(0,0,1,1,2,3,3,4,4,5,10,10)$ we observe that the corresponding snapshots that could have merged in the optimal schedule can \emph{not} be merged directly in the LEAF snapshot DAG. Figure \ref{fig:p3-00112334451010-leaf-schedule-no-merging} explains why this is the case: If we use use exhaustive search (i.e. a LEAF scheduler), the corresponding snapshots that could be merged in the optimal schedule can not be merged because they have different expected run times.
 
 \begin{figure}[ht]
   \centering{}
@@ -275,7 +299,7 @@ It is a notable fact that merging snapshots can not be done easily. Unfortunatel
   \label{fig:p3-00112334451010-leaf-schedule-no-merging}
 \end{figure}
 
-Moreover, we are not always allowed to merge certain snapshots just if their respective expected run times are equal. Consider e.g. the intree $(0,0,1,1,1,2)$ whose LEAF schedule beginning with tasks $4, 5, 6$ contains two snapshots whose run time is 4.05556.
+Moreover, we are not always allowed to merge certain snapshots just if their respective expected run times are equal. Consider e.g. the intree $(0,0,1,1,1,2)$ whose LEAF schedule beginning with tasks $4, 5, 6$ contains two snapshots whose run time is 4.05556 (see figure \ref{fig:p3-001112-two-snaps-same-run-time-not-mergeable}). They can not be merged in the LEAF snapshot DAG because the subsequent optimization routine still needs the distinction between those snapshots.
 
 \begin{figure}[th]
   \centering
@@ -301,7 +325,7 @@ Moreover, we are not always allowed to merge certain snapshots just if their res
 
 We now focus one one particular class on intrees, namely \emph{degenerate intrees}. A degenerate intree is an intree that consists of one longest chain from the bottom to one leaf, and all other tasks are direct predecessors to one of the tasks within this longest chain. Another characterization is the following: On each level, \emph{at most one task} has predecessors. 
 
-Here is an example for a degenerate intree with four levels and profile $\profile{5,3,4,2}$:
+Here is an example for a degenerate intree with four levels and profile $\profile{4,3,4,1}$:
 
 \begin{center}  
   \begin{tikzpicture}[scale=.4]
@@ -322,7 +346,7 @@ Here is an example for a degenerate intree with four levels and profile $\profil
   \end{tikzpicture}
 \end{center}
 
-Note that \emph{all} degenerate intree with the same profile are isomorphic intrees.
+Note that \emph{all} degenerate intrees with the same profile are isomorphic intrees.
 
 \subsection{HLF is optimal for degenerate intrees}
 \label{sec:p3-degenerate-intrees-hlf-optimal}
@@ -335,7 +359,7 @@ We prove that HLF is optimal for degenerate intrees (and three processors). Ther
   By $T^*_{t_1,t_2,t_3}(I)$ we denote the optimal expected run time that can be acchieved if we \emph{initially} schedule all tasks from the set $\left\{ t_1,t_2,t_3 \right\}$.
 \end{definition}
 
-Note that the notation from definition   \ref{def:optimal-run-time-with-scheduled-tasks-index} does not necessarily require that we actually have three tasks (e.g. if $t_1=t_2$).
+Note that the notation from definition  \ref{def:optimal-run-time-with-scheduled-tasks-index} does not necessarily require that we actually have three \emph{distinct} scheduled tasks (e.g. if $t_1=t_2$).
 
 \begin{lemma}
   \label{lem:p3-adding-tasks-level-keep-scheduled-same-inequality}
@@ -594,7 +618,7 @@ Note that the notation from definition   \ref{def:optimal-run-time-with-schedule
     We now examine whether $x'$ is also ready in the intree $I_2^x$:
     \begin{itemize}
     \item If there are only two ready tasks left in $I_1$ (namely $x$ and $y$), we set -- as mentioned before -- $x'=y$. Thus, in $I_2^x$, $x'$ is still ready\footnote{It may even be the case that $I_2^x$ contains some additional ready tasks that are not ready in $I_1^x$.}.
-    \item If $x'$ is the direct successor of $x$, then $x$ must have been the \emph{single topmost task} and the \emph{single predecessor} of $x'$ (since $I_1^x$ is a degenerate tree). However, since we assumed that $level(z_2)<level(z_1)$ and $z_1$ can not be a predecessor of $x'$ (since $x'$ is ready in $I_1$), it can not be the case that $z_2$ blocks $x'$ in $I_2^x$. We conclude that in this case $x'$ is ready in $I_2^x$.
+    \item If $x'$ is the direct successor of $x$, then $x$ must have been the \emph{single topmost task} and the \emph{single predecessor} of $x'$ (since $I_1^x$ is a degenerate tree). However, since we assumed that $level(z_2)<level(z_1)$ and $z_1$ can not be a predecessor of $x'$ (since $x'$ is ready in $I_1^x$), it can not be the case that $z_2$ blocks $x'$ in $I_2^x$. We conclude that in this case $x'$ is ready in $I_2^x$.
 
       % Moreover, since $x'$ is ready in $I_1^x$, the task $z_1$ can not be a predecessor of $x'$. Since $level(z_2)<level(z_1)$ and since $I_1^x$ and $I_2^x$ are both degenerate intrees, $z_2$ can not block $x'$.\todo{Genauer ausführen. Evtl. auslagern.}
     \item If $x'$ is not the direct successor of $x$, we recognize the fact that $x'$ must reside on a certain level within the degenerate intree. 
@@ -620,7 +644,7 @@ Note that the notation from definition   \ref{def:optimal-run-time-with-schedule
     \end{equation*}
 
     
-    We can now apply the induction hypothesis for the intree $I^x$, since this intree contains only $n-1$ tasks: We have an intree with $n-1$ tasks (namely $I^x$) and two tasks $z_1$ and $z_2$ with $level(z_1)>level(z_2)$, $I^x_1 = I^x\cup\left\{ z_1 \right\}$ and $I^x_2 = I^x\cup\left\{ z_2 \right\}$, implying that $T^*_{x',y,z_1}(I^x_1)>T^*_{x',y,z_2}(I^x_{2})$.
+    We can now apply the induction hypothesis for the intree $I^x$, since this intree contains only $n-1$ tasks: We have an intree with $n-1$ tasks (namely $I^x$) containing two ready tasks $y$ and $x'$ and two tasks $z_1$ and $z_2$ with $level(z_1)>level(z_2)$, $I^x_1 = I^x\cup\left\{ z_1 \right\}$ and $I^x_2 = I^x\cup\left\{ z_2 \right\}$, implying that $T^*_{x',y,z_1}(I^x_1)>T^*_{x',y,z_2}(I^x_{2})$.
   \item If $y$ is the first task to finish, we argue similar to the $x$ case, thereby considering $I^y_{1},I^y_{2}$ and $I^y$ which are all defined analogously. This finally yields the following inequality: $T^*_{x,y',z_1}(I^y_{1}) > T^*_{x,y',z_2}(I^y_{2})$ (where $y'$ denotes the task that is scheduled next after $y$ finishes).
   \end{itemize}
 
@@ -721,7 +745,7 @@ Note that the notation from definition   \ref{def:optimal-run-time-with-schedule
     \label{fig:p3-adding-tasks-level-keep-scheduled-same-inequality}
   \end{figure}
   
-  Now we argue that the (optimal) run times for $I_1$ and $I_2$ can be computed as follows:
+  Now we argue that the (optimal) expected run times for $I_1$ and $I_2$ can be computed as follows:
   \begin{align*}
     T^*_{x,y,z_1}(I_1) & = 
       \frac{1}{3} + 
@@ -761,7 +785,7 @@ Note that the notation from definition   \ref{def:optimal-run-time-with-schedule
       = T^*_{x,y,z_2}(I_2).
   \end{align*}
 
-  This proves our claim for $level(z_1) > level(z_2)$. It is simple to obtain the claim for the version where $level(z_1) \geq level(z_2)$: If the levels are the same, the resulting degenerate intrees $I_1$ and $I_2$ are isomorphic (and there is an isomorphism that maps $z_1$ onto $z_2$), thus the optimal run time is the same. If the levels are different, we argument as in the beginning of the proof.
+  This proves our claim for $level(z_1) > level(z_2)$. It is simple to obtain the claim for the version where $level(z_1) \geq level(z_2)$: If the levels are the same, the resulting degenerate intrees $I_1$ and $I_2$ are isomorphic (and there is an isomorphism that maps $z_1$ onto $z_2$), thus the optimal run time is the same. 
 \end{proof}
 
 \paragraph{Application of lemma \ref{lem:p3-adding-tasks-level-keep-scheduled-same-inequality}}
@@ -784,7 +808,7 @@ We can now derive the following theorem.
   If we choose three HLF-conform tasks $x,y,z$ of $I$, we can argue as follows: If $x$ is the task that finishes first, for the resulting subtree $I\setminus \left\{ x \right\}$, we can be sure that we can choose the next task such that we adhere to HLF, thus choosing the optimal solution for $I\setminus\left\{ x \right\}$ (by induction hypothesis). The same holds if $y$ or $z$ finishes first.
   
   We now consider a (possibly) non-HLF schedule for $I$ and compare it to the HLF schedule described before.
-  Let $x',y',z'$ be the tasks to be chosen such that at least $x\neq x'$ or $y\neq y'$ or $z\neq z'$. We can -- without loss of generality -- assume $level(x')\leq level(x)$, $level(y')\leq level(y')$, $level(z')\leq level(z)$. If $x'$ is the first task to finish, we consider the degenerate intree $I\setminus\left\{ x' \right\}$. Since $I \setminus \left\{ x' \right\}$ is a degenerate intree with $n-1$ tasks, it would be optimal to use HLF. However, using HLF may or may not be possible depending on our previous choices of $y'$ and $z'$. That is, the optimum for $I\setminus\left\{ x' \right\}$ \emph{might} be acchieved if we chose $y'$ and $z'$ accordingly. From this we can conclude that the optimal expected run time -- if we start with $x',y'$ and $z'$ -- is at least $T_{HLF}\left( I\setminus\left\{ x' \right\} \right)$, where $T_{HLF}$ denotes the run time for HLF (which we know, by induction, is optimal).
+  Let $x',y',z'$ be the tasks to be chosen such that at least $x\neq x'$ or $y\neq y'$ or $z\neq z'$. We can -- without loss of generality -- assume $level(x')\leq level(x)$, $level(y')\leq level(y')$, $level(z')\leq level(z)$. If $x'$ is the first task to finish, we consider the degenerate intree $I\setminus\left\{ x' \right\}$. Since $I \setminus \left\{ x' \right\}$ is a degenerate intree with $n-1$ tasks, it would be optimal to use HLF. However, using HLF may or may not be possible depending on our previous choices of $y'$ and $z'$. That is, the optimum for $I\setminus\left\{ x' \right\}$ \emph{might} be acchieved if we chose $y'$ and $z'$ accordingly. From this we can conclude that the optimal expected run time for $I\setminus\left\{ x' \right\}$ -- if we start with $x',y'$ and $z'$ -- is at least $T_{HLF}\left( I\setminus\left\{ x' \right\} \right)$, where $T_{HLF}$ denotes the run time for HLF (which we know, by induction, is optimal).
 
   Now we compare the run time for $I\setminus\left\{ x' \right\}$ to the optimal run time for $I \setminus\left\{ x \right\}$, which is exactly given by $T_{HLF}\left( I \setminus\left\{ x \right\} \right)$. We recognize that $I\setminus\left\{ x' \right\}$ and $I\setminus\left\{ x \right\}$ have a common subtree, namely $I\setminus\left\{ x,x' \right\}$ with $n-2$ tasks.
   
@@ -795,65 +819,75 @@ We can now derive the following theorem.
     \leq 
     \underbrace{T^*_{x,y,z}(I\setminus\{x'\})}_{\text{Optimal for $I\setminus \{x'\}$}}.
   \end{equation*}
-  Equality holds if $x$ and $x'$ are on the same level.
+  Equality holds iff $x$ and $x'$ are on the same level.
 
-  As stated before, for the intree $I\setminus\{x'\}$, the schedule chosen \emph{might} be a non-HLF schedule. In this case, the schedule performs even worse than $T_{x,y,z}(I\setminus\{ x'  \})$, since the optimal schedule would choose $x,y,z$ as scheduled tasks. This means that
+  As stated before, for the intree $I\setminus\{x'\}$, the schedule chosen \emph{might} be a non-HLF schedule. In this case, the schedule performs even worse than $T^*_{x,y,z}(I\setminus\{ x'  \})$, since the optimal schedule would choose $x,y,z$ as scheduled tasks. This means that
   \begin{equation*}
     T^*_{x,y,z}(I\setminus\{x'\})
     \leq
-    T_{x'',y',z'}(I\setminus\{x'\}),
+    T^*_{x'',y',z'}(I\setminus\{x'\}),
   \end{equation*}
-  where $x''$ is the task chosen by the non-HLF schedule, finally implying (by $T_{HLF}(I\setminus\{x\}) \leq T_{x',y,z}\left( I\setminus\left\{ x \right\} \right)$) that
+  where $x''$ is the task chosen by the non-HLF schedule, finally implying (by $T_{HLF}(I\setminus\{x\}) \leq T^*_{x',y,z}\left( I\setminus\left\{ x \right\} \right)$) that
   \begin{equation*}
     T_{HLF}(I\setminus\{x\})
     \leq
-    T_{x'',y',z'}(I\setminus\{x'\})
+    T^*_{x'',y',z'}(I\setminus\{x'\})
     \quad
     \text{ and }
-    T_{x',y,z}(I\setminus\{x\})
+    \quad
+    T^*_{x',y,z}(I\setminus\{x\})
     \leq
-    T_{x'',y',z'}(I\setminus\{x'\})
+    T^*_{x'',y',z'}(I\setminus\{x'\})
     .
   \end{equation*}
   %because the HLF schedule is at least as good as the schedule that starts out with tasks $x',y,z$.
+  
   We argue similar for tasks $y$ and $y'$ resp. $z$ and $z'$ and finally obtain the following:
 
   \begin{eqnarray*}
-    T_{x',y,z}(I\setminus\{x\})
+    T^*_{x',y,z}(I\setminus\{x\})
     & \leq &
-    T_{x'',y',z'}(I\setminus\{x'\}) \\
-    T_{x,y',z}(I\setminus\{y\})
+    T^*_{x'',y',z'}(I\setminus\{x'\}) \\
+    T^*_{x,y',z}(I\setminus\{y\})
     & \leq &
-    T_{x',y'',z'}(I\setminus\{y'\}) \\
-    T_{x,y,z'}(I\setminus\{z\})
+    T^*_{x',y'',z'}(I\setminus\{y'\}) \\
+    T^*_{x,y,z'}(I\setminus\{z\})
     & \leq &
-    T_{x',y',z''}(I\setminus\{z'\}) \\
+    T^*_{x',y',z''}(I\setminus\{z'\}) \\
   \end{eqnarray*}
   Note that if e.g. $x=x'$, the above three equations are still satisfied.
   Combining the above inequalities yields that
   \begin{eqnarray*}
     %T_{HLF}(I) = 
-    T_{x,y,z}(I) 
+    T^*_{x,y,z}(I) = T_{HLF}(I)
+    & = &
+    \frac{1}{3} + \frac{1}{3} \cdot 
+    \left( 
+      T_{HLF}(I\setminus\{x\}) +
+      T_{HLF}(I\setminus\{y\}) +
+      T_{HLF}(I\setminus\{z\})
+    \right) 
+    \leq \\
     & \leq & 
     \frac{1}{3} + \frac{1}{3} \cdot 
     \left( 
-      T_{x',y,z}(I\setminus\{x\}) +
-      T_{x,y',z}(I\setminus\{y\}) +
-      T_{x,y,z'}(I\setminus\{z\})
+      T^*_{x',y,z}(I\setminus\{x\}) +
+      T^*_{x,y',z}(I\setminus\{y\}) +
+      T^*_{x,y,z'}(I\setminus\{z\})
     \right) 
     \leq \\
     & \leq &
     \frac{1}{3} + \frac{1}{3} \cdot 
     \left( 
-      T_{x'',y',z'}(I\setminus\{x'\}) +
-      T_{x',y'',z'}(I\setminus\{y'\}) +
-      T_{x',y',z''}(I\setminus\{z'\})
-    \right) \leq \\
-    & \leq &
-    T_{x',y',z'}(I)
+      T^*_{x'',y',z'}(I\setminus\{x'\}) +
+      T^*_{x',y'',z'}(I\setminus\{y'\}) +
+      T^*_{x',y',z''}(I\setminus\{z'\})
+    \right) = \\
+    & = &
+    T^*_{x',y',z'}(I)
   \end{eqnarray*}
 
-  This finally shows that a HLF schedule is at least as good as an arbitrary other task, meaning that HLF is optimal for three processors on degenerate trees.
+  This finally shows that a HLF schedule is at least as good as an arbitrary other schedule, meaning that HLF is optimal for three processors on degenerate trees.
 \end{proof}
 
 \subsection{Comparison of exhaustive search vs. HLF on degenerate binary trees}
