@@ -259,7 +259,7 @@ Figure \ref{fig:intrees-maximum-snapshot-dag-size-p3} shows the intrees whose \e
 
 When we considered the two processor case (see chapter \ref{chap:p2}), we mentioned that all intrees with the same profile (see section \ref{sec:p2-profiles}) have -- scheduled on two processors -- the same run time. We then were able to compress the snapshot DAG and to merge certain snapshots into one single snapshot.
 
-Unfortunately, this behaviour does not transfer to the three processor case. The core requirement for two snapshots that could be merged was that they had the same run time. For three processors, we have seen that intrees with the same profile do not necessarily have the same (optimal) run time. As an example, consider the intrees $(0,0,1,1,3,4)$ with optimal run time $4.81482$ and $(0,0,1,2,4,4)$ with optimal run time $4.81944$ (but both having profile $\profile{2,2,2,1}$. Additionally, we saw that HLF might even yield different run times depending on its choices of tasks (see section \ref{sec:p3-suboptimal-hlf-same-profiles-different-run-times}).
+Unfortunately, this behaviour does not transfer to the three processor case. The core requirement for two snapshots that could be merged was that they had the same run time. For three processors, we have seen that intrees with the same profile do not necessarily have the same (optimal) run time. As an example, consider the intrees $(0,0,1,1,3,4)$ with optimal run time $4.81482$ and $(0,0,1,2,4,4)$ with optimal run time $4.81944$ (but both having profile $\profile{2,2,2,1}$). Additionally, we saw that HLF might even yield different run times depending on its choices of tasks (see section \ref{sec:p3-suboptimal-hlf-same-profiles-different-run-times}).
 
 However, we still can merge certain snapshots in some rare cases. Consider e.g. the intree $(0,0,0,1,1,2,2,3)$ shown in figure \ref{fig:filling-up-without-loss-of-generality}. This intree has the property that it is irrelevant whether we initially schedule tasks $4,5,8$ or tasks $4,6,8$: The optimal run time is in both cases 4.87243. This comes from the fact that, after the first task finishes, the resulting snapshots are the same and they are reached with the same probability.
 
@@ -984,7 +984,7 @@ We have seen that degenerate binary intrees, while having a possibly huge amount
 We will now consider another class of intrees that can be shown to have HLF as optimal schedules.
 
 \begin{definition}[Parallel chain]
-  Let $I$ be an parallel chain. We call $I$ a \emph{parallel chain}, if each task except the root has at most one predecessor. The root may have arbitrarily many predecessors.
+  Let $I$ be an intree. We call $I$ a \emph{parallel chain}, if each task except the root has at most one predecessor. The root may have arbitrarily many predecessors.
 \end{definition}
 
 We show an example of a parallel chain in figure \ref{fig:parallel-chain-intro-figure}.
@@ -1018,17 +1018,30 @@ We show an example of a parallel chain in figure \ref{fig:parallel-chain-intro-f
 \subsection{Parallel chains are optimally scheduled by HLF}
 \label{sec:parallel-chains-optimally-hlf}
 
-We start out by a lemma that we will use later. This lemma is an analogue variant of a lemma described in \cite{chandyreynoldsshortpaper1975}. While their lemma works for two processors and general intrees, our variant is for three processors, but restricted to parallel chains.
+We start out by a lemma that we will use later. This lemma is an analogue variant of a lemma described in \cite{chandyreynoldsshortpaper1975}. While their lemma works for two processors and general intrees, our variant is for three processors, but restricted to parallel chains. Moreover, we split the lemma into two parts since the respective proof techniques rely on different strategies.
 
 \begin{lemma}
-  \label{lemma:parallel-chains-flatness}
-  Let $I$ be an intree and $x$ and $y$ two ready tasks with $level(x) > level(y)$. Then, $T_{HLF}(I\setminus\{ x \}) < T_{HLF}(I\setminus\{ y \})$, where $T_{HLF}(I)$ denotes the run time that is acchieved if intree $I$ is scheduled according to HLF.
+  \label{lemma:parallel-chains-flatness-three-or-less-tasks}
+  Let $I$ be a parallel chain with at most three ready tasks. Let $x$ and $y$ two ready tasks with $level(x) > level(y)$. Then, $T_{HLF}(I\setminus\{ x \}) < T_{HLF}(I\setminus\{ y \})$, where $T_{HLF}(I)$ denotes the run time that is acchieved if intree $I$ is scheduled according to HLF.
 \end{lemma}
 
-\begin{proof}
-  \newcommand{\iminus}[1]{I\setminus\{#1\}}
+\newcommand{\chainlengths}[1]{(#1)}
 
-  We prove the claim by induction. For parallel chains with fewer than 6 tasks (all parallel chains with fewer than 5 tasks are trivially optimally scheduled by HLF), the fact can be easily proven. Note that it suffices to examine all parallel chains with at least 3 ready tasks, since intrees with two or less tasks are optimally scheduled by HLF (according to the fact that only two processors can be used for those intrees and the fact that for two processors HLF is optimal). The only parallel chain with fewer than 6 tasks with more than 2 ready tasks is the intree $(0,0,0,1)$. This parallel chain (and its resulting parallel chains after removing HLF-conform tasks) are shown in figure       \ref{fig:parallel-intrees-lemma-induction-start-concrete}.
+\begin{proof}
+  Note that a parallel chain is uniquely (up to isomorphisms) defined by its chain lengths. We denote the sequence of chain lengths as a tuple $\chainlengths{l_1,l_2,\dots,l_r}$ meaning that the root has $r$ predecessors, and the respective chain lengths are $l_1,l_2,\dots,l_r$. Since we are interested in parallel chains with three or less ready tasks, we can for now restrict on triples $\chainlengths{a,b,c}$ indicating three chains of length $a$, $b$ resp. $c$. Note that we can w.l.o.g. assume that $a\geq b$.
+
+  We now assume w.l.o.g. that $x$ is the leaf task of the chain of length $a$ and $y$ is the task at the beginning of the second chain (whose length is given by $b$). Because we assume $level(x) > level(y)$, we can state that $a>b$.
+  
+  The claim
+  \begin{equation*}
+    T_{HLF}(I\setminus\{ x \}) < T_{HLF}(I\setminus\{ y \})
+  \end{equation*}
+  can then be reformulated to
+  \begin{equation*}
+    T_{HLF}(\chainlengths{a-1,b,c}) \leq T_{HLF}(\chainlengths{a,b-1,c})
+  \end{equation*}
+
+  We proof the claim by induction. The base case (the minimal parallel chain with at least three tasks and $x$ and $y$ on different levels is $(0,0,0,1)$) is illustrated and confirmed in figure \ref{fig:parallel-intrees-lemma-induction-start}.
 
   \begin{figure}[th]
     \centering
@@ -1069,7 +1082,75 @@ We start out by a lemma that we will use later. This lemma is an analogue varian
     \label{fig:parallel-intrees-lemma-induction-start}
   \end{figure}
 
-  We consider the HLF schedules on the intrees $I\setminus \{x\}$ and $I \setminus \{y\}$, with variable names as aforementioned. Note that the intrees $I\setminus \{x\}$ and $\setminus \{y\}$ -- since we assume that we have at least three leaves -- have at least two common HLF-conform tasks (i.e. tasks that are scheduled by HLF). We call these two tasks $x_1$ and $x_2$. For the intree $\iminus{x}$, we call the third HLF-task $x_3$ and can compute its expected run time (for HLF) by
+  The induction step is on the number of tasks. Assume that we know the claim for $n-1$ tasks to be true.
+
+  Then, take a parallel chain containing $n$ described by chain lengths $\chainlengths{a,b,c}$ with $a > b$.
+
+  The run time for $\chainlengths{a-1,b,c}$ can be computed by
+  \begin{equation*}
+    T_{HLF}(\chainlengths{a-1,b,c}) = 
+    \frac{1}{3} +
+    \frac{1}{3} \cdot 
+    \left[ 
+    T_{HLF}(\chainlengths{a-2,b,c}) +
+    T_{HLF}(\chainlengths{a-1,b-1,c}) + 
+    T_{HLF}(\chainlengths{a-1,b,c-1}) 
+    \right],
+  \end{equation*}
+  while the run time for $\chainlengths{a,b-1,c}$ is given by
+  \begin{equation*}
+    T_{HLF}(\chainlengths{a,b-1,c}) = 
+    \frac{1}{3} +
+    \frac{1}{3} \cdot 
+    \left[ 
+      T_{HLF}(\chainlengths{a-1,b-1,c}) +
+      T_{HLF}(\chainlengths{a,b-2,c}) + 
+      T_{HLF}(\chainlengths{a,b-1,c-1}) 
+    \right].
+  \end{equation*}
+
+  By the induction hypothesis, we have:
+  \begin{eqnarray*}
+    T_{HLF}(\chainlengths{a-2,b,c}) & < & T_{HLF}(\chainlengths{a-1,b-1,c}) \\
+    T_{HLF}(\chainlengths{a-1,b-1,c}) & < & T_{HLF}(\chainlengths{a,b-2,c}) \\
+    T_{HLF}(\chainlengths{a-1,b,c-1}) & < & T_{HLF}(\chainlengths{a,b-1,c-1})
+  \end{eqnarray*}
+
+  This can be used to derive our claim:
+  \begin{eqnarray*}
+    T_{HLF}(\chainlengths{a-1,b,c}) & = &
+    \frac{1}{3} +
+    \frac{1}{3} \cdot 
+    \left[ 
+    T_{HLF}(\chainlengths{a-2,b,c}) +
+    T_{HLF}(\chainlengths{a-1,b-1,c}) + 
+    T_{HLF}(\chainlengths{a-1,b,c-1}) 
+    \right] < \\
+    &<&
+    \frac{1}{3} +
+    \frac{1}{3} \cdot 
+    \left[ 
+      T_{HLF}(\chainlengths{a-1,b-1,c}) +
+      T_{HLF}(\chainlengths{a,b-2,c}) + 
+      T_{HLF}(\chainlengths{a,b-1,c-1}) 
+    \right] = \\
+    &=& T_{HLF}\left( \chainlengths{a,b-1,c} \right)
+  \end{eqnarray*}
+\end{proof}
+
+We now extend lemma \ref{lemma:parallel-chains-flatness-three-or-less-tasks} to work for an arbitrary number of chains resp. ready tasks.
+
+\begin{lemma}
+  \label{lemma:parallel-chains-flatness}
+  Let $I$ be a parallel chain and $x$ and $y$ two ready tasks with $level(x) > level(y)$. Then, $T_{HLF}(I\setminus\{ x \}) < T_{HLF}(I\setminus\{ y \})$, where $T_{HLF}(I)$ denotes the run time that is acchieved if intree $I$ is scheduled according to HLF.
+\end{lemma}
+
+\begin{proof}
+  \newcommand{\iminus}[1]{I\setminus\{#1\}}
+
+  We prove the claim by induction. For parallel chains with fewer than 6 tasks (all parallel chains with fewer than 5 tasks are trivially optimally scheduled by HLF), the fact can be easily proven. Note that it suffices to examine all parallel chains with at least 3 ready tasks, since intrees with two or less tasks are optimally scheduled by HLF (according to the fact that only two processors can be used for those intrees and the fact that for two processors HLF is optimal). The only parallel chain with fewer than 6 tasks with more than 2 ready tasks is the intree $(0,0,0,1)$. This parallel chain (and its resulting parallel chains after removing HLF-conform tasks) are shown in figure       \ref{fig:parallel-intrees-lemma-induction-start-concrete}.
+  
+  We consider the HLF schedules on the intrees $I\setminus \{x\}$ and $I \setminus \{y\}$, with variable names as aforementioned. Note that the intrees $I\setminus \{x\}$ and $I \setminus \{y\}$ -- since we assume that we have at least three leaves -- have at least two common HLF-conform tasks (i.e. tasks that are scheduled by HLF). We call these two tasks $x_1$ and $x_2$. For the intree $\iminus{x}$, we call the third HLF-task $x_3$ and can compute its expected run time (for HLF) by
   \begin{equation*}
     T_{HLF}(\iminus{x}) = 
     \frac{1}{3} +
@@ -1089,9 +1170,9 @@ We start out by a lemma that we will use later. This lemma is an analogue varian
   \end{equation*}
   We can now compare $T(\iminus{x, x_1})$ with $T(\iminus{y, x_1})$, $T(\iminus{x, x_2})$ with $T(\iminus{x, x_2})$ and $T(\iminus{x, x_3})$ with $T(\iminus{y, x'})$.
   
-  The intrees $\iminus{x,x_1}$ and $\iminus{y,x_1}$ have a common subtree, namely $\iminus{x_1}$. By induction ($\iminus{x_1}$ has $n-1$ tasks, $level(x) > level(y)$), we know that the expected HLF run time for $\iminus{x,x_1}$ is less than the expected run time for $\iminus{y,x_1}$. Note that $\iminus{x, x_1}$ has at least as many ready tasks as $\iminus{y,x_1}$. So, if $\iminus{y,x_1}$ has two or less ready tasks, the claim is true, because it has been shown for two processors in \cite{chandyreynoldsshortpaper1975} and we -- moreover -- can use a third processor for $\iminus{x,x_1}$. This consideration can be done for $x_2$ in the same manner. 
+  The intrees $\iminus{x,x_1}$ and $\iminus{y,x_1}$ have a common supertree, namely $\iminus{x_1}$. By induction ($\iminus{x_1}$ has $n-1$ tasks, $level(x) > level(y)$), we know that the expected HLF run time for $\iminus{x,x_1}$ is less than the expected run time for $\iminus{y,x_1}$. Note that $\iminus{x, x_1}$ has at least as many ready tasks as $\iminus{y,x_1}$. So, if $\iminus{y,x_1}$ has two or less ready tasks, the claim is true, because it has been shown for two processors in \cite{chandyreynoldsshortpaper1975} and we -- moreover -- can possibly use a third processor for $\iminus{x,x_1}$. This consideration can be done for $x_2$ in the same manner. 
 
-  It remains to compare $T(\iminus{x, x_3})$ and $T(\iminus{y, x'})$. If $\iminus{y,x'}$ has fewer ready tasks than $T(\iminus{x, x_3})$, then we trivially have $T(\iminus{x, x_3}) \leq T(\iminus{y, x'})$ (similar to the case before, it has been shown for two processors, and we additionally can use a third processor for $\iminus{x,x_3}$). We, thus, focus on other cases.
+  It remains to compare $T(\iminus{x, x_3})$ and $T(\iminus{y, x'})$. If $\iminus{y,x'}$ has fewer ready tasks than $T(\iminus{x, x_3})$, then we have $T(\iminus{x, x_3}) \leq T(\iminus{y, x'})$ (similar to the case before, it has been shown for two processors by \cite{chandyreynoldsshortpaper1975}, and we additionally can possibly use a third processor for $\iminus{x,x_3}$). We, thus, focus on the remaining cases where both have the same number of ready tasks.
 
   \begin{itemize}
   \item  If $level(x')=level(x_3)$, the intrees $\iminus{x'}$ and $\iminus{x_3}$ are isomorphic (we are dealing with parallel chains only), and can -- thus -- be considered equal in our computations (we can do so because HLF can be seen as deterministic for parallel chains). That is, we can w.l.o.g. assume $x'=x_3$ if the levels of $x'$ and $x_3$ are equal. In this case, we have that $T(\iminus{x, x_3})$ and $T(\iminus{y, x'})$ share a common supertree (namely $\iminus{x_3}=\iminus{x'}$), and we know -- by induction since $level(x)>level(y)$ that $T(\iminus{x, x_3}) < T(\iminus{y, x'})$.
