@@ -583,7 +583,7 @@ int main(int argc, char** argv){
             for(unsigned int i= 0; i<s.size(); ++i){
                 expected_runtimes[i] = s[i]->expected_runtime();
             }
-            myfloat expected_runtime = 0;
+            myfloat expected_runtime = (myfloat)0;
             vector<Snapshot*> best {s[0]};
             for(unsigned int i= 0; i<s.size(); ++i){
                 if(i>0 && s[i]->expected_runtime() <= best[0]->expected_runtime()){

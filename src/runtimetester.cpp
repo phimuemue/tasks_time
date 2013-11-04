@@ -5,7 +5,7 @@ string RuntimeTester::test_string(const Snapshot* s, unsigned int p){
     RuntimeTester rtt;
     ss << "(";
     for(unsigned int procs = p; procs>0; --procs){
-        ss << to_string(test_all(s, procs)); 
+        ss << test_all(s, procs); 
         if (procs > 1){
             ss << "|";
         }
@@ -16,6 +16,9 @@ string RuntimeTester::test_string(const Snapshot* s, unsigned int p){
 
 myfloat RuntimeTester::test(const Snapshot* s, unsigned int p){
     if(p==1 && s->intree.count_tasks() == 1){
+        return 1;
+    }
+    if(s->marked.size() == 0){
         return 1;
     }
     myfloat transition_time = ((myfloat)1)/((myfloat) s->marked.size());
