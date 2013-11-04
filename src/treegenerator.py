@@ -115,14 +115,44 @@ def count_leaves(l):
     nl = {a for a in l}
     return len(l)+1-len(nl)
 
-for n in xrange(1,18):
-    print "Working with %d tasks."%n
-    with open("../database/%d_all.txt"%n, "w") as f:
-        for i in generate_trees(n, False):
-            if count_leaves(i) > 0:
-                for num in i:
-                    f.write("%d "%num)
-                f.write("\n")
+def generate_parallel_chains(n):
+    def gen_chains(n, r, minidx):
+        if r==1:
+            if n>=minidx:
+                yield [n]
+            return
+        for i in xrange(minidx, n):
+            for pc in gen_chains(n-i, r-1, i):
+                yield [i] + pc
+    for r in xrange(1, n+1):
+        for pc in gen_chains(n, r, 1):
+            tree = list(xrange(n))
+            s = 0
+            for cl in pc[:-1]:
+                s = s + cl
+                tree[s] = 0
+            yield tree
+
+with open("../database/parallel_chains.txt", "w") as f:
+    for n in xrange(28,31):
+        for i in generate_parallel_chains(n):
+            for num in i:
+                f.write("%d "%num)
+            f.write("\n")
+
+
+for i in xrange(6):
+    for pc in generate_parallel_chains(i):
+        print pc
+
+# for n in xrange(1,18):
+#     print "Working with %d tasks."%n
+#     with open("../database/%d_all.txt"%n, "w") as f:
+#         for i in generate_trees(n, False):
+#             if count_leaves(i) > 0:
+#                 for num in i:
+#                     f.write("%d "%num)
+#                 f.write("\n")
 
 
 
