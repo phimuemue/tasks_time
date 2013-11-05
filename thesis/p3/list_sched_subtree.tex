@@ -1,0 +1,27 @@
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (5.25,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+\node[circle, scale=0.75, fill] (tid3) at (0.75,4.5){};
+\node[circle, scale=0.75, fill] (tid4) at (2.25,4.5){};
+\node[circle, scale=0.75, fill] (tid5) at (3.75,4.5){};
+\node[circle, scale=0.75, fill, task_scheduled] (tid10) at (3.75,6){};
+\draw[](tid5) -- (tid10);
+\draw[](tid1) -- (tid3);
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (7.5,3){};
+\node[circle, scale=0.75, fill] (tid6) at (5.25,4.5){};
+\node[circle, scale=0.75, fill] (tid7) at (6.75,4.5){};
+\node[circle, scale=0.75, fill, task_scheduled] (tid8) at (8.25,4.5){};
+\node[circle, scale=0.75, fill, task_scheduled] (tid9) at (9.75,4.5){};
+\draw[](tid2) -- (tid6);
+\draw[](tid2) -- (tid7);
+\draw[](tid2) -- (tid8);
+\draw[](tid2) -- (tid9);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+
+%%% Local Variables:
+%%% TeX-master: "thesis/thesis.tex"
+%%% End: 
