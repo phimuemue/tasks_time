@@ -2,17 +2,40 @@
 \chapter{Conclusion and future work}
 \label{chap:conclusion-outlook}
 
-This thesis addressed the problem of non-preemtively scheduling tasks with independent, identically exponentially distributed processing times and intree precedence constraints on three processors. We already knew that HLF is not strictly optimal \cite{chandyreynoldsshortpaper1975} but asymptotically optimal \cite{journals/siamcomp/PapadimitriouT87}.
+This thesis addressed the problem of non-preemtively scheduling tasks with independent, identically exponentially distributed processing times and intree precedence constraints on three processors. We already knew that HLF for three processors is not strictly optimal \cite{chandyreynoldsshortpaper1975} but asymptotically optimal \cite{journals/siamcomp/PapadimitriouT87}.
+
+\section{Two processor case}
+\label{sec:conclusion-two-processor-case}
+
+We found a (still complex) formula for the expected HLF runtime for two processors on intrees with a profile of the form
+$\profile{n_1,\profileones{j-2},n_j,\profileones{r-j}}$
+and were able to extend a result from \cite{MoritzMaasDiploma} who already found a formula for two-leaves intrees.
+
+We have seen a simple proof that relying on profiles that shows that the number of snapshots is polynomial in the two processor case.
+
+\section{Computing optimal schedules}
+\label{sec:conclusion-optimal-schedules}
 
 We found an algorithm to compute the optimal schedule (basically relying on exhaustive search as described in chapter \ref{sec:additional-algs}) in exponential time, even after we tweaked it by excluding equivalent snapshots, thereby avoiding (basically) recomputing the same things over and over. We saw that the algorithm performs reasonably well in practice for small intrees (i.e. fewer than 20 tasks).
 
-We investigated a collection of strategies and confirmed that they are suboptimal. From these strategies we deduced certain conjectures that we suspect to be true for \emph{optimal} schedules, most important that as many topmost tasks as possible are scheduled by an optimal schedule. If this conjecture was true, it could be exploited by an algorithm whose running time is remarkably smaller than exhaustive search. It would probably be a step in the right direction to prove (or even disprove) this conjecture. In addition to that, we classified degenerate intrees and parallel chains as particular structures that are optimally scheduled by HLF. This might be useful in a new scheduling strategy.
-
-Moreover, we considered the size of snapshot DAGs and observed that the number of snapshots in the LEAF snapshot DAG is larger than the number of subtrees (on average). Still we saw that, on average, the size of the \emph{optimal} snapshot DAG was drastically smaller than the number of subtrees (possibly even polynomial in the number of tasks, whereas the number of subtrees grows exponentially). We researched whether we could find any pattern for intrees whose snapshot DAG has the maximal size, but were not able to deduce any.
-
-The program we developed may serve as a starting point for further examinations of the problem. Due to its modular architecture, it should be simple to introduce new checks that can be applied to the single snapshots, thereby hopefully simplifying further work. It may even be extended for more general scenarios, among them foremost an even higher amount of processors, support for other probability distributions, generalization to general DAGs instead of only intrees, etc.
+The program we developed may serve as a starting point for further examinations of the problem. Due to its modular architecture, it should be simple to introduce new checks that can be applied to the single snapshots, thereby hopefully simplifying further work. It may even be extended for more general scenarios, among them foremost an even higher amount of processors, support for other probability distributions, generalization to general DAGs instead of only intrees, preemtive scheduling, etc.
 
 The bottleneck of the program is currently the computation of a canonical snapshot, which is where we suspect some potential for further optimizations. However, we were not able to find another paradigm that is able to compute equivalent snapshots considerably faster than the current technique based on the isomorphism algorithm for rooted trees from \cite{aho1974design}.
+
+Another enhancement for the program might consist of parallelizing it in a way that enables modern CPUs to share work and thereby reducing the time needed to compute optimal schedules.
+
+\section{New strategies and conjectures}
+\label{sec:conclusion-strategies}
+
+We investigated a collection of strategies and confirmed that they are suboptimal. From these strategies we deduced certain conjectures that we suspect to be true for \emph{optimal} schedules, most important conjecture \ref{conj:as-many-topmost-as-possibly} stating that as many topmost tasks as possible should initially be scheduled by an optimal schedule. We also conjecture that in intermediate steps, if a topmost task is currently unscheduled, it should be chosen (conjecture \ref{conj:only-nontop-tasks-exchange-better}).
+
+If these conjectures were true, they could be exploited by an algorithm whose running time is remarkably smaller than exhaustive search. It would probably be a step in the right direction to prove (or even disprove) these conjectures. 
+
+We have seen that seemingly intuitive suspicions, such as that the expected time span where three processors are busy shall be as large as possible to obtain an optimal schedule, turns out to be false. The counterpart to it, i.e. that the time span with only one busy processor shall be minimal in an optimal schedule also is not a criterion for optimality.
+
+In addition to that, we classified degenerate intrees as particular structures that are optimally scheduled by HLF. This might be useful in a new scheduling strategy. We tested parallel chains and confirmed that -- for at most 27 tasks -- these are optimally scheduled by HLF. We strongly conjecture this to hold for parallel chains with more tasks.
+
+Moreover, we considered the size of snapshot DAGs and observed that the number of snapshots in the LEAF snapshot DAG is larger than the number of subtrees (on average). Still we saw that, on average, the size of the \emph{optimal} snapshot DAG was drastically smaller than the number of subtrees (possibly even polynomial in the number of tasks, whereas the number of subtrees grows exponentially). We researched whether we could find any pattern for intrees whose snapshot DAG has the maximal size, but were not able to deduce any.
 
 We also saw that optimal schedules -- in some situations -- lead to snapshots whose intrees would be scheduled in another way by a preemtive scheduler which \emph{might} be interpreted as a hint that non-preemtive scheduling may be somewhat more difficult to compute because it can not rely only on the structure of subtrees.
 
