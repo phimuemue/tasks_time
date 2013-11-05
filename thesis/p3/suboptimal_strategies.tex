@@ -151,18 +151,18 @@ Note that this also excludes HLF from being optimal.
   \begin{subfigure}[b]{.5\textwidth}
     \centering
     \includegraphics{p3/list_sched_0011122236_opt_sched.pdf}
-    \caption{Optimal schedule for intree $(0,0,1,1,1,2,2,2,2,3,6)$.}
+    \caption{Optimal schedule for intree $(0,0,1,1,1,2,2,2,2,3,6)$. The middle subtree has to be scheduled as shown due to previous choices.}
   \end{subfigure}
   \quad
   \begin{subfigure}[b]{.4\textwidth}
     \centering
     \vfill
-    \includegraphics{p3/list_sched_subtree.pdf}
+    \input{p3/list_sched_subtree}
     \vfill
     \caption{This subtree of $(0,0,1,1,1,2,2,2,3,6)$ is optimally scheduled as shown, but in the optimal schedule for the original intree, it has to be scheduled in another way.}
     \label{fig:list-schedule-counter-example-subtree}
   \end{subfigure}
-  \caption{A counterexample for list scheduling\todo{Rechtes Bild dem linken angleichen!}}
+  \caption{A counterexample for list scheduling}
   \label{fig:list-scheduling-counter-example}
 \end{figure}
 
