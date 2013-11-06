@@ -430,7 +430,43 @@ In some cases it is useful to consider only intrees with a certain number of \em
 
 Those intrees can naturally be used to describe dependencies between different tasks, as long as each task is the requirement for \emph{at most one} other task. Each vertex in an intree then represents a task. If $t_1$ is a (direct) predecessor of $t_2$, this means that the task associated with $t_1$ must be executed before the task associated with $t_2$. Since we represent tasks by vertices, we will often use the terms task and vertex interchangeably.
 
-\todo{Vielleicht ein Beispiel aus der echten Welt.}
+Of course, this precedence is transitive, i.e. if $t_1$ is a direct predecessor of $t_2$ which itself is a direct predecessor of $t_3$, $t_1$ has to be processed before $t_2$ and, thus, before $t_3$.
+
+As a simple example, consider a software project $S$ that is subdivided into smaller units $A_1,A_2,A_3,\dots$. These smaller units themselves are broken into small tasks $B_1,B_2,\dots$. Now before the modules $A_1,A_2,\dots$ go into production code, the respective subparts $B_1,B_2,\dots$ have to be verified to work properly. Assume that there are only two (equally powerful) programmers working on that particular project. 
+
+Now assume that it is not known a priori how long it takes one of these programmers to create a certain part of the software, but assume that they broke it up into parts that they expect to require the same amount of time each. To be precise, they assume that the time needed for one particular task is exponentially distributed with some parameter. They agree that at each time at most one programmer is working on at most one task and that they ``always finish what they begin''.
+
+An exemplary scenario of subparts might look as follows:
+
+\begin{center}
+  \begin{tikzpicture}
+    \node[circle,draw=black](s) at (0,0) {$S$};
+    \node[circle,draw=black](a1) at (-2,1) {$A_1$};
+    \node[circle,draw=black](a2) at (0,1) {$A_2$};
+    \node[circle,draw=black](a3) at (2,1) {$A_3$};
+    \node[circle,draw=black](b1) at (-2.5,2) {$B_1$};
+    \node[circle,draw=black](b2) at (-1.5,2) {$B_2$};
+    \node[circle,draw=black](b3) at (0,2) {$B_3$};
+    \node[circle,draw=black](b4) at (1,2) {$B_4$};
+    \node[circle,draw=black](b5) at (2,2) {$B_5$};
+    \node[circle,draw=black](b6) at (3,2) {$B_6$};
+    \node[circle,draw=black](b7) at (4,2) {$B_7$};
+    \draw (a1) -- (s);
+    \draw (a2) -- (s);
+    \draw (a3) -- (s);
+    \draw (b1) -- (a1);
+    \draw (b2) -- (a1);
+    \draw (b3) -- (a2);
+    \draw (b4) -- (a3);
+    \draw (b5) -- (a3);
+    \draw (b6) -- (a3);
+    \draw (b7) -- (a3);
+  \end{tikzpicture}
+\end{center}
+
+Now, the programmers want to determine the optimal order in which they should work down the tasks such that the time when the whole project $S$ is finished is minimal.
+
+Naturally, this is not the only scenario that can be modelled using intree structures with exponentially distributed tasks. A central issue thereby is, of course, which tasks can be worked on at the current state. We call those tasks \emph{ready}:
 
 \begin{definition}[Ready tasks]
   Let $I$ be an intree of tasks (represented by vertices) and. If $t$ is a leaf of $I$, we call the corresponding task (resp. -- for simplicity -- the whole vertex) \emph{ready}.
