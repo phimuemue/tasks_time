@@ -542,10 +542,12 @@ We now use $D$ to denote the the snapshot DAG for a certain scheduler. As explai
 
 Since we compute the \emph{canonical snapshot} for each of those snapshots and the run time to compute the canonical snapshot is $O(n \log n)$, we can deduce that the overall run time to compute all schedules for a given scheduler is bounded by $O(|D| \cdot n \log n)$.
 
-\emph{Remark:} The run time for the version \emph{without} canonical snapshots could be denoted by $O(|D_{\text{non-canonical}}|)$, i.e. without the term $n\log n$ introduced by computing the canonical snapshots. Note that in this case, the size of the snapshot DAG (denoted by $|D_{\text{non-canonical}}|$) is remarkably bigger than the size of the snapshot DAG after merging equivalent snapshots. In practice, this behaviour became evident quite quickly.
+\emph{Remark:} The run time for the version \emph{without} canonical snapshots could be denoted descriptively by $O(|D_{\text{non-canonical}}|)$, i.e. without the term $n\log n$ introduced by computing the canonical snapshots. Still, please note that, the size of the snapshot DAG (denoted by $|D_{\text{non-canonical}}|$) is remarkably bigger than the size of the snapshot DAG after merging equivalent snapshots. In practice, this behaviour became evident quite quickly --- both in run time and in memory consumption.
 
 \section{Extensibility of the program}
 \label{sec:implementation-extending-program}
+
+The program at its current state works for intrees whose task times are exponentially distributed. I supports schedules for an arbitrary number of processors and can optimize them and provides convenient input and output facilities.
 
 We now describe in short how the program can be extended. We describe the possible adjustments and how complex they are.
 
