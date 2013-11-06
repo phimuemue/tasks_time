@@ -99,6 +99,7 @@ For these examples, after two tasks finish, the possible remaining intrees are t
 We have seen that HLF is suboptimal in some cases, but experience shows that HLF is quite good in many cases. In fact \cite{journals/siamcomp/PapadimitriouT87} have shown that the following theorem holds:
 
 \begin{theorem}
+  \label{thm:quality-hlf-papadimitriou}
   There is a function $\beta: \mathbb{N} \mapsto \mathbb{R}^+_0$ with $\lim_{n\rightarrow \infty} \beta(n) = 0$ such that for each intree $I$ and an arbitrary HLF strategy $HLF$ we have
   \begin{equation*}
     T_{HLF}(I) \leq \inf_\pi\, T_{\pi}(I) \cdot \left( 1+\beta(N) \right),
@@ -109,6 +110,8 @@ We have seen that HLF is suboptimal in some cases, but experience shows that HLF
 \begin{proof}
   See \cite{journals/siamcomp/PapadimitriouT87}.
 \end{proof}
+
+Note that theorem \ref{thm:quality-hlf-papadimitriou} states this property for \emph{an arbitrary HLF} strategy, implying that we can use \emph{any} HLF strategy. This in particular means that we do not need to try all possibilities if HLF has several choices.
 
 This result is quite useful because it shows that HLF is -- even if not optimal -- quite close as the number of tasks grows. Thus, HLF is probably a good choice in many situations in practice.
 
@@ -764,6 +767,11 @@ However, after some investigation, we are tempted to conjecture the following.
 \end{conjecture}
 
 Even if this conjecture turns out to be true, it seems complex to transform this knowledge into a scheduling strategy that does something more significantly efficient than ``explore everything, and choose the best'' (i.e. LEAF scheduling with subsequent optimization), because $T_3, T_2$ and $T_1$ are not that easy to compute.
+
+\subsection{A note on implementation}
+\label{sec:maximizing-t3-minimizing-t1-float-problem}
+
+When we conducted experiments to find out whether $T_3$ must be maximal or $T_1$ must be minimal, we experienced the phenomenon that a floating point representation for expected values is not accurate enough for some measurements. This was one of the cases where we needed a representation by fractions (see sections \ref{sec:implementation-numbers} and \ref{sec:benchmarks-myfloat-variations}).
 
 \section{Conclusion}
 \label{sec:p3-conclusion}
