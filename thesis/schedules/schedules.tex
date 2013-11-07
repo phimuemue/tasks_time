@@ -1,20 +1,20 @@
 \chapter{Schedules}
 \label{chap:introduction-schedules}
 
-We will now combine the knowledge from chapter \ref{chap:theoretical-foundations} and introduce the problem we will be working on. 
+We will now apply the knowledge from chapter \ref{chap:theoretical-foundations} and introduce the problem we will be working on. 
 
 \section{Computational setting}
 \label{sec:schedules-problem-setting}
 
-We now describe our assumptions concerning the tasks to be processed and our machines.
+We first describe our assumptions concerning the tasks to be processed and our machines.
 
 \paragraph{Intree constraint}
 
-We assume that the dependencies between the tasks under consideration can be described as an intree (as introduced in  section \ref{sec:foundations-graph-theory}).
+We assume that the dependencies between the tasks under consideration can be modeled as an intree (as introduced in  section \ref{sec:foundations-graph-theory}).
 
 \paragraph{Random task processing times}
 
-We assume that we do not know the processing time for a certain task in advance. We instead assume that we can model the task time for each task within the intree by an exponentially distributed random variable as defined in section \ref{sec:exponential-distribution}. We furthermore assume that all tasks are exponentially distributed with the \emph{same} parameter $\lambda$. Note that we can assume w.l.o.g. --  according to theorem \ref{thm:expoenential-distr-scalability} explaining exponential variables' scaling -- that all tasks have parameter $\lambda=1$.
+We assume that we do not know the processing time for a certain task in advance. We instead assume that we can model the task time for each task within the intree by an exponentially distributed random variable as defined in section \ref{sec:exponential-distribution}. We furthermore assume that all tasks are exponentially distributed with the \emph{same} parameter $\lambda$. Note that we can assume w.l.o.g. --  according to theorem \ref{thm:expoenential-distr-scalability} (exponential variables' scaling) -- that all tasks have parameter $\lambda=1$.
 
 \paragraph{Parallel processors}
 
@@ -26,7 +26,7 @@ We assume that one single task can be processed by one processor exclusively, i.
 
 \paragraph{Non-preemtive scheduling}
 
-We will focus on non-preemtive scheduling, i.e. once a task is processor is assigned a task, this task has to be processed \emph{completely} before the processor can be used for anything else. Note that the restriction on non-preemtive scheduling is no problem when we work with two processors (as shown in \cite{chandyreynoldslargepaper1979}) --- in this case, the optimal schedule is (without loss of generality) non-preemtive. However, for three processors, preemtive schedules might be better than non-preemtive ones. We will later show an example intree for this fact (see section \ref{preemtiveness-explanation}).
+We will focus on non-preemtive scheduling, i.e. once a task is processor is assigned a task, this task has to be processed \emph{completely} before the processor can be used for anything else. Note that the restriction on non-preemtive scheduling is no problem when we work with two processors (as shown in \cite{chandyreynoldslargepaper1979}): In this case, the optimal schedule is (without loss of generality) non-preemtive. However, for three processors, preemtive schedules might be better than non-preemtive ones. We will later show an example intree for this fact (see section \ref{preemtiveness-explanation}).
 
 However, as shown in \cite{chandyreynoldslargepaper1979} an optimal schedule (without loss of generality) only preemts a task directly after another task finishes.
 
@@ -41,10 +41,10 @@ That is, we assign some (at most $p$) ready tasks to processors, wait until the 
   Let $I$ be an intree of tasks that is processed. A \emph{schedule} is the order in which tasks are processed. Since task times are unknown, this order is not deterministic and can vary from execution to execution.
 
   Let $S$ be a schedule of $I$.
-  A \emph{snapshot} of $S$ a pair containing
+  A \emph{snapshot} of $S$ is a pair containing
   \begin{itemize}
-  \item the current subtree $I'\subseteq I$ describing which tasks are not finished yet,
-  \item a set $X$ holding the tasks that are currently being processed (i.e. a set of \emph{currently scheduled tasks}).
+  \item the current subtree $I'\subseteq I$ describing which tasks are not finished yet (and their dependencies),
+  \item a set of tasks $X \subseteq I$\footnote{In this context, $X\subseteq I$ does \emph{not} denote a subtree of $I$, but simply a \emph{subset} of vertices resp. tasks of $I$.} holding the tasks that are currently being processed (i.e. a set of \emph{currently scheduled tasks}).
   \end{itemize}
 \end{definition}
 
@@ -52,7 +52,7 @@ While the above definition is well suited for theoretical considerations, we -- 
 \tikz{\node[circle, scale=0.75, fill, task_scheduled] (tid7) at (2.25,6){};} 
 while the non-scheduled tasks are drawn as
 \tikz{\node[circle, scale=0.75, fill] (tid7) at (2.25,6){};}
-.
+(if not stated otherwise).
 
 \begin{figure}[t]
   \centering
@@ -83,10 +83,10 @@ while the non-scheduled tasks are drawn as
   \label{fig:intro-snapshot-graphical-representation}
 \end{figure}
 
-Consider now a snapshot, i.e. the current intree and a set of currently scheduled tasks. At this point, there are several possibilities:
+Consider now a snapshot, i.e. the current intree and a set of currently scheduled tasks, there are several possibilities:
 
 \begin{itemize}
-\item Any of the currently scheduled tasks may be the first task to finish.
+\item Any of the currently scheduled tasks may be the first task to finish (all with same probability according to theorem \ref{thm:iid-cont-rand-var-minimum}).
 \item If a certain task finishes, the corresponding processor gets idle and can be assigned new work. That is, we may be able to choose a new task\footnote{It may be the case that we are not able to select any new task because all leaves are already scheduled. In this case, the processor has to stay idle and can not get assigned a new task.} and assign it to the now idle processor.
 
   Note that we can -- in principle -- easily choose a certain task with some probability and another task with another probability, thus introducing more possibilities.
@@ -95,44 +95,44 @@ Consider now a snapshot, i.e. the current intree and a set of currently schedule
 That is, we have several possibilities here. The first of them (which task finishes first) can not be influenced in our scenario. The second, however, leaves us a choice that we can influence. Depending on which task we choose next, we might get a better or worse overall run time.
 
 \begin{definition}[Scheduling strategy]
-  A \emph{scheduling strategy} determines the probability that a certai tasks should be the next tasks to be scheduled.
+  A \emph{scheduling strategy} determines the probability that a certain task should be the next tasks to be scheduled.
 \end{definition}
 
 That means, we use the notion of a \emph{probabilistic scheduler} in the sense that the scheduler is not forced to restrict on \emph{one single} task, but can instead specify probabilities for each ready, currently unscheduled task. Note that we can easily ``simulate'' a deterministic scheduler by assigning probability 1 to one single ready task, and probability 0 to all other possibilities.
 
-One desirable goal is to always choose the next task to be scheduled (resp. the respective probabilities) in such a way that the overall expected run time is minimal. We will now see how we can compute the expected run time for a schedule.
+One desirable goal is to always choose the next task to be scheduled (resp. the respective probabilities) in such a way that the overall expected run time is minimal.
 
 \subsection{Two prominent scheduling strategies}
 \label{sec:intro-two-scheduling-strategies}
 
-We will now present two important scheduling strategies that we will use to research the problem throughout this work.
+We will now present two important scheduling strategies that we will use to research our problem throughout this work.
 
 \begin{definition}[HLF scheduling]
-  A \emph{highest level first} scheduler (or HLF scheduler) assigns, if there are idle processors, ready tasks whose levels are maximal.
+  A \emph{highest level first} scheduler (or HLF scheduler) assigns, if there are idle processors, ready tasks whose levels are as large as possible.
 \end{definition}
 
-Note that the above definition of HLF leaves some freedom if there are several tasks that could be chosen by HLF. If this is the case, then there are (basically) two possibilities:
+Note that the above definition of HLF leaves some freedom if there are several tasks that are on the highest level and thus could all be chosen by HLF. If this is the case, then there are (basically) two possibilities:
 \begin{itemize}
 \item Choose \emph{one} task according to a certain pattern or randomly.
 \item Assign to \emph{each} possibly chosen task a certain probability.
 \end{itemize}
 
-Note that we can consider the first possibility as a special case of the second one. HLF scheduling is optimal for intrees whose task times are equal scheduled on any number of processors \cite{hu:1961:hlfoptimalforknowntimesintree} and for intrees whose task times are exponentially distributed (with same parameter) scheduled on two processors (see \cite{chandyreynoldsshortpaper1975} and chapter \ref{chap:p2}). 
+Note that we can consider the first possibility as a special case of the second one. HLF scheduling is optimal for intrees whose task times are equal scheduled on any number of processors \cite{hu:1961:hlfoptimalforknowntimesintree} and for intrees whose task times are exponentially distributed (with same parameter) scheduled on two processors (see \cite{chandyreynoldsshortpaper1975}). 
 
-Another (very trivial) scheduler is the scheduler that tries all possibilities:
+Another (very trivial) scheduler is the scheduler that simply tries all possibilities:
 
 \begin{definition}[LEAF scheduling]
-  A LEAF scheduler, if a processor gets free and can be assigned a new task, assigns each ready task with the same probability to this processor. In the beginning, each possible combination of scheduled tasks is taken with the same probability.
+  A LEAF scheduler assigns, if a processor gets free and can be assigned a new task, each ready task with the same probability to this processor. In the beginning, each possible combination of ready tasks is taken with the same probability.
 \end{definition}
 
-LEAF schedulers are useful to examine all possible schedules and play an important role when we research how many snapshots have to be examined \emph{at most}. Note that a LEAF scheduler examines \emph{all possible} schedules. The resulting schedule, thus, \emph{must} contain the optimal choices as a part of it. That means, we can compute an optimal schedule by first scheduling the intree with the LEAF scheduler, and afterwards excluding the ``wrong'' (i.e. suboptimal) choices.
+LEAF schedulers are useful to examine all possible schedules and play an important role when we research how many snapshots have to be examined \emph{at most}. Please confirm for yourself that a LEAF scheduler indeed examines \emph{all possible} schedules. The resulting schedule, thus, \emph{must} contain the optimal choices as a part of it. That means, we can compute an optimal schedule by first scheduling the intree with the LEAF scheduler, and afterwards excluding the ``wrong'' (i.e. suboptimal) choices.
 
 \section{Visualizing a schedule}
 \label{sec:intro-visualizing-schedules}
 
 If we are speaking of a schedule, we talk about the complete processing of an intree of tasks.
 
-We can think of it as a connected directed acyclic graph or DAG (see \cite{diestel2005graph} for more information), where each vertex represents one single snapshot. The edges between the snapshots then represent transitions that indicate that a certain task has finished and (possibly) a new task has chosen to be scheduled. We can naturally assign the edges weights that represent the corresponding probability that a task has finished and the new task has been picked.
+We can think of it as a connected directed acyclic graph (DAG). For more and an introduction on DAGs, see e.g \cite{diestel2005graph} for more information. In these snapshot DAGs, each vertex represents one single snapshot. The edges between the snapshots then represent transitions that indicate that a certain task has finished or (possibly) a new task has chosen to be scheduled. We can naturally assign the edges weights that represent the corresponding probability that a task has finished and the new task has been picked.
 
 As stated before, we have two sources of non-determinism:
 \begin{itemize}
@@ -166,9 +166,9 @@ We will look at the intree $(0,0,1,2,2,2,6,6,8)$ -- it shall be processed by two
   \end{tikzpicture}
 \end{center}
 
-Figure \ref{fig:schedule-dag-intro} shows (the beginning) a two-processor schedule for the intree $(0,0,1,2,2,2,6.6,8)$ in two variants: Figure \ref{fig:schedule-dag-intro-intermediates} shows the schedule and incorporates situations where the scheduler can decide wich tasks should be scheduled next with wich probabilities (``intermediate snapshots''). At the beginning, the nodes 9 and 3 are scheduled (snapshot $A$). Then each of these two tasks is the first one to finish (each one with probability 50\%). This intermediate situation, where exactly one of the two tasks is finished and the scheduler can assign probabilities describing which task to pick next, are shown in snapshots $B$ (this is the situation where task 3 finished first) and $C$ (where 9 finished first).
+Figure \ref{fig:schedule-dag-intro} shows (the beginning of) a two-processor schedule for this intree $(0,0,1,2,2,2,6.6,8)$ in two variants: Figure \ref{fig:schedule-dag-intro-intermediates} shows the schedule and incorporates situations where the scheduler can decide which tasks should be scheduled next with which probabilities (``intermediate snapshots''). At the beginning, tasks 9 and 3 are scheduled (snapshot $A$). Then each of these two tasks may be the first one to finish (each one with probability 50\%). The intermediate situations, where exactly one of the two tasks is finished and the scheduler can assign probabilities describing which task to pick next, are shown in snapshots $B$ (this is the situation where task 3 finished first) and $C$ (where 9 finished first).
 
-In the situation described by the intermediate snapshot $B$, the scheduler can decide which task shall be chosen next with which probability. In the situation of snapshot $B$, the scheduler decides that with probability 20\%, the task 1 shall be chosen as next task (snapshot $B_1$) and with probability 80\% task 4 shall be chosen as next task (snapshot $B_2$). Similarily it decides in the situation denoted by $C$ that tasks 8 resp. 4 shall be chosen with probability 40\% each ($C_1$ resp. $C_3$) and task 7 shall be chosen with probability 20\% ($C_2$).
+In the situation described by the intermediate snapshot $B$, the scheduler can decide which task shall be chosen next with which probability. In the situation of snapshot $B$, the particular scheduler used in figure \ref{fig:schedule-dag-intro} decides that with probability 20\%, the task 1 shall be chosen as next task (snapshot $B_1$) and with probability 80\% task 4 shall be chosen as next task (snapshot $B_2$). Similarily, it decides in the situation denoted by $C$ that tasks 8 resp. 4 shall be chosen with probability 40\% each ($C_1$ resp. $C_3$) and task 7 shall be chosen with probability 20\% ($C_2$).
 
 \begin{figure}[th]
   \centering
@@ -188,7 +188,7 @@ In the situation described by the intermediate snapshot $B$, the scheduler can d
   \label{fig:schedule-dag-intro}
 \end{figure}
 
-Figure \ref{fig:schedule-dag-intro-no-intermediates} shows the version of the schedule that omits intermediate snapshots. From now on, we will restrict ourselves to the latter structure (without intermediate snapshots) because this representation is easier to maintain and -- after some time to get accustomed to it -- as easy to understand as the version with intermediate snapshots.
+Figure \ref{fig:schedule-dag-intro-no-intermediates} shows the version of the schedule that omits intermediate snapshots. From now on, we will restrict ourselves to the latter structure (without intermediate snapshots) because this representation is easier to maintain and -- after some time to get accustomed to it -- as easy to understand as the version with intermediate snapshots. Note that the new probabilities are noted in the initial snapshot at the bottom of the box (in the order of the successors).
 
 \section{Computing the expected run time of a schedule}
 \label{sec:introduction-compute-expected-time-schedule}
@@ -199,9 +199,9 @@ Computing the expected run time for a given schedule (more precisely for the who
 \item If the current intree $I$ consists of exactly one task (the root), then we simply have to process this single task. Since one task has expected run time $\frac{1}{\lambda}=1$ (remember: we assumed w.l.o.g $\lambda=1$), we know that the expected run time for $I$ is 1.
 \item If the current intree consists of more than 1 task, there may be up to $p$ tasks scheduled, where $p$ denotes the number of processors. Let us assume that there are $r\leq p$ tasks scheduled ($r$ may be smaller than $p$ if there are less ready tasks than processors) and denote the set of these tasks by $X=\{x_1,x_2,\dots,x_r\}$. According to theorem \ref{thm:iid-cont-rand-var-minimum}, the probability that task $x_i$ ($i\in\left\{ 1,2,\dots,r \right\}$) is the \emph{first} task to finish is $\frac{1}{r}$. The expected run time for $x_i$ is $\frac{1}{n}$ (by theorems \ref{thm:minimum-of-exponential-distribution-is-exponential} and \ref{thm:exponential-distribution-expectancy}). Moreover, the probability that two tasks finish at exactly the same time is 0 (since the run times of tasks are exponentially -- i.e. continuously -- distributed).
 
-  If task $x_i$ finishes, the remaining intree is $I\setminus\left\{ x_i \right\}$, with -- due to non-preemtive scheduling -- at least tasks within $\left\{ x_1,x_2,\dots,x_r \right\} \setminus \left\{ x_i \right\}$ scheduled. By $X_i$ we denote the set of tasks that are scheduled in the next step (i.e. $\left\{ x_1,x_2,\dots,x_r \right\} \setminus \left\{ x_i \right\} \subseteq X_i$). The expected run time for $I\setminus\left\{ x_i \right\}$ can then be computed recursively (see remark below).
+  If task $x_i$ finishes first, the remaining intree is $I\setminus\left\{ x_i \right\}$, with -- due to non-preemtive scheduling -- at least the tasks within $\left\{ x_1,x_2,\dots,x_r \right\} \setminus \left\{ x_i \right\}$ scheduled. By $X_i$ we denote the set of tasks that are scheduled in the next step (i.e. $\left\{ x_1,x_2,\dots,x_r \right\} \setminus \left\{ x_i \right\} \subseteq X_i$). The expected run time for $I\setminus\left\{ x_i \right\}$ can then be computed recursively: We can act as if $I\setminus \left\{ x_i \right\}$ is the initial tree with tasks $X_i$ scheduled (see remark below).
 
-  This means: If $x_i$ is the first task to finish, we can use the expected run time is given by
+  This means: If $x_i$ is the first task to finish, the expected run time for the whole intree is given by
   \begin{equation*}
     \frac{1}{r} + T_{X_i}(I\setminus\left\{ x_i \right\}),
   \end{equation*}
@@ -231,12 +231,12 @@ Computing the expected run time for a given schedule (more precisely for the who
 
 \emph{Remark:} We can reformulate (\ref{eqn:intro-recursive-formula-for-run-time-total-exp}) to (\ref{eqn:intro-recursive-formula-for-intermediate-form}) because the expected run time to process the whole tree $I$ under the condition $F_i$ (i.e. under the knowledge that task $x_i$ is the first to finish) can be computed by summing up the time that is needed by task $x_i$ (thus the term $T(x_i)$) and the time needed for the remaining tree (denoted by $T_{X_i}(I)\setminus\{x_i\}$).
 
-Since all tasks' processing times are assumed to be exponentially distributed, i.e. in particular memoryless (see theorem \ref{thm:exponential-memoryless}), we can argue as follows: If one task finishes, the other scheduled tasks -- of course -- \emph{might} have been processed up to a certain point. But since their processing times are memoryless, we can assume them to behave \emph{as if} they had not been processed at all. That is, the remaining tree can be considered \emph{as if} we just started all scheduled tasks. This, however, means that we are in the same situation as before, except that we are dealing with an intree that has one task less than the intree before. Thus, we can justify the reformulation from (\ref{eqn:intro-recursive-formula-for-intermediate-form}) to (\ref{eqn:intro-recursive-formula-for-intermediate-form-2}).
+Since all tasks' processing times are assumed to be exponentially distributed, i.e. in particular memoryless (see theorem \ref{thm:exponential-memoryless}), we can argue as follows: If one task finishes, the other scheduled tasks -- of course -- \emph{might} have been processed up to a certain point. But since their processing times are memoryless, we can assume them to behave \emph{as if} they had not yet been processed at all. That is, the remaining tree can be considered \emph{as if} we just \emph{began} working on all scheduled tasks. This, however, means that we are in the same situation as before, except that we are dealing with an intree that has one task less than the intree before. Thus, we can justify the reformulation from (\ref{eqn:intro-recursive-formula-for-intermediate-form}) to (\ref{eqn:intro-recursive-formula-for-intermediate-form-2}).
 
 %The fact that we can compute the expected run time \emph{recursively} follows from the fact that exponentially distributed random variables are memoryless (see theorem \ref{thm:exponential-memoryless}): 
 
 
-As an example, consider the tree in figure \ref{fig:intro-computing-expected-runtime}. The topmost snapshots describe the first step of schedules for three resp. four processors on the same intree. We are the corresponding expected run times. We can assume that the run times of the snapshots in the second line have already been computed (recursively). Using these, we can compute the overal expected run time using theorem (\ref{eqn:intro-recursive-formula-for-run-time}) as described in figures \ref{fig:intro-recursive-formula-run-time-example-three-procs} and \ref{fig:intro-recursive-formula-run-time-example-four-procs}. 
+As an example, consider the tree in figure \ref{fig:intro-computing-expected-runtime}. The topmost snapshots describe the first step of schedules for three resp. four processors on the same intree. We are interested in the corresponding expected run times. We can assume that the run times of the snapshots in the second line have already been computed (recursively). Using these, we can compute the overal expected run time using theorem (\ref{eqn:intro-recursive-formula-for-run-time}) as described in figures \ref{fig:intro-recursive-formula-run-time-example-three-procs} and \ref{fig:intro-recursive-formula-run-time-example-four-procs}. 
 
 \begin{figure}[tt]
   \centering
@@ -523,7 +523,7 @@ As mentioned in section \ref{sec:intrees-extension-to-forests}, we can also deal
 \section{Optimizing a given schedule}
 \label{sec:algorithm-computing-optimal-schedule}
 
-Now we know how to compute a schedule according to a specific scheduling strategy. We now describe an algorithm that can be used to improve the original schedule. It recursively discards ``wrong choices'', i.e. decisions that are suboptimal. The technique for it is shown in algorithm \ref{alg:optimize-snapshot}.
+Now we know how to compute the expected run time of a schedule according to a specific scheduling strategy. We now describe an algorithm that can be used to improve the original schedule. It recursively discards ``wrong choices'', i.e. decisions that are suboptimal. The technique for it is shown in algorithm \ref{alg:optimize-snapshot}.
 
 \begin{algorithm}[t]
   \begin{algorithmic}[5]
@@ -531,7 +531,7 @@ Now we know how to compute a schedule according to a specific scheduling strateg
       \Comment{$s$ is the snapshot to be optimized}
     \For{$t \in scheduled(s)$}
       \Comment{Iterate over all currently scheduled tasks}
-    \State $sucs_t \gets \left\{ s' \mid s' \text{ is a successor of } s \text{ resulting if } t \text{ is the first finishing task} \right\}$
+    \State $sucs_t \gets \left\{ s' \mid s' \text{ is a successor snapshot of } s \text{ resulting if } t \text{ is the first finishing task} \right\}$
     \State $osucs_t \gets \left\{ \Call{OptimizeSnapshot}{s'} \mid s' \in sucs_t \right\}$
     \EndFor
     \State $\displaystyle newsucs \gets \bigcup_{t\in scheduled(s)}  \Call{BestSnaps}{osucs_t} $
@@ -549,14 +549,14 @@ Now we know how to compute a schedule according to a specific scheduling strateg
 
 Line \ref{alg:optimize-snap-adjust-probs} of algorithm \ref{alg:optimize-snapshot} needs some explanation: We did not in particular specify how to ``adjust'' the probabilities properly. This is because there are different solutions. The only thing that must be kept in mind is that the sum of all probabilities for reaching a snapshot from the set $\Call{BestSnaps}{osucs_t}$ must be equal to the probability that task $t$ is the first task to finish (i.e. in our particular case, it must be equal to $\frac{1}{r}$ if there are $r$ tasks scheduled for the respective snapshot).
 
-One canonical way of assigning probabilities to snapshots within $\Call{BestSnaps}{osucs_t}$ is to assign probability $\frac{1}{r\cdot|\Call{BestSnaps}{osucs_t}|}$ to each of the snapshots within this set. Another way is to choose one particular element in $\Call{BestSnaps}{osucs_t}$ and assign it probability $\frac{1}{r}$ while all other snapshots in $\Call{BestSnaps}{osucs_t}$ get probability 0. This way, we eliminate further snapshots by making them impossible to reach. The latter method is especially useful because it automatically eliminates some snapshots that are not needed.
+One canonical way of assigning probabilities to snapshots within $\Call{BestSnaps}{osucs_t}$ is to assign probability $\frac{1}{r\cdot|\Call{BestSnaps}{osucs_t}|}$ to each of the snapshots within this set. Another way is to choose one particular element in $\Call{BestSnaps}{osucs_t}$ and assign it probability $\frac{1}{r}$ while all other snapshots in $\Call{BestSnaps}{osucs_t}$ get probability 0. This way, we eliminate further snapshots by making them impossible to reach. The latter method is especially useful because it automatically eliminates some snapshots that can be omitted without worsening the overall run time.
 
-An important aspect of this optimization routine is that we can -- in an implementation -- assure that it is executed \emph{at most once} for each snapshot (by simply having a flag that indicates whether a snapshot was already subject to optimization). This means that we can assure that the total cost to optimize all snapshots of a schedule is bounded by $O\left(\sum_{s\in D} optcost(s)\right)$ where $D$ denotes the snapshot DAG for the particular scheduler and $optcost(s)$ gives the cost to optimize a snapshot $s$. If we know the most expensive snapshot to optimize and call it $s^*$ we can argue that $O\left(\sum_{s\in D} optcost(s)\right) \subseteq O\left(|D|\cdot optcost(s^*)\right)$.
+An important aspect of this optimization routine is that we can -- in an implementation -- assure that it is executed \emph{at most once} for each snapshot (by e.g. simply having a flag that indicates whether a snapshot was already subject to optimization). This means that we can assure that the total cost to optimize all snapshots of a schedule is bounded by $O\left(\sum_{s\in D} optcost(s)\right)$ where $D$ denotes the snapshot DAG for the particular scheduler and $optcost(s)$ gives the cost to optimize a snapshot $s$. If we know the most expensive snapshot to optimize and call it $s^*$ we can argue that $O\left(\sum_{s\in D} optcost(s)\right) \subseteq O\left(|D|\cdot optcost(s^*)\right)$.
 
 \section{Computing the optimal schedule}
 \label{sec:intro-computing-optimal-schedule}
 
-We saw that we can optimize a given schedule and exploit this fact in conjunction with the LEAF scheduler (that corresponds to an exhaustive search). We first compute \emph{all possible} schedules using the LEAF scheduler and -- afterwards -- optimize this using algorithm \ref{alg:optimize-snapshot}. This way, we can compute the optimal schedule by an exhaustive search.
+We saw that we can optimize a given schedule and exploit this fact in conjunction with the LEAF scheduler (that corresponds to an exhaustive search). We first compute \emph{all possible} schedules using the LEAF scheduler and -- afterwards -- optimize this using algorithm \ref{alg:optimize-snapshot}. This way, we basically compute the optimal schedule by an exhaustive search.
 
 It is clear that the resulting schedule must be optimal because algorithm \ref{alg:optimize-snapshot} chooses -- for each scheduled task $t$ that could be the first to finish -- only the best solutions. Since a ``complete schedule'' from the LEAF schedule contains all possible schedules as a part of it, the optimization algorithm picks the best choices possible for each step.
 
@@ -857,7 +857,7 @@ From now on, if not stated otherwise, we restrict ourselves to snapshot DAGs tha
 \section{Snapshot DAGs revisited}
 \label{sec:introduction-snapshot-dags-revisited}
 
-We have seen transition probabilities between certain snapshots, how compute the expected run time of a schedule recursively, excluding equivalent snapshots. We now come back to the description of a schedule as a snapshot DAG (as introduced in section \ref{sec:intro-visualizing-schedules}) that already contained the transition probabilities as elements in the corresponding snapshots.
+We have seen transition probabilities between certain snapshots, how to compute the expected run time of a schedule recursively, excluding equivalent snapshots. We now come back to the description of a schedule as a snapshot DAG (as introduced in section \ref{sec:intro-visualizing-schedules}) that already contained the transition probabilities as elements in the corresponding snapshots.
 
 We augment this visualization by two new elements: The expected run time for a snapshot and probability of reaching a certain snapshot.
 
@@ -868,7 +868,7 @@ We augment this visualization by two new elements: The expected run time for a s
   \label{fig:intro-complete-dag}
 \end{figure}
 
-Figure \ref{fig:intro-complete-dag} visualizes a schedule for the intree $(0,0,1,1,2)$ processed by three processors. This snapshot DAG contains -- for each snapshot -- the probability of reaching it, the corresponding intree, the expected run time and the probabilities for the successors.
+Figure \ref{fig:intro-complete-dag} visualizes a schedule for the intree $(0,0,1,1,2)$ processed by three processors. This snapshot DAG contains -- for each snapshot -- the probability of reaching it, the corresponding intree, the expected run time and the probabilities for the successors (in each respective box from top to bottom).
 
 \section{Summary: Problem statement}
 \label{sec:introduction-aim}
