@@ -234,9 +234,9 @@ Theorem \ref{theo:law-total-prob} can be used to derive its analogon for expecta
 As we will see later, we will constantly deal with \emph{intrees}. In this section we develop simple notation for such trees. We assume that the reader is familiar with the concept of undirected trees and develop our notation on top of the one for undirected trees. For a more detailed introduction on what trees are, see e.g. \cite{diestel2005graph}.
 
 \begin{definition}[Intree]
-  Let $I'$ be a undirected tree. Let $v$ be a vertex within $I'$. Let $I$ be the directed version of $I'$ in such a way that all edges are directed towards vertex $v$. Then we call $I$ an \emph{intree} or a \emph{rooted tree} with \emph{root} $v$.
+  Let $I'$ be a undirected tree. Let $v$ be a vertex within $I'$. Let $I$ be the directed version of $I'$ in such a way that all edges are directed towards vertex $v$, i.e. if $\left\{ x,y \right\}$ is an edge of $I'$, then if $dist(v,x) > dist(v,y)$ in $I'$, the new edge in $I$ is $(x,y)$. Then we call $I$ an \emph{intree} or a \emph{rooted tree} with \emph{root} $v$.
 
-  If there is a path from $t_1$ to $t_2$, we call $t_1$ a \emph{predecessor} of $t_2$. Moreover, we call $t_2$ a \emph{successor} of $t_1$.
+  If there is a (directed) path from $t_1$ to $t_2$ (in $I$), we call $t_1$ a \emph{predecessor} of $t_2$. Moreover, we call $t_2$ a \emph{successor} of $t_1$.
 
   If a task $t$ in $I$ has no predecessors, we call $t$ a \emph{leaf}.
 \end{definition}
@@ -249,7 +249,7 @@ Throughout this thesis, if not stated otherwise, we use the terms intree and tre
   Let $I$ be an intree. Let $v$ be a vertex within $I$. We define $level(v)$ be number of edges along the (unique) path from $v$ to the root.
 \end{definition}
 
-The concept of levels is illustrated in figure \ref{fig:intrees-introductory-explanation}. Note that our definition of levels implies that the lowest level carries the number 0.
+The concept of levels is illustrated in figure \ref{fig:intree-example-structure-version}. Note that our definition of levels implies that the lowest level carries the number 0.
 
 \begin{definition}[Topmost leaf]
   A leaf $t$ of an intree $I$ is called a \emph{topmost leaf} if for all vertices $v$ of $I$, we have $level(t) \geq level(v)$.
@@ -258,25 +258,25 @@ The concept of levels is illustrated in figure \ref{fig:intrees-introductory-exp
 We introduce intuitive (but non-standard) notation for modifying an intree by adding or deleting leaves.
 
 \begin{definition}[Removal of leaves]
-  Let $I$ be an intree. Let $v$ be a vertex of $I$. We call $v$ a \emph{leaf} if $v$ has no predecessors.
-  
-  Let now $x$ be a leaf of $I$.
-  By $I\setminus\left\{ x \right\}$ we denote the intree that is obtained if we remove $x$ and the outgoing edge of $x$ from $I$.
+  Let $I$ be an intree and let $x$ be a leaf of $I$.
+  By $I\setminus\left\{ x \right\}$ we denote the intree that is obtained if we remove $x$ and the outgoing edge of $x$ (to its direct successor) from $I$.
 \end{definition}
 
 \begin{definition}[Addition of leaves]
-  Let $I$ be an intree. Let $v$ be an intree and $t$ be a vertex in $I$. Let $(v,t)$ be an edge. Then, we denote by $I\cup\left\{ (v,t) \right\}$ the intree obtained by adding $v$ to $I$ as a direct predecessor of $t$.
+  Let $I$ be an intree. Let $v$ be n new vertex not in $I$ and $t$ be a vertex in $I$. Let $(v,t)$ be an edge. Then, we denote by $I\cup\left\{ (v,t) \right\}$ the intree obtained by adding $v$ to $I$ as a direct predecessor of $t$.
 
   If the successor $t$ of $v$ is clear from the context, we sometimes simply write $I\cup\left\{ v \right\}$ instead of $I\cup\left\{ (v,t) \right\}$.
 \end{definition}
 
 \begin{definition}[Siblings]
-  We call a vertex $v$ a sibling of another vertex $u$ if $v$ and $u$ have the same direct successor.
+  Let $v,u$ be two vertices of an intree. We call a vertex $v$ a sibling of another vertex $u$ if $v$ and $u$ have the same direct successor.
 \end{definition}
+
+In addition to that, we employ a simple notation for subtrees. If $I'$ is a subtree of $I$, we simply write $I'\subseteq I$. Of course, we also write $I\superseteq I'$ to denote that $I$ is a supertree of $I'$. For some scenarios it is important that the subtree $I'$ still contains the root of $I$ and is constructed by successively removing leaves from $I$. If not stated otherwise, when we talk about subtrees, we consider those that still contain the root of the original tree.
 
 \paragraph{Describing intrees}
 
-We conclude this short introduction on intrees with an intuitive way of describing intrees. Most readers are probably acquainted with a visual description of intrees such the one in figure \ref{fig:intree-example-task-names-directed-edges}. For textual representations (and even more important: for use in command line), we rely on another representation. 
+We conclude this short introduction to intrees with an intuitive way of describing intrees. Most readers are probably acquainted with a visual description of intrees such the one in figure \ref{fig:intree-example-task-names-directed-edges}. For textual representations (and from a practical standpoint even more important: for easy specification in command line), we rely on another representation. 
 
 \begin{itemize}
 \item We number the tasks (resp. vertices), beginning with 0 in
@@ -294,11 +294,9 @@ Carrying out the procedure given above yields the sequence
   (0, 0, 1, 1, 2, 3, 3, 3, 6, 8).
 \end{equation*}
 
-Note that since the root carries number 0, we can start iterating at 1. Moreover, this representation enforces that the first number in such a sequence describing an intree is always 0. This, of course, introduces some redundancy, but, on the other hand, enables us to describe the tree consisting of only a root: It is denoted by an empty sequence: $()$.
+Note that since the root carries number 0, we can start iterating at vertex 1. 
 
-That means, that the sequence $(x_1,x_2,\dots,x_n)$ describes an intree with $n+1$ tasks where task $i$ is a requirement for task $x_i$.
-
-Note that this representation still is not the most concise one in the sense that it allows several possible sequences for one intree. E.g. the sequences $(0,0,0,1,2,2,3,3,3)$, $(0,0,0,1,1,1,2,2,3)$, $(0,1,0,0,3,4,3,4,4)$ and $(2,0,0,5,0,5,3,3,5)$ all describe the following intree:
+Note that this representation still is not the most concise one in the sense that it allows several possible sequences for one intree. E.g. the sequences $(0,0,0,1,1,2,1,3,3)$, $(0,0,0,2,2,1,1,3,3)$, $(0,1,0,0,4,3,1,3,4)$ and $(2,0,0,3,2,3,8,0,8)$ all describe the following intree:
 
 \begin{center}
   \begin{tikzpicture}[scale=.2]
@@ -326,12 +324,16 @@ Note that this representation still is not the most concise one in the sense tha
 
 However, we will most of the time use a notion where we assume that for a tree sequence $(x_1,x_2,\dots, x_n)$ we have $\forall i \in \left\{ 1,2,\dots,n \right\}x_i\leq i$. This is always possible because we can start a breadth-first search (BFS) at task 0 and assign numbers to the tasks representing the order in which BFS visits the tasks.
 
+Doing so, this representation enforces that the first number in such a sequence describing an intree is always 0. This, of course, introduces some redundancy, but, on the other hand, enables us to describe the tree consisting of only a root: It is denoted by an empty sequence: $()$.
+
+That means, that the sequence $(x_1,x_2,\dots,x_n)$ describes an intree with $n+1$ tasks where task $i$ is a requirement for task $x_i$.
+
 \subsection{Labelled and unlabelled intrees}
 \label{sec:intrees-labelled-unlabelled}
 
 We can draw such intrees in a very straightforward manner: We draw the root at the bottom and its direct predecessors one level above. For each predecessor, we inductively repeat this procedure to obtain a ``top-to-bottom-description'' of the tree.
 
-Figure \ref{fig:intree-example-task-names-directed-edges} shows an intree (the one given by the sequence $(0,0,1,1,2,3,3,3,6,8)$), where tasks 8 is a requirement for task 6, which itself is -- like task 7, 8 and (indirectly) task 10 -- a requirement for task 3. This figure also illustrates the fact that -- in an intree -- each task is a direct requirement for \emph{at most} one other task.
+Figure \ref{fig:intree-example-task-names-directed-edges} shows an intree (the one given by the sequence $(0,0,1,1,2,3,3,3,6,8)$), where task 9 is a requirement for task 6, which itself is -- like task 7, 8 and (indirectly) task 10 -- a requirement for task 3. This figure also illustrates the fact that -- in an intree -- each task is a direct requirement for \emph{at most} one other task.
 
 However, we are mostly interested in the \emph{structure} of the tree, which is why we most of the time omit the labellings of the vertices (i.e. we omit the task names) and rely on a \emph{unlabelled} representation as shown in figure \ref{fig:intree-example-structure-version}. 
 
@@ -408,16 +410,22 @@ The mathematical concept behind unlabelled trees can be described by the notion 
 
 \begin{definition}[Intree isomorphism]
   We call two intrees $I_1$ and $I_2$ \emph{isomorphic}, if there exists a bijective function that maps vertices of $I_1$ onto vertices of $I_2$ such that $(v,t)$ is an edge in $I_1$ if and only if $(f(v), f(t))$ is an edge in $I_2$ and the root of $I_1$ is mapped onto the root of $I_2$.
+
+  If $I_1$ and $I_2$ are not isomorphic, we call them \emph{distinct}.
 \end{definition}
 
 \emph{Remark:} The above definition of isomorphisms is somewhat non-standard in the sense that usually isomorphisms are defined for undirected trees. For this work, we restrict ourselves onto our definition (except where explicitly stated otherwise).
 
-As an example for isomorphic intrees, consider $(0,0,1,1,2,3,3,3,6,8)$, $(0,1,2,3,0,5,1,2,2,9)$ and $(0,1,0,3,3,4,4,7,4,9)$.
+Since we are only interested in the structure of intrees, it has no use considering isomorphic intrees over and over, which is why we are interested in distinct intrees most of the time.
 
-Since we are using a notion of intrees as aforementioned (i.e. with $\forall i \in \left\{ 1,2,\dots,n \right\}.\ x_i \leq i$), this means that there are $n!$ possibilities for tree sequences with exactly $n$ tasks. On the other hand, there are less (distinct) intrees of size $n$:
+We have already seen examples for isomorphic subtrees, namely the varying descriptions for the intree $(0,0,0,1,1,2,2,3,3)$.
+
+%As an example for isomorphic intrees, consider $(0,0,1,1,2,3,3,3,6,8)$, $(0,1,2,3,0,5,1,2,2,9)$ and $(0,1,0,3,3,4,4,7,4,9)$.
+
+Since we are using a notion of intrees as aforementioned (i.e. $(x_0,x_1,\dots,x_{n-1})$ with $\forall i \in \left\{0,1,2,\dots,n-1 \right\}.\ x_i \leq i$), this means that there are $n!$ possibilities for tree sequences with exactly $n$ tasks. On the other hand, there are less (distinct) intrees of size $n$:
 
 \begin{theorem}
-  Let $T_n$ denote the number of intrees containing $n$ tasks. Then,
+  Let $T_n$ denote the number of distinct intrees containing $n$ tasks. Then,
   \begin{equation*}
     T_n \sim C\cdot r^{-n}\cdot n^{-1.5} 
     \quad \text{ as } n\rightarrow \infty,
@@ -429,9 +437,9 @@ Since we are using a notion of intrees as aforementioned (i.e. with $\forall i \
   See \cite{asymptotic_enum_odlyzko}.
 \end{proof}
 
-The first values for $T_n$ are $0, 1, 1, 2, 4, 9, 20, 48, 115, 286, 719, 1842, 4766, 12486, 32973, \dots$ \cite{oeisrootedtrees}.
+The first values for $T_n$ are $0, 1, 1, 2, 4, 9, 20, 48, 115, 286, 719, 1842, 4766, 12486, 32973, \dots$ \cite{oeisrootedtrees}. Of course, the number of labelled trees is much larger.
 
-In some cases it is useful to consider only intrees with a certain number of \emph{leaves}. If we consider the set of all intrees with $n$ tasks it is clear that \emph{all but one} intree have more than one leaf (the only intree having exactly one leaf is a chain of $n$ tasks). For us, especially the number of intrees with at least 4 leaves might be of interest \footnote{Because all other intrees -- with 3 or less leaves -- are trivially optimally scheduled by HLF (see section \ref{sec:intro-two-scheduling-strategies}).}. Moreover, an optimal schedule for an intree whose root has exactly one predecessor (meaning that the degree of the root is 1 or -- more mathematically -- $\deg (0) = 1$) looks the same as if we omitted the root and scheduled it after the whole intree \emph{without} the root. Table \ref{tab:number-of-intrees-summary} sums up the number of intrees fulfilling the respective properties.
+In some cases it is useful to consider only intrees with a certain number of \emph{leaves}. If we consider the set of all intrees with $n$ tasks it is clear that \emph{all but one} intree have more than one leaf (the only intree having exactly one leaf is a chain of $n$ tasks). For us, especially the number of intrees with at least 4 leaves might be of interest \footnote{Because all other intrees -- with 3 or less leaves -- are trivially optimally scheduled by HLF (see section \ref{sec:intro-two-scheduling-strategies}). For three processors, there is no choice and for two processors it has been shown by \cite{chandyreynoldsshortpaper1975}.}. Moreover, an optimal schedule for an intree whose root has exactly one predecessor (meaning that the degree of the root is 1 or -- more mathematically -- $\deg (0) = 1$) looks the same as if we omitted the root and scheduled it after the whole intree \emph{without} the root. Table \ref{tab:number-of-intrees-summary} sums up the number of intrees fulfilling the respective properties.
 
 \begin{table}[th]
   \centering
@@ -450,15 +458,15 @@ In some cases it is useful to consider only intrees with a certain number of \em
 \subsection{Interpretation as dependency graphs}
 \label{sec:intrees-interpreted-as-dependency-graphs}
 
-Those intrees can naturally be used to describe dependencies between different tasks, as long as each task is the requirement for \emph{at most one} other task. Each vertex in an intree then represents a task. If $t_1$ is a (direct) predecessor of $t_2$, this means that the task associated with $t_1$ must be executed before the task associated with $t_2$. Since we represent tasks by vertices, we will often use the terms task and vertex interchangeably.
+Intrees can naturally be used to describe dependencies between different tasks, as long as each task is the requirement for \emph{at most one} other task. Each vertex in an intree then represents a task. Since we represent tasks by vertices, we will often use the terms task and vertex interchangeably. If $t_1$ is a (direct) predecessor of $t_2$, this means that the task associated with $t_1$ must be executed before the task associated with $t_2$. 
 
 Of course, this precedence is transitive, i.e. if $t_1$ is a direct predecessor of $t_2$ which itself is a direct predecessor of $t_3$, $t_1$ has to be processed before $t_2$ and, thus, before $t_3$.
 
-As a simple example, consider a software project $S$ that is subdivided into smaller units $A_1,A_2,A_3,\dots$. These smaller units themselves are broken into small tasks $B_1,B_2,\dots$. Now before the modules $A_1,A_2,\dots$ go into production code, the respective subparts $B_1,B_2,\dots$ have to be verified to work properly. Assume that there are only two (equally powerful) programmers working on that particular project. 
+As a simple example, consider a software project $S$ that is subdivided into smaller units $A_1,A_2,A_3,\dots$. These smaller units themselves are broken into small tasks $B_1,B_2,\dots$. Now before the modules $A_1,A_2,\dots$ can be developed, the respective subparts $B_1,B_2,\dots$ have to be built to work properly. Assume that there are only two (equally powerful) programmers working on that particular project. 
 
 Now assume that it is not known a priori how long it takes one of these programmers to create a certain part of the software, but assume that they broke it up into parts that they expect to require the same amount of time each. To be precise, they assume that the time needed for one particular task is exponentially distributed with some parameter. They agree that at each time at most one programmer is working on at most one task and that they ``always finish what they begin''.
 
-An exemplary scenario of subparts might look as follows:
+An exemplary scenario of subpart dependencies might look as follows:
 
 \begin{center}
   \begin{tikzpicture}
@@ -486,12 +494,12 @@ An exemplary scenario of subparts might look as follows:
   \end{tikzpicture}
 \end{center}
 
-Now, the programmers want to determine the optimal order in which they should work down the tasks such that the time when the whole project $S$ is finished is minimal.
+Now, the programmers want to determine the optimal order in which they should work down the tasks such that the time when the whole project $S$ is finished is minimal. This is the problem we address in this thesis.
 
-Naturally, this is not the only scenario that can be modelled using intree structures with exponentially distributed tasks. A central issue thereby is, of course, which tasks can be worked on at the current state. We call those tasks \emph{ready}:
+Naturally, this is not the only scenario that can be modelled using intree structures with exponentially distributed tasks. A central issue when processing all the tasks is, of course, which tasks can be worked on at the current state. We call those tasks \emph{ready}:
 
 \begin{definition}[Ready tasks]
-  Let $I$ be an intree of tasks (represented by vertices) and. If $t$ is a leaf of $I$, we call the corresponding task (resp. -- for simplicity -- the whole vertex) \emph{ready}.
+  Let $I$ be an intree of tasks (represented by vertices). If $t$ is a leaf of $I$, we call the corresponding task (resp. -- for simplicity -- the whole vertex) \emph{ready}.
 \end{definition}
 
 The intree $(0,0,1,1,2,3,3,3,6,8)$ (see figure \ref{fig:intree-example-task-names-directed-edges}) has the ready tasks 4, 5, 7, 9 and 10.
@@ -623,8 +631,6 @@ It is worth mentioning that -- for our needs -- there is a straightforward exten
   \caption{Converting an in-forest to an intree.}
   \label{fig:in-forest-to-intree}
 \end{figure}
-
-To manipulate intrees, we define some non-standard notation that is, however, very convenient and should be easily understandable.
 
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"
