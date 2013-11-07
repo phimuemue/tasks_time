@@ -4,15 +4,15 @@
 \section{Probability theory}
 \label{sec:some-probability}
 
-Our computations are based on fundamental probability theoretic considerations. We therefore introduce some important concepts, where we rely on established notation (i.e. we use $\p{}$ to denote probabilities, $\E{}$ for expected values, etc).
+Our computations are based on fundamental probabilistic considerations. We therefore introduce some important concepts, where we rely on established notation (i.e. we use $\p{}$ to denote probabilities, $\E{}$ for expected values, etc). We assume that the reader is familiar with the fundamental concepts of probability theory, in particular with expectations and conditional probabilities. An overview about these topics can be found e.g. in \cite{schickinger2001diskrete}.
 
 \subsection{Exponential distribution}
 \label{sec:exponential-distribution}
 
-The well-known exponential distribution is the central distribution we are dealing with in this text. All definitions and theorems within this subsection are along the lines of \cite{schickinger2001diskrete}.
+The well-known exponential distribution is the central distribution we are dealing with in this text. All definitions and theorems within this section are along the lines of \cite{schickinger2001diskrete}.
 
 \begin{definition}
-  A continuous random variable is \emph{exponentially distributed} with parameter $\lambda$ if it has density 
+  A continuous random variable is \emph{exponentially distributed} with parameter $\lambda \in \mathbb{R}^+\setminus \left\{ 0 \right\}$ if it has density 
   \begin{equation*}
     f(x) =
     \begin{cases}
@@ -28,23 +28,23 @@ Note that the above definition also determines the distribution function $F$ of 
 \begin{equation*}
   F(x) =
   \begin{cases}
-    1-e^{\lambda x} & \text{ if } x \geq 0 \\
+    1-e^{-\lambda x} & \text{ if } x \geq 0 \\
     0 & \text{ otherwise}
   \end{cases}
 \end{equation*}
 
 \begin{theorem}
   \label{thm:exponential-distribution-expectancy}
-  Let $X$ be an exponentially distributed random variable. Then, the expectancy of $X$ is $\E{X} = \frac 1 \lambda$.
+  Let $X$ be an exponentially distributed random variable. Then, the expectation of $X$ is $\E{X} = \frac 1 \lambda$.
 \end{theorem}
 
-\begin{proof}
+\begin{proof} Let $f$ denote the density of the exponentially distributed random variable $X$.
   We can compute the expectancy for $X$ as follows:
   \begin{eqnarray*}
     \E{X} 
     &=& \int_{-\infty}^\infty x\cdot f(x)\, dx = \\
-    &=& \int_{0}^\infty x\cdot \lambda e^{-\lambda x}\, dx \\
-    &=& \left[ - \frac{e^{-\lambda x}\cdot \left( \lambda x + 1 \right)}{\lambda} \right]_{0}^\infty \\
+    &=& \int_{0}^\infty x\cdot \lambda e^{-\lambda x}\, dx = \\
+    &=& \lim_{b\rightarrow \infty} \left[ - \frac{e^{-\lambda x}\cdot \left( \lambda x + 1 \right)}{\lambda} \right]_{0}^b = \\
     &=& \frac{1}{\lambda}
   \end{eqnarray*}
 \end{proof}
@@ -59,28 +59,10 @@ Note that the above definition also determines the distribution function $F$ of 
   \begin{equation*}
     \p{aX \leq x} 
     = \p{X \leq \frac{x}{a}}
+    = 1 - e^{-\lambda \cdot \frac{x}{a}}
     = 1 - e^{-\frac{\lambda}{a} \cdot x}
   \end{equation*}
   This result is equivalent to the density function of an exponentially distributed random variable with parameter $\frac{\lambda}{a}$.
-\end{proof}
-
-\begin{theorem}
-  \label{thm:minimum-of-exponential-distribution-is-exponential}
-  Let $X_1,\dots,X_n$ be exponentially-distributed random variables with respective parameters $\lambda_1,\dots,\lambda_n$. Then, the ranvom variable $Z:=\min_{i\in\left\{ 1,\dots,n \right\}} \left\{ X_i \right\}$ is exponentially distributed with parameter $\lambda=\lambda_1+\dots+\lambda_n$.
-\end{theorem}
-
-\begin{proof}
-  We prove the claim by induction. 
-
-  Suppose, we have two exponentially distributed random variables $X_1$ resp. $X_2$ with parameters $\lambda_1$ resp. $\lambda_2$. We then can compute
-  \begin{align*}
-    \p{min\left\{ X_1,X_2 \right\} \geq x} & = \p{X_1 \geq x \wedge X_2 \geq x} = \\ 
-    & = \p{X_1 \geq x}\cdot\p{X_2 \geq x} = \\
-    & = e^{-\lambda_1 x} \cdot e^{-\lambda_2 x} = \\
-    & = e^{-\lambda_1 x - \lambda_2 x} = \\
-    & = e^{-\left( \lambda_1+\lambda_2 \right) \cdot x},
-  \end{align*}
-  from which we can conclude that $\min\left\{ X_1,X_2 \right\}$ is exponentially distributed with parameter $\lambda_1 + \lambda_2$. By induction, we obtain our claim.
 \end{proof}
 
 \begin{definition}[Memorylessness]
@@ -92,10 +74,11 @@ Note that the above definition also determines the distribution function $F$ of 
 
 \begin{theorem}
   \label{thm:exponential-memoryless}
-  Let $X$ be an exponentially distributed random variable with parameter $\lambda$. Then, $X$ is memoryless.
+  Let $X$ be an exponentially distributed random variable. Then, $X$ is memoryless.
 \end{theorem}
 
 \begin{proof}
+  Let $\lambda$ be the parameter of the random variable $X$.
   We start by using the definition of conditional probability and rewrite until we arrive at our goal:
   \begin{eqnarray*}
     \p{X>t+s \mid X>s} &=& \frac{\p{X>t+s \wedge X>s}}{\p{X>s}} = \\
@@ -106,7 +89,7 @@ Note that the above definition also determines the distribution function $F$ of 
   \end{eqnarray*}
 \end{proof}
 
-This is a very advantageous property that can be exploited in our considerations to follow.
+This is a very advantageous property that can be exploited in our considerations that will follow.
 
 \emph{Remark:} It can even be shown that any memoryless continuous random variable is exponentially distributed, but theorem \ref{thm:exponential-memoryless} is sufficient for our needs.
 
@@ -133,12 +116,33 @@ This is a very advantageous property that can be exploited in our considerations
 %   \end{cases}.
 % \end{equation*}
 
-\subsection{Minimum of continuous, identically distributed random variables}
+\subsection{Minimum of exponentially distributed variables}
 \label{sec:probability-misc}
+
+We will later need random variables that can be modelled as the minimum over several exponentially distributed variables. We introduce the required concepts here.
+
+\begin{theorem}
+  \label{thm:minimum-of-exponential-distribution-is-exponential}
+  Let $X_1,\dots,X_n$ be exponentially-distributed random variables with respective parameters $\lambda_1,\dots,\lambda_n$. Then, the random variable $Z:=\min_{i\in\left\{ 1,\dots,n \right\}} \left\{ X_i \right\}$ is exponentially distributed with parameter $\lambda=\lambda_1+\dots+\lambda_n$.
+\end{theorem}
+
+\begin{proof}
+  We prove the claim by induction. 
+
+  Suppose, we have two exponentially distributed random variables $X_1$ resp. $X_2$ with parameters $\lambda_1$ resp. $\lambda_2$. We then can compute
+  \begin{align*}
+    \p{min\left\{ X_1,X_2 \right\} \geq x} & = \p{X_1 \geq x \wedge X_2 \geq x} = \\ 
+    & = \p{X_1 \geq x}\cdot\p{X_2 \geq x} = \\
+    & = e^{-\lambda_1 x} \cdot e^{-\lambda_2 x} = \\
+    & = e^{-\lambda_1 x - \lambda_2 x} = \\
+    & = e^{-\left( \lambda_1+\lambda_2 \right) \cdot x},
+  \end{align*}
+  from which we can conclude that $\min\left\{ X_1,X_2 \right\}$ is exponentially distributed with parameter $\lambda_1 + \lambda_2$. By induction, we obtain our claim for more than two variables.
+\end{proof}
 
 \begin{theorem}
   \label{thm:iid-cont-rand-var-minimum}
-  Let $X_1,\dots,X_n$ be independent, identically exponentially distributed random variables and let $i\in\left\{ 1,\dots,n \right\}$. Then 
+  Let $X_1,\dots,X_n$ be independent, exponentially distributed random variables with same parameter and let $i\in\left\{ 1,\dots,n \right\}$. Then 
   \begin{equation}
     \label{eq:probability-that-cont-random-variable-is-smallest-out-of-iid-is-one-over-n}
     \p{X_i = \min_{j\in\left\{ 1,\dots,n \right\}}\left\{ X_j \right\}} = \frac{1}{n}.
@@ -150,8 +154,25 @@ This is a very advantageous property that can be exploited in our considerations
   \begin{equation*}
     \p{X_1 = \min_{j\in\left\{ 1,\dots,n \right\}}\left\{ X_j \right\}} = \p{X_2 = \min_{j\in\left\{ 1,\dots,n \right\}}\left\{ X_j \right\}} = \dots = \p{X_n = \min_{j\in\left\{ 1,\dots,n \right\}}\left\{ X_j \right\}}.
   \end{equation*}
-  Because one of the random variables \emph{must} be the minimum, we can deduce
-  (\ref{eq:probability-that-cont-random-variable-is-smallest-out-of-iid-is-one-over-n}).
+  Because one of the random variables \emph{must} be the minimum, i.e.
+  \begin{equation*}
+    \p{
+      X_1 = \min_{j\in\left\{ 1,\dots,n \right\}}\left\{ X_j \right\} \vee
+      \dots \vee
+      X_n = \min_{j\in\left\{ 1,\dots,n \right\}}\left\{ X_j \right\}
+    } = 1,
+  \end{equation*}
+  respectively (since all the events are mutually exclusive)
+  \begin{equation*}
+    \p{
+      X_1 = \min_{j\in\left\{ 1,\dots,n \right\}}\left\{ X_j \right\}
+    } + 
+    \dots +
+    \p{
+      X_n = \min_{j\in\left\{ 1,\dots,n \right\}}\left\{ X_j \right\}
+    } = 1,
+  \end{equation*}
+  we can deduce our claim.
 \end{proof}
 
 \emph{Remark:} Theorem \ref{thm:iid-cont-rand-var-minimum} does hold not only for independent, identically exponentially distributed random variables, but also for many other independent, identically distributed, continuous random variables. The proof can be extended straightforward for other distributions. For us, it suffices to have this fact for exponentially distributed variables, because we are working with them.
@@ -192,14 +213,15 @@ This is a very advantageous property that can be exploited in our considerations
   Now, solving the definition of conditional probability $\p{A\mid B_i} = \frac{\p{A \cap B_i}}{\p{B_i}}$ for $\p{A\cap B_i}$, and substituting each term accordingly, results in the desired equation.
 \end{proof}
 
-Theorem \ref{theo:law-total-prob} can be used to derive its counterpart for expected values:
+Theorem \ref{theo:law-total-prob} can be used to derive its analogon for expectations:
 
 \begin{theorem}
   \label{theo:law-total-expectation}
   Let $X$ be a random variable in a probability space $\Omega$ and ${\cal B}\left\{ B_1,B_2,B_3,\dots \right\}$ a finite or countably infinite set of pairwise disjoint events with $A \subseteq \bigcup_{B \in {\cal B}} B$. Then,
   \begin{equation*}
-    \E{X} = \sum_{B\in{\cal B}} \E{X | B} \cdot \p{B}.
+    \E{X} = \sum_{B\in{\cal B}} \E{X \mid B} \cdot \p{B},
   \end{equation*}
+  where $\E{X \mid B}$ denotes the expectation of $X$ under the condition that $B$ is fulfilled.
 \end{theorem}
 
 \begin{proof}
