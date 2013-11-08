@@ -6,13 +6,13 @@ While the main part of this work focuses on scheduling with tree processors, we 
 \section{Optimal solution for two processors}
 \label{sec:p2-hlf-is-optimal}
 
-For the two processor case, the \emph{highest-level-first} policy is known to be optimal according to \cite{chandyreynoldsshortpaper1975}. This strategy at the beginning schedules two tasks whose distances to the root are as large as possible. If the HLF strategy can choose between several tasks, it can -- for two processors -- pick any of them. The expected run time will be the same, as shown in \cite{chandyreynoldsshortpaper1975}. Figure \ref{fig:p2-intro-example} shows two HLF schedules for the intree $(0,0,1,1,2,2,2)$ and we can observe that snapshots on the same level have the same run time.
+For the two processor case, the \emph{highest-level-first} policy is known to be optimal according to \cite{chandyreynoldsshortpaper1975}. This strategy at the beginning schedules two tasks whose distances to the root are as large as possible. If the HLF strategy can choose between several tasks, it can -- for two processors -- pick each of them with some probability. The expected run time will be the same (independent of which task is chosen by HLF), as shown in \cite{chandyreynoldsshortpaper1975}. Figure \ref{fig:p2-intro-example} shows two HLF schedules for the intree $(0,0,1,1,2,2,2)$ and we can observe that snapshots on the same level have the same run time.
 
 \begin{figure}[h!]
   \centering
   \input{p2/intre_example_1}
   \input{p2/intre_example_2}  
-  \caption{Two possible two-processor HLF schedules for intree $(0,0,1,1,2,2,2)$. Both schedules have the same run time. Note that snapshots on the same levels have same run time.}
+  \caption{Two possible two-processor HLF schedules for intree $(0,0,1,1,2,2,2)$. Both schedules have the same run time. Note that snapshots on the same levels have same profiles and same run time.}
   \label{fig:p2-intro-example}
 \end{figure}
 
@@ -25,12 +25,12 @@ We have seen in the previous section that certain snapshots have the same run ti
 
 %If one considers the problem of scheduling an intree onto two processors, it becomes clear that HLF is optimal (see \cite{chandyreynoldsshortpaper1975} for a proof).
 
-Moreover, we can conclude that we can compute the optimal expected finish time in polynomial time. This chapter provides a proof for this claim that mainly relies on so-called \emph{profiles}. In this context, a profile is another structure that describes (some characteristics of) an intree in a compressed form.
+Moreover, we can conclude that we can compute the optimal expected finish time in polynomial time. This chapter provides a proof for this claim that mainly relies on so-called \emph{profiles}. In this context, a profile is another structure that describes (some characteristics of) an intree in a compact manner.
 
 \subsection{Profiles of Intrees}
 \label{sec:p2-simple-method-runtime-profiles-for-intrees}
 
-If we consider the trees in figure \ref{fig:p2-four-intrees-with-same-profile-6-3-1}, we can compute that for two processors HLF always yields an expected run time of $\frac{49}{8}$ for each of them, which is optimal:
+If we consider the trees in figure \ref{fig:p2-four-intrees-with-same-profile-6-3-1} on page \pageref{sec:p2-simple-method-runtime-profiles-for-intrees}, we can compute that for two processors HLF always yields an expected run time of $\frac{49}{8}$ for each of them, which is optimal:
 
 \begin{figure}[ht]
   \centering
@@ -41,11 +41,11 @@ If we consider the trees in figure \ref{fig:p2-four-intrees-with-same-profile-6-
 
 The intrees in figure \ref{fig:p2-four-intrees-with-same-profile-6-3-1} have the following in common: At each level, they have the same amount of tasks (six tasks at the topmost level, three in the middle one and one at the bottom level).
 
-We can use the number of tasks per level as a (non-bijective) ``encoding'' of intrees. For now, we call this encoding a \emph{profile} of the intree. The above intrees would all be encoded as a profile containing the numbers 6, 3 and 1 in that order. We denote the profile by $\profile{6, 3, 1}$.
+We can use the number of tasks per level as a (non-bijective) ``encoding'' of intrees. For now, we call this encoding a \emph{profile} of the intree. The intrees in figure \ref{fig:p2-four-intrees-with-same-profile-6-3-1} would all be encoded as a profile containing the numbers 6, 3 and 1 in that order. We denote the profile by $\profile{6, 3, 1}$.
 
 Note that not all sequences of numbers can be used as profiles. In particular, the last number in a profile is (w.l.o.g.) 1 (since we have only one task as the root of the tree)\footnote{This, of course, introduces some overhead in notation, but we leave it as it is since it is easier to read this way.}. Moreover, it can not be the case that there is a zero in a profile (since this would imply that there is \emph{no task} on one specific level in the intree).
 
-Moreover, we introduce a abbreviating notation for profiles.
+Moreover, we introduce an abbreviating notation for profiles.
 
 \begin{definition}[Compact notation of profiles]
   For a profile $p$, we introduce a shorthand notation that groups successive ones. That is, instead of writing $j$ consecutive ones, we simply write $\profileones{j}$.
@@ -66,7 +66,7 @@ For two processors and HLF-scheduling, we can easily conclude the successors of 
   \label{fig:p2-profiles-successors-of-5421-always-same}
 \end{figure}
 
-Another interesting case is $\profile{1,5,2,1}$, where the (single) topmost task and one of the five tasks on the second level are scheduled. If the topmost task is finished (which happens with probability $\frac{1}{2}$), we reach $\profile{5,2,1}$. If the scheduled task on the second level finishes first, we reach $\profile{1,4,2,1}$.
+Another interesting case is $\profile{1,5,2,1}$, where the (single) topmost task and one of the five tasks on the next-to-topmost level are scheduled. If the topmost task is finished first (which happens with probability $\frac{1}{2}$), we reach $\profile{5,2,1}$. If the scheduled task on the second level finishes first, we reach $\profile{1,4,2,1}$.
 
 The last example we want to give here is $\profile{1,1,1,3,1}$. In this case, the single topmost task and one of the three tasks of the second lowest level have to be scheduled. If the topmost task finishes first (which happens with probability $\frac{1}{2}$), the resulting profile will be $\profile{1,1,3,1}$ (where again the topmost task and one of the tree tasks in the second lowest level are scheduled). If the other scheduled task finishes first, we reach $\profile{1,1,1,2,1}$, where the single topmost task and one of the remaining \emph{two} tasks on the second lowest level are scheduled.
 
@@ -79,7 +79,7 @@ We now use the profile notation to compute the expected run time for an intree s
 \subsection{A recursive definition}
 \label{sec:p2-profile-exp-run-time-rec-def}
 
-Exploiting profile notation, we can define the recursive formulae that can be used to compute the optimal expected run time. Before we do so, we introduce an abbreviation to obtain a ``slice'' (i.e. a continuous sub-sequence) of a profile.
+Exploiting profile notation, we can define the recursive formula that can be used to compute the optimal expected run time. Before we do so, we introduce an abbreviation to obtain a ``slice'' (i.e. a continuous sub-sequence) of a profile.
 
 \newcommand{\profileconcat}{\cdot}
 \begin{definition}[Slice of a profile]
@@ -89,7 +89,7 @@ Exploiting profile notation, we can define the recursive formulae that can be us
 \end{definition}
 
 This definition, for example, gives $\profile{3,6,2,7,1,8}[2:4] = \profile{6,2,7}$ and $\profile{1,2,3}\profileconcat\profile{4,5,6}=\profile{1,2,3,4,5,6}$.
-We now continue with the recursive formulae aforementioned. We use the notation $\E{P}$ to compute the expected run time for two-processor HLF on an intree with profile $P$. If $P=\profile{n_1}\profileconcat P'$ is a profile, then we can compute:
+We now continue with the recursive formula aforementioned. We use the notation $\E{P}$ to denote the expected run time for two-processor HLF on an intree with profile $P$. If $P=\profile{n_1}\profileconcat P'$ is a profile, then we can compute:
 
 \begin{equation}
   \label{eq:p2-profile-optimal-exp-run-time}
@@ -97,7 +97,8 @@ We now continue with the recursive formulae aforementioned. We use the notation 
   \E{\profile{n_1} \profileconcat P'} =
   \begin{cases}
     r, & \text{ if } P = \profile{\profileones r} \\
-    \frac{n_1-1}{2} + \E{P'} , & \text{ if } n_1\geq 2 \\
+    %\frac{n_1-1}{2} + \E{P'} , & \text{ if } n_1\geq 2 \\
+    \frac{1}{2} + \E{\profile{n_1-1}\profileconcat P'} , & \text{ if } n_1\geq 2 \\
     \frac{1}{2} + \frac{1}{2} \cdot \left( \E{P'} + \E{SUC(P)} \right) ,& \text{ otherwise } 
   \end{cases},
 \end{equation}
@@ -112,6 +113,8 @@ We now continue with the recursive formulae aforementioned. We use the notation 
 %   \end{cases},
 % \end{equation}
 where $SUC(\profile{n_1,\dots,n_r}) = \profile{n_1, n_2, n_3,\dots,n_{j-1},n_j-1,n_{j+1},\dots,n_r}$ such that $j$ is the minimum index such that $n_j>1$.
+
+Note that we can -- by iteratively applying case $n_1\geq 2$ -- say that $\E{\profile{n_1} \profileconcat P'} = \frac{n_1-1}{2} + \E{\profile{1}\profileconcat P'}$ for $n_1\geq 2$.
 
 If we consider the second case of equation (\ref{eq:p2-profile-optimal-exp-run-time}) we see that we can simplify it to the following (by combining the second and third case):
 
@@ -143,7 +146,7 @@ Unfortunately, the recurrence relation in equation (\ref{eq:p2-profile-optimal-e
 
 \begin{theorem}
   \label{theo:simple-profiles-exp-runtime-for-p2-hlf}
-  Let $\profile{n_1,\profileones{j-2},n_j,\profileones{r-j}}$ be a profile 
+  Let $j\geq 2$ and $\profile{n_1,\profileones{j-2},n_j,\profileones{r-j}}$ be a profile 
   %where 
   %$\left|\left\{ i \in \left\{ 2,3,\dots,r \right\} \mid n_i > 1 \right\}\right| \leq 1$ 
   (i.e. at most the first and one other entry of the profile are different from 1).
@@ -269,9 +272,9 @@ We can now proof theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf}.
   This concludes the proof.
 \end{proof}
 
-Moritz Maaß has shown another property in \cite{MoritzMaasDiploma}:
+Moritz Maaß has already shown another property in \cite{MoritzMaasDiploma}:
 
-\begin{theorem}[Intrees with exactly two leaves and intrees with same profiles]
+\begin{theorem}[Intrees with exactly two ready tasks]
   Let $l, k\in\naturals$, $a\in\naturals_0$ and $\profile{\profilerepeat{1}{l-k}, \profilerepeat{2}{k}, \profilerepeat{1}{a+1}}$ be a profile. Then, it holds that
   \begin{eqnarray*}
     \E{\profile{\profilerepeat{1}{l-k}, \profilerepeat{2}{k}, \profilerepeat{1}{a+1}}}
@@ -333,7 +336,7 @@ We inspect the following example: Consider the profile $\profile{4,3,5,1}$. Its 
   \end{tabular}
 \end{center}
 
-We recognize that the first item in the succesing profiles has to be at most 4 (since the \emph{original} first entry was exactly 4). Moreover, the second entry can only be less then 3 (\emph{original} second entry: 3) if the first entry is 1. Similarily, the third entry in a successing profile can only be less then 5 (original third entry: 5) if the first and the second entry are 1.
+We recognize that the first item in the succesing profiles has to be at most 4 (since the \emph{original} first entry was exactly 4). Moreover, the second entry (\emph{original} second entry: 3) can only be less then 3 if the first entry is 1. Similarily, the third entry (original third entry: 5) in a successing profile can only be less then 5 if the first and the second entry are already 1.
 We illustrated this by putting the corresponding profiles into several lines in the description above.
 
 More general: In a successing profile, the entry at a certain position can only be less than the original entry at this position if all entries \emph{up to that position} are already 1.
@@ -347,7 +350,7 @@ Let $P=\profile{n_1,\dots,n_r}$ be a profile of lenght $r$. The set of successin
     \profile{m_{r-j+1},\dots,m_{r}}
     \mid
     \exists p \in \left\{ r-j+1,\dots,r \right\}.\,
-    \bigwedge_{i=r-j+1}^{p-1} m_i = 1 \ \wedge m_p < n_p
+    \bigwedge_{i=r-j}^{p-1} m_i = 1 \ \wedge m_p < n_p
   \right\}.
 \end{equation*}
 
@@ -359,11 +362,11 @@ The set of \emph{all} successing profiles clearly is then
 \end{equation*}
 \end{definition}
 
-As an example, consider the profile $\profile{6,3,1}$ whose set of successing profiles contains the following elements:
+As an example, consider the profile $\profile{6,3,1}$ whose set of all successing profiles contains the following elements:
 
 \begin{center}
   \begin{tabular}{l}
-    $\profile{5,3,1}$ \quad $\profile{4,3,1}$ \quad $\profile{3,3,1}$ \quad $\profile{2,3,1}$ \quad $\profile{1,3,1}$ \\
+    $\profile{6,3,1}$ \quad $\profile{5,3,1}$ \quad $\profile{4,3,1}$ \quad $\profile{3,3,1}$ \quad $\profile{2,3,1}$ \quad $\profile{1,3,1}$ \\
     $\profile{1,2,1}$ \quad $\profile{1,1,1}$ \\
     $\profile{3,1}$ \quad $\profile{2,1}$ \quad $\profile{1,1}$ \\
     $\profile{1}$
@@ -396,10 +399,10 @@ The size of the profile DAG (starting at a certain profile $P$) is then clearly 
     &=& \sum_{j=1}^{r} 1 + \sum_{j=1}^{r} \left( \sum_{i=j}^{r-1} n_i \right) - \sum_{j=1}^{r}\sum_{i=j}^{r-1} 1 \\
     &=&r - \sum_{j=1}^{r}(r-j) + \sum_{j=1}^{r} \left( \sum_{i=j}^{r-1} n_i \right) \\
     &=&r - \frac{r^2-r}{2} + \sum_{j=2}^{r-1} \left( \sum_{i=j}^{r-1} n_i \right) \\
-    &=&\sum _{j=1}^{r} \left( \sum _{i=j}^{r-1}n_{{i}} \right) + -0.5r^2 + 1.5 r
+    &=&\sum _{j=1}^{r} \left( \sum _{i=j}^{r-1}n_{{i}} \right) -0.5r^2 + 1.5 r
   \end{eqnarray*}
 
-  It remains to be shown that $\sum _{j=1}^{r} \left( \sum _{i=j}^{r-1}n_{{i}} \right) = \sum_{j=1}^{r-1}(j-1)\cdot n_j$. This can be seen by considering the following:
+  It remains to explain that $\sum _{j=1}^{r} \left( \sum _{i=j}^{r-1}n_{{i}} \right) = \sum_{j=1}^{r-1}(j-1)\cdot n_j$. This can be seen by considering the following:
   \begin{eqnarray*}
     \setlength{\arraycolsep}{2pt}
     \begin{array}{cccccccccccccccc}
@@ -435,7 +438,7 @@ Now that we know the size of the profile DAG, this imposes the question how many
   \begin{equation*}
     \sum_{j=1}^{r-2} j\cdot 1 + (r-1)\cdot(n-r+1) = \frac{(r-1)\cdot(r-2)}{2} + (r-1)\cdot(n-r+1).
   \end{equation*}
-  We consider now an arbitrary profile, but express it in terms of $P^*$. That is, we consider a profile $P=\profile{n_1,\dots,n_r}$, where $n_i = 1 + b_i$, for $i\in\left\{1,2,\dots,r-2\right\}$ and $n_{r-1} = (n-r+1) + b_{r-1}$. Note that this means that each $n_i$ (entry in $P$) is expressed as the corresponding entry in $P^*$ plus some constant $b_i$ chosen appropriately. Of course $n_r = 1$.
+  We consider now an arbitrary profile, but express it in terms of $P^*$. That is, we consider a profile $P=\profile{n_1,\dots,n_r}$, where $n_i = 1 + b_i$, for $i\in\left\{1,2,\dots,r-2\right\}$ and $n_{r-1} = (n-r+1) + b_{r-1}$. Note that this means that each $n_i$ (entry in $P$) is expressed as the corresponding entry in $P^*$ plus some constant $b_i\in\mathbb{Z}$ chosen appropriately. Of course $n_r = 1$.
 
   Two observations are important now:
 
@@ -449,9 +452,10 @@ Now that we know the size of the profile DAG, this imposes the question how many
     \begin{equation*}
       \sum_{i=1}^{r-2} \left[ 1+b_i \right] + \left[(n-r+1)+b_{r-1} \right] + 1 =
       \sum_{i=1}^{r-2} b_i + r-2 + n-r+1+b_{r-1}+1 = 
-      n + \sum_{i=1}^{r-1} b_i
+      n + \sum_{i=1}^{r-1} b_i =
+      n
     \end{equation*}
-    From this we can conclude that $b_{r-1} = -(\sum_{i=1}^{r-2})$.
+    From this we can conclude that $b_{r-1} = -(\sum_{i=1}^{r-2} b_i)$.
   \end{itemize}
 
   We can now compute the number of nodes for profile $P$ (remember: an arbitrary profile expressed through $P^*$ and the $b_i$'s):
@@ -544,7 +548,7 @@ We can now combine the lemmata to the following theorem:
 \section{Snapshot DAG}
 \label{sec:p2-snapshot-dag}
 
-Theorem \ref{the:profile-dags-maximum-size-quadratic} shows in particular that the worst-case size of a profile DAG is quadratic in the number of tasks of the intree. Additionally, we can use use the theorem to derive a simple, loose bound on the size of the original snapshot DAG resulting from a HLF schedule for two processors.
+Theorem \ref{the:profile-dags-maximum-size-quadratic} shows in particular that the worst-case size of a profile DAG is quadratic in the number of tasks of the intree. Additionally, we can use use the theorem to derive a simple (loose) bound on the size of the original snapshot DAG resulting from a HLF schedule for two processors.
 
 \begin{corollary}[Upper bound for the size of the snapshot DAG for P2]
   The size of a snapshot DAG for an intree containing $n$ tasks and resulting from HLF scheduling for two processors is $O(n^4)$.
@@ -557,19 +561,19 @@ Theorem \ref{the:profile-dags-maximum-size-quadratic} shows in particular that t
 
   \newcommand{\ceiln}{\left\lceil \frac{n}{2} \right\rceil}
   \newcommand{\floorn}{\left\lfloor \frac{n}{2} \right\rfloor}
-  We now consider a worst case snapshot DAG, having -- according to theorem \ref{the:profile-dags-maximum-size-quadratic} -- size $\floorn \cdot \ceiln +1\leq \frac{n^2}{4}$. Since each of these profiles corresponds to less than $n^2$ snapshots, it directly follows that the number of nodes in the snapshot DAG is less than $\frac{n^2}{4}\cdot n^2=\frac{n^4}{4}\in O(n^4)$.
+  We now consider a worst case snapshot DAG, having -- according to theorem \ref{the:profile-dags-maximum-size-quadratic} -- size $\floorn \cdot \ceiln +1 \in O(n^2)$. Since each of these profiles corresponds to less than $n^2$ snapshots, it directly follows that the number of nodes in the snapshot DAG is $O(n^2)\cdot n^2 = O(n^4)$.
 \end{proof}
 
 The above bound is far from being tight. Still, it suffices to show that the size of a snapshot DAG can \emph{not} be exponential in the number of nodes.
 
-This, on the other hand, implies a poly-time algorithm that can be used to determine the expected run time for a given intree of tasks whose run times are exponentially distributed: We simply construct the whole snapshot DAG according to HLF (whose size is $O(n^4)$, i.e. polynomial) and compute the expected run time recursively for each snapshot.
+This, on the other hand, implies a poly-time algorithm that can be used to determine the optimal expected run time for a given intree of tasks whose run times are exponentially distributed: We simply construct the whole snapshot resp. profile DAG according to HLF (whose size is $O(n^4)$ resp. $O(n^2)$, i.e. polynomial) and compute the expected run time recursively for each snapshot.
 
 \section{Summary}
 \label{sec:p2-summary}
 
 We have shown that we can compute the optimal expected run time in polynomial time and -- moreover -- that we can compute the exptected run time for special cases using relatively easy formulas. 
 
-We have also seen that we can consider profile DAGs instead of whole snapshot DAGs and can rely on them. In fact, it can be shown that -- for a given intree -- we can rely on an even simpler DAG that does not contain the profiles, but instead only the \emph{length} of the corresponding profile (i.e. implicitly the length of the longest path from the root to one leaf) and the number of overall tasks. 
+We have also seen that we can consider profile DAGs instead of whole snapshot DAGs and can rely on them. In fact, it can be shown that -- for a given intree -- we can rely on an even simpler DAG that does not contain the profiles, but instead only the \emph{length} of the corresponding profile (i.e. implicitly the length of the longest path from the root to one leaf) and the number of tasks not on this longest path.
 
 However, this simplification is only valid ``within the snapshot DAG for a given intree'', in the sense that there are different intrees with same profile length and same number of nodes aside this longest chain, but having different run times. Figure \ref{fig:p2-different-intrees-same-chainside} shows two such intrees (namely $(0,0,0,0,1)$ and $(0,0,0,1,1)$).
 
