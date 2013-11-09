@@ -294,7 +294,6 @@ Algorithm \ref{sec:algorithm-canonical-intree-o-n} is a very high level descript
 \begin{itemize}
 \item For this algorithm, it is convenient to have a canonical intree structure in which each task directly knows its predecessors. We can transform our representation (as explained in section \ref{sec:implementation-repr-intrees-snapshots}) into this one in $O(n)$.
 \item Concatenating two labels can be done in $O(1)$ (either amortized by e.g. using dynamic arrays or simply using linked lists with some additional information such e.g. a pointer to the last node in the list). Thus, the overal costs arising from line \ref{alg:canonical-intree-concatenate-line} (resp. for the whole inner loop) are $O(n)$ because the label of each task is subject to concatenation at most once. Moreover, note that the predecessors $p_1,\dots,p_r$ are sorted (they have been sorted in the previous iteration of the loop).
-\item Line \ref{alg:canonical-intree-numbering-line} ensures that the labels of tasks do not become very long. To be precise, if level $i$ has exactly $l_i$ tasks, the labels for level $i$ are at most the numbers 0 to $l_i$. Since each task gets an integer exactly once, the \emph{total} costs for line 9 (i.e. summed up over all iterations) is $O(n)$.
 \item Line \ref{alg:canonical-intree-sorting-line} from algorithm \ref{sec:algorithm-canonical-intree-o-n} shall sort in the following way: Shorter labels come first, and if two labels have the same length, they are compared lexicographically. This sorting can be implemented in $O(l_{i+1}\cdot\log l_{i+1})$, where $i$ denotes the index from the algorithm (i.e. the current level number) and $l_i$ denotes the number of tasks of $I$ on level $i$. This can be explained as follows:
   \begin{itemize}
   %\item First, we use a simple bucketsort to group the strings into buckets according to their lengths (can be done in $(O(l_{i+1}))$ if we store the lengths appropriately).
@@ -311,11 +310,13 @@ Algorithm \ref{sec:algorithm-canonical-intree-o-n} is a very high level descript
   %\item that the whole level can be sorted in $\sum_{j=0}^B O(n_j \cdot \log l_{i+1}) = O(l_{i+1} \cdot \log l_{i+1})$.
   \item The tree can be sorted top-down in $\sum_{i=0}^{L-2}O(l_{i+1})=O(n)$.
   \end{itemize}
+\item Line \ref{alg:canonical-intree-numbering-line} ensures that the labels of tasks do not become very long. To be precise, if level $i$ has exactly $l_i$ tasks, the labels for level $i$ are at most the numbers 0 to $l_i$. The integers can be given by scanning the sorted sequence of tasks on level $i$ (according to their labels). We start with integer 0 and compare the current element with the previous element. Since the labels on level $i$ have length $O(l_{i+1})$, we have $O(l_{i+1})$ comparisons per level, and $O(n)$ comparisons in total.
+Since each task gets an integer exactly once, the \emph{total} costs for line 9 (i.e. summed up over all iterations) is $O(n)$.
 %\item Replacing labels can be done in $O(n)$ in total since each tasks gets assigned a label only once.
 \end{itemize}
 
 \begin{theorem}
-  The canonical intree of an intree with $n$ tasks can be constructed in $O(n\cdot \log n)$.
+  The canonical intree of an intree with $n$ tasks can be constructed in $O(n)$.
 \end{theorem}
 
 \begin{proof}
