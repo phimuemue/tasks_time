@@ -141,9 +141,21 @@ with open("../database/parallel_chains.txt", "w") as f:
             f.write("\n")
 
 
-for i in xrange(6):
-    for pc in generate_parallel_chains(i):
-        print pc
+for n in xrange(1,16):
+    print "Working with %d tasks."%n
+    maxsubt = 0
+    for i in generate_trees(n, False):
+        if s(i) > 0:
+            for num in i:
+                f.write("%d "%num)
+            f.write("\n")
+
+
+
+
+# for i in xrange(6):
+#     for pc in generate_parallel_chains(i):
+#         print pc
 
 # for n in xrange(1,18):
 #     print "Working with %d tasks."%n
