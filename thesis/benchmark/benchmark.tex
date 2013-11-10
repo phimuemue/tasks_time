@@ -8,7 +8,8 @@ While chapter \ref{chap:p3} will focus on more theoretical aspects of our proble
 \section{Canonical vs. non-canonical variant}
 \label{sec:benchmark-canonical-vs-non-canonical}
 
-First we compare how the program performs with resp. without the elimination of equivalent snapshots (see section \ref{sec:intro-first-glance-schedules}). We therefore computed the LEAF schedules\footnote{The LEAF scheduler basically examines all possibilities, thus essentially corresponds to an exhaustive search (see section \ref{sec:intro-two-scheduling-strategies} for more information).} for all non-trivial intrees with a certain number of tasks and measured the run times. In this context, non-trivial means that the root has indegree of at least 2. Table \ref{tab:comparison-canonical-vs-non-canonical} shows the results (we did not measure up to milliseconds but only seconds since the results speak for themselves and need not be more accurate). This table was created using a Intel Core2 with 2.13GHz and 2Gb of RAM. For 13 tasks, we had to stop the variant that did not exclude equivalent snapshots because it needed too much memory. 
+First we compare how the program performs with resp. without the elimination of equivalent snapshots (see section \ref{sec:intro-first-glance-schedules}). We therefore computed the LEAF schedules\footnote{The LEAF scheduler basically examines all possibilities, thus essentially corresponds to an exhaustive search (see section \ref{sec:intro-two-scheduling-strategies} for more information).} for all non-trivial intrees with a certain number of tasks and measured the run times. In this context, non-trivial means that the root has indegree of at least 2. Table \ref{tab:comparison-canonical-vs-non-canonical} shows the results (we did not measure up to milliseconds but only seconds since the results speak for themselves and need not be more accurate). This table was created using a Intel Core2 with 2.13GHz and 2Gb of RAM. For 13 tasks, we had to stop the variant that did not exclude equivalent snapshots because it needed too much memory. We see that excluding equivalent snapshots, thereby avoiding (essentially) duplicate computations, speeds up the program by over $50\%$.
+Even more important is the memory consumption: While the variant \emph{with} canonical snapshots used roughly 30mb of memory to process all non-trivial intrees with 12 tasks, we needed over 550mb when we did \emph{not} exclude equivalent snapshots.
 
 \begin{table}[th]
   \centering
@@ -22,8 +23,6 @@ First we compare how the program performs with resp. without the elimination of 
   \label{tab:comparison-canonical-vs-non-canonical}
 \end{table}
 
-Even more important is the memory consumption: While the variant \emph{with} canonical snapshots used roughly 30mb of memory to process all non-trivial intrees with 12 tasks, we needed over 550mb when we did \emph{not} exclude equivalent snapshots.
-
 We observe that excluding equivalent snapshots results both in a remarkable speedup and in a considerably smaller memory footprint. For this reason, we quite quickly decided to focus on the variant that excludes equivalent snapshots. All following benchmarks are done with equivalent snapshots excluded.
 
 \section{Keeping all intrees in memory}
@@ -31,9 +30,9 @@ We observe that excluding equivalent snapshots results both in a remarkable spee
 
 We now research how much time it takes to compute optimal schedules for intrees with a certain size.
 
-As a first benchmark, we computed optimal schedules for all non-trivial intrees (with a certain amount of tasks) ``in one run'', i.e. we generated all non-trivial intrees, kept them in main memory and computed the optimal schedule for each of these intrees. This technique has the advantage that intermediate results can be re-used and do not need to be recomputed over and over again. On the other hand, keeping that many intrees in RAM leads to enormous memory consumption and, thus, was only done for up to 15 intrees.
+As a first benchmark, we computed optimal schedules for all non-trivial intrees (with a certain amount of tasks) ``in one run'', i.e. we generated all non-trivial intrees, kept them in main memory and computed the optimal schedule for each of these intrees. This technique has the advantage that intermediate results (i.e. results for subtrees of other intrees with the same number of tasks) can be re-used and do not need to be recomputed over and over again. On the other hand, keeping that many intrees in RAM leads to enormous memory consumption and, thus, was only done for up to 15 intrees.
 
-Table \ref{tab:time-benchmark} shows the results. This table was created on a reasonably modern machine (with an Intel Core i7). Peak memory consumption was measured with Valgrind for up to 13 tasks. According to the valgrind manual \cite{massifmanual}, these measurements are accurate within 1\%. For more than 13 tasks, Valgrind was too slow, so we went for a more simplistic approach: We simply observed the stats shown by the command line tool htop. This means, that the memory consumption for 14 and 15 tasks is not \emph{that} accurate, but probably still accurate enough to get an impression of how many memory was needed.
+Table \ref{tab:time-benchmark} shows the results. This table was created on a reasonably modern machine (with an Intel Core i7). Peak memory consumption was measured with Valgrind for up to 13 tasks. According to the valgrind manual \cite{massifmanual}, these measurements are accurate within 1\%. Still, we rounded the byte values to megabyte because their meaning is more intuitive. For more than 13 tasks, Valgrind was too slow, so we went for a more simplistic approach: We simply observed the stats shown by the command line tool htop. This means, that the memory consumption for 14 and 15 tasks is not \emph{that} accurate, but probably still accurate enough to get an impression of how many memory was needed.
 
 Moreover, we carried out these tests with simple floating point numbers to represent probabilities and expected run times\footnote{We also implemented another feature to support fractions --- see section \ref{sec:benchmarks-myfloat-variations} for more details.}.
 
@@ -42,13 +41,13 @@ Moreover, we carried out these tests with simple floating point numbers to repre
   \begin{tabular}[ht]{ccccc}
     Tasks & Intrees & Snapshots & Time & Memory \\
     \hline{}
-    $\leq 9$ & $\leq$ 171 & $\leq$ 891 & $\leq$ 0.5s & $\leq$ 1451040b \\
-    10 & 433 & 3004 & 1s & 4941576b \\
-    11 & 1123 & 10143 & 4s & 16847304b \\
-    12 & 2924 & 34065 & 6s & 57016592b \\
-    13 & 7720 & 113492 & 26s & 193781984b \\
-    14 & 20487 & 375088 & 2m10s & $\approx$ 410mb \\
-    15 & 54838 & 1230391 & 7m & $\approx$ 1.5Gb \\
+    $\leq 9$ & $\leq$ 171 & $\leq$ 891 & $\leq$ 0.5s & $\leq$ 1417 kB \\
+    10 & 433 & 3004 & 1s & $<5$ mb \\
+    11 & 1123 & 10143 & 4s & $<17$ mb \\
+    12 & 2924 & 34065 & 6s & $<55$ mb \\
+    13 & 7720 & 113492 & 26s & $<185$ mb \\
+    14 & 20487 & 375088 & 2m10s & $\approx$ 410 mb \\
+    15 & 54838 & 1230391 & 7m & $\approx$ 1.5 Gb \\
     
   \end{tabular}
   \caption{Time needed to compute optimal schedules for all non-trivial intrees with a certain number of tasks using a floating-point representation for probabilities and run times.}
@@ -62,9 +61,9 @@ The main problem is -- of course -- that the number of non-trivial intrees drast
 \section{Grouping intrees and computing them one after another}
 \label{sec:benchmarks-clustered-intrees}
 
-The next benchmark we conducted was done for intrees with 15 or more tasks. First, we generated all (nontrivial) intrees with a certain number of tasks. Afterwards, we split the collection of intrees with a fixed number of tasks into smaller chunks containing a certain amount of intrees. We then processed these chunks one after another. 
+The next benchmark we conducted was done for intrees with 15 or more tasks. First, we generated all (nontrivial) intrees with a certain number of tasks. Afterwards, we split the collection of intrees with a fixed number of tasks into smaller chunks containing a certain amount of intrees. We then processed these chunks one after another. That means, in this scenario, we can not re-use intermediate results resulting from \emph{all} other intrees with the same number of tasks, but only those resulting from the intrees within the respective chunk that is currently  processed.
 
-This technique has the downside that intermediate results have to be re-computed in some cases. On the other hand the memory consumption is less.
+This technique has the downside that a few intermediate results have to be re-computed. On the other hand the memory consumption is less.
 
 The results for this setting are shown in table \ref{tab:benchmark-clustered-run-time}.
 
@@ -85,14 +84,15 @@ In this scenario, the measurements become more difficult to interpret. Especiall
   \label{tab:benchmark-clustered-run-time}
 \end{table}
 
-One interesting fact that can be observed from table \ref{tab:benchmark-clustered-run-time} is that for 15 tasks, we needed roughly 11 minutes, while in the non-grouped case, it took only about the half of this time (about 6 minutes --- see table \ref{tab:time-benchmark}). That is, as expected, grouping the intrees into smaller chunks considerably increases the run time, but -- on the other hand -- seems to be the only real alternative since the number of trees grows that fast so they do not fit into main memory anymore.
+One interesting fact that can be observed from table \ref{tab:benchmark-clustered-run-time} is that for 15 tasks, we needed roughly 11 minutes, while in the non-grouped case, it took only about two thirds of this time (about 7 minutes --- see table \ref{tab:time-benchmark}). That is, as expected, grouping the intrees into smaller chunks considerably increases the run time, but -- on the other hand -- seems to be the only real alternative since the number of trees grows that fast so they do not fit into main memory anymore.
 
-As you can see, the time needed to compute optimal schedules for all non-trivial intrees increases very fast with growing number of tasks. Of course, the run time can be reduced by parallelizing the computations for example in a way that computes different chunks in parallel.
+As you can see, the time needed to compute optimal schedules for all non-trivial intrees increases very fast with growing number of tasks. Of course, the run time can be reduced by parallelizing the computations for example by computing different chunks in parallel.
 
 \section{Other representations for probabilities and expected values}
 \label{sec:benchmarks-myfloat-variations}
 
-As said before, the user can choose between different representations for probailities and expected values. By default, we simply use C++'s \texttt{float}s but for some scenarios it might be useful to have precise fractions. We implemented those using Boost Rational Number library or GNU Multiple Precision Arithmetic Library (GMP).
+As said before, the user can choose between different representations for probailities and expected values. By default, we simply use C++'s \texttt{float}s but for some scenarios it might be useful to have precise fractions. Note that -- due to the assumption that the parameter for all exponentially distributed task times is 1 -- the expected run time can always be \emph{exactly} expressed as a fraction, if the probabilities arising from a scheduler's possibility to choose are fractions, as well. This, however, is a very reasonable assumption and can be used w.l.o.g. (in the sense that we will still obtain the optimal run time).
+We implemented those using Boost Rational Number library or GNU Multiple Precision Arithmetic Library (GMP).
 
 We compare the performance of the program with different representations, namely the default \texttt{float} representation, the representation by Boost's Rational Number library with \texttt{unsigned long long}s as denominators and numerators, and representation by GMP. The results are shown in table \ref{tab:comparison-myfloat-variants} (generated on an Intel Core2 with 2.13GHz).
 
@@ -109,7 +109,7 @@ We compare the performance of the program with different representations, namely
   \label{tab:comparison-myfloat-variants}
 \end{table}
 
-We see that Boost's Rational Number library does not considerably increase run time, while GMP almost doubles it. This may come from the fact that GMP uses ``arbitrarily large'' integers as denominators and numerators to represent fractions, thus allowing arbitrary precision (within memory limits), while for Boost we can adjust which underlying representation for numerators and denominators should be used. Since we are using common \texttt{unsigned long long}s, the operations on these are not very expensive, while the GMP counterparts might be due to overflow checks, dynamic memory allocation for larger numbers, etc. However, \emph{only} GMP offers -- out of the box -- arbitrary precision, and Boost's Rational Number library might yield wrong results if the denominators and numerators get too big for \texttt{unsigned long long}s.
+We see that Boost's Rational Number library does not considerably increase run time, while GMP almost doubles it. This may come from the fact that GMP uses ``arbitrarily large'' integers as denominators and numerators to represent fractions, thus allowing arbitrary precision (within memory limits), while for Boost we can adjust which underlying representation for numerators and denominators should be used. Since we are using common \texttt{unsigned long long}s, the operations on these are not very expensive, while the GMP counterparts might be because of overflow checks, dynamic memory allocation for larger numbers, etc. However, \emph{only} GMP offers -- out of the box -- arbitrary precision, and Boost's Rational Number library might yield wrong results if the denominators and numerators get too big for \texttt{unsigned long long}s.
 
 Surprisingly, using Boost's Rationals did not increase memory consumption considerably. On the other hand, GMP also increased the memory consumption by roughly 40\%. This again comes possibly from the fact that GMP offers arbitrary precision, thereby requiring to store arbitrarily large numbers and requiring auxiliary data structures.
 
