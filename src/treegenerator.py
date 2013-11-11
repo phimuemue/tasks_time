@@ -133,25 +133,29 @@ def generate_parallel_chains(n):
                 tree[s] = 0
             yield tree
 
-with open("../database/parallel_chains.txt", "w") as f:
-    for n in xrange(28,31):
-        for i in generate_parallel_chains(n):
-            for num in i:
-                f.write("%d "%num)
-            f.write("\n")
-
-
-for n in xrange(1,16):
+for n in xrange(6,16):
     print "Working with %d tasks."%n
-    maxsubt = 0
-    for i in generate_trees(n, False):
-        if s(i) > 0:
+    for i in generate_trees(n, True):
+        if i[2] != 0 and count_leaves(i) > 5:
             for num in i:
-                f.write("%d "%num)
-            f.write("\n")
+                print num,
+            print 
 
-
-
+# with open("../database/parallel_chains.txt", "w") as f:
+#     for n in xrange(28,31):
+#         for i in generate_parallel_chains(n):
+#             for num in i:
+#                 f.write("%d "%num)
+#             f.write("\n")
+# 
+# for n in xrange(1,16):
+#     print "Working with %d tasks."%n
+#     maxsubt = 0
+#     for i in generate_trees(n, False):
+#         if s(i) > 0:
+#             for num in i:
+#                 f.write("%d "%num)
+#             f.write("\n")
 
 # for i in xrange(6):
 #     for pc in generate_parallel_chains(i):
