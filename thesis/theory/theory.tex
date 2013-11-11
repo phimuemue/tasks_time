@@ -422,7 +422,10 @@ We have already seen examples for isomorphic subtrees, namely the varying descri
 
 %As an example for isomorphic intrees, consider $(0,0,1,1,2,3,3,3,6,8)$, $(0,1,2,3,0,5,1,2,2,9)$ and $(0,1,0,3,3,4,4,7,4,9)$.
 
-Since we are using a notion of intrees as aforementioned (i.e. $(x_0,x_1,\dots,x_{n-1})$ with $\forall i \in \left\{0,1,2,\dots,n-1 \right\}.\ x_i \leq i$), this means that there are $n!$ possibilities for tree sequences with exactly $n$ tasks. On the other hand, there are less (distinct) intrees of size $n$:
+Since we are using a notion of intrees as aforementioned (i.e. $(x_0,x_1,\dots,x_{n-1})$ with 
+%$\forall i \in \left\{0,1,\dots,n-1 \right\}$.
+$0\ x_i \leq i$ for all $i \in \left\{ 0,1,\dots,n-1 \right\}$)
+, this means that there are $n!$ possibilities for tree sequences with exactly $n$ tasks. On the other hand, there are less (distinct) intrees of size $n$:
 
 \begin{theorem}
   Let $T_n$ denote the number of distinct intrees containing $n$ tasks. Then,
