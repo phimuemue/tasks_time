@@ -1,7 +1,7 @@
-\chapter{Warmup: Two Processors}
+\chapter{Warm up: Two Processors}
 \label{chap:p2}
 
-While the main part of this work focuses on scheduling with tree processors, we start off by considering the -- already solved -- two-processor case to become familiar with the problem. 
+While the main part of this work focuses on scheduling with tree processors, we start off by considering the -- already solved -- two processor case to become familiar with the problem. 
 
 \section{Optimal solution for two processors}
 \label{sec:p2-hlf-is-optimal}
@@ -12,7 +12,7 @@ For the two processor case, the \emph{highest-level-first} policy is known to be
   \centering
   \input{p2/intre_example_1}
   \input{p2/intre_example_2}  
-  \caption{Two possible two-processor HLF schedules for intree $(0,0,1,1,2,2,2)$. Both schedules have the same run time. Note that snapshots on the same levels have same profiles and same run time.}
+  \caption{Two possible two processor HLF schedules for intree $(0,0,1,1,2,2,2)$. Both schedules have the same run time. Note that snapshots on the same levels have same profiles and same run time.}
   \label{fig:p2-intro-example}
 \end{figure}
 
@@ -70,7 +70,7 @@ Another interesting case is $\profile{1,5,2,1}$, where the (single) topmost task
 
 The last example we want to give here is $\profile{1,1,1,3,1}$. In this case, the single topmost task and one of the three tasks of the second lowest level have to be scheduled. If the topmost task finishes first (which happens with probability $\frac{1}{2}$), the resulting profile will be $\profile{1,1,3,1}$ (where again the topmost task and one of the tree tasks in the second lowest level are scheduled). If the other scheduled task finishes first, we reach $\profile{1,1,1,2,1}$, where the single topmost task and one of the remaining \emph{two} tasks on the second lowest level are scheduled.
 
-\section{Expected runtime for two processor HLF using profiles}
+\section{Expected run time for two processor HLF using profiles}
 \label{sec:p2-profiles-hlf-exp-runtime}
 
 We now use the profile notation to compute the expected run time for an intree scheduled on two processors by HLF.
@@ -89,7 +89,7 @@ Exploiting profile notation, we can define the recursive formula that can be use
 \end{definition}
 
 This definition, for example, gives $\profile{3,6,2,7,1,8}[2:4] = \profile{6,2,7}$ and $\profile{1,2,3}\profileconcat\profile{4,5,6}=\profile{1,2,3,4,5,6}$.
-We now continue with the recursive formula aforementioned. We use the notation $\E{P}$ to denote the expected run time for two-processor HLF on an intree with profile $P$. If $P=\profile{n_1}\profileconcat P'$ is a profile, then we can compute:
+We now continue with the recursive formula aforementioned. We use the notation $\E{P}$ to denote the expected run time for two processor HLF on an intree with profile $P$. If $P=\profile{n_1}\profileconcat P'$ is a profile, then we can compute:
 
 \begin{equation}
   \label{eq:p2-profile-optimal-exp-run-time}
@@ -211,7 +211,7 @@ We can now proof theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf}.
 \begin{proof}[Proof of theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf}]
   We prove theorem \ref{theo:simple-profiles-exp-runtime-for-p2-hlf} by complete induction. The base case $\E{\profile{\profileones{r}}} = r$ is clear because in this case we can always schedule exactly one task. Since there are $r$ tasks in total, this results in an expected run time of $r$ (each task is expected to be exponentially distributed with expectation 1).
 
-  We now consider the special cases where \emph{all elements but one} in the profile are 1. That is, we consider the profile, whose elements are all 1, exctept the element at position $j$, which will be $n$. That is, we examine
+  We now consider the special cases where \emph{all elements but one} in the profile are 1. That is, we consider the profile, whose elements are all 1, except the element at position $j$, which will be $n$. That is, we examine
   \begin{equation*}
     \profile{\profileones{j-1},n,\profileones{r-j}}.
   \end{equation*}
@@ -301,14 +301,14 @@ Even if we were not able to deduce a more general formula that holds if more ent
 \section{Profile DAGs}
 \label{sec:p2-profile-dags}
 
-As seen in the previous chapter, a closed formula for $\E{\profile{n_1,\dots,n_r}}$ seems to be quite complex. This is why we may compute the expected runtime just with the recursive approach given in equation (\ref{eq:p2-profile-optimal-exp-run-time-def-simplified}).
+As seen in the previous chapter, a closed formula for $\E{\profile{n_1,\dots,n_r}}$ seems to be quite complex. This is why we may compute the expected run time just with the recursive approach given in equation (\ref{eq:p2-profile-optimal-exp-run-time-def-simplified}).
 
 Of course, it is an interesting question how complex this computation is. Therefore, we consider the \emph{profile DAG}. The profile DAG is -- intuitively -- a coarsening of the original snapshot DAG. It is created the following way: We ``merge'' snapshots having the same profile, thereby decreasing the number of vertices in the DAG. Figure \ref{fig:p2-profile-dag-example-000111223-hlfdet} shows a snapshot DAG and its corresponding profile DAG.
 
 \begin{figure}[t]
   \centering
   \input{p2/profile_dag_of_000111223_hlfdet}
-  \caption{A snapshot DAG (HLF, two processors) and its corresponding profile DAG containing much less nodes than the original snaphsot DAG. Snapshots contain the respective intrees and the respective expected run times. If a snapshot has two outgoing transitions, the probability for each is 50\%. If it has only one, the probability for it is, of course, 100\%. Snapshots with same profiles have the same expected run time and can thus be merged. }
+  \caption{A snapshot DAG (HLF, two processors) and its corresponding profile DAG containing much less nodes than the original snapshot DAG. Snapshots contain the respective intrees and the respective expected run times. If a snapshot has two outgoing transitions, the probability for each is 50\%. If it has only one, the probability for it is, of course, 100\%. Snapshots with same profiles have the same expected run time and can thus be merged. }
   \label{fig:p2-profile-dag-example-000111223-hlfdet}
 \end{figure}
 
@@ -318,9 +318,9 @@ To be more mathematical: If the snapshot DAG is $(V_s, E_s)$, then the profile D
   E_p &=& \left\{ \left(\text{PROFILE}(v_1), \text{PROFILE}(v_2) \right) \mid (v_1, v_2)\in E_s\right\}
 \end{eqnarray*}
 
-The function $\text{PROFILE}$ takes a snapshot as input and returns the profile corresponding the the snapshot's intree. Note that $\text{PROFILE}$ then is a homomorphism between the snapthot and the profile DAG (see \cite{hell2004graphs} for more information).
+The function $\text{PROFILE}$ takes a snapshot as input and returns the profile corresponding the the snapshot's intree. Note that $\text{PROFILE}$ then is a homomorphism between the snapshot and the profile DAG (see \cite{hell2004graphs} for more information).
 
-If we compute the expected run time via the profiles (as equation (\ref{eq:p2-profile-optimal-exp-run-time-def-simplified}) suggests), we only need to compute the profiles arising in the profile DAG. We can cache intermediate results, so we do not need to compute the runtime of any profile twice.
+If we compute the expected run time via the profiles (as equation (\ref{eq:p2-profile-optimal-exp-run-time-def-simplified}) suggests), we only need to compute the profiles arising in the profile DAG. We can cache intermediate results, so we do not need to compute the run time of any profile twice.
 
 Thus, it is an important question how big these profile DAGs can get. To tackle this question, we examine for a profile $P=\profile{n_1,\dots,n_r}$ how many profiles of a certain length exist as successors of this profile.
 
@@ -336,13 +336,13 @@ We inspect the following example: Consider the profile $\profile{4,3,5,1}$. Its 
   \end{tabular}
 \end{center}
 
-We recognize that the first item in the succesing profiles has to be at most 4 (since the \emph{original} first entry was exactly 4). Moreover, the second entry (\emph{original} second entry: 3) can only be less then 3 if the first entry is 1. Similarily, the third entry (original third entry: 5) in a successing profile can only be less then 5 if the first and the second entry are already 1.
+We recognize that the first item in the succesing profiles has to be at most 4 (since the \emph{original} first entry was exactly 4). Moreover, the second entry (\emph{original} second entry: 3) can only be less then 3 if the first entry is 1. Similarly, the third entry (original third entry: 5) in a successing profile can only be less then 5 if the first and the second entry are already 1.
 We illustrated this by putting the corresponding profiles into several lines in the description above.
 
 More general: In a successing profile, the entry at a certain position can only be less than the original entry at this position if all entries \emph{up to that position} are already 1.
 
 \begin{definition}[Successing profiles]
-Let $P=\profile{n_1,\dots,n_r}$ be a profile of lenght $r$. The set of successing profiles of length $j$ of original profile $P$ is
+Let $P=\profile{n_1,\dots,n_r}$ be a profile of length $r$. The set of successing profiles of length $j$ of original profile $P$ is
 \begin{equation*}
   S^P_{j}
   :=
@@ -391,7 +391,7 @@ The size of the profile DAG (starting at a certain profile $P$) is then clearly 
     1+ \sum_{i=j}^{r-1} (n_i-1).
   \end{equation*}
   
-  In a successing profile, the entry at position $p$ can take exactly the values $1, 2, 3, \dots, n_p-1$ (where $n_p$ is th entry at positon $p$ in profile $P$). This yields the term $(n_i-1)$. Moreover, we stated that the entry at position $p$ can only be smaller if \emph{all previous entries} are 1. Thus, we can simply sum um the terms for the different positions, yielding the above sum.
+  In a successing profile, the entry at position $p$ can take exactly the values $1, 2, 3, \dots, n_p-1$ (where $n_p$ is the entry at position $p$ in profile $P$). This yields the term $(n_i-1)$. Moreover, we stated that the entry at position $p$ can only be smaller if \emph{all previous entries} are 1. Thus, we can simply sum um the terms for the different positions, yielding the above sum.
 
   We now sum up over the different possible \emph{lengths} (ranging from 1 to $r$) of the successor profiles, and afterwards apply well-known summation rules and formulae for triangular numbers:
   \begin{eqnarray*}
@@ -443,7 +443,7 @@ Now that we know the size of the profile DAG, this imposes the question how many
   Two observations are important now:
 
   \begin{itemize}
-  \item Since all $n_i \in \naturals$, we can condlude that $b_i \geq 0$ for $i\in\{1,2,\dots,r-2\}$.
+  \item Since all $n_i \in \naturals$, we can conclude that $b_i \geq 0$ for $i\in\{1,2,\dots,r-2\}$.
   \item Since the number of all tasks has to be the same, we know that $P^*$ and $P$ must have the same number of tasks (namely $n$). This means that
     \begin{equation*}
       n = \sum_{i=1}^r n_i = \sum_{i=1}^{r-2} \left[ 1+b_i \right] + \left[(n-r+1)+b_{r-1} \right] + 1.
@@ -513,7 +513,7 @@ It remains to explain how to choose $r$ in a way such that given the number of t
       1
     } 
   \end{equation*}
-  Similarily, we could have chosen $r^*=\lceil\frac{n}{2}\rceil+1$. This shows the claim.
+  Similarly, we could have chosen $r^*=\lceil\frac{n}{2}\rceil+1$. This shows the claim.
 \end{proof}
 
 We can now combine the lemmata to the following theorem:
@@ -571,7 +571,7 @@ This, on the other hand, implies a poly-time algorithm that can be used to deter
 \section{Summary}
 \label{sec:p2-summary}
 
-We have shown that we can compute the optimal expected run time in polynomial time and -- moreover -- that we can compute the exptected run time for special cases using relatively easy formulas. 
+We have shown that we can compute the optimal expected run time in polynomial time and -- moreover -- that we can compute the expected run time for special cases using relatively easy formulas. 
 
 We have also seen that we can consider profile DAGs instead of whole snapshot DAGs and can rely on them. In fact, it can be shown that -- for a given intree -- we can rely on an even simpler DAG that does not contain the profiles, but instead only the \emph{length} of the corresponding profile (i.e. implicitly the length of the longest path from the root to one leaf) and the number of tasks not on this longest path.
 
@@ -582,25 +582,25 @@ However, this simplification is only valid ``within the snapshot DAG for a given
   \begin{subfigure}{.45\textwidth}
     \centering
     \includegraphics{p2/00001.pdf}
-    \caption{Snapshot DAG for HLF on intree $(0,0,0,0,1)$ resulting in an overal run time of 4.0625.}
+    \caption{Snapshot DAG for HLF on intree $(0,0,0,0,1)$ resulting in an overall run time of 4.0625.}
   \end{subfigure}
   \quad
   \begin{subfigure}{.45\textwidth}
     \centering
     \includegraphics{p2/00001_chain.pdf}
-    \caption{DAG containing only the length of the longest chain and the number of tasks \emph{not} on this chain for HLF on intree $(0,0,0,0,1)$ resulting in an overal run time of 4.0625.}
+    \caption{DAG containing only the length of the longest chain and the number of tasks \emph{not} on this chain for HLF on intree $(0,0,0,0,1)$ resulting in an overall run time of 4.0625.}
   \end{subfigure}
 
   \begin{subfigure}{.45\textwidth}
     \centering
     \includegraphics{p2/00011.pdf}
-    \caption{Snapshot DAG for HLF on intree $(0,0,0,1,1)$ resulting in an overal run time of 4.125.}
+    \caption{Snapshot DAG for HLF on intree $(0,0,0,1,1)$ resulting in an overall run time of 4.125.}
   \end{subfigure}
   \quad
   \begin{subfigure}{.45\textwidth}
     \centering
     \includegraphics{p2/00011_chain.pdf}
-    \caption{DAG containing only the length of the longest chain and the number of tasks \emph{not} on this chain for HLF on intree $(0,0,0,1,1)$ resulting in an overal run time of 4.0625.}
+    \caption{DAG containing only the length of the longest chain and the number of tasks \emph{not} on this chain for HLF on intree $(0,0,0,1,1)$ resulting in an overall run time of 4.0625.}
   \end{subfigure}
 
   \caption{Comparing snapshot DAGs to DAGs that contain only the length of the longest chain and the number of tasks \emph{not} on this chain. This example shows that there are distinct intrees both having depth three and three tasks not on the longest chain, but having different optimal expected run times.}

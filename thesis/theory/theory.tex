@@ -119,7 +119,7 @@ This is a very advantageous property that can be exploited in our considerations
 \subsection{Minimum of exponentially distributed variables}
 \label{sec:probability-misc}
 
-We will later need random variables that can be modelled as the minimum over several exponentially distributed variables. We introduce the required concepts here.
+We will later need random variables that can be modeled as the minimum over several exponentially distributed variables. We introduce the required concepts here.
 
 \begin{theorem}
   \label{thm:minimum-of-exponential-distribution-is-exponential}
@@ -328,14 +328,14 @@ Doing so, this representation enforces that the first number in such a sequence 
 
 That means, that the sequence $(x_1,x_2,\dots,x_n)$ describes an intree with $n+1$ tasks where task $i$ is a requirement for task $x_i$.
 
-\subsection{Labelled and unlabelled intrees}
+\subsection{Labeled and unlabeled intrees}
 \label{sec:intrees-labelled-unlabelled}
 
 We can draw such intrees in a very straightforward manner: We draw the root at the bottom and its direct predecessors one level above. For each predecessor, we inductively repeat this procedure to obtain a ``top-to-bottom-description'' of the tree.
 
 Figure \ref{fig:intree-example-task-names-directed-edges} shows an intree (the one given by the sequence $(0,0,1,1,2,3,3,3,6,8)$), where task 9 is a requirement for task 6, which itself is -- like task 7, 8 and (indirectly) task 10 -- a requirement for task 3. This figure also illustrates the fact that -- in an intree -- each task is a direct requirement for \emph{at most} one other task.
 
-However, we are mostly interested in the \emph{structure} of the tree, which is why we most of the time omit the labellings of the vertices (i.e. we omit the task names) and rely on a \emph{unlabelled} representation as shown in figure \ref{fig:intree-example-structure-version}. 
+However, we are mostly interested in the \emph{structure} of the tree, which is why we most of the time omit the labeling of the vertices (i.e. we omit the task names) and rely on a \emph{unlabeled} representation as shown in figure \ref{fig:intree-example-structure-version}. 
 
 \begin{figure}[t]
   \centering
@@ -364,7 +364,7 @@ However, we are mostly interested in the \emph{structure} of the tree, which is 
       \draw[<-, thick](tid0) -- (tid1);
       \draw[<-, thick](tid0) -- (tid4);
     \end{tikzpicture}
-    \caption{Labelled version with vertex labels and edges drawn as arrows.}
+    \caption{Labeled version with vertex labels and edges drawn as arrows.}
     \label{fig:intree-example-task-names-directed-edges}
   \end{subfigure}
   \quad
@@ -399,14 +399,14 @@ However, we are mostly interested in the \emph{structure} of the tree, which is 
       \draw[dashed] (0, 7.1) -- +(10, 0) node[below left, yshift=-.125cm]{Level 3};
       \draw[      ] (0, 8.6)    +(10, 0) node[below left, yshift=-.125cm]{Level 4};
     \end{tikzpicture}
-    \caption{Unlabelled version without arrows, edges are implicitly directed towards the root.}
+    \caption{Unlabeled version without arrows, edges are implicitly directed towards the root.}
     \label{fig:intree-example-structure-version}
   \end{subfigure}
   \caption{Graphical representation of an intree ($(0,0,1,1,2,3,3,3,6,8)$) with 5 levels (numbered 0 to 4). All edges are implicitly directed towards the root, which is drawn at the bottom of the tree. Most of the time, the \emph{structure} of the tree is enough, so we will omit vertex names most of the time.}
   \label{fig:intrees-introductory-explanation}
 \end{figure}
 
-The mathematical concept behind unlabelled trees can be described by the notion of \emph{isomorphisms}.
+The mathematical concept behind unlabeled trees can be described by the notion of \emph{isomorphisms}.
 
 \begin{definition}[Intree isomorphism]
   We call two intrees $I_1$ and $I_2$ \emph{isomorphic}, if there exists a bijective function that maps vertices of $I_1$ onto vertices of $I_2$ such that $(v,t)$ is an edge in $I_1$ if and only if $(f(v), f(t))$ is an edge in $I_2$ and the root of $I_1$ is mapped onto the root of $I_2$.
@@ -437,7 +437,7 @@ Since we are using a notion of intrees as aforementioned (i.e. $(x_0,x_1,\dots,x
   See \cite{asymptotic_enum_odlyzko}.
 \end{proof}
 
-The first values for $T_n$ are $0, 1, 1, 2, 4, 9, 20, 48, 115, 286, 719, 1842, 4766, 12486, 32973, \dots$ \cite{oeisrootedtrees}. Of course, the number of labelled trees is much larger.
+The first values for $T_n$ are $0, 1, 1, 2, 4, 9, 20, 48, 115, 286, 719, 1842, 4766, 12486, 32973, \dots$ \cite{oeisrootedtrees}. Of course, the number of labeled trees is much larger.
 
 In some cases it is useful to consider only intrees with a certain number of \emph{leaves}. If we consider the set of all intrees with $n$ tasks it is clear that \emph{all but one} intree have more than one leaf (the only intree having exactly one leaf is a chain of $n$ tasks). For us, especially the number of intrees with at least 4 leaves might be of interest \footnote{Because all other intrees -- with 3 or less leaves -- are trivially optimally scheduled by HLF (see section \ref{sec:intro-two-scheduling-strategies}). For three processors, there is no choice and for two processors it has been shown by \cite{chandyreynoldsshortpaper1975}.}. Moreover, an optimal schedule for an intree whose root has exactly one predecessor (meaning that the degree of the root is 1 or -- more mathematically -- $\deg (0) = 1$) looks the same as if we omitted the root and scheduled it after the whole intree \emph{without} the root. Table \ref{tab:number-of-intrees-summary} sums up the number of intrees fulfilling the respective properties.
 
@@ -496,7 +496,7 @@ An exemplary scenario of subpart dependencies might look as follows:
 
 Now, the programmers want to determine the optimal order in which they should work down the tasks such that the time when the whole project $S$ is finished is minimal. This is the problem we address in this thesis.
 
-Naturally, this is not the only scenario that can be modelled using intree structures with exponentially distributed tasks. A central issue when processing all the tasks is, of course, which tasks can be worked on at the current state. We call those tasks \emph{ready}:
+Naturally, this is not the only scenario that can be modeled using intree structures with exponentially distributed tasks. A central issue when processing all the tasks is, of course, which tasks can be worked on at the current state. We call those tasks \emph{ready}:
 
 \begin{definition}[Ready tasks]
   Let $I$ be an intree of tasks (represented by vertices). If $t$ is a leaf of $I$, we call the corresponding task (resp. -- for simplicity -- the whole vertex) \emph{ready}.

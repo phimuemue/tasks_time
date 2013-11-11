@@ -1,7 +1,7 @@
 \chapter{Implementation details}
 \label{sec:additional-algs}
 
-While chapter \ref{chap:introduction-schedules} focussed more on theoretical aspects, this chapter sums up some information about the implementation. We explain why we chose C++ and Python to implement a tool for the project and present some central algorithms that were developed during this project. In addition, we provide asymptotic run times for the single algorithms.
+While chapter \ref{chap:introduction-schedules} focused more on theoretical aspects, this chapter sums up some information about the implementation. We explain why we chose C++ and Python to implement a tool for the project and present some central algorithms that were developed during this project. In addition, we provide asymptotic run times for the single algorithms.
 
 \section{Choice or programming language(s)}
 \label{sec:implementation-prog-lang}
@@ -28,7 +28,7 @@ Before starting, the usual amount of command-line parsing and initialization is 
 
 Our program basically starts off given a single intree, a certain number of processors and a scheduling strategy. According to this strategy, we then compute all initial combinations of scheduled tasks, i.e. all initial snapshots (up to equivalent snapshots).
 
-Starting at an initial snapshot, we then recursively compute all its successors, i.e. we simulate which task finishes first and wich task shall be chosen next according to the given scheduling strategy. All of these events (task finishes, next task is chosen) are of probabilistic nature and modelled resp. associated with a certain probability. We do this until we reach the intree containing only 1 task, which then denotes the end of the scheduling process. We thereby eliminate equivalent snapshots in order to save memory.\footnote{We also implemented a variant that does not eliminate equivalent snapshots. However, this variant quickly became too slow as the number of tasks increased. This is why we focussed on the variant that eliminates equivalent snapshots.}
+Starting at an initial snapshot, we then recursively compute all its successors, i.e. we simulate which task finishes first and which task shall be chosen next according to the given scheduling strategy. All of these events (task finishes, next task is chosen) are of probabilistic nature and modeled resp. associated with a certain probability. We do this until we reach the intree containing only 1 task, which then denotes the end of the scheduling process. We thereby eliminate equivalent snapshots in order to save memory.\footnote{We also implemented a variant that does not eliminate equivalent snapshots. However, this variant quickly became too slow as the number of tasks increased. This is why we focused on the variant that eliminates equivalent snapshots.}
 
 After the whole snapshot DAG has been computed we can compute the expected run times of the initial snapshots (recursively, as explained in section \ref{sec:introduction-compute-expected-time-schedule}).
 
@@ -293,7 +293,7 @@ Algorithm \ref{sec:algorithm-canonical-intree-o-n} is a very high level descript
 
 \begin{itemize}
 \item For this algorithm, it is convenient to have a canonical intree structure in which each task directly knows its predecessors. We can transform our representation (as explained in section \ref{sec:implementation-repr-intrees-snapshots}) into this one in $O(n)$.
-\item Concatenating two labels can be done in $O(1)$ (either amortized by e.g. using dynamic arrays or simply using linked lists with some additional information such e.g. a pointer to the last node in the list). Thus, the overal costs arising from line \ref{alg:canonical-intree-concatenate-line} (resp. for the whole inner loop) are $O(n)$ because the label of each task is subject to concatenation at most once. Moreover, note that the predecessors $p_1,\dots,p_r$ are sorted (they have been sorted in the previous iteration of the loop).
+\item Concatenating two labels can be done in $O(1)$ (either amortized by e.g. using dynamic arrays or simply using linked lists with some additional information such e.g. a pointer to the last node in the list). Thus, the overall costs arising from line \ref{alg:canonical-intree-concatenate-line} (resp. for the whole inner loop) are $O(n)$ because the label of each task is subject to concatenation at most once. Moreover, note that the predecessors $p_1,\dots,p_r$ are sorted (they have been sorted in the previous iteration of the loop).
 \item Line \ref{alg:canonical-intree-sorting-line} from algorithm \ref{sec:algorithm-canonical-intree-o-n} shall sort in the following way: Shorter labels come first, and if two labels have the same length, they are compared lexicographically. This sorting can be implemented in $O(l_{i+1}\cdot\log l_{i+1})$, where $i$ denotes the index from the algorithm (i.e. the current level number) and $l_i$ denotes the number of tasks of $I$ on level $i$. This can be explained as follows:
   \begin{itemize}
   %\item First, we use a simple bucketsort to group the strings into buckets according to their lengths (can be done in $(O(l_{i+1}))$ if we store the lengths appropriately).
@@ -328,7 +328,7 @@ Since each task gets an integer exactly once, the \emph{total} costs for line 9 
 \subsection{Additional approaches}
 \label{sec:algorithm-canonical-snap-additional-approaches}
 
-We experienced that computing canonical snapshots has a major impact on the overal performance of our program, which is why we tried other approaches to tackle this problem. For completeness, we will explain them shortly. Unfortunately, they did not work out as good as expected, but maybe they are helpful for future work. In this section, we focus on the part concerning the computation of \emph{canonical intrees} (i.e. we do not distinguish between scheduled and non-scheuled leaves).
+We experienced that computing canonical snapshots has a major impact on the overall performance of our program, which is why we tried other approaches to tackle this problem. For completeness, we will explain them shortly. Unfortunately, they did not work out as good as expected, but maybe they are helpful for future work. In this section, we focus on the part concerning the computation of \emph{canonical intrees} (i.e. we do not distinguish between scheduled and non-scheduled leaves).
 
 \begin{description}
 \item[Tree sequence] As we have seen in previous chapters, we can describe intrees as a sequence of tasks $(x_1,\dots,x_n)$ such that task $i$ is a requirement for task $x_i$ (see section \ref{sec:foundations-graph-theory}). It is clear that we can assume certain facts about these sequences: We could e.g. assume that w.l.o.g. the sequence $(x_1,\dots,x_n)$ is non-decreasing (simply assign number by a breadth first search started by task 0). We tried to exploit the knowledge about tree sequences.
@@ -366,7 +366,7 @@ We could not devise a simple pattern that works as a general technique. Another 
   \label{fig:tree-sequence-not-working}
 \end{figure}
 
-\item[Matula numbers] Intrees and their encodings have of course already been subject to research. One example is \cite{matula1968natural}, where a (more or less) natural bijection between intrees and natural numbers, the so-called \emph{Matula numbers}, is shown.
+\item[Matula numbers] Intrees and their encoding have of course already been subject to research. One example is \cite{matula1968natural}, where a (more or less) natural bijection between intrees and natural numbers, the so-called \emph{Matula numbers}, is shown.
 
 These numbering is inductively defined as follows: A single leaf (resp. a tree consisting of a single root) obtains the number 1. A root with predecessors $t_1,\dots,t_r$ with corresponding numbers $n_1,\dots,n_r$ obtains the number $\prod_{i=1}^r p(n_i) = p(n_1)\cdot p(n_2) \cdot \dots \cdot p(n_r)$, where $p(x)$ denotes the $x$-th prime number. See figure \ref{fig:matula-illustration} for an example.
 
@@ -397,17 +397,17 @@ These numbering is inductively defined as follows: A single leaf (resp. a tree c
     \draw(28_1)--(535);
     \draw(3_1)--(535);
   \end{tikzpicture}
-  \caption{A tree whose vertices are labelled by the corresponding matula numbers. Consider e.g. the node 4, whose predecessors are two nodes labelled 1. Thus, we can compute $4=p(1)\cdot p(1)$. The node labelled 28 can be computed by $28 = p(4)\cdot p(1) \cdot p(1) = 2\cdot 2 \cdot 7$. The node 535 obtains its label by $535=p(28)\cdot p(3) = 107\cdot 5$.}
+  \caption{A tree whose vertices are labeled by the corresponding Matula numbers. Consider e.g. the node 4, whose predecessors are two nodes labelled 1. Thus, we can compute $4=p(1)\cdot p(1)$. The node labelled 28 can be computed by $28 = p(4)\cdot p(1) \cdot p(1) = 2\cdot 2 \cdot 7$. The node 535 obtains its label by $535=p(28)\cdot p(3) = 107\cdot 5$.}
   \label{fig:matula-illustration}
 \end{figure}
 
-While this description could lead to very elegant algorithms in a theoretical setting, it does not come in handy in practice because the matula numbers can be very big (more than 32 bit needed for matula numbers of 15-node intrees): As shown in \cite{onmatulanumbers}, the largest Matula number for an intree with $n\geq 5$ tasks is $p^{(n-4)}(8)$, where
+While this description could lead to very elegant algorithms in a theoretical setting, it does not come in handy in practice because the matula numbers can be very big (more than 32 bit needed for Matula numbers of 15-node intrees): As shown in \cite{onmatulanumbers}, the largest Matula number for an intree with $n\geq 5$ tasks is $p^{(n-4)}(8)$, where
 \begin{eqnarray*}
   p^{(0)} (x) &=& x, \\
   p^{(i)}(x) &=& p\left(p^{(i-1)}(x)\right).
 \end{eqnarray*}
 
-The growth of $p^{(n-4)}(8)$ is immense as $n$ increases. We can see from table \ref{tab:certain-values-pn-2-3-growth} that for intrees with 14 tasks, we exceed the size of a 32-bit unsigned integer, and for intrees with 20 tasks, the largest corresponding matula number even exceeds a 64-bit integer (table \ref{tab:certain-values-pn-2-3-growth} shows the values of $p^{(n-4)}(8)$ for $n$ up to 20 --- if these values were too large, we restricted ourselves to the logarithm (base 2) of the respective values to determine how many bits are needed).
+The growth of $p^{(n-4)}(8)$ is immense as $n$ increases. We can see from table \ref{tab:certain-values-pn-2-3-growth} that for intrees with 14 tasks, we exceed the size of a 32-bit unsigned integer, and for intrees with 20 tasks, the largest corresponding Matula number even exceeds a 64-bit integer (table \ref{tab:certain-values-pn-2-3-growth} shows the values of $p^{(n-4)}(8)$ for $n$ up to 20 --- if these values were too large, we restricted ourselves to the logarithm (base 2) of the respective values to determine how many bits are needed).
 
 \begin{table}[th]
   \centering
@@ -439,9 +439,9 @@ The growth of $p^{(n-4)}(8)$ is immense as $n$ increases. We can see from table 
   \label{tab:certain-values-pn-2-3-growth}
 \end{table}
 
-Note that smaller Matula numbers do not necessarily correspond to intrees with fewer tasks. That is, even intrees with fewer than 20 tasks might have matula numbers greater than $p^{(20-4)}(8)$, thus even worsening the scenario. 
+Note that smaller Matula numbers do not necessarily correspond to intrees with fewer tasks. That is, even intrees with fewer than 20 tasks might have Matula numbers greater than $p^{(20-4)}(8)$, thus even worsening the scenario. 
 
-In addition to the huge numbers that would need to be multiplied, computing matula numbers efficiently would require us to quickly compute $p(n)$. This would probably best acchieved using a lookup table, but this would require a huge amount of memory. In addition to that, one would need to devise a strategy that accounts for scheduled and non-scheduled tasks.
+In addition to the huge numbers that would need to be multiplied, computing Matula numbers efficiently would require us to quickly compute $p(n)$. This would probably best achieved using a lookup table, but this would require a huge amount of memory. In addition to that, one would need to devise a strategy that accounts for scheduled and non-scheduled tasks.
 
 \end{description}
 
@@ -455,13 +455,13 @@ We have seen how we can compute equivalent snapshots resp. a canonical represent
 
 The program starts out with a given intree and the scheduler generates a list of possible initial settings describing which tasks shall be chosen. This gives us a list of \emph{initial snapshots} where each snapshot contains the original intree and a set of tasks that shall be scheduled initially. We then process one initial snapshot after another. We describe now what we have to do for each initial snapshot (according to a specific scheduler).
 
-When we have a snapshot with a certain set of scheduled tasks, the program computes the intrees that occur if one of the tasks finishes. This has to be done for every currently scheduled task. That means, that for every currently scheduled task that could finish, we obtain a new intree (by removing the respective task) \emph{and} also a set of tasks that are scheduled (since we are considering non-preemtive scheduling, we have to keep the other tasks scheduled).
+When we have a snapshot with a certain set of scheduled tasks, the program computes the intrees that occur if one of the tasks finishes. This has to be done for every currently scheduled task. That means, that for every currently scheduled task that could finish, we obtain a new intree (by removing the respective task) \emph{and} also a set of tasks that are scheduled (since we are considering non-preemptive scheduling, we have to keep the other tasks scheduled).
 
 For each of the newly generated intrees, the scheduler determines which task shall be chosen with which probability in the next step, and generates new snapshots this way. The original snapshot stores pointers to the newly generated snapshots, associated with the respective probabilities of reaching them.
 
 However, as aforementioned, it is useful to compute a canonical version of each snapshot, thereby eliminating quite a large amount of snapshots for which we would -- essentially -- compute the same things twice. This requires us to manage a \emph{snapshot pool} where we store all snapshots that we have encountered up to now. If a newly generated snapshot (resp. its canonical variant) is already is in this pool, we do not continue computations on this newly generated snapshot but instead re-use the original one.
 
-This, on the other hand, requires us to quickly find out whether a snapshot has already been generated or not (and also to retrieve its address in memory). There are several ways to acchieve this. We are using a technique that maps snapshots onto the respective addresses. We therefore basically encode the snapshot's intree and the scheduled tasks as a sequence of bits. We could do this using ordinary \texttt{int}s or \texttt{long}s (or their \texttt{unsigned} equivalents in C++), but we decided to encode them using C++'s \texttt{vector<unsigned char>}s in connection with a list of the currently scheduled tasks.
+This, on the other hand, requires us to quickly find out whether a snapshot has already been generated or not (and also to retrieve its address in memory). There are several ways to achieve this. We are using a technique that maps snapshots onto the respective addresses. We therefore basically encode the snapshot's intree and the scheduled tasks as a sequence of bits. We could do this using ordinary \texttt{int}s or \texttt{long}s (or their \texttt{unsigned} equivalents in C++), but we decided to encode them using C++'s \texttt{vector<unsigned char>}s in connection with a list of the currently scheduled tasks.
 
 We went for this solution for several reasons:
 
@@ -544,7 +544,7 @@ We now use $D$ to denote the the snapshot DAG for a certain scheduler. As explai
 
 Since we compute the \emph{canonical snapshot} for each of those snapshots and the run time to compute the canonical snapshot is $O(n)$, we can deduce that the overall run time to compute all schedules for a given scheduler is bounded by $O(|D| \cdot n)$.
 
-\emph{Remark:} The run time for the version \emph{without} canonical snapshots could be denoted descriptively by $O(|D_{\text{non-canonical}}|)$, i.e. without the term $n\log n$ introduced by computing the canonical snapshots. Still, please note that, the size of the snapshot DAG (denoted by $|D_{\text{non-canonical}}|$) is remarkably bigger than the size of the snapshot DAG after merging equivalent snapshots. In practice, this behaviour became evident quite quickly --- both in run time and in memory consumption.
+\emph{Remark:} The run time for the version \emph{without} canonical snapshots could be denoted descriptively by $O(|D_{\text{non-canonical}}|)$, i.e. without the term $n\log n$ introduced by computing the canonical snapshots. Still, please note that, the size of the snapshot DAG (denoted by $|D_{\text{non-canonical}}|$) is remarkably bigger than the size of the snapshot DAG after merging equivalent snapshots. In practice, this behavior became evident quite quickly --- both in run time and in memory consumption.
 
 \section{Extensibility of the program}
 \label{sec:implementation-extending-program}
@@ -558,7 +558,7 @@ We now describe in short how the program could be extended. We describe the poss
 
 \begin{description}
 \item[Number representations] As mentioned in section \ref{sec:implementation-numbers}, we already support different possibilities to represent probabilities and expected values, namely \texttt{float}s, \texttt{double}s, and rational numbers using Boost Rational Number Library \cite{boostrational} or the GNU Multiple Precision Arithmetic Library \cite{gnumultiprecision}. These can easily be extended to other data types if they have overloaded operators and can be used like ordinary \texttt{float}s.
-\item[Scheduling strategies] We provide an interface to implement new scheduling strategies. New scheduling strategies have to provide (most important) two methods: One to generate the initial chioces of tasks to be chosen and one method to determine which task should be the next to be chosen with a certain probability. We thereby focus on non-preemtive schedulers.
+\item[Scheduling strategies] We provide an interface to implement new scheduling strategies. New scheduling strategies have to provide (most important) two methods: One to generate the initial choices of tasks to be chosen and one method to determine which task should be the next to be chosen with a certain probability. We thereby focus on non-preemptive schedulers.
 \item[Exporters] An important part of the program consists of code for exporters to various formats (most notably to \LaTeX{} (in connection with TikZ)) and the program provides a straightforward interface for new exporting methods.
 \item[New checks] We provide an easy-to-use interface that enables the programmer to quickly write new tests that can be used to automatically research properties of snapshots. The checks can be written in a very simple manner, and intermediate results are automatically cached by our framework so the program does not compute anything twice.
 \end{description}
@@ -574,20 +574,20 @@ We now describe in short how the program could be extended. We describe the poss
     Having other distributions may require some additional adjustments if we use discrete random variables for the run time of a single task, because we than can not necessarily assume that $\p{X = Y} = 0$, where $X$ and $Y$ denote the run times for two tasks $x$ and $y$.
   \item While it is not particularly difficult to \emph{implement} other distributions, it might still be difficult to \emph{calculate} the corresponding expected values and probabilities which task finishes first.
   \end{itemize}
-\item[Preemtive scheduling] While our schedulers focus on preemtive scheduling, it is possible to adapt the program for non-preemtive scheduling. However, this would require to rewrite some interfaces and to adjust the schedulers.
+\item[Preemptive scheduling] While our schedulers focus on preemptive scheduling, it is possible to adapt the program for non-preemptive scheduling. However, this would require to rewrite some interfaces and to adjust the schedulers.
 \item[General DAGs instead of intrees] It should be possible to adapt the program to work with arbitrary DAGs instead of simple intrees. However, isomorphism for directed acyclic graphs is GI-complete, meaning that it is at least as hard as the general graph isomorphism problem \cite{graphisomorphismproblem}. While it \emph{might} still be possible to exclude equivalent snapshots (because we have some information about the isomorphism we are looking for by the currently scheduled DAGs), it would probably require some tuning.
 \end{description}
 
 \section{Enumerating all intrees with a certain number of nodes}
 \label{sec:enumerating-all-intrees}
 
-It is clear that the number of intrees (more precisely, the number of unlabelled rooted trees) with exactly $n$ nodes is exponential in $n$ ($1, 1, 2, 4, 9, 20, 48, 115,\dots$ --- see e.g. \cite{flajolet2009analytic} for a derivation of the sequence or refer to \cite{oeisrootedtrees}). Still, for experimental purposes, it is convenient to have an algorithm that is capable of enumerating all these intrees. The main thing that should be kept in mind is that we do \emph{not} generate isomorphic intrees over and over again.
+It is clear that the number of intrees (more precisely, the number of unlabeled rooted trees) with exactly $n$ nodes is exponential in $n$ ($1, 1, 2, 4, 9, 20, 48, 115,\dots$ --- see e.g. \cite{flajolet2009analytic} for a derivation of the sequence or refer to \cite{oeisrootedtrees}). Still, for experimental purposes, it is convenient to have an algorithm that is capable of enumerating all these intrees. The main thing that should be kept in mind is that we do \emph{not} generate isomorphic intrees over and over again.
 
 We now show an algorithm to generate \emph{all} intrees with a certain number of nodes (called $n$) up to isomorphism. This algorithm is based on the following two facts: 
 
 \begin{itemize}
   \item The overall root can have any amount of children between 1 and $n-1$. If it has only 1 child, the corresponding predecessor intree must contain exactly $n-1$ vertices. If it has exactly $n-1$ children, each predecessor intree contains exactly 1 vertex. All the cases in between admit several possibilities.
-  \item If the overall root of the intree with $n$ verices has exactly $r$ predecessors (with $r \in \left\{ 1,2,\dots,n-1 \right\}$, as stated before), then the sum of the vertices with in the predecessor intrees is exactly $n-1$. Moreover, let us denote the predecessor intrees by $T_1,T_2,\dots,T_r$ and call $n_i$ the number of vertices in predecessor intree $T_i$ for all $i\in\left\{1,2,\dots,r \right\}$. This implies that $n_1+n_2+\dots+n_r=n-1$. Without loss of generality, we can assume $1 \leq n_1 \leq n_2 \leq n_3 \leq \dots \leq n_r$ (we sort the root's predecessors by the number of tasks).
+  \item If the overall root of the intree with $n$ vertices has exactly $r$ predecessors (with $r \in \left\{ 1,2,\dots,n-1 \right\}$, as stated before), then the sum of the vertices with in the predecessor intrees is exactly $n-1$. Moreover, let us denote the predecessor intrees by $T_1,T_2,\dots,T_r$ and call $n_i$ the number of vertices in predecessor intree $T_i$ for all $i\in\left\{1,2,\dots,r \right\}$. This implies that $n_1+n_2+\dots+n_r=n-1$. Without loss of generality, we can assume $1 \leq n_1 \leq n_2 \leq n_3 \leq \dots \leq n_r$ (we sort the root's predecessors by the number of tasks).
 
     \emph{Remark:} It is clear that the number of possibilities $P_n$ to decompose the value $n-1$ into $r$ summands (also called \emph{partition}) grows very fast. Even if -- according to \cite{concretemathematics} -- there is no closed form for $P_n$, the first values for $P_n$ ($n=0,1,2,\dots$) are in principle easy to compute. They are $1,1,2,3,5,7,11,15,22,30,42,56,77,\dots$ (see \cite{oeispartitionnumbers}).
 \end{itemize}
@@ -596,7 +596,7 @@ We can exploit these two facts to construct a recursive procedure which is descr
 \begin{equation*}
   n_1 + n_2 + \dots + n_r = n-1 \quad \text{ and } \quad 1\leq n_1\leq n_2\leq\dots\leq n_r.
 \end{equation*}
-It then (recursively) generates all combinations of predecessor intrees $(p_1,\dots,p_r)$ whose respective number of nodes are $n_1,\dots,n_r$. The algorithm thereby omits duplicate combinations. This can easily be acchieved by using the ordering $\left(\treegeq\right)$ on intrees as defined before.
+It then (recursively) generates all combinations of predecessor intrees $(p_1,\dots,p_r)$ whose respective number of nodes are $n_1,\dots,n_r$. The algorithm thereby omits duplicate combinations. This can easily be achieved by using the ordering $\left(\treegeq\right)$ on intrees as defined before.
 
 % follows ($t_1$ and $t_2$ being two intrees with roots $r_1$ resp. $r_2$ and roots' predecessors $p_{1,1}\dots,p_{1,r}$ resp. $p_{2,1},\dots,p_{2,r}$):
 
@@ -652,7 +652,7 @@ It then (recursively) generates all combinations of predecessor intrees $(p_1,\d
 
 Please note that algorithm \ref{alg:generate-intrees} can be easily adjusted to generate only non-trivial intrees (i.e. intrees whose root has a degree greater than 1) by adding a simple check that shall occur \emph{only in the initial call} of \textsc{GenerateIntrees}: We then simply have to assure that $r$ is greater than 1 in line \ref{alg:huge-for-loop-in-tree-generation}.
 
-Moreover, even if the algorithm is described here in a quite mathematical way, it can be fairly easily implemented in e.g. Python. Especially, the ordering of intrees -- that might look complicated at first sight -- can be acchieved with very simplistic methods.
+Moreover, even if the algorithm is described here in a quite mathematical way, it can be fairly easily implemented in e.g. Python. Especially, the ordering of intrees -- that might look complicated at first sight -- can be achieved with very simplistic methods.
 
 %%% Local Variables:
 %%% TeX-master: "../thesis.tex"
