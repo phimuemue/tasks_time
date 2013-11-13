@@ -1,0 +1,252 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{ifpdf}
+%\usepackage{hyperref}
+\usepackage[english]{babel}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{tikz}
+%\usepackage{multicol}
+%\usepackage{moreverb}
+\usepackage{listings}
+%\usepackage{color}
+%\usepackage{algorithm}
+%\usepackage{algorithmicx}
+%\usepackage{algpseudocode}
+%\usepackage{longtable}
+%\usepackage{geometry}
+%\geometry{margin=2cm}
+%\floatname{algorithm}{Algorithmus}
+\usepackage{pgfpages}
+
+\newcommand{\leveltop}{0}
+\newcommand{\leveltopI}{0}
+\newcommand{\leveltopII}{0}
+\newcommand{\leveltopIII}{0}
+\newcommand{\leveltopIIII}{0}
+\newcommand{\leveltopIIIII}{0}
+\newcommand{\leveltopIIIIII}{0}
+\newcommand{\leveltopIIIIIII}{0}
+\newcommand{\leveltopIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIII}{0}
+
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{shapes.callouts}
+\usetikzlibrary{shapes.multipart,chains}
+\usetikzlibrary{positioning}
+\usetikzlibrary{matrix}
+\usetikzlibrary{automata}
+\usetikzlibrary{external} 
+\tikzstyle{task_scheduled}=[fill=white, draw=black, task_cross]
+\tikzstyle{task_cross}=[
+    {path picture={ 
+        \draw[black]
+        (path picture bounding box.south east) -- 
+        (path picture bounding box.north west) 
+        (path picture bounding box.south west) -- 
+        (path picture bounding box.north east);
+      }
+    }
+]
+
+\title{Investigation of some Stochastic Scheduling Problems}
+\subtitle{Master's Thesis in Computer Science}
+\author[P. Müller]{Philipp Müller}
+\institute[TUM]{Technische Universität München}
+\date{November 20, 2013}
+
+\usetheme[compress]{Singapore}
+\useinnertheme{rectangles}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\lstset{
+	basicstyle=\ttfamily,
+	tabsize=2
+}
+
+%\setbeameroption{show notes on second screen=left}
+
+\setbeamertemplate{footline}
+{
+  \hbox{
+    \begin{beamercolorbox}[wd=\paperwidth,ht=0.2cm,dp=0.2cm]{page footer}
+      \begin{columns}
+        \begin{column}{.33\paperwidth}
+          \centering{}
+        \end{column}
+        \begin{column}{.33\paperwidth}
+          \centering{}
+          \insertframenumber 
+        \end{column}
+        \begin{column}{.33\paperwidth}
+          \centering
+        \end{column}
+      \end{columns}
+    \end{beamercolorbox}
+  }
+  \vskip0pt
+}
+\usenavigationsymbolstemplate{}
+
+\newcommand{\todo}[1]{ {\color{red}{#1} }}
+
+\tikzset{onslide/.code args={<#1>#2}{%
+  \only<#1>{\pgfkeysalso{#2}} 
+}}
+
+%\usetheme[compress]{Berlin}
+
+\AtBeginPart{
+  \begin{frame}
+    \partpage
+    %\setcounter{tocdepth}{1}
+    %\tableofcontents
+  \end{frame}
+}
+
+\begin{document}
+
+\begin{frame}
+  \maketitle{}
+\end{frame}
+
+\section{Introduction}
+\label{sec:intro}
+
+\subsection{Problem statement}
+\label{sec:problem-statement}
+
+\begin{frame}
+  \frametitle{Problem statement}
+  \begin{itemize}
+  \item Set of tasks
+  \item Dependencies form intree structure
+  \item Task times exponentially distributed with same parameter (w.l.o.g. $\lambda = 1$)
+  \item Goal: Minimize total expected make span
+  \end{itemize}
+  \begin{center}
+    \small
+    \begin{tikzpicture}[scale=.5, anchor=south]
+      \node[circle, scale=0.9, draw] (tid0) at (3,1.5){0};
+      \node[circle, scale=0.9, draw] (tid1) at (2.25,3){1};
+      \node[circle, scale=0.9, draw] (tid2) at (1.5,4.5){3};
+      \node[circle, scale=0.9, draw] (tid7) at (0.15,6){6};
+      \node[circle, scale=0.9, draw] (tid9) at (0.15,7.5){9};
+      \draw[<-, thick](tid7) -- (tid9);
+      \node[circle, scale=0.9, draw] (tid10) at (1.5,6){7};
+      \draw[<-, thick](tid2) -- (tid7);
+      \draw[<-, thick](tid2) -- (tid10);
+      \node[circle, scale=0.9, draw] (tid3) at (3.9,4.5){4};
+      \node[circle, scale=0.9, draw] (tid5) at (2.85,6){8};
+      \node[circle, scale=0.9, draw] (tid6) at (2.85,7.5){10
+};
+      \draw[<-, thick](tid5) -- (tid6);
+      \draw[<-, thick](tid2) -- (tid5);
+      \draw[<-, thick](tid1) -- (tid2);
+      \draw[<-, thick](tid1) -- (tid3);
+      \node[circle, scale=0.9, draw] (tid4) at (5.25,3){2};
+      \node[circle, scale=0.9, draw] (tid8) at (5.25,4.5){5};
+      \draw[<-, thick](tid4) -- (tid8);
+      \draw[<-, thick](tid0) -- (tid1);
+      \draw[<-, thick](tid0) -- (tid4);
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\todo{Nonpreemtiv, etc (precise problem description!)}
+
+\subsection{Schedules}
+\label{sec:schedules}
+
+\begin{frame}
+  \frametitle{Schedules}
+  \begin{itemize}
+  \item A schedule describes the order in which tasks are processed
+  \item Non-deterministic in our scenario (task times are random variables)
+  \item Scheduling strategy influences expected make span
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Snapshots}
+  \begin{itemize}
+  \item Each state of a schedule is a snapshot
+  \item Snapshot consists current intree and set of scheduled tasks
+  \item A schedule can be visualized by a snapshot DAG
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Schedule visualization}
+  \only<1>{
+    \begin{center}
+      \input{talk_schedule_vis1} % with intermediate snaps
+    \end{center}
+  }
+  \only<2>{
+    \begin{center}
+      \input{talk_schedule_vis2} % without intermediate snaps
+    \end{center}
+  }
+  \only<3>{
+    \begin{center}
+      \input{talk_schedule_vis3} % compressed form
+    \end{center}
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{Epected run time}
+  \begin{itemize}
+  \item $r$ tasks currently scheduled
+  \item Compute run time recursively:
+    \begin{itemize}
+    \item Expected time for fastest task ($\frac{1}{r}$)
+    \item Weighted expected time for successive snapshots
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \only<1>{
+    \begin{center}
+      \input{talk_schedule_vis3} % compressed form
+    \end{center}
+  }
+  \only<2>{
+    \begin{center}
+      \input{talk_schedule_vis4} % expected run times
+    \end{center}
+  }
+  \begin{equation*}
+    \frac{1}{2}
+    + 0.1 \cdot 6.1640
+    + 0.4 \cdot 5.9921
+    + 0.2 \cdot 5.8203
+    + \dots
+    % + 0.1 \cdot 5.8203
+    % + 0.2 \cdot 5.8906
+    = 6.43745
+  \end{equation*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Equivalent snapshots}
+  \begin{itemize}
+  \item The following two snapshots (basically) describe the same problem:
+  \end{itemize}
+\end{frame}
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
