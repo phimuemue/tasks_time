@@ -6,9 +6,11 @@
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{amsthm}
+\usepackage{stmaryrd}
 \usepackage{color}
 \usepackage{graphicx}
 \usepackage{tikz}
+\usepackage{suffix}
 %\usepackage{multicol}
 %\usepackage{moreverb}
 \usepackage{listings}
@@ -22,6 +24,47 @@
 %\floatname{algorithm}{Algorithmus}
 \usepackage{pgfpages}
 
+% profiles and stuff
+\newcommand{\profile}[1]{\left\llbracket #1 \right\rrbracket}
+\newcommand{\profileconcat}{\circ}
+%\newcommand{\profileones}[1]{\mathbb{1}^#1}
+\newcommand{\profilerepeat}[2]{{(#1)}^{#2}}
+\newcommand{\profileones}[1]{\profilerepeat{1}{#1}}
+
+\newcommand{\E}[1]{\mathbb{E}\left[ #1 \right]}
+\newcommand{\naturals}{\mathbb{N}}
+
+\newcommand{\p}[1]{\operatorname{Pr}\left[#1\right]}
+\newcommand{\alltasks}{{\mathbb T}}
+\newcommand{\neededfor}{\rightarrow}
+\WithSuffix\newcommand\neededfor*{\stackrel{*}{\rightarrow}}
+
+\newenvironment{strategyblock}
+{
+  \begin{block}{Strategy}
+}
+{
+  \end{block}
+}
+
+\newenvironment{motivationblock}
+{
+  \begin{block}{Motivation}
+}
+{
+  \end{block}
+}
+
+\newenvironment{counterexampleblock}
+{
+  \begin{alertblock}{Counterexample}
+}
+{
+  \end{alertblock}
+}
+
+
+
 \newcommand{\leveltop}{0}
 \newcommand{\leveltopI}{0}
 \newcommand{\leveltopII}{0}
@@ -34,6 +77,10 @@
 \newcommand{\leveltopIIIIIIIII}{0}
 \newcommand{\leveltopIIIIIIIIII}{0}
 \newcommand{\leveltopIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIII}{0}
+\newcommand{\leveltopIIIIIIIIIIIIIII}{0}
 
 \usetikzlibrary{decorations.pathmorphing}
 \usetikzlibrary{decorations.pathreplacing}
@@ -54,6 +101,9 @@
       }
     }
 ]
+\tikzset{onslide/.code args={<#1>#2}{%
+  \only<#1>{\pgfkeysalso{#2}} 
+}}
 
 \title{Investigation of some Stochastic Scheduling Problems}
 \subtitle{Master's Thesis in Computer Science}
@@ -241,7 +291,390 @@
   \frametitle{Equivalent snapshots}
   \begin{itemize}
   \item The following two snapshots (basically) describe the same problem:
+    \todo{Bilder!}
+  \item Isomorphic intrees
+  \item Scheduled tasks are mapped onto each other
+  \item Isomorphic snapshots can be excluded/re-used if they result from the same finishing task
   \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Equivalent snapshots --- example}
+  \begin{center}
+    \only<1>{
+      \input{talk_equivalence_large}
+    }
+    \only<2>{
+      \input{talk_equivalence_small}
+    }
+  \end{center}
+\end{frame}
+
+\section{Two processors}
+
+\subsection{Optimal solution}
+
+\begin{frame}
+  \frametitle{Optimal solution}
+  \begin{itemize}
+  \item Highest-level-first (HLF) is optimal for two processors
+  \item Profile (number of tasks per level) completely determines run time
+  \end{itemize}
+  \begin{exampleblock}{Profiles: Intrees with profile $\profile{6,3,1}$:}
+    \begin{center}
+      \includegraphics{../thesis/p2/four_profiles_631.pdf}  
+    \end{center}
+  \end{exampleblock}
+\end{frame}
+
+\subsection{Expected run time}
+
+\begin{frame}
+  \frametitle{Expected run time}
+  \begin{block}{Function $SUC$:}
+    \begin{equation*}
+      SUC(\profile{n_1,\dots,n_r}) = \profile{n_1, n_2, n_3,\dots,n_{j-1},n_j-1,n_{j+1},\dots,n_r} 
+    \end{equation*}
+    such that $j$ is the minimum index such that $n_j>1$.  
+  \end{block}
+  \begin{block}{Optimal (i.e. HLF) expected run time}
+    Let $P=\profile{n_1}\profileconcat P'$. Then
+    \begin{equation*}
+      \E{P} =
+      \begin{cases}
+        r, & \text{ if } P = \profile{\profileones r} \\
+        \frac{1}{2} + \E{\profile{n_1-1}\profileconcat P'} , & \text{ if } n_1\geq 2 \\
+        \frac{1}{2} + \frac{1}{2} \cdot \left( \E{P'} + \E{SUC(P)} \right) ,& \text{ otherwise } 
+      \end{cases}.
+    \end{equation*}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Expected run time --- two-leaves intrees}
+  \begin{theorem}[Moritz Maaß\todo{Wie zitieren?}]
+    Let $l, k\in\naturals$, $a\in\naturals_0$. Intrees with profile $\profile{\profilerepeat{1}{l-k}, \profilerepeat{2}{k}, \profilerepeat{1}{a+1}}$ have expected run time
+    \begin{align*}
+      & \sum_{i=1}^k \left(\frac{1}{2}\right)^{l+i-1} \cdot \binom{l+i-2}{i-1} \cdot \left( k-i+2 \right) \\
+       & + \sum_{j=1}^l \left(\frac{1}{2}\right)^{k+j-1} \cdot \binom{k+j-2}{j-1} \cdot \left( l-j+2 \right) \\
+       & + \sum_{i=1}^k \sum_{j=1}^l \left( \frac{1}{2}^{k-i+l-j+1}\cdot\binom{ki+l-j}{l-j} \right) \\
+       & + a
+      .
+    \end{align*}
+  \end{theorem}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Expected run time --- intrees with many 1-levels}
+  \begin{theorem}
+    Intrees with profile $\profile{n_1,\profileones{j-2},n_j,\profileones{r-j}}$ (for $j\geq 2$) has expected run time
+    \begin{equation*}
+      \E{\profile{n_1,\profileones{j-2},n_j,\profileones{r-j}}} = 
+      r + \frac{A_0(n_1-2)}{2^{n_1-1}} + \frac{A_{j-1}(n_j-2)}{2^{n_j+j-2}},
+    \end{equation*}
+    where $A_i$ is inductively defined as follows:
+    \begin{equation*}
+      A_0(n) = (n+1) \cdot 2^n \quad 
+      A_{i+1}(n) = \sum_{k=0}^n A_{i}(k)
+    \end{equation*}
+  \end{theorem}
+\end{frame}
+
+\subsection{Profile DAG}
+
+\begin{frame}
+  \frametitle{Profile DAG}
+  \begin{itemize}
+  \item We can use profiles instead of whole snapshots
+  \item Scheduled tasks are given implicitly
+  \item Worst case profile $\profile{ \profileones{ \left\lfloor\frac{n}{2} \right\rfloor - 1}, \left\lceil \frac{n}{2} \right\rceil, 1 }$
+  \item Worst case profile DAG size has $\lfloor \frac{n}{2} \rfloor \cdot \lceil \frac{n}{2} \rceil +1$ ``profile snapshots''.
+  \item Each profile snapshot accounts for at most $\binom{n}{2}\in O(n^2)$ ``original snapshots''.
+    
+    $\Rightarrow$ Simple proof: At most $O(n^4)$ original snapshots.
+  \end{itemize}
+\end{frame}
+
+\section{Program}
+
+\begin{frame}
+  \frametitle{Practical results}
+  \begin{itemize}
+  \item Excluding equivalent snapshots speeds up the program by at least factor 3 (for intrees with 11 or more tasks)
+  \item Computing optimal schedules for all intrees with up to 15 tasks in 11 minutes and less than 2Gb of main memory
+  \item More tasks require too much memory
+  \item Computing optimal schedules for non-trivial intrees with 19 tasks takes one day
+  \item Using Boost Rational to represent expectancies as fractions requires slightly more time and memory
+  \item Using GMP to represent expectancies as fractions requires roughly doubles time and increases memory consumption by roughly 40\%
+  \end{itemize}
+\end{frame}
+
+\section{Suboptimal strategies}
+
+\subsection{HLF}
+
+\begin{frame}
+  \frametitle{Highest level first --- ambiguities}
+  \input{hlf_ambi}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Highest level first --- strictly suboptimal}
+  \begin{columns}[ht]
+    \begin{column}{.45\textwidth}
+      \centering
+      \input{0012346688_subopt}
+    \end{column}
+    \begin{column}{.45\textwidth}
+      \centering
+      \input{0012346688_opt}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Highest level first --- summary}
+  \begin{itemize}
+  \item HLF is suboptimal
+  \item HLF is asymptotically very good [Papadimitriou, Tsitsiklis\todo{Zitieren?}]: 
+    \label{thm:quality-hlf-papadimitriou}
+    There is a function $\beta: \mathbb{N} \mapsto \mathbb{R}^+_0$ with $\lim_{n\rightarrow \infty} \beta(n) = 0$ such that for each intree $I$ and an arbitrary HLF strategy $HLF$ we have
+    \begin{equation*}
+      T_{HLF}(I) \leq \inf_\pi\, T_{\pi}(I) \cdot \left( 1+\beta(N) \right),
+    \end{equation*}
+    where the infimum is taken over all scheduling strategies $\pi$.
+  \item Optimal schedule is often one particular run of HLF\todo{Wie oft -- kurze Tabelle in Anhang!} $\Rightarrow$ HLF is ``can-optimal'' for these intrees
+  \end{itemize}
+\end{frame}
+
+\subsection{Dynamic list scheduling}
+
+\begin{frame}
+  \frametitle{(Dynamic) list scheduling}
+  \begin{itemize}
+  \item Can not be optimal for our problem
+  \item Optimal schedule has to consider previous choices
+  \item HLF is particular instance of dynamic list scheduling
+  \end{itemize}
+\end{frame}
+
+\subsection{2-HLF plus 1}
+
+\begin{frame}
+  \frametitle{``2-HLF plus 1''}
+  \begin{motivationblock}
+    All non-HLF intrees with less than 14 always have two HLF tasks and at most one non-HLF task scheduled.
+  \end{motivationblock}
+  \begin{strategyblock}
+    Restrict to snapshots where at most one non-HLF task is scheduled.
+  \end{strategyblock}
+  \begin{counterexampleblock}
+    \begin{columns}
+      \begin{column}{.5\textwidth}
+        \input{0012233689101112_hlf}
+      \end{column}
+      \begin{column}{.5\textwidth}
+        \input{0012233689101112_opt}      
+      \end{column}
+    \end{columns}
+  \end{counterexampleblock}
+\end{frame}
+
+\subsection{Only highest or lowest leaves}
+
+\begin{frame}
+  \frametitle{Only highest and lowest leaves}
+  \begin{motivationblock}
+    All optimal schedules seen so far scheduled only highest and lowest possible leaves.
+  \end{motivationblock}
+  \begin{strategyblock}
+    Restrict to snapshots where only highest and lowest leaves are scheduled.
+  \end{strategyblock}
+  \begin{counterexampleblock}
+    \begin{columns}
+      \begin{column}{.5\textwidth}
+        \begin{center}
+          \input{00023457791010_hlf}
+        \end{center}      
+      \end{column}
+      \begin{column}{.5\textwidth}
+        \begin{center}
+          \input{00023457791010_opt}
+        \end{center}      
+      \end{column}
+    \end{columns}
+  \end{counterexampleblock}
+\end{frame}
+
+\subsection{As few free paths as possible}
+
+\begin{frame}
+  \frametitle{As few free paths as possible}
+  \begin{motivationblock}
+    \begin{itemize}
+    \item A path from the root to a leaf is \emph{free}, if \emph{no} task on the path has a scheduled predecessor
+    \item Some non-HLF examples are optimally scheduled by a strategy that minimizes the number of free paths
+    \item We tried it as a heuristic for can-optimal HLF
+    \end{itemize}
+  \end{motivationblock}
+  \todo{Kurzes Bild}
+\end{frame}
+
+\begin{frame}
+  \frametitle{As few free paths as possible}
+  \begin{strategyblock}
+    When scheduler has a choice, minimize the number of free paths.
+  \end{strategyblock}
+  \todo{Bild.}
+\end{frame}
+
+\subsection{Subtree with fewer topmost tasks}
+
+\begin{frame}
+  \frametitle{Subtree with fewer topmost tasks}
+  \begin{motivationblock}
+    In many cases, a topmost task being the single requirement for its direct successor has to be scheduled
+  \end{motivationblock}
+  \begin{definition}[Topmost-maximal subtree for a leaf]
+    Let $t$ be a leaf and let $p=(t, t_1, t_2, t_3, \dots, r)$ be the path from $t$ to the root $r$.
+
+    The \emph{topmost-maximal subtree} for $t$ is the subtree rooted at the \emph{lowest} task $t^*$ within $p$ different from $t$ that does \emph{not} contain more topmost tasks than the subtree rooted at the direct successor of $t$. 
+  \end{definition}
+\end{frame}
+
+
+\definecolor{topmosttask}{rgb}{0.8,0.3,0}
+\definecolor{currenttask}{rgb}{0.3,.5,0.2}
+\definecolor{donetask}{HTML}{EFCC3C}
+
+\begin{frame}
+  \frametitle{Subtree with fewer topmost tasks}
+  \begin{columns}
+    \begin{column}{.3\textwidth}
+      \begin{exampleblock}{Example intree}
+        \begin{center}
+          \begin{tikzpicture}[scale=.5, anchor=south]
+            \node[circle, scale=0.8, draw] (tid0) at (3,1.5){0};
+            \node[circle, scale=0.8, draw, onslide=<5>{fill=currenttask}] (tid1) at (2.25,3){1};
+            \node[circle, scale=0.8, draw, onslide=<4>{fill=currenttask}, onslide=<5->{fill=donetask}] (tid2) at (1.5,4.5){3};
+            \node[circle, scale=0.8, draw, onslide=<4->{fill=donetask}] (tid7) at (0.15,6){6};
+            \node[circle, scale=0.8, draw, onslide=<4->{fill=donetask}] (tid10) at (1.5,6){7};
+            \draw[ thick](tid2) -- (tid7);
+            \draw[ thick](tid2) -- (tid10);
+            \node[circle, scale=0.8, draw, onslide=<5>{fill=donetask}] (tid3) at (3.9,4.5){4};
+            \node[circle, scale=0.8, draw, onslide=<3>{fill=currenttask}, onslide=<4->{fill=donetask}] (tid5) at (2.85,6){8};
+            \node[circle, scale=0.8, draw, onslide=<2>{fill=currenttask}, onslide=<3-5>{fill=topmosttask}, onslide=<6>{fill=donetask}] (tid6) at (2.85,7.5){\small 10};
+            \draw[ thick](tid5) -- (tid6);
+            \draw[ thick](tid2) -- (tid5);
+            \draw[ thick](tid1) -- (tid2);
+            \draw[ thick](tid1) -- (tid3);
+            \node[circle, scale=0.8, draw] (tid4) at (5.25,3){2};
+            \node[circle, scale=0.8, draw, onslide=<5>{fill=donetask}] (tid9) at (4.3,6){9};
+            \draw[ thick](tid3) -- (tid9);
+            \node[circle, scale=0.8, draw, onslide=<5>{fill=topmosttask}] (tid11) at (4.3,7.5){11};
+            \draw[ thick](tid11) -- (tid9);
+            \node[circle, scale=0.8, draw] (tid8) at (5.25,4.5){5};
+            \draw[ thick](tid4) -- (tid8);
+            \draw[ thick](tid0) -- (tid1);
+            \draw[ thick](tid0) -- (tid4);
+          \end{tikzpicture}
+        \end{center}
+      \end{exampleblock}
+    \end{column}
+    \begin{column}{.7\textwidth}
+      Topmost-maximal subtree for task 10:
+      \begin{itemize}
+      \item<2-> The subtree rooted at 10 (called $I_{10}$) contains only the topmost task 10 (omitted). %It is omitted because we want to find the lowest task along the path that is different from 10.
+      \item<3-> Subtree $I_8$ contains only topmost task 10 (reference).
+      \item<4-> Subtree $I_3$ still contains only 10 as the topmost task (it introduces only new \emph{leaves}, namely 6 and 7).
+      \item<5-> Subtree $I_1$ contains 10 \emph{and} 11 as topmost tasks.
+      \item<6-> Subtree $I_3$ is the topmost maximal subtree for task 10.
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Subtree with fewer topmost tasks}
+  \begin{strategyblock}
+    Prefer tasks whose topmost-maximal subtree has fewer topmost tasks.
+  \end{strategyblock}
+  \begin{counterexampleblock}
+    \todo{Bild!}
+  \end{counterexampleblock}
+\end{frame}
+
+\subsection{Subtree with fewer leaves}
+
+\begin{frame}
+  \frametitle{Subtree with fewer leaves}
+  \begin{motivationblock}
+    Maybe we were wrong and should have focussed on \emph{ready}, and not on \emph{topmost} tasks.
+  \end{motivationblock}
+  \begin{definition}[Leaf-maximal subtree for a leaf]
+    Let $t$ be a leaf and let $p=(t, t_1, t_2, t_3, \dots, r)$ be the path from $t$ to the root $r$.
+
+    The \emph{leaf-maximal subtree} for $t$ is the subtree rooted at the \emph{lowest} task $t^*$ within $p$ different from $t$ that does \emph{not} contain more leaves than the subtree rooted at the direct successor of $t$. 
+  \end{definition}
+  \emph{Remark:} Preferring subtrees with more does not work.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Subtree with fewer leaves}
+  \begin{strategyblock}
+    Prefer tasks whose leaf-maximal subtree has fewer topmost tasks.
+  \end{strategyblock}
+  \begin{counterexampleblock}
+    \todo{Bild.}
+  \end{counterexampleblock}
+\end{frame}
+
+\subsection{Filling up subtrees}
+
+\begin{frame}
+  \frametitle{Filling up subtrees}
+  \begin{motivationblock}
+    Subtrees seem to be filled up one after another.
+  \end{motivationblock}
+  \begin{counterexampleblock}
+    \begin{center}
+      \input{00023355666_opt}
+    \end{center}
+  \end{counterexampleblock}
+\end{frame}
+
+\subsection{Maximizing $T_3$, minimizing $T_1$}
+
+\begin{frame}
+  \frametitle{Maximizing 3-processor time, minimizing 1-processor
+    time}
+  \begin{block}{Optimal schedules do \emph{not} necessarily \dots}
+    \begin{itemize}
+    \item \dots maximize the expected time span $T_3$ where 3 processors are busy
+    \item \dots minimize the expected time span $T_1$ where only 1 processor can work
+    \end{itemize}
+  \end{block}
+  \begin{columns}
+    \begin{column}{.3\textwidth}
+      \begin{center}
+        \input{00112333_t1min}
+        $T_1=2.98$
+      \end{center}
+    \end{column}
+    \begin{column}{.3\textwidth}
+      \begin{center}
+        \input{00112333_t3max} 
+        $T_3=2.36$
+      \end{center}
+    \end{column}
+    \begin{column}{.4\textwidth}
+      \begin{center}
+        \input{00112333_opt} 
+        $T_3=2.33, T_1=2.99$
+      \end{center}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 \end{document}
