@@ -55,6 +55,14 @@
   \end{block}
 }
 
+\newenvironment{conjecture}
+{
+  \begin{block}{Conjecture}
+}
+{
+  \end{block}
+}
+
 \newenvironment{counterexampleblock}
 {
   \begin{alertblock}{Counterexample}
@@ -178,7 +186,8 @@
   \begin{itemize}
   \item Set of tasks
   \item Dependencies form intree structure
-  \item Task times exponentially distributed with same parameter (w.l.o.g. $\lambda = 1$)
+  \item Task times exponentially distributed with same parameter \note{(w.l.o.g. $\lambda = 1$)}
+  \item Nonpreemptive scheduling
   \item Goal: Minimize total expected make span
   \end{itemize}
   \begin{center}
@@ -210,26 +219,37 @@
   \end{center}
 \end{frame}
 
-\todo{Nonpreemtiv, etc (precise problem description!)}
-
 \subsection{Schedules}
 \label{sec:schedules}
 
 \begin{frame}
-  \frametitle{Schedules}
-  \begin{itemize}
-  \item A schedule describes the order in which tasks are processed
-  \item Non-deterministic in our scenario (task times are random variables)
-  \item Scheduling strategy influences expected make span
-  \end{itemize}
+  \frametitle{Schedules and snapshots}
+  \begin{block}{Schedules}
+    \begin{itemize}
+    \item Describes the order of tasks
+    \item Our scenario: non-deterministic (task times are random)
+    \item Scheduling \emph{strategy} influences expected make span
+    \end{itemize}
+  \end{block}
+  \begin{block}{Snapshots}
+    \begin{itemize}
+    \item States of a schedule
+    \item Consist of current intree and the set of scheduled tasks
+    % \item A schedule can be visualized by a snapshot DAG
+    \end{itemize}
+  \end{block}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Snapshots}
+  \frametitle{Epected run time}
   \begin{itemize}
-  \item Each state of a schedule is a snapshot
-  \item Snapshot consists current intree and set of scheduled tasks
-  \item A schedule can be visualized by a snapshot DAG
+  \item $r$ tasks currently scheduled
+  \item Each of these tasks is the first to finish with probability $\frac{1}{r}$
+  \item Compute run time recursively (task times memoryless)
+    \begin{itemize}
+    \item Expected time for fastest task $\frac{1}{r}$
+    \item Weighted expected time for successive snapshots
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
@@ -250,31 +270,17 @@
       \input{talk_schedule_vis3} % compressed form
     \end{center}
   }
-\end{frame}
-
-\begin{frame}
-  \frametitle{Epected run time}
-  \begin{itemize}
-  \item $r$ tasks currently scheduled
-  \item Compute run time recursively:
-    \begin{itemize}
-    \item Expected time for fastest task ($\frac{1}{r}$)
-    \item Weighted expected time for successive snapshots
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \only<1>{
+  \only<4>{
     \begin{center}
-      \input{talk_schedule_vis3} % compressed form
+      \input{talk_schedule_vis4} % successors
     \end{center}
   }
-  \only<2>{
+  \only<5>{
     \begin{center}
-      \input{talk_schedule_vis4} % expected run times
+      \input{talk_schedule_vis5} % complete
     \end{center}
   }
+  \only<4->{
   \begin{equation*}
     \frac{1}{2}
     + 0.1 \cdot 6.1640
@@ -285,17 +291,24 @@
     % + 0.2 \cdot 5.8906
     = 6.43745
   \end{equation*}
+  }
 \end{frame}
 
 \begin{frame}
   \frametitle{Equivalent snapshots}
-  \begin{itemize}
-  \item The following two snapshots (basically) describe the same problem:
-    \todo{Bilder!}
-  \item Isomorphic intrees
-  \item Scheduled tasks are mapped onto each other
-  \item Isomorphic snapshots can be excluded/re-used if they result from the same finishing task
-  \end{itemize}
+  These two snapshots describe the same:
+  \begin{center}
+    \input{equiv1}
+    \input{equiv2}
+  \end{center}
+  \begin{block}{Equivalent snapshots}
+    \begin{itemize}
+    \item Isomorphic intrees
+    \item Scheduled tasks are mapped onto each other
+    \item Equivalent snapshots excluded/re-used if they result from the same finishing task
+    \item \emph{Canonical} snapshots constructable in $O(n)$
+    \end{itemize}
+  \end{block}
 \end{frame}
 
 \begin{frame}
@@ -315,44 +328,61 @@
 \subsection{Optimal solution}
 
 \begin{frame}
-  \frametitle{Optimal solution}
-  \begin{itemize}
-  \item Highest-level-first (HLF) is optimal for two processors
-  \item Profile (number of tasks per level) completely determines run time
-  \end{itemize}
-  \begin{exampleblock}{Profiles: Intrees with profile $\profile{6,3,1}$:}
-    \begin{center}
-      \includegraphics{../thesis/p2/four_profiles_631.pdf}  
-    \end{center}
-  \end{exampleblock}
+  \frametitle{Two processors --- optimal solution}
+  \begin{columns}
+    \begin{column}{0.6\textwidth}
+      \begin{block}{Known results (Chandy, Reynolds 1975)}
+        \begin{itemize}
+        \item Highest-level-first (HLF) optimal for two processors
+        \item Profile (number of tasks per level) completely determines run time
+        \item Reduce computation of expected run time to profiles
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{.4\textwidth}
+      \input{2hlf}
+    \end{column}
+  \end{columns}
+  %   \begin{exampleblock}{Profiles: Intrees with profile $\profile{6,3,1}$ (run time $7.125$):}
+  %   % \begin{center}
+  %   %   \includegraphics{../thesis/p2/four_profiles_631.pdf}  
+  %   % \end{center}
+  % \end{exampleblock}
 \end{frame}
+
+% \begin{frame}
+%   \frametitle{HLF example}
+%   \begin{center}
+%     \input{2hlf}
+%   \end{center}
+% \end{frame}
 
 \subsection{Expected run time}
 
-\begin{frame}
-  \frametitle{Expected run time}
-  \begin{block}{Function $SUC$:}
-    \begin{equation*}
-      SUC(\profile{n_1,\dots,n_r}) = \profile{n_1, n_2, n_3,\dots,n_{j-1},n_j-1,n_{j+1},\dots,n_r} 
-    \end{equation*}
-    such that $j$ is the minimum index such that $n_j>1$.  
-  \end{block}
-  \begin{block}{Optimal (i.e. HLF) expected run time}
-    Let $P=\profile{n_1}\profileconcat P'$. Then
-    \begin{equation*}
-      \E{P} =
-      \begin{cases}
-        r, & \text{ if } P = \profile{\profileones r} \\
-        \frac{1}{2} + \E{\profile{n_1-1}\profileconcat P'} , & \text{ if } n_1\geq 2 \\
-        \frac{1}{2} + \frac{1}{2} \cdot \left( \E{P'} + \E{SUC(P)} \right) ,& \text{ otherwise } 
-      \end{cases}.
-    \end{equation*}
-  \end{block}
-\end{frame}
+% \begin{frame}
+%   \frametitle{Expected run time}
+%   \begin{block}{Function $SUC$:}
+%     \begin{equation*}
+%       SUC(\profile{n_1,\dots,n_r}) = \profile{n_1, n_2, n_3,\dots,n_{j-1},n_j-1,n_{j+1},\dots,n_r} 
+%     \end{equation*}
+%     such that $j$ is the minimum index such that $n_j>1$.  
+%   \end{block}
+%   \begin{block}{Optimal (i.e. HLF) expected run time}
+%     Let $P=\profile{n_1}\profileconcat P'$. Then
+%     \begin{equation*}
+%       \E{P} =
+%       \begin{cases}
+%         r, & \text{ if } P = \profile{\profileones r} \\
+%         \frac{1}{2} + \E{\profile{n_1-1}\profileconcat P'} , & \text{ if } n_1\geq 2 \\
+%         \frac{1}{2} + \frac{1}{2} \cdot \left( \E{P'} + \E{SUC(P)} \right) ,& \text{ otherwise } 
+%       \end{cases}.
+%     \end{equation*}
+%   \end{block}
+% \end{frame}
 
 \begin{frame}
   \frametitle{Expected run time --- two-leaves intrees}
-  \begin{theorem}[Moritz Maaß\todo{Wie zitieren?}]
+  \begin{theorem}[Maaß 2001]
     Let $l, k\in\naturals$, $a\in\naturals_0$. Intrees with profile $\profile{\profilerepeat{1}{l-k}, \profilerepeat{2}{k}, \profilerepeat{1}{a+1}}$ have expected run time
     \begin{align*}
       & \sum_{i=1}^k \left(\frac{1}{2}\right)^{l+i-1} \cdot \binom{l+i-2}{i-1} \cdot \left( k-i+2 \right) \\
@@ -377,6 +407,7 @@
       A_0(n) = (n+1) \cdot 2^n \quad 
       A_{i+1}(n) = \sum_{k=0}^n A_{i}(k)
     \end{equation*}
+    \note{Closed forms $A_j$ for fixed $j$ known}
   \end{theorem}
 \end{frame}
 
@@ -385,41 +416,30 @@
 \begin{frame}
   \frametitle{Profile DAG}
   \begin{itemize}
-  \item We can use profiles instead of whole snapshots
-  \item Scheduled tasks are given implicitly
+  \item Use profiles instead of whole snapshots
+  \item Scheduled tasks given implicitly (HLF)
   \item Worst case profile $\profile{ \profileones{ \left\lfloor\frac{n}{2} \right\rfloor - 1}, \left\lceil \frac{n}{2} \right\rceil, 1 }$
-  \item Worst case profile DAG size has $\lfloor \frac{n}{2} \rfloor \cdot \lceil \frac{n}{2} \rceil +1$ ``profile snapshots''.
-  \item Each profile snapshot accounts for at most $\binom{n}{2}\in O(n^2)$ ``original snapshots''.
+  \item Worst case profile DAG size has $\lfloor \frac{n}{2} \rfloor \cdot \lceil \frac{n}{2} \rceil +1$ ``profile snapshots''
+  \item Each profile snapshot accounts for less than $n^2$ ``original snapshots''
     
     $\Rightarrow$ Simple proof: At most $O(n^4)$ original snapshots.
   \end{itemize}
 \end{frame}
 
-\section{Program}
-
-\begin{frame}
-  \frametitle{Practical results}
-  \begin{itemize}
-  \item Excluding equivalent snapshots speeds up the program by at least factor 3 (for intrees with 11 or more tasks)
-  \item Computing optimal schedules for all intrees with up to 15 tasks in 11 minutes and less than 2Gb of main memory
-  \item More tasks require too much memory
-  \item Computing optimal schedules for non-trivial intrees with 19 tasks takes one day
-  \item Using Boost Rational to represent expectancies as fractions requires slightly more time and memory
-  \item Using GMP to represent expectancies as fractions requires roughly doubles time and increases memory consumption by roughly 40\%
-  \end{itemize}
-\end{frame}
-
-\section{Suboptimal strategies}
+\section{Three processors: strategies}
 
 \subsection{HLF}
 
 \begin{frame}
-  \frametitle{Highest level first --- ambiguities}
-  \input{hlf_ambi}
+  \frametitle{HLF may be ambiguous \dots}
+  HLF may result in different run times:
+  \begin{block}{}
+    \input{hlf_ambi}
+  \end{block}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Highest level first --- strictly suboptimal}
+  \frametitle{\dots or even strictly suboptimal}
   \begin{columns}[ht]
     \begin{column}{.45\textwidth}
       \centering
@@ -433,16 +453,16 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Highest level first --- summary}
+  \frametitle{HLF --- summary}
   \begin{itemize}
-  \item HLF is suboptimal
-  \item HLF is asymptotically very good [Papadimitriou, Tsitsiklis\todo{Zitieren?}]: 
+  \item HLF is suboptimal \dots
+  \item \dots but asymptotically good (Papadimitriou, Tsitsiklis 1987): 
     \label{thm:quality-hlf-papadimitriou}
     There is a function $\beta: \mathbb{N} \mapsto \mathbb{R}^+_0$ with $\lim_{n\rightarrow \infty} \beta(n) = 0$ such that for each intree $I$ and an arbitrary HLF strategy $HLF$ we have
     \begin{equation*}
-      T_{HLF}(I) \leq \inf_\pi\, T_{\pi}(I) \cdot \left( 1+\beta(N) \right),
+      T_{HLF}(I) \leq T_{\pi^*}(I) \cdot \left( 1+\beta(N) \right),
     \end{equation*}
-    where the infimum is taken over all scheduling strategies $\pi$.
+    where  $\pi^*$ is the optimal strategy.
   \item Optimal schedule is often one particular run of HLF\todo{Wie oft -- kurze Tabelle in Anhang!} $\Rightarrow$ HLF is ``can-optimal'' for these intrees
   \end{itemize}
 \end{frame}
@@ -463,10 +483,10 @@
 \begin{frame}
   \frametitle{``2-HLF plus 1''}
   \begin{motivationblock}
-    All non-HLF intrees with less than 14 always have two HLF tasks and at most one non-HLF task scheduled.
+    Non-HLF intrees up to 13 tasks have at most one non-HLF task scheduled.
   \end{motivationblock}
   \begin{strategyblock}
-    Restrict to snapshots where at most one non-HLF task is scheduled.
+    Discard snapshots with more than one non-HLF task scheduled.
   \end{strategyblock}
   \begin{counterexampleblock}
     \begin{columns}
@@ -485,19 +505,25 @@
 \begin{frame}
   \frametitle{Only highest and lowest leaves}
   \begin{motivationblock}
-    All optimal schedules seen so far scheduled only highest and lowest possible leaves.
+    Optimal schedules seen so far scheduled only topmost and lowest leaves.
+    %only highest and lowest possible leaves.
   \end{motivationblock}
   \begin{strategyblock}
-    Restrict to snapshots where only highest and lowest leaves are scheduled.
+    Restrict to snapshots where only topmost and lowest leaves are scheduled.
   \end{strategyblock}
   \begin{counterexampleblock}
     \begin{columns}
-      \begin{column}{.5\textwidth}
+      \begin{column}{.3\textwidth}
         \begin{center}
           \input{00023457791010_hlf}
         \end{center}      
       \end{column}
-      \begin{column}{.5\textwidth}
+      \begin{column}{.3\textwidth}
+        \begin{center}
+          \input{00023457791010_med}
+        \end{center}      
+      \end{column}
+      \begin{column}{.3\textwidth}
         \begin{center}
           \input{00023457791010_opt}
         \end{center}      
@@ -506,27 +532,27 @@
   \end{counterexampleblock}
 \end{frame}
 
-\subsection{As few free paths as possible}
+% \subsection{As few free paths as possible}
 
-\begin{frame}
-  \frametitle{As few free paths as possible}
-  \begin{motivationblock}
-    \begin{itemize}
-    \item A path from the root to a leaf is \emph{free}, if \emph{no} task on the path has a scheduled predecessor
-    \item Some non-HLF examples are optimally scheduled by a strategy that minimizes the number of free paths
-    \item We tried it as a heuristic for can-optimal HLF
-    \end{itemize}
-  \end{motivationblock}
-  \todo{Kurzes Bild}
-\end{frame}
+% \begin{frame}
+%   \frametitle{As few free paths as possible}
+%   \begin{motivationblock}
+%     \begin{itemize}
+%     \item A path from the root to a leaf is \emph{free}, if \emph{no} task on the path has a scheduled predecessor
+%     \item Some non-HLF examples are optimally scheduled by a strategy that minimizes the number of free paths
+%     \item We tried it as a heuristic for can-optimal HLF
+%     \end{itemize}
+%   \end{motivationblock}
+%   \todo{Kurzes Bild}
+% \end{frame}
 
-\begin{frame}
-  \frametitle{As few free paths as possible}
-  \begin{strategyblock}
-    When scheduler has a choice, minimize the number of free paths.
-  \end{strategyblock}
-  \todo{Bild.}
-\end{frame}
+% \begin{frame}
+%   \frametitle{As few free paths as possible}
+%   \begin{strategyblock}
+%     When scheduler has a choice, minimize the number of free paths.
+%   \end{strategyblock}
+%   \todo{Bild.}
+% \end{frame}
 
 \subsection{Subtree with fewer topmost tasks}
 
@@ -601,7 +627,11 @@
     Prefer tasks whose topmost-maximal subtree has fewer topmost tasks.
   \end{strategyblock}
   \begin{counterexampleblock}
-    \todo{Bild!}
+    \begin{center}
+      \input{0012223334_secondbest}
+      \quad
+      \input{0012223334_opt}
+    \end{center}
   \end{counterexampleblock}
 \end{frame}
 
@@ -626,7 +656,51 @@
     Prefer tasks whose leaf-maximal subtree has fewer topmost tasks.
   \end{strategyblock}
   \begin{counterexampleblock}
-    \todo{Bild.}
+    \begin{center}
+      \input{00111256666_secondbest}
+      \quad
+      \input{00111256666_opt}
+    \end{center}
+  \end{counterexampleblock}
+\end{frame}
+
+\subsection{Recursive approach}
+
+\begin{frame}
+  \frametitle{Recursive approach}
+  \begin{strategyblock}
+    Prefer root's predecessors with maximal processing time.
+  \end{strategyblock}
+  \begin{counterexampleblock}
+    \begin{center}
+      \input{000111223_opt}
+      \begin{tikzpicture}[scale=.3]
+        \begin{scope}
+          \node[circle, fill, scale=.5] (0) at (0,0){};
+          \node[circle, fill, scale=.5] (1) at (-1,1){};
+          \node[circle, fill, scale=.5] (2) at (0,1){};
+          \node[circle, fill, scale=.5] (3) at (1,1){};
+          \draw(0)--(1);
+          \draw(0)--(2);
+          \draw(0)--(3);
+          \node at (0, -1.5){2.83 resp. 3};
+        \end{scope}
+        \begin{scope}[xshift=6cm]
+          \node[circle, fill, scale=.5] (0) at (0,0){};
+          \node[circle, fill, scale=.5] (1) at (-.5,1){};
+          \node[circle, fill, scale=.5] (3) at (.5,1){};
+          \draw(0)--(1);
+          \draw(0)--(3);
+          \node at (0, -1.5){2.5};
+        \end{scope}
+        \begin{scope}[xshift=11cm]
+          \node[circle, fill, scale=.5] (0) at (0,0){};
+          \node[circle, fill, scale=.5] (1) at (0,1){};
+          \draw(0)--(1);
+          \node at (0, -1.5){2};
+        \end{scope}
+      \end{tikzpicture}
+    \end{center}
   \end{counterexampleblock}
 \end{frame}
 
@@ -675,6 +749,149 @@
       \end{center}
     \end{column}
   \end{columns}
+\end{frame}
+
+\section{Optimal strategies}
+
+\subsection{Facts}
+
+\begin{frame}
+  \frametitle{Optimal strategies --- facts}
+  \begin{itemize}
+  \item No deliberate idleness (Chandy, Reynolds 1979)
+  \item More processors do not worsen run time (Maaß 2001)
+  \item Preemptive scheduling is strictly better than non-preemptive scheduling for 3 or more processors (equal for 2 processors)
+    \note{Rescheduling only necessary at points where one task finishes.}
+  \item ``Optimal schedules for subtrees do not help''
+  \end{itemize}
+\end{frame}
+
+\subsection{Computing the optimal schedule}
+
+\begin{frame}
+  \frametitle{Computing optimal schedules}
+  \begin{itemize}
+  \item Exhaustive search (\emph{LEAF} scheduler)
+  \item ``Optimize'' result from exhaustive search by recursively discarding bad choices
+  \item Exponential run time
+  \end{itemize}
+\end{frame}
+
+\subsection{Snapshot DAG}
+
+\begin{frame}
+  \frametitle{Size of the snapshot DAG}
+  \begin{itemize}
+  \item Number of subtrees grows exponentially
+    
+    $\Rightarrow$ Number of overall snapshots as well
+  \item Number of snapshots in optimal DAG remarkably smaller
+  \end{itemize}
+  \begin{columns}
+    \begin{column}{.5\textwidth}
+      \centering
+      \includegraphics[scale=.8]{max.pdf}
+      
+      Maximum
+    \end{column}
+    \begin{column}{.5\textwidth}
+      \centering
+      \includegraphics[scale=.8]{avg.pdf}
+      
+      Average
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Compressing the snapshot DAG}
+  \begin{itemize}
+  \item Optimal snapshot DAG allows (recursive) merging of some snapshots
+  \item LEAF snapshot DAG prevents us from merging because the run times are not the same for some snapshots \todo{Verbessern!}
+  \end{itemize}
+\end{frame}
+
+\subsection{Conjectures}
+
+\begin{frame}
+  \frametitle{Optimal strategies --- conjectures}
+  \begin{itemize}
+  \item \emph{In the beginning}, as many topmost task as possible shall be scheduled
+    
+    \note{Itermediate snapshots (in the optimal schedule) \emph{might} have fewer topmost task than possible scheduled}
+  \item If the scheduler has a choice, it shall pick a topmost task, if available
+  \item If only non-top tasks are scheduled, we can exchange any one with a topmost task and can obtain a better run time
+  \end{itemize}
+\end{frame}
+
+\subsection{Particular classes of intrees}
+
+\begin{frame}
+  \frametitle{Degenerate intrees}
+  \begin{itemize}
+  \item On each level, at most one task has predecessors
+  \item Uniquely determined by their profile
+  \end{itemize}
+  \begin{theorem}
+    Degenerate intrees are optimally scheduled by HLF.
+  \end{theorem}
+  \begin{proof}
+    \begin{itemize}
+    \item Assert that for degenerate intree $I$, two tasks $z_1, z_2$ with $level(z_1) \geq level(z_2)$: 
+      $T^*_{x,y,z_1}(I \cup \left\{ z_1 \right\}) \geq
+      T^*_{x,y,z_2}(I \cup \left\{ z_2 \right\})$
+    \item Induction over the number of tasks, comparing $T_{HLF}(I)$ to $T_{x',y',z'}(I)$
+    \end{itemize}
+  \end{proof}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Parallel chains}
+  \begin{itemize}
+  \item Each task, except the root, has at most one predecessor
+  \item Parallel chains with up to 27 tasks are optimally scheduled by HLF
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Degenerate intrees and parallel chains --- outcome}
+  \begin{itemize}
+  \item HLF is deterministic for these classes \dots
+  \item \dots and needs remarkably less snapshots than LEAF
+  \item Example: Number of snapshots for degenerate binary trees
+    \begin{center}
+      \includegraphics{deg_intrees.pdf}
+    \end{center}
+  \item Analogous results for parallel chains
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Improving LEAF with conjectures}
+  \begin{block}{SCLEAF}
+    \begin{itemize}
+    \item Simple LEAF scheduler, but \dots
+    \item \dots using HLF when encountering degenerate intrees or parallel chains \dots
+    \item \dots restricts to snapshots where as many topmost task as possible are scheduled
+    \end{itemize}
+  \end{block}
+  \begin{center}
+    \includegraphics{scleaf.pdf}
+  \end{center}
+\end{frame}
+
+\section{Program}
+
+\begin{frame}
+  \frametitle{Practical results}
+  \begin{itemize}
+  \item Excluding equivalent snapshots speeds up the program by at least factor 3 (for intrees with 11 or more tasks)
+  \item Computing optimal schedules for all intrees with up to 15 tasks in 11 minutes and less than 2Gb of main memory
+  \item More tasks require too much memory
+  \item Computing optimal schedules for non-trivial intrees with 19 tasks takes one day
+  \item Using Boost Rational to represent expectancies as fractions requires slightly more time and memory
+  \item Using GMP to represent expectancies as fractions requires roughly doubles time and increases memory consumption by roughly 40\%
+  \end{itemize}
 \end{frame}
 
 \end{document}
