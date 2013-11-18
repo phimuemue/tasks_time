@@ -1,0 +1,39 @@
+\begin{tikzpicture}[scale=.2, anchor=south]
+\begin{scope}[yshift=\leveltopI cm]
+\matrix (line1)[column sep=1cm] {
+\node[rectangle split,  rectangle split parts=1] (sn0x9ef9630){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (5.25,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (3,3){};
+\node[circle, scale=0.75, fill] (tid3) at (0.75,4.5){};
+\node[circle, scale=0.75, fill] (tid4) at (2.25,4.5){};
+\node[circle, scale=0.75, fill, task_scheduled] (tid8) at (2.25,6){};
+\draw[](tid4) -- (tid8);
+\node[circle, scale=0.75, fill] (tid5) at (4.5,4.5){};
+\node[circle, scale=0.75, fill] (tid9) at (3.75,6){};
+\node[circle, scale=0.75, fill] (tid10) at (5.25,6){};
+\draw[](tid5) -- (tid9);
+\draw[](tid5) -- (tid10);
+\draw[](tid1) -- (tid3);
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (8.25,3){};
+\node[circle, scale=0.75, fill] (tid6) at (6.75,4.5){};
+\node[circle, scale=0.75, fill] (tid7) at (9,4.5){};
+\node[circle, scale=0.75, fill, task_scheduled] (tid11) at (8.25,6){};
+\node[circle, scale=0.75, fill, task_scheduled] (tid12) at (9.75,6){};
+\draw[](tid7) -- (tid11);
+\draw[](tid7) -- (tid12);
+\draw[](tid2) -- (tid6);
+\draw[](tid2) -- (tid7);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+};
+\\
+};
+\end{scope}
+\end{tikzpicture}
+%%% Local Variables:
+%%% TeX-master: "thesis/thesis.tex"
+%%% End: 

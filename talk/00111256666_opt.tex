@@ -1,0 +1,51 @@
+\renewcommand{\leveltopI}{-15cm + \leveltop}
+\renewcommand{\leveltopII}{-15cm + \leveltopI}
+\renewcommand{\leveltopIII}{-15cm + \leveltopII}
+\renewcommand{\leveltopIIII}{-15cm + \leveltopIII}
+\renewcommand{\leveltopIIIII}{-15cm + \leveltopIIII}
+\renewcommand{\leveltopIIIIII}{-15cm + \leveltopIIIII}
+\renewcommand{\leveltopIIIIIII}{-15cm + \leveltopIIIIII}
+\renewcommand{\leveltopIIIIIIII}{-15cm + \leveltopIIIIIII}
+\renewcommand{\leveltopIIIIIIIII}{-15cm + \leveltopIIIIIIII}
+\renewcommand{\leveltopIIIIIIIIII}{-15cm + \leveltopIIIIIIIII}
+\renewcommand{\leveltopIIIIIIIIIII}{-15cm + \leveltopIIIIIIIIII}
+\renewcommand{\leveltopIIIIIIIIIIII}{-15cm + \leveltopIIIIIIIIIII}
+\begin{tikzpicture}[scale=.2, anchor=south]
+\begin{scope}[yshift=\leveltopI cm]
+\matrix (line1)[column sep=1cm] {
+\node[draw=black, rectangle split,  rectangle split parts=2] (sn0x9dbbc98){
+\begin{tikzpicture}[scale=.2]
+\node[circle, scale=0.75, fill] (tid0) at (5.25,1.5){};
+\node[circle, scale=0.75, fill] (tid1) at (2.25,3){};
+\node[circle, scale=0.75, fill] (tid3) at (0.75,4.5){};
+\node[circle, scale=0.75, fill] (tid4) at (2.25,4.5){};
+\node[circle, scale=0.75, fill] (tid5) at (3.75,4.5){};
+\node[circle, scale=0.75, fill] (tid7) at (3.75,6){};
+\draw[](tid5) -- (tid7);
+\draw[](tid1) -- (tid3);
+\draw[](tid1) -- (tid4);
+\draw[](tid1) -- (tid5);
+\node[circle, scale=0.75, fill] (tid2) at (7.5,3){};
+\node[circle, scale=0.75, fill] (tid6) at (7.5,4.5){};
+\node[circle, scale=0.75, fill, task_scheduled] (tid8) at (5.25,6){};
+\node[circle, scale=0.75, fill, task_scheduled] (tid9) at (6.75,6){};
+\node[circle, scale=0.75, fill, task_scheduled] (tid10) at (8.25,6){};
+\node[circle, scale=0.75, fill] (tid11) at (9.75,6){};
+\draw[](tid6) -- (tid8);
+\draw[](tid6) -- (tid9);
+\draw[](tid6) -- (tid10);
+\draw[](tid6) -- (tid11);
+\draw[](tid2) -- (tid6);
+\draw[](tid0) -- (tid1);
+\draw[](tid0) -- (tid2);
+\end{tikzpicture}
+\nodepart{two}
+\footnotesize{6.26749}
+};
+\\
+};
+\end{scope}
+\end{tikzpicture}
+%%% Local Variables:
+%%% TeX-master: "thesis/thesis.tex"
+%%% End: 
