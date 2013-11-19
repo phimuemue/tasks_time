@@ -23,6 +23,9 @@
 %\geometry{margin=2cm}
 %\floatname{algorithm}{Algorithmus}
 \usepackage{pgfpages}
+\usepackage[backend=biber,style=authoryear-comp]{biblatex}
+\addbibresource{bib.bib}
+\bibhang3em
 
 % profiles and stuff
 \newcommand{\profile}[1]{\left\llbracket #1 \right\rrbracket}
@@ -161,19 +164,21 @@
 
 %\usetheme[compress]{Berlin}
 
-\AtBeginPart{
-  \begin{frame}
-    \partpage
-    %\setcounter{tocdepth}{1}
-    %\tableofcontents
-  \end{frame}
-}
+% \AtBeginPart{
+%   \begin{frame}
+%     \partpage
+%     %\setcounter{tocdepth}{1}
+%     %\tableofcontents
+%   \end{frame}
+% }
 
 \begin{document}
 
 \begin{frame}
   \maketitle{}
 \end{frame}
+
+\part{Introduction}
 
 \section{Introduction}
 \label{sec:intro}
@@ -185,9 +190,9 @@
   \frametitle{Problem statement}
   \begin{itemize}
   \item Set of tasks
+  \item Task times exponentially distributed with parameter 1 \note{(w.l.o.g. $\lambda = 1$)}
   \item Dependencies form intree structure
-  \item Task times exponentially distributed with same parameter \note{(w.l.o.g. $\lambda = 1$)}
-  \item Nonpreemptive scheduling
+  \item Non-preemptive scheduling
   \item Goal: Minimize total expected make span
   \end{itemize}
   \begin{center}
@@ -227,31 +232,39 @@
   \begin{block}{Schedules}
     \begin{itemize}
     \item Describes the order of tasks
-    \item Our scenario: non-deterministic (task times are random)
+    \item Our scenario: non-deterministic and non-preemptive
     \item Scheduling \emph{strategy} influences expected make span
     \end{itemize}
   \end{block}
   \begin{block}{Snapshots}
-    \begin{itemize}
-    \item States of a schedule
-    \item Consist of current intree and the set of scheduled tasks
-    % \item A schedule can be visualized by a snapshot DAG
-    \end{itemize}
+    \begin{columns}
+      \begin{column}{.7\textwidth}
+        \begin{itemize}
+        \item States of a schedule
+        \item Consist of current intree and the set of scheduled tasks
+          % \item A schedule can be visualized by a snapshot DAG
+        \end{itemize}
+      \end{column}
+      \begin{column}{.3\textwidth}
+        \centering
+        \input{equiv1}
+      \end{column}
+    \end{columns}
   \end{block}
 \end{frame}
 
-\begin{frame}
-  \frametitle{Epected run time}
-  \begin{itemize}
-  \item $r$ tasks currently scheduled
-  \item Each of these tasks is the first to finish with probability $\frac{1}{r}$
-  \item Compute run time recursively (task times memoryless)
-    \begin{itemize}
-    \item Expected time for fastest task $\frac{1}{r}$
-    \item Weighted expected time for successive snapshots
-    \end{itemize}
-  \end{itemize}
-\end{frame}
+% \begin{frame}
+%   \frametitle{Epected run time}
+%   \begin{itemize}
+%   \item $r$ tasks currently scheduled
+%   \item Each of these tasks is the first to finish with same probability
+%   \item Compute run time recursively (task times memoryless)
+%     \begin{itemize}
+%     \item Expected time for fastest task $\frac{1}{r}$
+%     \item Weighted expected time for successive snapshots
+%     \end{itemize}
+%   \end{itemize}
+% \end{frame}
 
 \begin{frame}
   \frametitle{Schedule visualization}
@@ -318,10 +331,27 @@
       \input{talk_equivalence_large}
     }
     \only<2>{
-      \input{talk_equivalence_small}
+      \begin{center}
+        \input{talk_equivalence_small}
+
+        $\Rightarrow$ Reduces number of snapshots
+      \end{center}
     }
   \end{center}
 \end{frame}
+
+% \subsection{Facts}
+
+% \begin{frame}
+%   \frametitle{Optimal strategies --- facts}
+%   \begin{itemize}
+%   \item No deliberate idleness (Chandy, Reynolds 1979)
+%   %\item More processors do not worsen run time (Maaß 2001)
+%   %\item Preemptive scheduling is strictly better than non-preemptive scheduling for 3 or more processors (equal for 2 processors)
+%     \note{Rescheduling only necessary at points where one task finishes.}
+%   \item ``Optimal schedules for subtrees do not help''
+%   \end{itemize}
+% \end{frame}
 
 \section{Two processors}
 
@@ -331,11 +361,14 @@
   \frametitle{Two processors --- optimal solution}
   \begin{columns}
     \begin{column}{0.6\textwidth}
-      \begin{block}{Known results (Chandy, Reynolds 1975)}
+      \begin{block}{Known results (Chandy, Reynolds 1975/1979)}
         \begin{itemize}
+        \item No deliberate idleness (also for more processors)
         \item Highest-level-first (HLF) optimal for two processors
         \item Profile (number of tasks per level) completely determines run time
         \item Reduce computation of expected run time to profiles
+        
+          $\Rightarrow$ Formula computing expected run time for intrees with 2 leaves (Maaß 2001)
         \end{itemize}
       \end{block}
     \end{column}
@@ -380,22 +413,22 @@
 %   \end{block}
 % \end{frame}
 
-\begin{frame}
-  \frametitle{Expected run time --- two-leaves intrees}
-  \begin{theorem}[Maaß 2001]
-    Let $l, k\in\naturals$, $a\in\naturals_0$. Intrees with profile $\profile{\profilerepeat{1}{l-k}, \profilerepeat{2}{k}, \profilerepeat{1}{a+1}}$ have expected run time
-    \begin{align*}
-      & \sum_{i=1}^k \left(\frac{1}{2}\right)^{l+i-1} \cdot \binom{l+i-2}{i-1} \cdot \left( k-i+2 \right) \\
-       & + \sum_{j=1}^l \left(\frac{1}{2}\right)^{k+j-1} \cdot \binom{k+j-2}{j-1} \cdot \left( l-j+2 \right) \\
-       & + \sum_{i=1}^k \sum_{j=1}^l \left( \frac{1}{2}^{k-i+l-j+1}\cdot\binom{ki+l-j}{l-j} \right) \\
-       & + a
-      .
-    \end{align*}
-  \end{theorem}
-\end{frame}
+% \begin{frame}
+%   \frametitle{Expected run time --- two-leaves intrees}
+%   \begin{theorem}[Maaß 2001]
+%     Let $l, k\in\naturals$, $a\in\naturals_0$. Intrees with profile $\profile{\profilerepeat{1}{l-k}, \profilerepeat{2}{k}, \profilerepeat{1}{a+1}}$ have expected run time
+%     \begin{align*}
+%       & \sum_{i=1}^k \left(\frac{1}{2}\right)^{l+i-1} \cdot \binom{l+i-2}{i-1} \cdot \left( k-i+2 \right) \\
+%        & + \sum_{j=1}^l \left(\frac{1}{2}\right)^{k+j-1} \cdot \binom{k+j-2}{j-1} \cdot \left( l-j+2 \right) \\
+%        & + \sum_{i=1}^k \sum_{j=1}^l \left( \frac{1}{2}^{k-i+l-j+1}\cdot\binom{ki+l-j}{l-j} \right) \\
+%        & + a
+%       .
+%     \end{align*}
+%   \end{theorem}
+% \end{frame}
 
 \begin{frame}
-  \frametitle{Expected run time --- intrees with many 1-levels}
+  \frametitle{Expected run time --- special intrees}
   \begin{theorem}
     Intrees with profile $\profile{n_1,\profileones{j-2},n_j,\profileones{r-j}}$ (for $j\geq 2$) has expected run time
     \begin{equation*}
@@ -420,13 +453,65 @@
   \item Scheduled tasks given implicitly (HLF)
   \item Worst case profile $\profile{ \profileones{ \left\lfloor\frac{n}{2} \right\rfloor - 1}, \left\lceil \frac{n}{2} \right\rceil, 1 }$
   \item Worst case profile DAG size has $\lfloor \frac{n}{2} \rfloor \cdot \lceil \frac{n}{2} \rceil +1$ ``profile snapshots''
-  \item Each profile snapshot accounts for less than $n^2$ ``original snapshots''
+
+    $\Rightarrow$ Optimal expected run time computable in polynomial time 
+  %\item Each profile snapshot accounts for less than $n^2$ ``original snapshots''
     
-    $\Rightarrow$ Simple proof: At most $O(n^4)$ original snapshots.
+  %  $\Rightarrow$ Simple proof: At most $O(n^4)$ original snapshots.
+    
   \end{itemize}
 \end{frame}
 
-\section{Three processors: strategies}
+\part{Three processors}
+
+\section{P3: Optimal solution}
+
+\subsection{Computing the optimal schedule}
+
+\begin{frame}
+  \frametitle{Computing optimal schedules}
+  \begin{itemize}
+  \item Exhaustive search (\emph{LEAF} scheduler)
+  \item ``Optimize'' result from exhaustive search by recursively discarding bad choices
+  \item Exponential run time
+  \end{itemize}
+\end{frame}
+
+\subsection{Snapshot DAG}
+
+\begin{frame}
+  \frametitle{Size of the snapshot DAG}
+  \begin{itemize}
+  \item Number of subtrees grows exponentially
+    
+    $\Rightarrow$ Number of overall snapshots as well
+  \item Number of snapshots in optimal DAG remarkably smaller
+  \end{itemize}
+  \begin{columns}
+    \begin{column}{.5\textwidth}
+      \centering
+      \includegraphics[scale=.8]{max.pdf}
+      
+      Maximum
+    \end{column}
+    \begin{column}{.5\textwidth}
+      \centering
+      \includegraphics[scale=.8]{avg.pdf}
+      
+      Average
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Compressing the snapshot DAG}
+  \begin{itemize}
+  \item Optimal snapshot DAG allows (recursive) merging of some snapshots
+  \item LEAF snapshot DAG prevents us from merging because the run times are not the same for some snapshots
+  \end{itemize}
+\end{frame}
+
+\section{P3: Strategies}
 
 \subsection{HLF}
 
@@ -453,30 +538,32 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{HLF --- summary}
+  \frametitle{HLF and (dynamic) list scheduling}
   \begin{itemize}
-  \item HLF is suboptimal \dots
-  \item \dots but asymptotically good (Papadimitriou, Tsitsiklis 1987): 
-    \label{thm:quality-hlf-papadimitriou}
-    There is a function $\beta: \mathbb{N} \mapsto \mathbb{R}^+_0$ with $\lim_{n\rightarrow \infty} \beta(n) = 0$ such that for each intree $I$ and an arbitrary HLF strategy $HLF$ we have
-    \begin{equation*}
-      T_{HLF}(I) \leq T_{\pi^*}(I) \cdot \left( 1+\beta(N) \right),
-    \end{equation*}
-    where  $\pi^*$ is the optimal strategy.
-  \item Optimal schedule is often one particular run of HLF\todo{Wie oft -- kurze Tabelle in Anhang!} $\Rightarrow$ HLF is ``can-optimal'' for these intrees
-  \end{itemize}
-\end{frame}
-
-\subsection{Dynamic list scheduling}
-
-\begin{frame}
-  \frametitle{(Dynamic) list scheduling}
-  \begin{itemize}
-  \item Can not be optimal for our problem
+  \item HLF is (like every dynamic list scheduling strategy) suboptimal \dots
+  \item \dots but asymptotically good (Papadimitriou, Tsitsiklis 1987)
+    % There is a function $\beta: \mathbb{N} \mapsto \mathbb{R}^+_0$ with $\lim_{n\rightarrow \infty} \beta(n) = 0$ such that for each intree $I$ and an arbitrary HLF strategy $HLF$ we have
+    % \begin{equation*}
+    %   T_{HLF}(I) \leq T_{\pi^*}(I) \cdot \left( 1+\beta(N) \right),
+    % \end{equation*}
+    % where  $\pi^*$ is the optimal strategy.
   \item Optimal schedule has to consider previous choices
-  \item HLF is particular instance of dynamic list scheduling
+  \item Optimal schedule may be one particular run of HLF
+    %\todo{Wie oft -- kurze Tabelle in Anhang!} 
+    $\Rightarrow$ HLF is ``can-optimal'' for these intrees
   \end{itemize}
 \end{frame}
+
+% \subsection{Dynamic list scheduling}
+
+% \begin{frame}
+%   \frametitle{(Dynamic) list scheduling}
+%   \begin{itemize}
+%   \item Can not be optimal for our problem
+%   \item Optimal schedule has to consider previous choices
+%   \item HLF is particular instance of dynamic list scheduling
+%   \end{itemize}
+% \end{frame}
 
 \subsection{2-HLF plus 1}
 
@@ -561,70 +648,8 @@
   \begin{motivationblock}
     In many cases, a topmost task being the single requirement for its direct successor has to be scheduled
   \end{motivationblock}
-  \begin{definition}[Topmost-maximal subtree for a leaf]
-    Let $t$ be a leaf and let $p=(t, t_1, t_2, t_3, \dots, r)$ be the path from $t$ to the root $r$.
-
-    The \emph{topmost-maximal subtree} for $t$ is the subtree rooted at the \emph{lowest} task $t^*$ within $p$ different from $t$ that does \emph{not} contain more topmost tasks than the subtree rooted at the direct successor of $t$. 
-  \end{definition}
-\end{frame}
-
-
-\definecolor{topmosttask}{rgb}{0.8,0.3,0}
-\definecolor{currenttask}{rgb}{0.3,.5,0.2}
-\definecolor{donetask}{HTML}{EFCC3C}
-
-\begin{frame}
-  \frametitle{Subtree with fewer topmost tasks}
-  \begin{columns}
-    \begin{column}{.3\textwidth}
-      \begin{exampleblock}{Example intree}
-        \begin{center}
-          \begin{tikzpicture}[scale=.5, anchor=south]
-            \node[circle, scale=0.8, draw] (tid0) at (3,1.5){0};
-            \node[circle, scale=0.8, draw, onslide=<5>{fill=currenttask}] (tid1) at (2.25,3){1};
-            \node[circle, scale=0.8, draw, onslide=<4>{fill=currenttask}, onslide=<5->{fill=donetask}] (tid2) at (1.5,4.5){3};
-            \node[circle, scale=0.8, draw, onslide=<4->{fill=donetask}] (tid7) at (0.15,6){6};
-            \node[circle, scale=0.8, draw, onslide=<4->{fill=donetask}] (tid10) at (1.5,6){7};
-            \draw[ thick](tid2) -- (tid7);
-            \draw[ thick](tid2) -- (tid10);
-            \node[circle, scale=0.8, draw, onslide=<5>{fill=donetask}] (tid3) at (3.9,4.5){4};
-            \node[circle, scale=0.8, draw, onslide=<3>{fill=currenttask}, onslide=<4->{fill=donetask}] (tid5) at (2.85,6){8};
-            \node[circle, scale=0.8, draw, onslide=<2>{fill=currenttask}, onslide=<3-5>{fill=topmosttask}, onslide=<6>{fill=donetask}] (tid6) at (2.85,7.5){\small 10};
-            \draw[ thick](tid5) -- (tid6);
-            \draw[ thick](tid2) -- (tid5);
-            \draw[ thick](tid1) -- (tid2);
-            \draw[ thick](tid1) -- (tid3);
-            \node[circle, scale=0.8, draw] (tid4) at (5.25,3){2};
-            \node[circle, scale=0.8, draw, onslide=<5>{fill=donetask}] (tid9) at (4.3,6){9};
-            \draw[ thick](tid3) -- (tid9);
-            \node[circle, scale=0.8, draw, onslide=<5>{fill=topmosttask}] (tid11) at (4.3,7.5){11};
-            \draw[ thick](tid11) -- (tid9);
-            \node[circle, scale=0.8, draw] (tid8) at (5.25,4.5){5};
-            \draw[ thick](tid4) -- (tid8);
-            \draw[ thick](tid0) -- (tid1);
-            \draw[ thick](tid0) -- (tid4);
-          \end{tikzpicture}
-        \end{center}
-      \end{exampleblock}
-    \end{column}
-    \begin{column}{.7\textwidth}
-      Topmost-maximal subtree for task 10:
-      \begin{itemize}
-      \item<2-> The subtree rooted at 10 (called $I_{10}$) contains only the topmost task 10 (omitted). %It is omitted because we want to find the lowest task along the path that is different from 10.
-      \item<3-> Subtree $I_8$ contains only topmost task 10 (reference).
-      \item<4-> Subtree $I_3$ still contains only 10 as the topmost task (it introduces only new \emph{leaves}, namely 6 and 7).
-      \item<5-> Subtree $I_1$ contains 10 \emph{and} 11 as topmost tasks.
-      \item<6-> Subtree $I_3$ is the topmost maximal subtree for task 10.
-      \end{itemize}
-    \end{column}
-  \end{columns}
-\end{frame}
-
-
-\begin{frame}
-  \frametitle{Subtree with fewer topmost tasks}
   \begin{strategyblock}
-    Prefer tasks whose topmost-maximal subtree has fewer topmost tasks.
+    Prefer tasks whose corresponding subtree has fewer topmost tasks.
   \end{strategyblock}
   \begin{counterexampleblock}
     \begin{center}
@@ -632,37 +657,116 @@
       \quad
       \input{0012223334_opt}
     \end{center}
-  \end{counterexampleblock}
+  \end{counterexampleblock}  
 \end{frame}
 
-\subsection{Subtree with fewer leaves}
+% \begin{frame}
+%   \frametitle{Subtree with fewer topmost tasks}
+%   \begin{motivationblock}
+%     In many cases, a topmost task being the single requirement for its direct successor has to be scheduled
+%   \end{motivationblock}
+%   \begin{definition}[Topmost-maximal subtree for a leaf]
+%     Let $t$ be a leaf and let $p=(t, t_1, t_2, t_3, \dots, r)$ be the path from $t$ to the root $r$.
 
-\begin{frame}
-  \frametitle{Subtree with fewer leaves}
-  \begin{motivationblock}
-    Maybe we were wrong and should have focussed on \emph{ready}, and not on \emph{topmost} tasks.
-  \end{motivationblock}
-  \begin{definition}[Leaf-maximal subtree for a leaf]
-    Let $t$ be a leaf and let $p=(t, t_1, t_2, t_3, \dots, r)$ be the path from $t$ to the root $r$.
+%     The \emph{topmost-maximal subtree} for $t$ is the subtree rooted at the \emph{lowest} task $t^*$ within $p$ different from $t$ that does \emph{not} contain more topmost tasks than the subtree rooted at the direct successor of $t$. 
+%   \end{definition}
+% \end{frame}
 
-    The \emph{leaf-maximal subtree} for $t$ is the subtree rooted at the \emph{lowest} task $t^*$ within $p$ different from $t$ that does \emph{not} contain more leaves than the subtree rooted at the direct successor of $t$. 
-  \end{definition}
-  \emph{Remark:} Preferring subtrees with more does not work.
-\end{frame}
 
-\begin{frame}
-  \frametitle{Subtree with fewer leaves}
-  \begin{strategyblock}
-    Prefer tasks whose leaf-maximal subtree has fewer topmost tasks.
-  \end{strategyblock}
-  \begin{counterexampleblock}
-    \begin{center}
-      \input{00111256666_secondbest}
-      \quad
-      \input{00111256666_opt}
-    \end{center}
-  \end{counterexampleblock}
-\end{frame}
+% \definecolor{topmosttask}{rgb}{0.8,0.3,0}
+% \definecolor{currenttask}{rgb}{0.3,.5,0.2}
+% \definecolor{donetask}{HTML}{EFCC3C}
+
+% \begin{frame}
+%   \frametitle{Subtree with fewer topmost tasks}
+%   \begin{columns}
+%     \begin{column}{.3\textwidth}
+%       \begin{exampleblock}{Example intree}
+%         \begin{center}
+%           \begin{tikzpicture}[scale=.5, anchor=south]
+%             \node[circle, scale=0.8, draw] (tid0) at (3,1.5){0};
+%             \node[circle, scale=0.8, draw, onslide=<5>{fill=currenttask}] (tid1) at (2.25,3){1};
+%             \node[circle, scale=0.8, draw, onslide=<4>{fill=currenttask}, onslide=<5->{fill=donetask}] (tid2) at (1.5,4.5){3};
+%             \node[circle, scale=0.8, draw, onslide=<4->{fill=donetask}] (tid7) at (0.15,6){6};
+%             \node[circle, scale=0.8, draw, onslide=<4->{fill=donetask}] (tid10) at (1.5,6){7};
+%             \draw[ thick](tid2) -- (tid7);
+%             \draw[ thick](tid2) -- (tid10);
+%             \node[circle, scale=0.8, draw, onslide=<5>{fill=donetask}] (tid3) at (3.9,4.5){4};
+%             \node[circle, scale=0.8, draw, onslide=<3>{fill=currenttask}, onslide=<4->{fill=donetask}] (tid5) at (2.85,6){8};
+%             \node[circle, scale=0.8, draw, onslide=<2>{fill=currenttask}, onslide=<3-5>{fill=topmosttask}, onslide=<6>{fill=donetask}] (tid6) at (2.85,7.5){\small 10};
+%             \draw[ thick](tid5) -- (tid6);
+%             \draw[ thick](tid2) -- (tid5);
+%             \draw[ thick](tid1) -- (tid2);
+%             \draw[ thick](tid1) -- (tid3);
+%             \node[circle, scale=0.8, draw] (tid4) at (5.25,3){2};
+%             \node[circle, scale=0.8, draw, onslide=<5>{fill=donetask}] (tid9) at (4.3,6){9};
+%             \draw[ thick](tid3) -- (tid9);
+%             \node[circle, scale=0.8, draw, onslide=<5>{fill=topmosttask}] (tid11) at (4.3,7.5){11};
+%             \draw[ thick](tid11) -- (tid9);
+%             \node[circle, scale=0.8, draw] (tid8) at (5.25,4.5){5};
+%             \draw[ thick](tid4) -- (tid8);
+%             \draw[ thick](tid0) -- (tid1);
+%             \draw[ thick](tid0) -- (tid4);
+%           \end{tikzpicture}
+%         \end{center}
+%       \end{exampleblock}
+%     \end{column}
+%     \begin{column}{.7\textwidth}
+%       Topmost-maximal subtree for task 10:
+%       \begin{itemize}
+%       \item<2-> The subtree rooted at 10 (called $I_{10}$) contains only the topmost task 10 (omitted). %It is omitted because we want to find the lowest task along the path that is different from 10.
+%       \item<3-> Subtree $I_8$ contains only topmost task 10 (reference).
+%       \item<4-> Subtree $I_3$ still contains only 10 as the topmost task (it introduces only new \emph{leaves}, namely 6 and 7).
+%       \item<5-> Subtree $I_1$ contains 10 \emph{and} 11 as topmost tasks.
+%       \item<6-> Subtree $I_3$ is the topmost maximal subtree for task 10.
+%       \end{itemize}
+%     \end{column}
+%   \end{columns}
+% \end{frame}
+
+
+% \begin{frame}
+%   \frametitle{Subtree with fewer topmost tasks}
+%   \begin{strategyblock}
+%     Prefer tasks whose topmost-maximal subtree has fewer topmost tasks.
+%   \end{strategyblock}
+%   \begin{counterexampleblock}
+%     \begin{center}
+%       \input{0012223334_secondbest}
+%       \quad
+%       \input{0012223334_opt}
+%     \end{center}
+%   \end{counterexampleblock}
+% \end{frame}
+
+% \subsection{Subtree with fewer leaves}
+
+% \begin{frame}
+%   \frametitle{Subtree with fewer leaves}
+%   \begin{motivationblock}
+%     Maybe we were wrong and should have focussed on \emph{ready}, and not on \emph{topmost} tasks.
+%   \end{motivationblock}
+%   \begin{definition}[Leaf-maximal subtree for a leaf]
+%     Let $t$ be a leaf and let $p=(t, t_1, t_2, t_3, \dots, r)$ be the path from $t$ to the root $r$.
+
+%     The \emph{leaf-maximal subtree} for $t$ is the subtree rooted at the \emph{lowest} task $t^*$ within $p$ different from $t$ that does \emph{not} contain more leaves than the subtree rooted at the direct successor of $t$. 
+%   \end{definition}
+%   \emph{Remark:} Preferring subtrees with more does not work.
+% \end{frame}
+
+% \begin{frame}
+%   \frametitle{Subtree with fewer leaves}
+%   \begin{strategyblock}
+%     Prefer tasks whose leaf-maximal subtree has fewer topmost tasks.
+%   \end{strategyblock}
+%   \begin{counterexampleblock}
+%     \begin{center}
+%       \input{00111256666_secondbest}
+%       \quad
+%       \input{00111256666_opt}
+%     \end{center}
+%   \end{counterexampleblock}
+% \end{frame}
 
 \subsection{Recursive approach}
 
@@ -751,65 +855,7 @@
   \end{columns}
 \end{frame}
 
-\section{Optimal strategies}
-
-\subsection{Facts}
-
-\begin{frame}
-  \frametitle{Optimal strategies --- facts}
-  \begin{itemize}
-  \item No deliberate idleness (Chandy, Reynolds 1979)
-  \item More processors do not worsen run time (Maaß 2001)
-  \item Preemptive scheduling is strictly better than non-preemptive scheduling for 3 or more processors (equal for 2 processors)
-    \note{Rescheduling only necessary at points where one task finishes.}
-  \item ``Optimal schedules for subtrees do not help''
-  \end{itemize}
-\end{frame}
-
-\subsection{Computing the optimal schedule}
-
-\begin{frame}
-  \frametitle{Computing optimal schedules}
-  \begin{itemize}
-  \item Exhaustive search (\emph{LEAF} scheduler)
-  \item ``Optimize'' result from exhaustive search by recursively discarding bad choices
-  \item Exponential run time
-  \end{itemize}
-\end{frame}
-
-\subsection{Snapshot DAG}
-
-\begin{frame}
-  \frametitle{Size of the snapshot DAG}
-  \begin{itemize}
-  \item Number of subtrees grows exponentially
-    
-    $\Rightarrow$ Number of overall snapshots as well
-  \item Number of snapshots in optimal DAG remarkably smaller
-  \end{itemize}
-  \begin{columns}
-    \begin{column}{.5\textwidth}
-      \centering
-      \includegraphics[scale=.8]{max.pdf}
-      
-      Maximum
-    \end{column}
-    \begin{column}{.5\textwidth}
-      \centering
-      \includegraphics[scale=.8]{avg.pdf}
-      
-      Average
-    \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Compressing the snapshot DAG}
-  \begin{itemize}
-  \item Optimal snapshot DAG allows (recursive) merging of some snapshots
-  \item LEAF snapshot DAG prevents us from merging because the run times are not the same for some snapshots \todo{Verbessern!}
-  \end{itemize}
-\end{frame}
+\section{Conjectures}
 
 \subsection{Conjectures}
 
@@ -818,40 +864,59 @@
   \begin{itemize}
   \item \emph{In the beginning}, as many topmost task as possible shall be scheduled
     
-    \note{Itermediate snapshots (in the optimal schedule) \emph{might} have fewer topmost task than possible scheduled}
+    \note{Intermediate snapshots (in the optimal schedule) \emph{might} have fewer topmost task than possible scheduled}
   \item If the scheduler has a choice, it shall pick a topmost task, if available
-  \item If only non-top tasks are scheduled, we can exchange any one with a topmost task and can obtain a better run time
+  %\item If only non-top tasks are scheduled, we can exchange any one with a topmost task and can obtain a better run time
   \end{itemize}
 \end{frame}
 
 \subsection{Particular classes of intrees}
 
 \begin{frame}
-  \frametitle{Degenerate intrees}
-  \begin{itemize}
-  \item On each level, at most one task has predecessors
-  \item Uniquely determined by their profile
-  \end{itemize}
-  \begin{theorem}
-    Degenerate intrees are optimally scheduled by HLF.
-  \end{theorem}
-  \begin{proof}
-    \begin{itemize}
-    \item Assert that for degenerate intree $I$, two tasks $z_1, z_2$ with $level(z_1) \geq level(z_2)$: 
-      $T^*_{x,y,z_1}(I \cup \left\{ z_1 \right\}) \geq
-      T^*_{x,y,z_2}(I \cup \left\{ z_2 \right\})$
-    \item Induction over the number of tasks, comparing $T_{HLF}(I)$ to $T_{x',y',z'}(I)$
-    \end{itemize}
-  \end{proof}
+  \frametitle{Special classes of intrees}
+  \begin{block}{Degenerate intrees}
+    \begin{columns}
+      \begin{column}{.8\textwidth}
+        \begin{itemize}
+        \item On each level, at most one task has predecessors
+        \item Degenerate intrees are optimally scheduled by HLF (proven)
+        \end{itemize}
+      \end{column}
+      \begin{column}{.2\textwidth}
+        \input{deg_intree}
+      \end{column}
+    \end{columns}
+  \end{block}
+  \begin{block}{Parallel chains}
+    \begin{columns}
+      \begin{column}{.8\textwidth}
+        \begin{itemize}
+        \item Each task, except the root, has at most one predecessor
+        \item Parallel chains with up to 27 tasks are optimally scheduled by HLF
+        \end{itemize}
+      \end{column}
+      \begin{column}{.2\textwidth}
+        \input{par_chain}
+      \end{column}
+    \end{columns}
+  \end{block}
+  % \begin{proof}
+  %   \begin{itemize}
+  %   \item Assert that for degenerate intree $I$, two tasks $z_1, z_2$ with $level(z_1) \geq level(z_2)$: 
+  %     $T^*_{x,y,z_1}(I \cup \left\{ z_1 \right\}) \geq
+  %     T^*_{x,y,z_2}(I \cup \left\{ z_2 \right\})$
+  %   \item Induction over the number of tasks, comparing $T_{HLF}(I)$ to $T_{x',y',z'}(I)$
+  %   \end{itemize}
+  % \end{proof}
 \end{frame}
 
-\begin{frame}
-  \frametitle{Parallel chains}
-  \begin{itemize}
-  \item Each task, except the root, has at most one predecessor
-  \item Parallel chains with up to 27 tasks are optimally scheduled by HLF
-  \end{itemize}
-\end{frame}
+% \begin{frame}
+%   \frametitle{Parallel chains}
+%   \begin{itemize}
+%   \item Each task, except the root, has at most one predecessor
+%   \item Parallel chains with up to 27 tasks are optimally scheduled by HLF
+%   \end{itemize}
+% \end{frame}
 
 \begin{frame}
   \frametitle{Degenerate intrees and parallel chains --- outcome}
@@ -880,19 +945,111 @@
   \end{center}
 \end{frame}
 
-\section{Program}
+\section{Results}
 
 \begin{frame}
-  \frametitle{Practical results}
+  \frametitle{Results}
+  \begin{block}{Practical results}
+    \begin{itemize}
+      % \item Excluding equivalent snapshots speeds up the program by at least factor 3 (for intrees with 11 or more tasks)
+    \item Optimal schedules for all intrees with up to 15 tasks: 11 minutes, less than 2Gb
+    \item More tasks $\Rightarrow$ too much memory $\Rightarrow$ Subdivide into smaller sets of trees
+    \item Optimal schedules for non-trivial intrees with 19 tasks: 1 day
+      % \item Using Boost Rational to represent expectancies as fractions requires slightly more time and memory
+      % \item Using GMP to represent expectancies as fractions requires roughly doubles time and increases memory consumption by roughly 40\%
+    \end{itemize}
+  \end{block}
+  \begin{block}{Theoretical results}
+    \begin{itemize}
+    \item New formula for run time for 2 processors
+    \item Conjectures about optimal schedules for 3 processors \dots
+    \item \dots that could help improving exhaustive search
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\appendix
+
+\section{Program}
+
+\subsection{Invocation and features}
+
+\begin{frame}[fragile,fragile]
+  \frametitle{Features}
+  \texttt{./build/tasks\_cs1 -p3 -s leaf --optimize --random 6 --tikz}
+  % \begin{description}
+  % \item[-p3] Use three processors
+  % \item[-s leaf] Use the LEAF scheduler
+  % \item[--optimize] Optimize the schedule (i.e. discard wrong choices)
+  % \item[--random 6] Generate a random intree with 6 tasks
+  % \item[--tikz] Generate output for \LaTeX
+  % \end{description}
+\begin{verbatim}
+Normalized:	[1, 0] [4, 2, 0] [5, 2, 0] [6, 3, 0]
+  !   PTM! [3, 4, 5]  4.27161  (1.90123|1.92593|2.44444)  (13 snaps)
+  !    TM! [3, 4, 6]  4.26235  (1.93827|1.86111|2.46296)  (14 snaps)
+*H         [4, 5, 6]  4.2037   (2|1.7963|2.40741)         (13 snaps)
+Total expected run time: 4.25
+Total number of snaps:   16
+Writing tikz to default.tex
+Compiling to PDF.
+Pool sizes: 17, 17,
+\end{verbatim}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Extensibility}
   \begin{itemize}
-  \item Excluding equivalent snapshots speeds up the program by at least factor 3 (for intrees with 11 or more tasks)
-  \item Computing optimal schedules for all intrees with up to 15 tasks in 11 minutes and less than 2Gb of main memory
-  \item More tasks require too much memory
-  \item Computing optimal schedules for non-trivial intrees with 19 tasks takes one day
-  \item Using Boost Rational to represent expectancies as fractions requires slightly more time and memory
-  \item Using GMP to represent expectancies as fractions requires roughly doubles time and increases memory consumption by roughly 40\%
+  \item Different number representations
+  \item Other distributions
+  \item New checks
+  \item Preemptiveness
+  \item Other dependency structures
+  \item Exporters
   \end{itemize}
 \end{frame}
+
+\part{Further reading}
+
+\setbeamertemplate{bibliography item}{%
+  \ifboolexpr{ test {\ifentrytype{book}} or test {\ifentrytype{mvbook}}
+    or test {\ifentrytype{collection}} or test {\ifentrytype{mvcollection}}
+    or test {\ifentrytype{reference}} or test {\ifentrytype{mvreference}} }
+    {\setbeamertemplate{bibliography item}[book]}
+    {\ifentrytype{online}
+       {\setbeamertemplate{bibliography item}[online]}
+       {\setbeamertemplate{bibliography item}[article]}}%
+  \usebeamertemplate{bibliography item}}
+
+\defbibenvironment{bibliography}
+  {\list{}
+     {\settowidth{\labelwidth}{\usebeamertemplate{bibliography item}}%
+      \setlength{\leftmargin}{\labelwidth}%
+      \setlength{\labelsep}{\biblabelsep}%
+      \addtolength{\leftmargin}{\labelsep}%
+      \setlength{\itemsep}{\bibitemsep}%
+      \setlength{\parsep}{\bibparsep}}}
+  {\endlist}
+  {\item}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Further reading: Original problem}
+  \nocite{*}
+  \printbibliography[keyword=chandy]
+\end{frame}
+
+\begin{frame}
+  \frametitle{Further reading: Equivalent snapshots}
+  \nocite{*}
+  \printbibliography[keyword=equivalent]
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Further reading: Scheduling}
+  \nocite{*}
+  \printbibliography[keyword=sched]
+\end{frame}
+
 
 \end{document}
 
