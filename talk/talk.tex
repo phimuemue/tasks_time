@@ -429,19 +429,25 @@
 
 \begin{frame}
   \frametitle{Expected run time --- special intrees}
-  \begin{theorem}
-    Intrees with profile $\profile{n_1,\profileones{j-2},n_j,\profileones{r-j}}$ (for $j\geq 2$) has expected run time
-    \begin{equation*}
-      \E{\profile{n_1,\profileones{j-2},n_j,\profileones{r-j}}} = 
-      r + \frac{A_0(n_1-2)}{2^{n_1-1}} + \frac{A_{j-1}(n_j-2)}{2^{n_j+j-2}},
-    \end{equation*}
-    where $A_i$ is inductively defined as follows:
-    \begin{equation*}
-      A_0(n) = (n+1) \cdot 2^n \quad 
-      A_{i+1}(n) = \sum_{k=0}^n A_{i}(k)
-    \end{equation*}
-    \note{Closed forms $A_j$ for fixed $j$ known}
-  \end{theorem}
+  \begin{columns}
+    \begin{column}{.7\textwidth}
+      \begin{theorem}
+        Intrees with profile $\profile{n_1,\profileones{j-2},n_j,\profileones{r-j}}$ have expected run time
+        \begin{equation*}
+          r + \frac{A_0(n_1-2)}{2^{n_1-1}} + \frac{A_{j-1}(n_j-2)}{2^{n_j+j-2}},
+        \end{equation*}
+        where $A_i$ is inductively defined as follows:
+        \begin{equation*}
+          A_0(n) = (n+1) \cdot 2^n \quad 
+          A_{i+1}(n) = \sum_{k=0}^n A_{i}(k)
+        \end{equation*}
+        \note{Closed forms $A_j$ for fixed $j$ known}
+      \end{theorem}
+    \end{column}
+    \begin{column}{.3\textwidth}
+      \input{theorem}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 \subsection{Profile DAG}
