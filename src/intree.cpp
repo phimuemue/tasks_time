@@ -153,21 +153,10 @@ Intree Intree::canonical_intree(const Intree& _t,
         const vector<task_id>& _preferred,
         map<task_id, task_id>& isomorphism,
         tree_id& out){
-    // cout << "Computing canonical intree for " << _t;
-    // for(auto it : _preferred){
-    //     cout << it << ", ";
-    // }
-    // cout << endl;
     Outtree ot(_t, _preferred);
     ot.canonicalize();
     Intree result = ot.toIntree(isomorphism);
-    // cout << "Isomorphism:" << endl;
-    // for(auto it : isomorphism){
-    //     cout << it.first << " -> " << it.second << endl;
-    // }
-    // cout << ot.getCompressedString() << endl;
     result.get_raw_tree_id(out);
-    // cout << result << endl;
     return result;
 }
 
@@ -322,7 +311,6 @@ Intree Intree::canonical_intree2(const Intree& _t,
     for(task_id it=1; it < _t.edges.size(); ++it){
         edges.push_back(pair<Task,Task>(Task(isomorphism[it]),Task(isomorphism[_t.edges[it]])));
     }
-    // TODO: Expand to more than 64 bits!
     out.clear();
     for(unsigned int i=0; i<canonical_names[0].size(); ++i){
         out.push_back(canonical_names[0][i] > 0 ? 1u : 0u);
@@ -510,7 +498,7 @@ pair<Task, Task> Intree::get_edge_from(const task_id t) const {
 
 bool Intree::is_chain() const {
     vector<vector<task_id>> chains;
-    // TODO: this can be made more efficient
+    // TODO: this can be made more efficient, but it is not needed very often
     get_chains(chains);
     return chains.size() == 1;
 }

@@ -363,7 +363,6 @@ void TikzExporter2::merge_tikz_nodes(map<unsigned int, vector<const TikzNode*>>&
         it.second = it.second / (myfloat)2;
     }
     // merge TikzNodes in current level
-    // TODO: Need a delete after the new!
     TikzNode* combined_tn = new TikzNode(a->snapshot,
             a->reaching_prob + b->reaching_prob, combined_sucs
             );

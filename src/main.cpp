@@ -519,7 +519,6 @@ void generate_stats(const po::variables_map& vm,
     }
 }
 
-// TODO: rule-of-three everywhere!
 int main(int argc, char** argv){
 #if USE_SIMPLE_OPENMP // openmp settings - useful?
     omp_set_nested(1);
@@ -569,7 +568,6 @@ int main(int argc, char** argv){
                     probs,
                     expected_runtimes);
 
-
             // optimize current snapshot
             if(vm["optimize"].as<bool>()){
                 cout << "Optimizing scheduling policies." << endl;
@@ -599,7 +597,6 @@ int main(int argc, char** argv){
                 }
                 expected_runtime += expected_runtimes[i] * probs[i];
             }
-            //expected_runtime /= (myfloat)s.size();
 
             // output stats
             generate_stats(vm, s, best, initial_settings);

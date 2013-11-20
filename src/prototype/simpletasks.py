@@ -105,7 +105,6 @@ class Intree(object):
                 useful_chains.append(chain)
         return useful_chains
     def nice_string(self):
-        # TODO: actually create a cool ascii-graph
         return str(self.chains())
 
 

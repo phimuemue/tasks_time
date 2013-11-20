@@ -3,14 +3,9 @@
 map<Snapshot::PoolKind, map<snapshot_id, Snapshot*>> Snapshot::pool;
 
 void Snapshot::clear_pool(){
-    // We have to ensure that we don't double-delete some pointers
-    // TODO: Why does it not work this way?
     cout << "Pool sizes: ";
     for(auto pp : Snapshot::pool){
         cout << pp.second.size() << ", ";
-        // for(auto xx : pp.second){
-        //     cout << *(xx.second) << endl;
-        // }
     }
     cout << endl;
     map<Snapshot*, bool> done;
@@ -294,7 +289,7 @@ void Snapshot::get_successors(const Scheduler& scheduler,
     for(auto it = marked.begin(); it!=marked.end(); 
             ++it, ++finish_prob_it){
         task_id current_finished_task = *it;
-        // TODO: can we remove this?
+        // TODO: We can probably remove this because of canonical snapshots
 #if SIMPLE_ISOMORPHISM_CHECK
         if(*finish_prob_it == 0)
             continue;
@@ -316,13 +311,11 @@ void Snapshot::get_successors(const Scheduler& scheduler,
                 if(raw_sucs[i].first != NOTASK)
                     newmarked.push_back(raw_sucs[i].first);
                 sort(newmarked.begin(), newmarked.end());
-                // TODO: every "new" needs a "delete"
 #if USE_CANONICAL_SNAPSHOT
                 Snapshot* news = Snapshot::canonical_snapshot(tmp, 
                         newmarked,
                         representant);
 #else
-                //Snapshot* news = new Snapshot(tmp, newmarked);
                 Snapshot* news = Snapshot::find_snapshot_in_pool(tmp,
                         newmarked,
                         representant);
@@ -341,13 +334,11 @@ void Snapshot::get_successors(const Scheduler& scheduler,
                         [it](const task_id& a){
                         return a==*it;
                         }), newmarked.end());
-            // TODO: every "new" needs a "delete"
 #if USE_CANONICAL_SNAPSHOT
             Snapshot* news = Snapshot::canonical_snapshot(tmp, 
                     newmarked,
                     representant);
 #else
-            //Snapshot* news = new Snapshot(tmp, newmarked);
             Snapshot* news = Snapshot::find_snapshot_in_pool(tmp,
                     newmarked,
                     representant);
@@ -492,10 +483,6 @@ Snapshot* Snapshot::optimize() const {
         for(const boost::tuple<Snapshot*, myfloat, task_id>& s : it->second){
                 orig_prob_sum += s.get<1>();
         }
-        // cout << "Successors to choose from:" << endl;
-        // for(auto iit : it->second){
-        //     cout << iit.first << ": " << iit.first->expected_runtime() << endl;
-        // }
         // get one best intree structure
         boost::tuple<Snapshot*, myfloat, task_id> best_one = 
             *min_element(it->second.begin(), it->second.end(),
@@ -515,10 +502,6 @@ Snapshot* Snapshot::optimize() const {
             ),
             it->second.end()
         );
-        // cout << "Successors chosen:" << endl;
-        // for(auto iit : it->second){
-        //     cout << iit.first << ": " << iit.first->expected_runtime() << endl;
-        // }
         // compute new sum of probabilities to normalize the old ones
         myfloat new_prob_sum = (myfloat)0;
         for_each(it->second.begin(), it->second.end(),

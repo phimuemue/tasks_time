@@ -11,7 +11,6 @@
 using namespace std;
 
 class Scheduler {
-    // TODO: Better if the following was pure virtual
     public:
         virtual ~Scheduler();
         virtual void get_initial_schedule(const Intree& t, 

@@ -49,7 +49,6 @@ void TopMostSureScheduler::get_next_tasks(const Intree& t,
             )
         );
     }
-    // TODO: more elegant, possibly directly
     assert(tasks_probs.size()==tasks.size());
     for(unsigned int i=0; i<tasks_probs.size(); ++i){
         target.push_back(pair<task_id,myfloat>(tasks_probs[i]));

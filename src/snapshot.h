@@ -43,7 +43,7 @@ class Snapshot {
         mutable myfloat cache_expected_runtime;
         bool finalized;
 
-        // TODO: combine successors and successor_probs into 1 vector!
+        // TODO: put successors, successor_probs, finished_task into 1 vector
         vector<Snapshot*> successors;
         vector<myfloat> successor_probs;
         vector<task_id> finished_task;
@@ -103,7 +103,7 @@ class Snapshot {
             Snapshot* my_Snapshot;
         } SuccessorProbabilities;
 
-        // constructors and destructors - TODO: should they be private?
+        // constructors and destructors 
         Snapshot();
         Snapshot(const Snapshot& s);
         Snapshot(Intree& t);
