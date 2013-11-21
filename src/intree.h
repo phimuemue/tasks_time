@@ -45,7 +45,6 @@ class Intree {
                 string getCompressedString() const;
         };
         friend inline bool operator<(const Intree::Outtree& a, const Intree::Outtree& b){
-            // cout << "Comparing " << a.id << " vs. " << b.id << endl;
             return a.getCompressedString() > b.getCompressedString();
             if (a.predecessors.size() > b.predecessors.size()){
                 return true;
@@ -65,6 +64,10 @@ class Intree {
         Intree(const Intree& t);
         Intree(const vector<pair<task_id, task_id>>& edges);
         Intree(const vector<pair<Task, Task>>& edges);
+        static Intree canonical_intree3(const Intree& _t, 
+                const vector<task_id>& _preferred,
+                map<task_id, task_id>& isomorphism,
+                tree_id& out);
         static Intree canonical_intree2(const Intree& _t, 
                 const vector<task_id>& _preferred,
                 map<task_id, task_id>& isomorphism,

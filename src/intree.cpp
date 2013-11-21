@@ -58,7 +58,6 @@ Intree::Outtree::Outtree(const Outtree& ot) :
 Intree::Outtree::Outtree(const Intree& i, const vector<task_id>& marked) :
     id(0)
 {
-    // map<task_id, Outtree*> outtrees;
     vector<Outtree*> outtrees(i.count_tasks() + 1);
     outtrees[0] = this;
     for(task_id edge = 1; edge < i.edges.size(); ++edge){
@@ -149,6 +148,9 @@ Intree Intree::Outtree::toIntree(map<task_id, task_id>& isomorphism) const {
 #endif
 }
 
+// For some reason, the detour via outtrees works
+// faster than canonical_intree3, which is a "1-to-1" translation
+// of the AHU algorithm
 Intree Intree::canonical_intree(const Intree& _t, 
         const vector<task_id>& _preferred,
         map<task_id, task_id>& isomorphism,
@@ -156,6 +158,85 @@ Intree Intree::canonical_intree(const Intree& _t,
     Outtree ot(_t, _preferred);
     ot.canonicalize();
     Intree result = ot.toIntree(isomorphism);
+    result.get_raw_tree_id(out);
+    return result;
+}
+
+Intree Intree::canonical_intree3(const Intree& _t,
+        const vector<task_id>& _preferred,
+        map<task_id, task_id>& isomorphism,
+        tree_id& out){
+    // distribute tasks into levels
+    map<unsigned int, vector<task_id>> levels;
+    levels[0].push_back(0);
+    for(task_id i = 1; i<_t.edges.size(); ++i){
+        if(_t.get_successor(i) != NOTASK){
+            //assert(_t.get_level(i) < 4096);
+            levels[_t.get_level(i)].push_back(i);
+        }
+    }
+    map<task_id, int> labels;
+    // assign labels to leaves
+    vector<task_id> leaves;
+    _t.get_leaves(leaves);
+    for(task_id it : leaves){
+        labels[it] = find(_preferred.begin(), _preferred.end(), it)==_preferred.end() ? 0 : -1;
+    }
+    for(unsigned int lev = levels.size() - 2; lev < 4095 && lev >= 0; --lev){
+        map<task_id, vector<int>> intermediate_labels;
+        // construct new labels
+        for(task_id it : levels[lev + 1]){
+            if(_t.get_successor(it) != NOTASK){
+                if(intermediate_labels.find(_t.get_successor(it)) == intermediate_labels.end()){
+                    intermediate_labels[_t.get_successor(it)].push_back(4096);
+                }
+                intermediate_labels[_t.get_successor(it)].push_back(labels[it]);
+            }
+        }
+        for(task_id it : levels[lev]){
+            if(labels.find(it) != labels.end()){
+                intermediate_labels[it].push_back(labels[it]);
+            }
+        }
+#if 1
+        // just for assertions
+        for(auto it : levels[lev]){
+            assert(intermediate_labels.find(it) != intermediate_labels.end());
+        }
+#endif
+        // sort level ...
+        sort(levels[lev].begin(), levels[lev].end(), 
+                [&intermediate_labels](const task_id a, const task_id b) -> bool {
+                    return intermediate_labels[a] < intermediate_labels[b];
+                }
+            );
+        // ... compute (short) labels
+        assert(levels[lev].size() > 0);
+        if(labels.find(levels[lev][0]) == labels.end()){
+            labels[levels[lev][0]] = 2;
+        }
+        int counter = 3;
+        for(unsigned int i = 1; i < levels[lev].size(); ++i){
+            assert(intermediate_labels.find(levels[lev][i]) != intermediate_labels.end());
+            assert(intermediate_labels.find(levels[lev][i-1]) != intermediate_labels.end());
+            if(intermediate_labels[levels[lev][i]] != intermediate_labels[levels[lev][i-1]]){
+                counter++;
+            }
+            labels[levels[lev][i]] = counter;
+        }
+    }
+    // compute isomorphism and return canonical intree
+    isomorphism[0] = 0;
+    task_id counter = 1;
+    vector<pair<task_id, task_id>> edges;
+    for(unsigned int lev = 1; lev < levels.size(); ++lev){
+        for(auto it : levels[lev]){
+            isomorphism[it] = counter;
+            edges.push_back(pair<task_id, task_id>(counter, isomorphism[_t.get_successor(it)]));
+            counter++;
+        }
+    }
+    Intree result = Intree(edges);
     result.get_raw_tree_id(out);
     return result;
 }
