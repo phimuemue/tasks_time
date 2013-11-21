@@ -68,7 +68,7 @@ void SpecialCaseLeafscheduler::get_initial_schedule(const Intree& t,
 }
 
 void SpecialCaseLeafscheduler::get_next_tasks(const Intree& t, 
-#define CHECK_TARGET_VALIDITY
+//#define CHECK_TARGET_VALIDITY
         const vector<task_id>& marked,
         vector<pair<task_id,myfloat>>& target) const {
     // cout << t << endl;
