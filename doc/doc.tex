@@ -1,0 +1,153 @@
+%%% doc.tex --- 
+
+%% Author: philipp@pmpc
+%% Version: $Id: doc.tex,v 0.0 2013/11/22 12:54:52 philipp Exp$
+
+%%\revision$Header: /home/philipp/Documents/Uni/masterarbeit/tasks_time/doc/doc.tex,v 0.0 2013/11/22 12:54:52 philipp Exp$
+
+\documentclass[usletter]{article}
+
+\usepackage[english]{babel}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{tikz}
+
+\title{A short intro to the \texttt{tasks} program}
+\date{\today}
+\author{Philipp Müller}
+
+\newcommand{\dir}[1]{\texttt{#1}}
+
+
+\begin{document}
+
+\maketitle
+
+\section{Obtaining the code}
+
+If you are reading this, chances are good that you already have the code --- if not, you can go to \url{https://github.com/phimuemue/tasks_time} and download the archive, or you can just
+\begin{verbatim}
+git clone git@github.com:phimuemue/tasks_time.git
+\end{verbatim}
+to get the newest copy of the program.
+
+\section{Compiling}
+
+\subsection{Requirements}
+
+The program needs (I hope this list is complete):
+\begin{description}
+\item[gcc 4.6.3] A reasonably modern version of the GNU C++ Compiler is needed (because of some C++11 features). Possibly older versions work, as well.
+\item[scons] Build system, see \url{http://www.scons.org/}.
+\item[Boost Program Options] Library needed to parse the command line arguments. See \url{http://www.boost.org/}.
+\item[Boost Tuples] Needed for some auxiliary functions. See \url{http://www.boost.org/}.
+\end{description}
+
+Optional components:
+\begin{description}
+\item[Boost Rational Numbers] Can be used to represent probabilities by fractions instead of simple floating point numbers. See \url{http://www.boost.org/}.
+\item[GMP] Gnu Multiple Precision library, used to represent probabilities with arbitrarily precise fractions. See \url{http://gmplib.org/}.
+\end{description}
+
+I am using a Linux machine to build all this stuff. I suppose the easiest way to get it working is running it under Linux, installing all needed libraries by the distribution's package manager.
+
+\subsection{Compilation with scons}
+
+Compilation is done using the program scons. It should be invoked from within the \dir{scr}. The build script provides some configuration flags that can be set. All of them can be viewed by invoking \texttt{scons -h}. The most important one is \texttt{MYFLOAT} are described now:
+
+\begin{description}
+\item[\texttt{MYFLOAT}] A number between 0 and 4, indicating how to represent probabilities and expectations (0 indicating simple floats, 4 indicating GNU MP, for other values please see \texttt{scons -h}).
+\end{description}
+
+The program is then compiled to the \dir{build} directory. The default name is \texttt{tasks\_cs1}.
+
+\section{Invocation}
+
+To invoke the program, run \texttt{./buils/tasks\_cs1}.
+
+\subsection{Input}
+
+The program can be launched with various input sources:
+\begin{description}
+\item[\texttt{--random}] Accepts a number $n$ and generates a random intree with $n+1$ tasks for which schedules are computed.
+\item[\texttt{--randp}] Accepts a sequence of numbers (a profile) and generates a random intree with the given profile.
+\item[\texttt{--direct}] Accepts an input string describing the tree sequence of the intree (simply numbers separated by spaces).
+\item[\texttt{--input}] Accepts a file name. The file must contain one intree per line described as tree sequences (format as aforementioned).
+\end{description}
+
+\subsection{Scheduler settings}
+
+\begin{description}
+\item[\texttt{-p}] Accepts a number describing the amount of processors.
+\item[\texttt{-s}] Accepts a string denoting the name of the scheduler (possibly \texttt{hlf} or \texttt{leaf}).
+\item[\texttt{--optimize}] Accepts nothing. Turns on ``optimization'' of the generated schedules by excluding bad choices.
+\end{description}
+
+\subsection{Understanding the output}
+
+Let's assume we invoke the program with
+\begin{verbatim}
+./build/tasks_cs1 -p3 -s leaf --optimize --random 10
+\end{verbatim}
+
+The output may look (roughly) as follows:
+
+\begin{verbatim}
+Raw form:	[4, 3, 0] [6, 2, 1, 0] [8, 0] [9, 3, 0] [10, 7, 5, 2, 1, 0]
+  10                 
+  7                  
+  5    6             
+    2      4  9      
+    1        3      8
+          0          
+Treeseq:	0 1 0 3 2 2 5 0 3 7 
+Generating initial settings.
+Compiling snapshot DAGs.
+Optimizing scheduling policies.
+Computing expected runtimes.
+  !   PTM! [8, 4, 6]   6.6619   (2.451|2.4361|3.77481)     (51 snaps)
+  !   PTM! [4, 9, 6]   6.61517  (2.61728|2.15026|3.84762)  (44 snaps)
+*H         [4, 6, 10]  6.41726  (2.72169|2.13937|3.5562)   (46 snaps)
+  !   PTM! [8, 4, 9]   6.69679  (2.56516|2.1729|3.95873)   (45 snaps)
+  !    TM  [8, 4, 10]  6.5036   (2.56363|2.36913|3.57083)  (51 snaps)
+  !    TM  [4, 9, 10]  6.44333  (2.74958|2.05751|3.63623)  (44 snaps)
+  !    TM  [8, 6, 10]  6.47896  (2.54077|2.4395|3.49869)   (50 snaps)
+Total expected run time: 6.53998
+Total number of snaps:   81
+Pool sizes: 99, 99,
+\end{verbatim}
+
+The first lines describe the given (or generated) intree in some ways: First, it shows the paths from the leaves to the root. The second is an ``ASCII art'' representation of the tree (probably the most useful output for humans). The third is the tree sequence that can be used to give it as an argument to the program.
+
+The program then generates a table containing information about the schedules computed. Each line holds several information:
+
+\begin{itemize}
+\item If the line starts with a star (\texttt{*}), the corresponding schedule is the best.
+\item If the second letter is \texttt{H}, then it is a HLF schedule. If it is followed by a \texttt{!}, then the \emph{first} snapshot is \emph{non-HLF}.
+\item \texttt{TM} means that there are snapshots where \texttt{not} as many topmost tasks as possible are scheduled. If followed by a \texttt{!}, then this holds already for the first snapshot.
+\end{itemize}
+
+Each line then contains (in square brackets) the initially scheduled tasks (e.g. \texttt{[4, 6, 10]} for the optimal schedule in the example above), followed by its expected run time.
+
+Then -- in round parentheses -- we have $T_3, T_2, T_1$ (properly adjusted for more than three processors).
+
+The last item in each line shows how many snapshots are needed for the respective schedule.
+
+The \texttt{total expected run time} is not really useful; it barely builds the average of all schedules.
+
+The ``total number of snaps'' show the number of snapshots that are used in total \emph{for all schedules} in the table. Pool size shows how many snapshots have been researched before optimization.
+
+\subsection{Export}
+
+The program can export schedule DAGs to various formats. Each of them can be specified with a certain flag.
+
+\begin{description}
+\item[\texttt{--tikz}] Exports the snapshot DAG to TikZ to use the image in \LaTeX.
+\item[\texttt{--dv}] Exports a nested structure of snapshots that can be viewed with the supplied dagview tool.
+\end{description}
+
+\end{document}
