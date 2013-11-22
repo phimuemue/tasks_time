@@ -24,6 +24,10 @@ treetolist it = let
         where first = (if pre < 0 then [] else [pre])
     in ttl it 0 (-1)
 
+countleaves :: (Intree a) -> Int
+countleaves (Intree _ []) = 1
+countleaves (Intree _ c) = sum [countleaves child | child <- c]
+
 partitions :: Int -> Int -> [[Int]]
 partitions n r = let
     partis n 0 m = []
@@ -62,8 +66,9 @@ printlist (x:xs) = do
     putStr " "
     printlist xs
 
-printtrees n = mapM_ printlist [treetolist t | t <- generateintrees n]
+printtrees n minleaves = mapM_ printlist [treetolist t | t <- filter (\x -> minleaves <= countleaves x) $ generateintrees n]
 
 main = do
     args <- getArgs
-    printtrees $ read $ head args
+    printtrees (read $ args!!0) (read $ args!!1)
+    print args

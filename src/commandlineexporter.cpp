@@ -7,7 +7,7 @@ void CommandLineExporter::export_snapshot_dag(ostream& output, const Snapshot* s
 }
 
 void CommandLineExporter::export_tree(ostream& output, const Intree& t) const {
-    output << "Intree " << t << endl;
+    // output << "Intree " << t << endl;
     Intree::Outtree outtree(t, vector<task_id>());
     vector<pair<Intree::Outtree*, unsigned int>> stack;
     stack.push_back(pair<Intree::Outtree*, unsigned int>(&outtree, 0));
