@@ -549,11 +549,8 @@ int main(int argc, char** argv){
             map<task_id, task_id> isomorphism;
             tree_id tid;
             // print tree to command line
-            // auto normalized_intree = 
-            //     Intree::canonical_intree(t, vector<task_id>(), isomorphism, tid);
-            // cout << "Normalized:\t" << normalized_intree << endl;
-            // CommandLineExporter cle;
-            // cle.export_tree(cout, t);
+            CommandLineExporter cle;
+            cle.export_tree(cout, t);
             cout << "Treeseq:\t";
             for(task_id it = 1; it < t.count_tasks(); ++it){
                 cout << t.get_successor(it) << " ";
