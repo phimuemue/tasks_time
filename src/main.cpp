@@ -295,6 +295,7 @@ void create_snapshot_dags(const po::variables_map& vm,
         Intree& t,
         const Scheduler* sched,
         vector<vector<task_id>>& initial_settings,
+        vector<map<task_id, task_id>>& isomorphisms,
         vector<Snapshot*>& s,
         vector<myfloat>& probs,
         vector<myfloat>& expected_runtimes){
@@ -303,9 +304,11 @@ void create_snapshot_dags(const po::variables_map& vm,
     sched->get_initial_schedule(t, vm["processors"].as<int>(), initial_settings);
     cout << "Generating initial settings." << endl;
     s = vector<Snapshot*>(initial_settings.size());
+    isomorphisms = vector<map<task_id, task_id>>(initial_settings.size());
 #if USE_CANONICAL_SNAPSHOT
     for(unsigned int i= 0; i<initial_settings.size(); ++i){
-        s[i] = Snapshot::canonical_snapshot(Snapshot(t, initial_settings[i]));
+        // s[i] = Snapshot::canonical_snapshot(Snapshot(t, initial_settings[i]), NULL);
+        s[i] = Snapshot::canonical_snapshot(Snapshot(t, initial_settings[i]), &(isomorphisms[i]));
     }
 #else
     for(unsigned int i= 0; i<initial_settings.size(); ++i){
@@ -434,7 +437,8 @@ string get_count_snaps_string(const Snapshot* s){
 void generate_stats(const po::variables_map& vm,
         const vector<Snapshot*>& s,
         const vector<Snapshot*>& best,
-        const vector<vector<task_id>>& initial_settings
+        const vector<vector<task_id>>& initial_settings,
+        const vector<map<task_id, task_id>>& isomorphisms
         ){
     vector<vector<string>> lines;
     assert(s.size() == initial_settings.size());
@@ -472,14 +476,22 @@ void generate_stats(const po::variables_map& vm,
         // Initially scheduled tasks
         // TODO: This does not work all the time.
         stringstream markedstring("");
-        map<task_id, task_id> isomorphism;
         tree_id tid;
-        auto normalized_intree = 
-            Intree::canonical_intree(s[i]->intree, vector<task_id>(), isomorphism, tid);
+        // we need this to compute the isomorphism
+        // map<task_id, task_id> isomorphism;
+        // Intree::canonical_intree(s[i]->intree, initial_settings[i], isomorphism, tid);
         markedstring << "[";
-        for(unsigned int midx = 0; midx < initial_settings[i].size(); ++midx){
-            markedstring << isomorphism[initial_settings[i][midx]];
-            if(midx < initial_settings[i].size() - 1){
+        for(unsigned int midx = 0; midx < s[i]->marked.size(); ++midx){
+            task_id nexttask = NOTASK;
+            for(auto it : isomorphisms[i]){
+                if(it.second == s[i]->marked[midx]){
+                    nexttask = it.first;
+                    break;
+                }
+            }
+            markedstring << nexttask;
+            // markedstring << isomorphisms[i].at(initial_settings[i][midx]);
+            if(midx < s[i]->marked.size() - 1){
                 markedstring << ", ";
             }
         }
@@ -504,11 +516,8 @@ void generate_stats(const po::variables_map& vm,
             column_widths[i] = max(column_widths[i], (unsigned int)(line[i].size()));
         }
     }
-    //auto asdf = s.begin();
     for(auto line : lines){
         assert(line.size() == column_widths.size());
-        // cout << **asdf << endl;
-        // asdf++;
         for(unsigned int i=0; i<line.size(); ++i){
             cout << line[i];
             for(unsigned int l=0; l<column_widths[i]-line[i].size(); ++l){
@@ -539,9 +548,10 @@ int main(int argc, char** argv){
             cout << "Raw form:\t" << t << endl;
             map<task_id, task_id> isomorphism;
             tree_id tid;
-            auto normalized_intree = 
-                Intree::canonical_intree(t, vector<task_id>(), isomorphism, tid);
-            cout << "Normalized:\t" << normalized_intree << endl;
+            // print tree to command line
+            // auto normalized_intree = 
+            //     Intree::canonical_intree(t, vector<task_id>(), isomorphism, tid);
+            // cout << "Normalized:\t" << normalized_intree << endl;
             // CommandLineExporter cle;
             // cle.export_tree(cout, t);
             cout << "Treeseq:\t";
@@ -553,6 +563,7 @@ int main(int argc, char** argv){
             // compute snapshot dags
             vector<vector<task_id>> initial_settings;
             vector<Snapshot*> s;
+            vector<map<task_id, task_id>> isomorphisms;
             vector<myfloat> probs;
             vector<myfloat> expected_runtimes;
 
@@ -564,6 +575,7 @@ int main(int argc, char** argv){
                     t,
                     schedulers[vm["scheduler"].as<string>()],
                     initial_settings,
+                    isomorphisms,
                     s,
                     probs,
                     expected_runtimes);
@@ -599,7 +611,7 @@ int main(int argc, char** argv){
             }
 
             // output stats
-            generate_stats(vm, s, best, initial_settings);
+            generate_stats(vm, s, best, initial_settings, isomorphisms);
 
             cout << "Total expected run time: " << expected_runtime 
                 << endl;

@@ -121,22 +121,34 @@ Snapshot::~Snapshot(){
 
 Snapshot* Snapshot::canonical_snapshot(
         const Snapshot& s,
+        map<task_id, task_id>* isomorphism,
         Snapshot::PoolKind representant){
     Intree intreecopy(s.intree);
     vector<task_id> mcopy(s.marked);
-    return canonical_snapshot(intreecopy, mcopy, representant);
+    return canonical_snapshot(intreecopy, mcopy, isomorphism, representant);
 }
 
 Snapshot* Snapshot::canonical_snapshot(
         Intree& t, 
         vector<task_id> m,
+        map<task_id, task_id>* _isomorphism,
         Snapshot::PoolKind representant){
     vector<task_id> original_m(m);
 #if USE_SIMPLE_OPENMP
     cout << "Warning! Using openmp with canonical snapshots!" << endl;
 #endif
 
-    map<task_id, task_id> isomorphism;
+    // do not use unique_ptr, because the result must possibly exist
+    // after the function has terminated
+    map<task_id, task_id>* tmp_iso;
+    if(_isomorphism == NULL){
+        tmp_iso = new map<task_id, task_id>();
+    }
+    else{
+        tmp_iso = _isomorphism;
+    }
+    map<task_id, task_id>& isomorphism = *tmp_iso;
+    //map<task_id, task_id> isomorphism;
     tree_id tid;
     Intree tmp = Intree::canonical_intree(t, m, isomorphism, tid);
 
@@ -199,6 +211,10 @@ Snapshot* Snapshot::canonical_snapshot(
     if(correct_pool == Snapshot::pool[representant].end()){
         Snapshot::pool[representant][find_key] 
             = new Snapshot(tmp, newmarked);
+    }
+    assert(Snapshot::pool[representant].find(find_key) != Snapshot::pool[representant].end());
+    if(_isomorphism == NULL){
+        delete tmp_iso;
     }
     return Snapshot::pool[representant].find(find_key)->second;
 }
@@ -314,6 +330,7 @@ void Snapshot::get_successors(const Scheduler& scheduler,
 #if USE_CANONICAL_SNAPSHOT
                 Snapshot* news = Snapshot::canonical_snapshot(tmp, 
                         newmarked,
+                        NULL, 
                         representant);
 #else
                 Snapshot* news = Snapshot::find_snapshot_in_pool(tmp,
@@ -337,6 +354,7 @@ void Snapshot::get_successors(const Scheduler& scheduler,
 #if USE_CANONICAL_SNAPSHOT
             Snapshot* news = Snapshot::canonical_snapshot(tmp, 
                     newmarked,
+                    NULL,
                     representant);
 #else
             Snapshot* news = Snapshot::find_snapshot_in_pool(tmp,
