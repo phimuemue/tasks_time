@@ -67,7 +67,7 @@ void CommandLineExporter::export_helper(
         }
 
         if(l>0){
-            for(int l2 = lines.size() - 2; l2 >= l; --l2){
+            for(unsigned int l2 = lines.size() - 2; l2 >= l && l2 < NOTASK; --l2){
                 while(lines[l2+1].size() > lines[l2].size()){
                     lines[l2] = lines[l2] + " ";
                 }

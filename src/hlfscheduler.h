@@ -11,7 +11,7 @@ class HLFscheduler : public Leafscheduler {
                 unsigned int n,
                 unsigned int minindex,
                 const Intree& t,
-                const vector<int>& referencelevels,
+                const vector<unsigned int>& referencelevels,
                 vector<task_id>& current,
                 vector<vector<task_id>>& target) const;
     public:

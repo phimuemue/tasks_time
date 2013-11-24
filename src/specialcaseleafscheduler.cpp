@@ -28,7 +28,7 @@ void SpecialCaseLeafscheduler::get_initial_schedule(const Intree& t,
             }
         );
     unsigned int count = 0;
-    int max_level = t.get_level(leaves[0]);
+    unsigned int max_level = t.get_level(leaves[0]);
     for(auto it : leaves){
         if(t.get_level(it) == max_level){
             count++;
@@ -97,7 +97,7 @@ void SpecialCaseLeafscheduler::get_next_tasks(const Intree& t,
         // }
         // count number of topmost tasks
         unsigned int count = 0;
-        int max_level = t.get_level(leaves[0]);
+        unsigned int max_level = t.get_level(leaves[0]);
         for(auto it : leaves){
             if(t.get_level(it) == max_level){
                 count++;

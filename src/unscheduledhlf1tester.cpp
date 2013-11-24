@@ -10,7 +10,7 @@ bool UnscheduledHlf1Tester::test(const Snapshot* s){
     vector<task_id> leaves;
     s->intree.get_leaves(leaves);
     auto depth = s->intree.longest_chain_length() - 1;
-    int max_s=0, min_s=s->intree.count_tasks();
+    unsigned int max_s=0, min_s=s->intree.count_tasks();
     for(auto t : s->marked){
         min_s = min(s->intree.get_level(t), min_s);
         max_s = max(s->intree.get_level(t), max_s);

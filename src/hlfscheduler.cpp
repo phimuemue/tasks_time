@@ -4,7 +4,7 @@ void HLFscheduler::all_combinations(vector<task_id> nums,
         unsigned int n, 
         unsigned int minindex,
         const Intree& t,
-        const vector<int>& referencelevels,
+        const vector<unsigned int>& referencelevels,
         vector<task_id>& current,
         vector<vector<task_id>>& target) const {
     if(n==0){
@@ -51,7 +51,7 @@ void HLFscheduler::get_initial_schedule(const Intree& t,
     // compute possible combinations
     vector<vector<task_id>> combos;
     vector<task_id> dummy;
-    vector<int> referencelevels;
+    vector<unsigned int> referencelevels;
     unsigned int numtasks = tmp.size();
     unsigned int actualprocs = min(procs, numtasks);
     for(unsigned int i=0; i<actualprocs; ++i){
@@ -75,7 +75,7 @@ void HLFscheduler::get_next_tasks(const Intree& t,
     );
     vector<pair<task_id, myfloat>> tmp;
     Leafscheduler::get_next_tasks(t, marked, tmp);
-    int maxlevel = 0; 
+    unsigned int maxlevel = 0; 
     for(auto it=tmp.begin(); it!=tmp.end(); ++it){
         maxlevel = t.get_level(it->first) > maxlevel ? t.get_level(it->first) : maxlevel;
     }

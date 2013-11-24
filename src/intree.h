@@ -87,8 +87,8 @@ class Intree {
         void get_tasks(set<task_id>& result) const;
         void rename_leaf(task_id original, task_id now);
 
-        int get_level(const Task& t) const;
-        int get_level(const task_id t) const;
+        unsigned int get_level(const Task& t) const;
+        unsigned int get_level(const task_id t) const;
 
         task_id get_successor(const task_id t) const;
         void get_predecessors(const Task& t, vector<task_id>& target) const;

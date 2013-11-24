@@ -474,7 +474,7 @@ Distribution Intree::get_task_distribution(const task_id t) const {
 }
 #endif
 
-int Intree::get_level(const Task& t) const{
+unsigned int Intree::get_level(const Task& t) const{
     return get_level(t.get_id());
 }
 
@@ -541,10 +541,14 @@ bool Intree::is_leaf(const task_id t) const{
     return get_in_degree(t)==0;
 }
 
-int Intree::get_level(const task_id t) const{
-    int current = t;
-    int result = 0;
-    while(current > 0){
+unsigned int Intree::get_level(const task_id t) const{
+    task_id current = t;
+    unsigned int result = 0;
+    while(current > 0
+#if !USE_CANONICAL_SNAPSHOT
+            && current < NOTASK
+#endif
+            ){
 #if 0
         auto edge = get_edge_from(current);
         current = edge.second.get_id();

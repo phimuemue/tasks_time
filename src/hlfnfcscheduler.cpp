@@ -4,7 +4,7 @@ void HLFNFCscheduler::all_combinations(vector<task_id> nums,
         unsigned int n, 
         unsigned int minindex,
         const Intree& t,
-        const vector<int>& referencelevels,
+        const vector<unsigned int>& referencelevels,
         vector<task_id>& current,
         vector<vector<task_id>>& target) const {
     HLFscheduler::all_combinations(nums, n, minindex, t, referencelevels, current, target);
