@@ -667,8 +667,8 @@ unsigned int Intree::longest_chain_length() const{
     if(edges.size()<=1){
         return edges.size()+1;
     }
-//#ifndef USE_CANONICAL_SNAPSHOT
 #if 1
+    // NOTE: use the other variant if working with a huge set of intrees!
     vector<vector<task_id>> chains;
     get_chains(chains);
     unsigned int result = 0;
@@ -678,6 +678,7 @@ unsigned int Intree::longest_chain_length() const{
             }
             );
 #else
+    // this can only be used if the input is given in a strictly increasing order
     unsigned int result = 1;
     for(unsigned int idx = edges.size() - 1; idx > 0; idx = edges[idx]){
         result++;
