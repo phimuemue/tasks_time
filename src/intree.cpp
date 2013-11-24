@@ -524,8 +524,12 @@ int Intree::get_level(const task_id t) const{
     int current = t;
     int result = 0;
     while(current > 0){
+#if 0
         auto edge = get_edge_from(current);
         current = edge.second.get_id();
+#else
+        current = get_successor(current);
+#endif
         result++;
     }
     return result;
@@ -568,6 +572,7 @@ pair<Task, Task> Intree::get_edge_from(const Task& t) const {
 }
 
 pair<Task, Task> Intree::get_edge_from(const task_id t) const {
+    return pair<Task, Task>(Task(t), Task(edges[t]));
     for(task_id it = 1; it < edges.size(); ++it){
         if(t == it){
             return pair<Task, Task>(Task(it), Task(edges[it]));
@@ -644,8 +649,12 @@ void Intree::get_chain(const task_id t, vector<task_id>& target) const {
     int current = t;
     target.push_back(current);
     while(current > 0){
+#if 0
         auto edge = get_edge_from(current);
         current = edge.second.get_id();
+#else
+        current = get_successor(current);
+#endif
         target.push_back(current);
         if(current == NOTASK){
             target.clear();
