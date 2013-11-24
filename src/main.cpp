@@ -474,7 +474,6 @@ void generate_stats(const po::variables_map& vm,
         // Delimitter
         line.push_back(" ");
         // Initially scheduled tasks
-        // TODO: This does not work all the time.
         stringstream markedstring("");
         tree_id tid;
         // we need this to compute the isomorphism
