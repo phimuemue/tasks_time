@@ -128,6 +128,8 @@ The program then generates a table containing information about the schedules co
 \begin{itemize}
 \item If the line starts with a star (\texttt{*}), the corresponding schedule is the best.
 \item If the second letter is \texttt{H}, then it is a HLF schedule. If it is followed by a \texttt{!}, then the \emph{first} snapshot is \emph{non-HLF}.
+\item The letter \texttt{U} indicates that -- in the initial snapshot -- there are tasks that have both scheduled and non-scheduled direct predecessors (mostly useful if as many topmost tasks as possible are scheduled).
+\item The letter \texttt{P} indicates that -- in the initial snapshot -- there is a unscheduled task on the topmost level that is the single predecessor of its successor.
 \item \texttt{TM} means that there are snapshots where \texttt{not} as many topmost tasks as possible are scheduled. If followed by a \texttt{!}, then this holds already for the first snapshot.
 \end{itemize}
 

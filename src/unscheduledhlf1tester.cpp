@@ -6,6 +6,8 @@ string UnscheduledHlf1Tester::test_string(const Snapshot* s){
     return result;
 }
 
+// Tests whether the snapshot has 1 HLF-task and
+// 2 non-HLF tasks scheduled.
 bool UnscheduledHlf1Tester::test(const Snapshot* s){
     vector<task_id> leaves;
     s->intree.get_leaves(leaves);
