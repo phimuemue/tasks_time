@@ -460,10 +460,11 @@ Snapshot* Snapshot::optimize() const {
     Intree new_intree(intree);
     vector<task_id> new_marked(marked);
 #if USE_CANONICAL_SNAPSHOT
-#if 0
-    map<task_id, task_id> iso;
-    Intree::canonical_intree(new_intree, new_marked, iso, tid);
-#endif
+    // map<task_id, task_id> iso;
+    // Intree::canonical_intree(new_intree, new_marked, iso, tid);
+    new_intree.get_raw_tree_id(tid);
+#else
+    new_intree.get_raw_tree_id(tid);
 #endif
     
     pair<tree_id, vector<task_id>> opt_finder(tid, new_marked);
