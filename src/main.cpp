@@ -163,7 +163,10 @@ int read_variables_map_from_args(int argc,
     // generic options
     po::options_description generic_options("Generic", LINE_LENGTH);
     generic_options.add_options()
-        ("help,h", "Print help message");
+        ("help,h", "Print help message")
+        ("verbosity", po::value<int>()->default_value(1), 
+         "The higher this number, the less information is printed.")
+        ;
     // output options
     po::options_description dv_output_options("Dagview output", LINE_LENGTH);
     dv_output_options.add_options()
@@ -302,7 +305,9 @@ void create_snapshot_dags(const po::variables_map& vm,
     // generate all possible initial markings
     vector<task_id> marked;
     sched->get_initial_schedule(t, vm["processors"].as<int>(), initial_settings);
-    cout << "Init ";
+    if(vm["verbosity"].as<int>() < 2){
+        cout << "Generating initial settings" << endl;
+    }
     s = vector<Snapshot*>(initial_settings.size());
     isomorphisms = vector<map<task_id, task_id>>(initial_settings.size());
 #if USE_CANONICAL_SNAPSHOT
@@ -340,7 +345,10 @@ void create_snapshot_dags(const po::variables_map& vm,
 #if USE_SIMPLE_OPENMP
 #pragma omp parallel for num_threads(initial_settings.size())
 #endif
-    cout << " > Comp";
+
+    if(vm["verbosity"].as<int>() < 2){
+        cout << "Compiling snapshot DAGs" << endl;
+    }
     for(unsigned int i= 0; i<s.size(); ++i){
         s[i]->compile_snapshot_dag(*sched);
     }
@@ -536,8 +544,6 @@ int main(int argc, char** argv){
     omp_set_nested(1);
 #endif
 
-    print_version(false);
-
     try{
         // command line parsing stuff
         po::variables_map vm;
@@ -545,15 +551,23 @@ int main(int argc, char** argv){
             return 1;
         }
 
+        if(vm["verbosity"].as<int>() == 0){
+            print_version(false);
+        }
+
         // read tree and print it for user
         vector<Intree> trees = generate_tree(vm);
         for(Intree t : trees){
-            cout << "Raw form:\t" << t << endl;
+            if(vm["verbosity"].as<int>() < 2){
+                cout << "Raw form:\t" << t << endl;
+            }
             map<task_id, task_id> isomorphism;
             tree_id tid;
             // print tree to command line
-            CommandLineExporter cle;
-            cle.export_tree(cout, t);
+            if(vm["verbosity"].as<int>() < 2){
+                CommandLineExporter cle;
+                cle.export_tree(cout, t);
+            }
             cout << "Treeseq:\t";
             for(task_id it = 1; it < t.count_tasks(); ++it){
                 cout << t.get_successor(it) << " ";
@@ -582,19 +596,22 @@ int main(int argc, char** argv){
 
             // optimize current snapshot
             if(vm["optimize"].as<bool>()){
-                cout << " > Opt";
+                if(vm["verbosity"].as<int>() < 2){
+                    cout << "Optimizing schedules" << endl;
+                }
                 for(unsigned int i= 0; i<s.size(); ++i){
                     s[i] = s[i]->optimize();
                 }
             }
-            cout << endl;
-            
+
             for(unsigned int i= 0; i<s.size(); ++i){
                 s[i]->finalize();
             }
 
             // compute expected runtimes
-            cout << "Computing expected runtimes." << endl;
+            if(vm["verbosity"].as<int>() < 2){
+                cout << "Computing expected runtimes." << endl;
+            }
             assert(expected_runtimes.size() == s.size());
             for(unsigned int i= 0; i<s.size(); ++i){
                 expected_runtimes[i] = s[i]->expected_runtime();
@@ -614,8 +631,9 @@ int main(int argc, char** argv){
             // output stats
             generate_stats(vm, s, best, initial_settings, isomorphisms);
 
-            cout << "Total expected run time: " << expected_runtime 
-                << endl;
+            if(vm["verbosity"].as<int>() < 2){
+                cout << "Total expected run time: " << expected_runtime << endl;
+            }
 
             map<const Snapshot*, bool> map_for_total_count;
             unsigned int snap_count;
