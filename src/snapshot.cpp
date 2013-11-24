@@ -3,7 +3,7 @@
 map<Snapshot::PoolKind, map<snapshot_id, Snapshot*>> Snapshot::pool;
 
 void Snapshot::clear_pool(){
-    cout << "Pool sizes: ";
+    cout << "Pool size(s): ";
     for(auto pp : Snapshot::pool){
         cout << pp.second.size() << ", ";
     }
@@ -457,10 +457,14 @@ myfloat Snapshot::get_reaching_probability(const Snapshot* t) const {
 // but instead use the proper vectors directly.
 Snapshot* Snapshot::optimize() const {
     tree_id tid;
-    map<task_id, task_id> iso;
     Intree new_intree(intree);
     vector<task_id> new_marked(marked);
+#if USE_CANONICAL_SNAPSHOT
+#if 0
+    map<task_id, task_id> iso;
     Intree::canonical_intree(new_intree, new_marked, iso, tid);
+#endif
+#endif
     
     pair<tree_id, vector<task_id>> opt_finder(tid, new_marked);
     if(Snapshot::pool[PoolOptimized].find(opt_finder) != 
