@@ -740,7 +740,7 @@ void Intree::get_profile(vector<unsigned int>& target) const {
     }
 }
 
-void Intree::get_raw_tree_id(tree_id& target){
+void Intree::get_raw_tree_id(tree_id& target) const {
     // the following can be used to swith between one
     // (I think) quite correct solution and a 
     // (I think) quite correct but more efficient solution

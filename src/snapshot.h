@@ -24,7 +24,7 @@ class Snapshot {
     friend class Probability_Computer;
     private:
         // private constructor which sets *everything*
-        Snapshot(Intree& t, 
+        Snapshot(const Intree& t, 
             vector<task_id>& m, 
             vector<Snapshot*>& s,
             vector<myfloat>& sp,
@@ -106,8 +106,8 @@ class Snapshot {
         // constructors and destructors 
         Snapshot();
         Snapshot(const Snapshot& s);
-        Snapshot(Intree& t);
-        Snapshot(Intree& t, vector<task_id> m);
+        Snapshot(const Intree& t);
+        Snapshot(const Intree& t, vector<task_id> m);
         ~Snapshot();
 
         // canonical snapshot stuff
@@ -115,14 +115,14 @@ class Snapshot {
                 map<task_id, task_id>* isomorphism=NULL,
                 Snapshot::PoolKind representant = PoolDefault);
         // TODO: is it necessary to pass m by val?
-        static Snapshot* canonical_snapshot(Intree& t, 
+        static Snapshot* canonical_snapshot(const Intree& t, 
                 vector<task_id> m,
                 map<task_id, task_id>* isomorphism=NULL,
                 Snapshot::PoolKind representant = PoolDefault);
 
         static Snapshot* find_snapshot_in_pool(const Snapshot& s,
                 Snapshot::PoolKind representant = PoolDefault);
-        static Snapshot* find_snapshot_in_pool(Intree& t,
+        static Snapshot* find_snapshot_in_pool(const Intree& t,
                 vector<task_id> m,
                 Snapshot::PoolKind representant = PoolDefault);
 

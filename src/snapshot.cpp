@@ -42,7 +42,7 @@ Snapshot::Snapshot(const Snapshot& s) :
     {
 }
 
-Snapshot::Snapshot(Intree& t) :
+Snapshot::Snapshot(const Intree& t) :
     cache_expected_runtime(0),
     finalized(false),
     intree(t),
@@ -53,7 +53,7 @@ Snapshot::Snapshot(Intree& t) :
 
 }
 
-Snapshot::Snapshot(Intree& t, vector<task_id> m) :
+Snapshot::Snapshot(const Intree& t, vector<task_id> m) :
     cache_expected_runtime(0),
     finalized(false),
     marked(m),
@@ -78,7 +78,7 @@ Snapshot::Snapshot(Intree& t, vector<task_id> m) :
     }
 }
 
-Snapshot::Snapshot(Intree& t, 
+Snapshot::Snapshot(const Intree& t, 
         vector<task_id>& m, 
         vector<Snapshot*>& s,
         vector<myfloat>& sp,
@@ -129,7 +129,7 @@ Snapshot* Snapshot::canonical_snapshot(
 }
 
 Snapshot* Snapshot::canonical_snapshot(
-        Intree& t, 
+        const Intree& t, 
         vector<task_id> m,
         map<task_id, task_id>* _isomorphism,
         Snapshot::PoolKind representant){
@@ -228,7 +228,7 @@ Snapshot* Snapshot::find_snapshot_in_pool(const Snapshot& s,
     return find_snapshot_in_pool(t, newmarked, representant);
 }
 
-Snapshot* Snapshot::find_snapshot_in_pool(Intree& t,
+Snapshot* Snapshot::find_snapshot_in_pool(const Intree& t,
         vector<task_id> m,
         Snapshot::PoolKind representant){
     tree_id tid;
@@ -457,7 +457,7 @@ myfloat Snapshot::get_reaching_probability(const Snapshot* t) const {
 // but instead use the proper vectors directly.
 Snapshot* Snapshot::optimize() const {
     tree_id tid;
-    Intree new_intree(intree);
+    const Intree& new_intree = intree;
     vector<task_id> new_marked(marked);
 #if USE_CANONICAL_SNAPSHOT
     // map<task_id, task_id> iso;

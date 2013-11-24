@@ -116,7 +116,7 @@ class Intree {
         unsigned int longest_chain_length() const;
         void get_profile(vector<unsigned int>& target) const;
 
-        void get_raw_tree_id(tree_id& target);
+        void get_raw_tree_id(tree_id& target) const;
 
         void get_reverse_tree(map<task_id, vector<task_id>>& rt) const;
         unsigned int get_max_width(task_id tid = 0) const;
