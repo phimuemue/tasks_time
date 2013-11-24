@@ -302,7 +302,7 @@ void create_snapshot_dags(const po::variables_map& vm,
     // generate all possible initial markings
     vector<task_id> marked;
     sched->get_initial_schedule(t, vm["processors"].as<int>(), initial_settings);
-    cout << "Generating initial settings." << endl;
+    cout << "Init ";
     s = vector<Snapshot*>(initial_settings.size());
     isomorphisms = vector<map<task_id, task_id>>(initial_settings.size());
 #if USE_CANONICAL_SNAPSHOT
@@ -340,7 +340,7 @@ void create_snapshot_dags(const po::variables_map& vm,
 #if USE_SIMPLE_OPENMP
 #pragma omp parallel for num_threads(initial_settings.size())
 #endif
-    cout << "Compiling snapshot DAGs." << endl;
+    cout << " > Comp";
     for(unsigned int i= 0; i<s.size(); ++i){
         s[i]->compile_snapshot_dag(*sched);
     }
@@ -582,11 +582,12 @@ int main(int argc, char** argv){
 
             // optimize current snapshot
             if(vm["optimize"].as<bool>()){
-                cout << "Optimizing scheduling policies." << endl;
+                cout << " > Opt";
                 for(unsigned int i= 0; i<s.size(); ++i){
                     s[i] = s[i]->optimize();
                 }
             }
+            cout << endl;
             
             for(unsigned int i= 0; i<s.size(); ++i){
                 s[i]->finalize();
