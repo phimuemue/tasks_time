@@ -482,6 +482,7 @@ void generate_stats(const po::variables_map& vm,
         // Intree::canonical_intree(s[i]->intree, initial_settings[i], isomorphism, tid);
         markedstring << "[";
         for(unsigned int midx = 0; midx < s[i]->marked.size(); ++midx){
+#if USE_CANONICAL_SNAPSHOT
             task_id nexttask = NOTASK;
             for(auto it : isomorphisms[i]){
                 if(it.second == s[i]->marked[midx]){
@@ -490,6 +491,9 @@ void generate_stats(const po::variables_map& vm,
                 }
             }
             markedstring << nexttask;
+#else
+            markedstring << s[i]->marked[midx];
+#endif
             // markedstring << isomorphisms[i].at(initial_settings[i][midx]);
             if(midx < s[i]->marked.size() - 1){
                 markedstring << ", ";
