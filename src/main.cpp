@@ -628,6 +628,10 @@ int main(int argc, char** argv){
                 expected_runtime += expected_runtimes[i] * probs[i];
             }
 
+            if(vm["verbosity"].as<int>() < 1){
+                cout << "Results:" << endl;
+            }
+
             // output stats
             generate_stats(vm, s, best, initial_settings, isomorphisms);
 

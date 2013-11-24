@@ -257,9 +257,15 @@ Intree Intree::canonical_intree2(const Intree& _t,
     t.get_leaves(leaves);
     sort(leaves.begin(), leaves.end(),
         [&](const task_id a, const task_id b) -> bool {
+#if 0
             if(t.get_edge_from(a).second == t.get_edge_from(b).second)
                 return a < b;
             return t.get_edge_from(a).second < t.get_edge_from(b).second;
+#else
+            if(t.get_successor(a) == t.get_successor(b))
+                return a < b;
+            return t.get_successor(a) < t.get_successor(b);
+#endif
         }
     );
     task_id max_tid = 0;
@@ -498,11 +504,26 @@ void Intree::get_siblings(const task_id t, vector<task_id>& target) const {
 }
 
 void Intree::get_leaves(vector<task_id>& target) const{
+#if !USE_CANONICAL_SNAPSHOT
     for(task_id it = 1; it < edges.size(); ++it){
         if (get_in_degree(it) == 0){
             target.push_back(it);
         }
     }
+#else
+    vector<bool> leaf_candidates(edges.size(), true);
+    for(task_id it = edges.size()-1; it > 0; --it){
+        if(edges[it] != NOTASK){
+            leaf_candidates[edges[it]] = false;
+        }
+    }
+    leaf_candidates[0] = false;
+    for(task_id it = 0; it < leaf_candidates.size(); ++it){
+        if(leaf_candidates[it]){
+            target.push_back(it);
+        }
+    }
+#endif
 }
 
 void Intree::get_leaves(set<task_id>& target) const{
@@ -646,9 +667,9 @@ void Intree::get_chain(const Task& t, vector<task_id>& target) const {
 }
 
 void Intree::get_chain(const task_id t, vector<task_id>& target) const {
-    int current = t;
+    task_id current = t;
     target.push_back(current);
-    while(current > 0){
+    while(current > 0u){
 #if 0
         auto edge = get_edge_from(current);
         current = edge.second.get_id();
@@ -664,10 +685,15 @@ void Intree::get_chain(const task_id t, vector<task_id>& target) const {
 
 void Intree::get_chains(vector<vector<task_id>>& target) const {
     for(task_id it = 1; it < edges.size(); ++it){
-        if(get_in_degree(it) == 0){
-            vector<task_id> nv;
-            get_chain(it, nv);
-            target.push_back(nv);
+#if !USE_CANONICAL_SNAPSHOT
+        if(edges[it] != NOTASK)
+#endif
+        {
+            if(get_in_degree(it) == 0){
+                vector<task_id> nv;
+                get_chain(it, nv);
+                target.push_back(nv);
+            }
         }
     }
 }
