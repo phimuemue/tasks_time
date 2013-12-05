@@ -44,6 +44,7 @@
 #include "runtimetester.h"
 #include "singlesuccessortester.h"
 #include "topmosttester.h"
+#include "pythontester.h"
 
 #include "tikztopdf.h"
 
@@ -479,6 +480,9 @@ void generate_stats(const po::variables_map& vm,
         // as many topmost tasks as possible scheduled?
         TopmostTester tmt;
         line.push_back(tmt.test_string(s[i]));
+        // Python user-defined tests
+        PythonTester pythontest;
+        line.push_back(pythontest.test_string(s[i]));
         // Delimitter
         line.push_back(" ");
         // Initially scheduled tasks

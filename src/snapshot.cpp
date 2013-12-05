@@ -434,6 +434,10 @@ const Snapshot* Snapshot::get_next_on_successor_path(const Snapshot* t) const {
     return NULL;
 }
 
+unsigned int Snapshot::count_tasks() const {
+    return intree.count_tasks();
+}
+
 myfloat Snapshot::get_reaching_probability(const Snapshot* t) const {
     myfloat result = (myfloat)0;
     if(t->intree.count_tasks()==1 || t==this){
@@ -603,3 +607,4 @@ unsigned long Snapshot::count_snapshots_in_dag(map<const Snapshot*, bool>& tmp) 
 bool Snapshot::operator== (const Snapshot& s) const {
     return marked==s.marked && intree==s.intree;
 }
+

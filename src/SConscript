@@ -102,9 +102,15 @@ env = Environment(variables = vars,
                             "-DUSE_TASKMAP=${USE_TASKMAP}",
                             "-DRELEASE_MODE=${RELEASE_MODE}",
                             ], 
+                  CPPPATH=[
+                            "/usr/include/python2.7/",
+                  ],
                   LIBS = [
                           "boost_program_options",
                           "python2.7",
+                          "boost_python",
+                          "boost_system",
+                          "boost_filesystem",
                   ],
                   LINKFLAGS="-fopenmp",
                   build_dir = "build"
