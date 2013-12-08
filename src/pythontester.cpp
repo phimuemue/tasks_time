@@ -1,5 +1,7 @@
 #include "pythontester.h"
 
+#if PYTHON_TESTS
+
 using namespace boost::python;
 
 PythonTester::PythonTester() :
@@ -15,7 +17,6 @@ PythonTester::PythonTester() :
         PyObject* sysPath = PySys_GetObject("path");
         PyList_Insert( sysPath, 0, PyString_FromString(workingDir.string().c_str()));
         boost::python::api::object main_module = import("__main__");
-        //boost::python::api::object test_namespace = main_module.attr("__dict__");
 
         test_module = import("tester");
     }
@@ -92,3 +93,5 @@ std::string PythonTester::parse_python_exception(){
     }
     return ret;
 }
+
+#endif

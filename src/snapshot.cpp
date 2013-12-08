@@ -608,6 +608,7 @@ bool Snapshot::operator== (const Snapshot& s) const {
     return marked==s.marked && intree==s.intree;
 }
 
+#if PYTHON_TESTS
 #include <boost/python.hpp>
 using namespace boost::python;
 BOOST_PYTHON_MODULE(snapshot)
@@ -619,3 +620,4 @@ BOOST_PYTHON_MODULE(snapshot)
         .def_readonly("marked", &Snapshot::marked)
         ;
 }
+#endif

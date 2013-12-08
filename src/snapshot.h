@@ -157,6 +157,8 @@ class Snapshot {
         unsigned long count_snapshots_in_dag(map<const Snapshot*, bool>&) const;
 };
 
+#if PYTHON_TESTS
 extern "C" void initsnapshot();
+#endif
 
 #endif

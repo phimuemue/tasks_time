@@ -868,6 +868,7 @@ bool Intree::operator==(const Intree& t) const {
     return edges==t.edges;
 }
 
+#if PYTHON_TESTS
 #include <boost/python.hpp>
 using namespace boost::python;
 BOOST_PYTHON_MODULE(intree)
@@ -891,3 +892,4 @@ BOOST_PYTHON_MODULE(intree)
         .def("same_chain", &Intree::same_chain)
         ;
 }
+#endif

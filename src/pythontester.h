@@ -5,6 +5,8 @@
 #include <boost/python.hpp>
 #include <boost/filesystem.hpp>
 
+#if PYTHON_TESTS
+
 #include "tester.h"
 
 class PythonTester : public Tester<bool> {
@@ -20,5 +22,7 @@ class PythonTester : public Tester<bool> {
 
         string parse_python_exception();
 };
+
+#endif
 
 #endif

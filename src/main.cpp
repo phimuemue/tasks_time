@@ -44,7 +44,9 @@
 #include "runtimetester.h"
 #include "singlesuccessortester.h"
 #include "topmosttester.h"
+#if PYTHON_TESTS
 #include "pythontester.h"
+#endif
 
 #include "tikztopdf.h"
 
@@ -480,9 +482,12 @@ void generate_stats(const po::variables_map& vm,
         // as many topmost tasks as possible scheduled?
         TopmostTester tmt;
         line.push_back(tmt.test_string(s[i]));
+#if PYTHON_TESTS
+        cout << "PYTHON!" << endl;
         // Python user-defined tests
         PythonTester pythontest;
         line.push_back(pythontest.test_string(s[i]));
+#endif
         // Delimitter
         line.push_back(" ");
         // Initially scheduled tasks

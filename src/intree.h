@@ -132,6 +132,8 @@ class Intree {
         friend ostream& operator<<(ostream& os, const Intree& t);
 };
 
+#if PYTHON_TESTS
 extern "C" void initintree();
+#endif
 
 #endif
