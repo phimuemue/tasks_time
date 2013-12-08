@@ -454,6 +454,22 @@ void Intree::get_tasks(set<task_id>& result) const {
     }
 }
 
+void Intree::get_tasks(vector<task_id>& result) const{
+    result.push_back(0);
+    for(task_id it = 1; it<edges.size(); ++it){
+        if(edges[it]!=NOTASK){
+            result.push_back(it);
+        }
+    }
+}
+
+vector<task_id> Intree::get_tasks() const{
+    vector<task_id> result;
+    get_tasks(result);
+    return result;
+}
+
+
 void Intree::rename_leaf(task_id original, task_id now){
 #if USE_TASKMAP
     assert(taskmap.find(original)!=taskmap.end());
@@ -494,6 +510,12 @@ void Intree::get_predecessors(const task_id t, vector<task_id>& target) const{
     }
 }
 
+vector<task_id> Intree::get_predecessors(const task_id t) const {
+    vector<task_id> result;
+    get_predecessors(t, result);
+    return result;
+}
+
 void Intree::get_siblings(const task_id t, vector<task_id>& target) const {
     task_id successor = edges[t];
     for(task_id it = 0; it < edges.size(); ++it){
@@ -501,6 +523,12 @@ void Intree::get_siblings(const task_id t, vector<task_id>& target) const {
             target.push_back(it);
         }
     }
+}
+
+vector<task_id> Intree::get_siblings(const task_id t) const {
+    vector<task_id> result;
+    get_siblings(t, result);
+    return result;
 }
 
 void Intree::get_leaves(vector<task_id>& target) const{
@@ -535,6 +563,12 @@ void Intree::get_leaves(set<task_id>& target) const{
     if(count_tasks()==1){
         target.insert(0);
     }
+}
+
+vector<task_id> Intree::get_leaves() const{
+    vector<task_id> result;
+    get_leaves(result);
+    return result;
 }
 
 bool Intree::is_leaf(const task_id t) const{
@@ -838,7 +872,22 @@ bool Intree::operator==(const Intree& t) const {
 using namespace boost::python;
 BOOST_PYTHON_MODULE(intree)
 {
+    class_<std::vector<task_id>>("task_id_vector")
+        .def(boost::python::vector_indexing_suite<std::vector<task_id>>());
     class_<Intree>("Intree")
         .def("count_tasks", &Intree::count_tasks)
+        .def("get_in_degree", (int (Intree::*)(const task_id) const)&Intree::get_in_degree)
+        .def("contains_task", &Intree::contains_task)
+        .def("get_tasks", (vector<task_id>(Intree::*)() const)&Intree::get_tasks)
+        .def("get_level", (unsigned int(Intree::*)(const task_id) const)&Intree::get_level)
+        .def("get_successor", &Intree::get_successor)
+        .def("get_predecessors", (vector<task_id>(Intree::*)(const task_id) const)&Intree::get_predecessors)
+        .def("get_siblings", (vector<task_id>(Intree::*)(const task_id) const)&Intree::get_siblings)
+        .def("get_leaves", (vector<task_id>(Intree::*)() const)&Intree::get_leaves)
+        .def("is_leaf", &Intree::is_leaf)
+        .def("is_chain", &Intree::is_chain)
+        .def("is_degenerate_tree", &Intree::is_degenerate_tree)
+        .def("is_parallel_chain", &Intree::is_parallel_chain)
+        .def("same_chain", &Intree::same_chain)
         ;
 }

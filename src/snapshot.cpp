@@ -615,5 +615,7 @@ BOOST_PYTHON_MODULE(snapshot)
     class_<Snapshot>("Snapshot")
         .def("count_tasks", &Snapshot::count_tasks)
         .def("get_successor_count", &Snapshot::get_successor_count)
+        .def_readonly("intree", &Snapshot::intree)
+        .def_readonly("marked", &Snapshot::marked)
         ;
 }

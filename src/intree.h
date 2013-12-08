@@ -14,6 +14,7 @@
 #include<string>
 #include<boost/dynamic_bitset.hpp>
 #include<Python.h>
+#include<boost/python/suite/indexing/vector_indexing_suite.hpp>
 
 #include "task.h"
 
@@ -86,6 +87,8 @@ class Intree {
         bool contains_task(task_id tid) const;
         const Task& get_task_by_id(task_id tid) const;
         void get_tasks(set<task_id>& result) const;
+        void get_tasks(vector<task_id>& result) const;
+        vector<task_id> get_tasks() const;
         void rename_leaf(task_id original, task_id now);
 
         unsigned int get_level(const Task& t) const;
@@ -94,9 +97,12 @@ class Intree {
         task_id get_successor(const task_id t) const;
         void get_predecessors(const Task& t, vector<task_id>& target) const;
         void get_predecessors(const task_id t, vector<task_id>& target) const;
+        vector<task_id> get_predecessors(const task_id t) const;
         void get_siblings(const task_id t, vector<task_id>& target) const;
+        vector<task_id> get_siblings(const task_id t) const;
         void get_leaves(set<task_id>& target) const;
         void get_leaves(vector<task_id>& target) const;
+        vector<task_id> get_leaves() const;
         bool is_leaf(const task_id t) const;
 
         Distribution get_task_distribution(const task_id t) const;
