@@ -78,6 +78,7 @@ vars.Add(EnumVariable("MYFLOAT", "Datatype for rational numbers:\n"
 vars.Add(EnumVariable("USE_SIMPLE_OPENMP", "Simple multithreading for computing topmost successors. Currently only working for value 0.", 0,
             allowed_values=("0", "1")))
 vars.Add(EnumVariable("USE_CANONICAL_SNAPSHOT", "Only consider non-isomorphic snapshots", 1, allowed_values=("0", "1")))
+vars.Add(EnumVariable("PYTHON_TESTS", "Enable support for tests written in Python 2.7.", 1, allowed_values=("0", "1")))
 vars.Add(EnumVariable("USE_MATULA", "Use matula numbers for canonical snapshots.", 0, allowed_values=("0", "1")))
 vars.Add(EnumVariable("USE_TASKMAP", "Set to 1 if tasks in one tree behave different.", 0,
             allowed_values=("0", "1")))
@@ -99,6 +100,7 @@ env = Environment(variables = vars,
                             "-DMYFLOAT=${MYFLOAT}",
                             "-DUSE_SIMPLE_OPENMP=${USE_SIMPLE_OPENMP}",
                             "-DUSE_CANONICAL_SNAPSHOT=${USE_CANONICAL_SNAPSHOT}",
+                            "-DPYTHON_TESTS=${PYTHON_TESTS}",
                             "-DUSE_TASKMAP=${USE_TASKMAP}",
                             "-DRELEASE_MODE=${RELEASE_MODE}",
                             ], 
