@@ -2,19 +2,12 @@
 
 using namespace boost::python;
 
-BOOST_PYTHON_MODULE(snapshot)
-{
-    class_<Snapshot>("Snapshot")
-        .def("count_tasks", &Snapshot::count_tasks)
-        .def("get_successor_count", &Snapshot::get_successor_count)
-        ;
-}
-
 PythonTester::PythonTester() :
     module_path("tester")
 {
     try {
         Py_Initialize();
+        initintree();
         initsnapshot();
         // adjust working directory and search paths -- taken from
         // http://stackoverflow.com/questions/9285384/

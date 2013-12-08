@@ -608,3 +608,12 @@ bool Snapshot::operator== (const Snapshot& s) const {
     return marked==s.marked && intree==s.intree;
 }
 
+#include <boost/python.hpp>
+using namespace boost::python;
+BOOST_PYTHON_MODULE(snapshot)
+{
+    class_<Snapshot>("Snapshot")
+        .def("count_tasks", &Snapshot::count_tasks)
+        .def("get_successor_count", &Snapshot::get_successor_count)
+        ;
+}

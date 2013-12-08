@@ -833,3 +833,12 @@ ostream& operator<<(ostream& os, const Intree& t){
 bool Intree::operator==(const Intree& t) const {
     return edges==t.edges;
 }
+
+#include <boost/python.hpp>
+using namespace boost::python;
+BOOST_PYTHON_MODULE(intree)
+{
+    class_<Intree>("Intree")
+        .def("count_tasks", &Intree::count_tasks)
+        ;
+}

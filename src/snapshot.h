@@ -10,6 +10,7 @@
 #include<sstream>
 #include<iomanip>
 #include<boost/iterator/zip_iterator.hpp>
+#include<Python.h>
 
 #include "config.h"
 #include "intree.h"
@@ -155,5 +156,7 @@ class Snapshot {
         unsigned long count_snapshots_in_dag() const ;
         unsigned long count_snapshots_in_dag(map<const Snapshot*, bool>&) const;
 };
+
+extern "C" void initsnapshot();
 
 #endif

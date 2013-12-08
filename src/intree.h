@@ -13,6 +13,7 @@
 #include<sstream>
 #include<string>
 #include<boost/dynamic_bitset.hpp>
+#include<Python.h>
 
 #include "task.h"
 
@@ -124,5 +125,7 @@ class Intree {
         bool operator==(const Intree& t) const;
         friend ostream& operator<<(ostream& os, const Intree& t);
 };
+
+extern "C" void initintree();
 
 #endif
