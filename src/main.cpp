@@ -453,6 +453,15 @@ void generate_stats(const po::variables_map& vm,
         ){
     vector<vector<string>> lines;
     assert(s.size() == initial_settings.size());
+    HLFTester hlftester;
+    OnlyOneNonScheduledSiblingTester oonsst;
+    SameRunTimeTester srtt;
+    UnscheduledHlf1Tester uh1t;
+    SingleSuccessorTester sst;
+    TopmostTester tmt;
+#if PYTHON_TESTS
+    PythonTester pythontest;
+#endif
     for(unsigned int i= 0; i<s.size(); ++i){
         lines.push_back(vector<string>());
         vector<string>& line = lines.back();
@@ -465,27 +474,19 @@ void generate_stats(const po::variables_map& vm,
         }
         // Test Suite:
         // is HLF?
-        HLFTester hlftester;
         line.push_back(hlftester.test_string(s[i]));
         // at most one task with unscheduled siblings?
-        OnlyOneNonScheduledSiblingTester oonsst;
         line.push_back(oonsst.test_string(s[i]));
         // can snapshots be aggregated?
-        SameRunTimeTester srtt;
         line.push_back(srtt.test_string(s[i]));
         // hlf-1 level tasks unscheduled, but lower ones?
-        UnscheduledHlf1Tester uh1t;
         line.push_back(uh1t.test_string(s[i]));
         // singlepredecessor task unscheduled?
-        SingleSuccessorTester sst;
         line.push_back(sst.test_string(s[i]));
         // as many topmost tasks as possible scheduled?
-        TopmostTester tmt;
         line.push_back(tmt.test_string(s[i]));
 #if PYTHON_TESTS
-        cout << "PYTHON!" << endl;
         // Python user-defined tests
-        PythonTester pythontest;
         line.push_back(pythontest.test_string(s[i]));
 #endif
         // Delimitter

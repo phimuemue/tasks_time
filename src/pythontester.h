@@ -1,11 +1,11 @@
 #ifndef PYTHONTESTER_H
 #define PYTHONTESTER_H
 
+#if PYTHON_TESTS
+
 #include <string>
 #include <boost/python.hpp>
 #include <boost/filesystem.hpp>
-
-#if PYTHON_TESTS
 
 #include "tester.h"
 

@@ -13,8 +13,10 @@
 #include<sstream>
 #include<string>
 #include<boost/dynamic_bitset.hpp>
+#if PYTHON_TESTS
 #include<Python.h>
 #include<boost/python/suite/indexing/vector_indexing_suite.hpp>
+#endif
 
 #include "task.h"
 

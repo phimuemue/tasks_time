@@ -10,7 +10,9 @@
 #include<sstream>
 #include<iomanip>
 #include<boost/iterator/zip_iterator.hpp>
+#if PYTHON_TESTS
 #include<Python.h>
+#endif
 
 #include "config.h"
 #include "intree.h"
