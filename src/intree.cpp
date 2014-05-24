@@ -42,6 +42,18 @@ Intree::Intree(const vector<pair<Task, Task>>& edges) :
 #endif
 }
 
+Intree::Intree(const vector<task_id>& arg_edges) :
+    edges(arg_edges)
+{
+#if USE_TASKMAP
+    for(unsigned int i=0; i<edges.size(); ++i){
+        taskmap[i] = Task(i);
+        taskmap[edges[i]] = Task(edges[i]);
+    }
+    taskmap[0] = Task(0);
+#endif
+}
+
 Intree::Outtree::Outtree(task_id i, bool m) :
     id(i),
     marked(m)
@@ -183,56 +195,57 @@ Intree Intree::canonical_intree3(const Intree& _t,
         labels[it] = find(_preferred.begin(), _preferred.end(), it)==_preferred.end() ? 0 : -1;
     }
     for(unsigned int lev = levels.size() - 2; lev < 4095 && lev >= 0; --lev){
+        auto& currentLevel = levels[lev];
         map<task_id, vector<int>> intermediate_labels;
         // construct new labels
         for(task_id it : levels[lev + 1]){
-            if(_t.get_successor(it) != NOTASK){
-                if(intermediate_labels.find(_t.get_successor(it)) == intermediate_labels.end()){
-                    intermediate_labels[_t.get_successor(it)].push_back(4096);
-                }
-                intermediate_labels[_t.get_successor(it)].push_back(labels[it]);
+            if(intermediate_labels.find(_t.get_successor(it)) == intermediate_labels.end()){
+                // TODO: why is inserted 4096 at the beginning of intermediate label? Necessary?
+                intermediate_labels[_t.get_successor(it)].push_back(4096);
             }
+            intermediate_labels[_t.get_successor(it)].push_back(labels[it]);
         }
-        for(task_id it : levels[lev]){
+        for(task_id it : currentLevel){
+            // check if it is leaf
             if(labels.find(it) != labels.end()){
                 intermediate_labels[it].push_back(labels[it]);
             }
         }
 #if 1
         // just for assertions
-        for(auto it : levels[lev]){
+        for(auto it : currentLevel){
             assert(intermediate_labels.find(it) != intermediate_labels.end());
         }
 #endif
         // sort level ...
-        sort(levels[lev].begin(), levels[lev].end(), 
+        sort(currentLevel.begin(), currentLevel.end(), 
                 [&intermediate_labels](const task_id a, const task_id b) -> bool {
                     return intermediate_labels[a] < intermediate_labels[b];
                 }
             );
         // ... compute (short) labels
-        assert(levels[lev].size() > 0);
-        if(labels.find(levels[lev][0]) == labels.end()){
-            labels[levels[lev][0]] = 2;
+        assert(currentLevel.size() > 0);
+        if(labels.find(currentLevel[0]) == labels.end()){
+            labels[currentLevel[0]] = 2;
         }
         int counter = 3;
-        for(unsigned int i = 1; i < levels[lev].size(); ++i){
-            assert(intermediate_labels.find(levels[lev][i]) != intermediate_labels.end());
-            assert(intermediate_labels.find(levels[lev][i-1]) != intermediate_labels.end());
-            if(intermediate_labels[levels[lev][i]] != intermediate_labels[levels[lev][i-1]]){
+        for(unsigned int i = 1; i < currentLevel.size(); ++i){
+            assert(intermediate_labels.find(currentLevel[i]) != intermediate_labels.end());
+            assert(intermediate_labels.find(currentLevel[i-1]) != intermediate_labels.end());
+            if(intermediate_labels[currentLevel[i]] != intermediate_labels[currentLevel[i-1]]){
                 counter++;
             }
-            labels[levels[lev][i]] = counter;
+            labels[currentLevel[i]] = counter;
         }
     }
     // compute isomorphism and return canonical intree
     isomorphism[0] = 0;
     task_id counter = 1;
-    vector<pair<task_id, task_id>> edges;
+    vector<task_id> edges = {NOTASK};
     for(unsigned int lev = 1; lev < levels.size(); ++lev){
         for(auto it : levels[lev]){
             isomorphism[it] = counter;
-            edges.push_back(pair<task_id, task_id>(counter, isomorphism[_t.get_successor(it)]));
+            edges.push_back(isomorphism[_t.get_successor(it)]);
             counter++;
         }
     }
