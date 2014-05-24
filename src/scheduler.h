@@ -1,12 +1,12 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
+#include "intree.h"
+#include "config.h"
+
 #include<vector>
 #include<utility>
 #include<algorithm>
-
-#include "config.h"
-#include "intree.h"
 
 using namespace std;
 

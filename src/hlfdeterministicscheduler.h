@@ -1,9 +1,9 @@
 #ifndef HLFDETERMINISTICSCHEDULER_H
 #define HLFDETERMINISTICSCHEDULER_H
 
-#include <algorithm>
-
 #include "hlfscheduler.h"
+
+#include <algorithm>
 
 class HLFDeterministicScheduler : public HLFscheduler {
     public:

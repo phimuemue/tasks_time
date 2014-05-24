@@ -1,9 +1,9 @@
 #ifndef EXPORTER_H
 #define EXPORTER_H
 
-#include<ostream>
-
 #include "snapshot.h"
+
+#include<ostream>
 
 using namespace std;
 

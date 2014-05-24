@@ -1,6 +1,10 @@
 #ifndef INTREE_H
 #define INTREE_H
 
+#if PYTHON_TESTS
+#include<Python.h>
+#include<boost/python/suite/indexing/vector_indexing_suite.hpp>
+#endif
 #include<utility>
 #include<vector>
 #include<iostream>
@@ -13,10 +17,6 @@
 #include<sstream>
 #include<string>
 #include<boost/dynamic_bitset.hpp>
-#if PYTHON_TESTS
-#include<Python.h>
-#include<boost/python/suite/indexing/vector_indexing_suite.hpp>
-#endif
 
 #include "task.h"
 
@@ -58,10 +58,7 @@ class Intree {
                     return true;
                 }
             }
-            if (a.marked==1 && b.marked==0){
-                return true;
-            }
-            return false;
+            return a.marked==1 && b.marked==0;
         };
     public:
         Intree();

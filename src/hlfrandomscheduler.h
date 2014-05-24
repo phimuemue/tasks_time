@@ -1,10 +1,10 @@
 #ifndef HLFRANDOMSCHEDULER_H
 #define HLFRANDOMSCHEDULER_H
 
+#include "hlfscheduler.h"
+
 #include <algorithm>
 #include <random>
-
-#include "hlfscheduler.h"
 
 class HLFRandomScheduler : public HLFscheduler {
     private:

@@ -1,6 +1,8 @@
 #ifndef TESTER_H
 #define TESTER_H
 
+#include "snapshot.h"
+
 #include<iostream>
 #include<string>
 #include<vector>
@@ -8,8 +10,6 @@
 
 #include "boost/tuple/tuple.hpp"
 #include "boost/tuple/tuple_comparison.hpp"
-
-#include "snapshot.h"
 
 using namespace std;
 

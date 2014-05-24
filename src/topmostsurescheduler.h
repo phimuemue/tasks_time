@@ -1,9 +1,9 @@
 #ifndef TOPMOSTSURESCHEDULER_H
 #define TOPMOSTSURESCHEDULER_H
 
-#include <algorithm>
-
 #include "leafscheduler.h"
+
+#include <algorithm>
 
 class TopMostSureScheduler : public Leafscheduler {
     protected:

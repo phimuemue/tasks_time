@@ -1,10 +1,10 @@
 #ifndef HLFNFCSCHEDULER_H
 #define HLFNFCSCHEDULER_H
 
-#include <algorithm>
-
 #include "leafscheduler.h"
 #include "hlfscheduler.h"
+
+#include <algorithm>
 
 class HLFNFCscheduler : public HLFscheduler {
     protected:

@@ -1,18 +1,6 @@
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-#else
-#include<sys/ioctl.h>
+#if PYTHON_TESTS
+#include "pythontester.h"
 #endif
-
-#include<time.h>
-
-#include<iostream>
-#include<random>
-#include<string>
-#include<fstream>
-#include<memory>
-
-#include<boost/program_options.hpp>
-
 #include "info.h"
 #include "intree.h"
 #include "snapshot.h"
@@ -44,13 +32,25 @@
 #include "runtimetester.h"
 #include "singlesuccessortester.h"
 #include "topmosttester.h"
-#if PYTHON_TESTS
-#include "pythontester.h"
-#endif
 
 #include "tikztopdf.h"
 
 #include "alltrees.h"
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+#else
+#include<sys/ioctl.h>
+#endif
+
+#include<time.h>
+
+#include<iostream>
+#include<random>
+#include<string>
+#include<fstream>
+#include<memory>
+
+#include<boost/program_options.hpp>
 
 using namespace std;
 namespace po = boost::program_options;

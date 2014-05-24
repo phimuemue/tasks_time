@@ -1,10 +1,11 @@
 #ifndef COMMANDLINEEXPORTER_H
 #define COMMANDLINEEXPORTER_H
 
+#include "exporter.h"
+
 #include<iostream>
 #include<iomanip>
 #include<deque>
-#include "exporter.h"
 
 class CommandLineExporter : public Exporter{
     public:

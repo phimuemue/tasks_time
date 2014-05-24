@@ -1,8 +1,8 @@
 #ifndef PROBABILITY_H
 #define PROBABILITY_H
 
-#include "config.h"
 #include "snapshot.h"
+#include "config.h"
 
 class Probability_Computer{
     private:

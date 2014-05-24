@@ -1,6 +1,9 @@
 #ifndef SNAPSHOT_H
 #define SNAPSHOT_H
 
+#if PYTHON_TESTS
+#include<Python.h>
+#endif
 #include<vector>
 #include<assert.h>
 #include<string>
@@ -10,9 +13,6 @@
 #include<sstream>
 #include<iomanip>
 #include<boost/iterator/zip_iterator.hpp>
-#if PYTHON_TESTS
-#include<Python.h>
-#endif
 
 #include "config.h"
 #include "intree.h"

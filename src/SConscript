@@ -58,7 +58,7 @@ def create_version_info(*a,**b):
 vars = Variables()
 vars.Add(EnumVariable("COMPILER", 
             "Compiler command (default g++)", "g++", 
-            allowed_values=("g++", "icpc")))
+            allowed_values=("g++", "icpc", "clang")))
 vars.Add(EnumVariable("OPT", 
             "Optimization level can be set to 0, 1, 2 or 3", "3", 
             allowed_values=("0", "1", "2", "3")))
