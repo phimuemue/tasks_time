@@ -35,7 +35,7 @@ class Intree {
 #endif
         class Outtree {
             private:
-                mutable string compressedString;
+                mutable vector<char> compressedString;
             public:
                 task_id id;
                 bool marked;
@@ -46,7 +46,7 @@ class Intree {
                 ~Outtree();
                 void canonicalize();
                 Intree toIntree(map<task_id, task_id>& isomorphism) const;
-                string getCompressedString() const;
+                const vector<char>& getCompressedString() const;
         };
         friend inline bool operator<(const Intree::Outtree& a, const Intree::Outtree& b){
             return a.getCompressedString() > b.getCompressedString();

@@ -86,7 +86,7 @@ Intree::Outtree::~Outtree(){
     }
 }
 
-string Intree::Outtree::getCompressedString() const{
+const vector<char>& Intree::Outtree::getCompressedString() const{
     return compressedString;
 }
 
@@ -102,18 +102,22 @@ void Intree::Outtree::canonicalize(){
     if(compressedString.size() == 0){
         if(predecessors.size() == 0){
             if(marked){
-                compressedString += "0";
+                compressedString.push_back('0');
             }
             else{
-                compressedString += "1";
+                compressedString.push_back('1');
             }
         }
         else{
-            compressedString += "[";
+            compressedString.push_back('[');
             for(auto a : predecessors){
-                compressedString += a->getCompressedString();
+                compressedString.insert(
+                    compressedString.end(),
+                    a->getCompressedString().begin(),
+                    a->getCompressedString().end()
+                );
             }
-            compressedString += "]";
+            compressedString.push_back(']');
         }
     }
 }
