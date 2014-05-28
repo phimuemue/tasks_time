@@ -3,6 +3,7 @@
 #endif
 #include "info.h"
 #include "intree.h"
+#include "taskdag.h"
 #include "snapshot.h"
 #include "treegenerator.h"
 
@@ -550,6 +551,29 @@ void generate_stats(const po::variables_map& vm,
 }
 
 int main(int argc, char** argv){
+    // Currently just testing DAG stuff    
+#define EDGES(x, ...) std::make_pair(x, vector<task_id>{__VA_ARGS__})
+    std::map<task_id, vector<task_id>> edges {
+        EDGES(8, 4),
+        EDGES(7, 4),
+        EDGES(5, 1, 0),
+        EDGES(4, 3, 2),
+        EDGES(3, 2, 1),
+        EDGES(2, 0),
+        EDGES(1, 0),
+        EDGES(0)
+    };
+    auto dag = TaskDAG(edges);
+    cout << dag << endl;
+#undef EDGES
+    cout << "Leafs: ";
+    for (auto e : dag.get_leaves()) {
+        cout << e << ", ";
+    }
+    cout << endl;
+
+
+    return 0;
 #if USE_SIMPLE_OPENMP // openmp settings - useful?
     omp_set_nested(1);
 #endif
