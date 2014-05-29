@@ -22,11 +22,11 @@ void TikzExporter2::generate_tikz_nodes(const Snapshot* s,
         return;
     }
     for(auto it : s->Successors()){
-        generate_tikz_nodes(it, orig, target);
+        generate_tikz_nodes(it.snapshot, orig, target);
     }
     TNSucs tikz_sucs;
-    for(auto it : s->SuccessorProbabilities){
-        tikz_sucs.push_back(TNSuc(target[it.get<0>()],it.get<1>()));
+    for(auto it : s->Successors()){
+        tikz_sucs.push_back(TNSuc(target[it.snapshot],it.probability));
     }
     target[s] = new TikzNode(s, orig->get_reaching_probability(s), tikz_sucs);
 }

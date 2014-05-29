@@ -47,8 +47,8 @@ RetVal Tester<RetVal, Args...>::test_all(const Snapshot* s, Args... args){
         return cache_all[finder];
     }
     vector<RetVal> values;
-    for(const Snapshot* suc : s->Successors()){
-        values.push_back(test_all(suc, args...));
+    for(auto suc : s->Successors()){
+        values.push_back(test_all(suc.snapshot, args...));
     }
     return cache_all[finder] = combine_function(s, test(s, args...), values);
 }

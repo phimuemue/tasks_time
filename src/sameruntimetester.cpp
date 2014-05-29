@@ -10,15 +10,15 @@ bool SameRunTimeTester::test(const Snapshot* s){
     myfloat epsilon = (myfloat)0.00001;
     for(auto suc1 = s->Successors().begin(); suc1 != s->Successors().end(); ++suc1) {
         for(auto suc2 = suc1 + 1; suc2 != s->Successors().end(); ++suc2) {
-            if(abs((*suc1)->expected_runtime() - (*suc2)->expected_runtime()) < epsilon)
+            if(abs((*suc1).snapshot->expected_runtime() - (*suc2).snapshot->expected_runtime()) < epsilon)
             {
                 vector<const Snapshot*> s1;
                 vector<const Snapshot*> s2;
-                for(auto it : (*suc1)->Successors()){
-                    s1.push_back(it);
+                for(auto it : (*suc1).snapshot->Successors()){
+                    s1.push_back(it.snapshot);
                 }
-                for(auto it : (*suc2)->Successors()){
-                    s2.push_back(it);
+                for(auto it : (*suc2).snapshot->Successors()){
+                    s2.push_back(it.snapshot);
                 }
                 sort(s1.begin(), s1.end());
                 sort(s2.begin(), s2.end());

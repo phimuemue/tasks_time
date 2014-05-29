@@ -28,11 +28,11 @@ myfloat RuntimeTester::test(const Snapshot* s, unsigned int p){
 myfloat RuntimeTester::combine_function(const Snapshot* s, myfloat result, vector<myfloat> values){
     myfloat returnvalue = (myfloat)result;
     auto val = values.begin();
-    for(auto sucs = s->SuccessorProbabilities.begin();
-            sucs != s->SuccessorProbabilities.end();
+    for(auto sucs = s->Successors().begin();
+            sucs != s->Successors().end();
             sucs++, val++)
     {
-        myfloat tmp = (*sucs).get<1>();
+        myfloat tmp = sucs->probability;
         tmp *= *val;
         returnvalue += tmp;
     }

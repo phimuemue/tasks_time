@@ -32,11 +32,11 @@ void DagviewExporter::dag_view_string_internal(const Snapshot* s,
     output << *s << " " << s->expected_runtime() << " " << probability << endl;
     if(s->intree.count_tasks() > task_count_limit){
         if(!s->intree.is_chain()){
-            for(auto it : s->SuccessorProbabilities){
-                dag_view_string_internal(it.get<0>(),
+            for(auto it : s->Successors()){
+                dag_view_string_internal(it.snapshot,
                         output,
                         task_count_limit,
-                        it.get<1>(),
+                        it.probability,
                         depth+1);
             }
         }

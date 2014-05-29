@@ -42,7 +42,7 @@ void TikzExporter::compute_level_widths(const Snapshot* s,
         level_count[depth] = level_count[depth] + s->intree.get_max_width() * 1.5f + 2;
     }
     for(auto it=s->Successors().begin(); it!=s->Successors().end(); ++it){
-        compute_level_widths(*it, level_count, done, depth+1);
+        compute_level_widths(it->snapshot, level_count, done, depth+1);
     }
 }
 
@@ -61,10 +61,10 @@ void TikzExporter::tikz_dag_by_levels(const Snapshot* s,
         }
     }
     for_each(s->Successors().begin(), s->Successors().end(),
-            [&](const Snapshot* x){
-                tikz_dag_by_levels(x, levels, depth+1, consec_num);
-            }
-            );
+        [&](const Snapshot::SuccessorInfo& x){
+            tikz_dag_by_levels(x.snapshot, levels, depth+1, consec_num);
+        }
+    );
 }
 
 void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
@@ -143,7 +143,7 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
                     else{
                         output << ".south) -- ";
                     }
-                    output << "(" << names[sit];
+                    output << "(" << names[sit.snapshot];
                     if(horizontal){
                         output << ".west);" << endl;
                     }
@@ -163,12 +163,12 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
         // draw current snapshot at proper position
         // connect (we have to draw probabilities seperately!)
         if(s->intree.count_tasks() > task_count_limit){
-            for(Snapshot* it : s->Successors()){
+            for(auto const& it : s->Successors()){
                 output << "\\draw ("
                     << tikz_node_name(s)
                     << ".south) -- "
                     << "(" 
-                    << names[it] << ".north);" << endl;
+                    << names[it.snapshot] << ".north);" << endl;
             }
         }
     }
@@ -208,9 +208,9 @@ void TikzExporter::tikz_draw_node(const Snapshot* s,
     // draw probabilities
     if(show_probabilities){
         vector<pair<Snapshot*,myfloat>> successor_probs_in_order;
-        for(auto sit : s->SuccessorProbabilities){
+        for(auto sit : s->Successors()){
             successor_probs_in_order.push_back(
-                    pair<Snapshot*, myfloat>(sit.get<0>(), sit.get<1>())
+                    std::make_pair(sit.snapshot, sit.probability)
                     );
         }
         sort(successor_probs_in_order.begin(), successor_probs_in_order.end(),

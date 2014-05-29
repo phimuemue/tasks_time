@@ -25,13 +25,23 @@ using namespace std;
 class Snapshot {
     // TODO: I dont want no friends!!!
     friend class Probability_Computer;
+    public:
+        struct SuccessorInfo {
+            task_id task; // finishing task leading to successor
+            myfloat probability; // corresponding probability
+            Snapshot* snapshot; // snapshot itself
+            SuccessorInfo(task_id t, myfloat p, Snapshot* s) :
+                task(t),
+                probability(p),
+                snapshot(s)
+            {}
+        };
     private:
         // private constructor which sets *everything*
         Snapshot(const Intree& t, 
             vector<task_id>& m, 
-            vector<Snapshot*>& s,
-            vector<myfloat>& sp,
-            vector<task_id>& ft);
+            vector<SuccessorInfo>& s
+        );
 
         // snapshots are organized in a set of pools (no duplicates)
         // We need different pools for different versions of the snap,
@@ -46,48 +56,15 @@ class Snapshot {
         mutable myfloat cache_expected_runtime;
         bool finalized;
 
-        // TODO: put successors, successor_probs, finished_task into 1 vector
-        vector<Snapshot*> successors;
-        vector<myfloat> successor_probs;
-        vector<task_id> finished_task;
+        vector<SuccessorInfo> successors;
 
     public:
         const vector<task_id> marked;
         const Intree intree;
-        const vector<Snapshot*>& Successors() const {
+
+        const vector<SuccessorInfo>& Successors() const {
             return successors;
         }
-        const vector<myfloat>& Probabilities() const {
-            return successor_probs;
-        }
-
-        // Member spaces to offer nice iterators 
-        // for probabilities and successors
-        struct SuccessorProbabilities {
-            typedef boost::tuple<
-                vector<Snapshot*>::const_iterator,
-                vector<myfloat>::const_iterator
-                > sp_tuple;
-            boost::zip_iterator<sp_tuple> begin() const {
-                return boost::make_zip_iterator(
-                    boost::make_tuple(
-                        my_Snapshot->successors.begin(),
-                        my_Snapshot->successor_probs.begin())
-                );
-            };
-            boost::zip_iterator<sp_tuple> end() const {
-                return boost::make_zip_iterator(
-                    boost::make_tuple(
-                        my_Snapshot->successors.end(),
-                        my_Snapshot->successor_probs.end())
-                );
-            };
-            private:
-            friend class Snapshot;
-            SuccessorProbabilities(Snapshot* s) : my_Snapshot(s) {}
-            Snapshot* my_Snapshot;
-        } SuccessorProbabilities;
-
         // constructors and destructors 
         Snapshot();
         Snapshot(const Snapshot& s);

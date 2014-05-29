@@ -20,7 +20,7 @@ void SimpleExporter::print_snapshot_dag(const Snapshot* s, int depth, ostream& o
     output << *s;
     output << endl;
     for(auto it=s->Successors().begin(); it!=s->Successors().end(); ++it){
-        print_snapshot_dag(*it, depth+1, output);
+        print_snapshot_dag(it->snapshot, depth+1, output);
     }
 }
 
