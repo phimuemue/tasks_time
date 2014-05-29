@@ -151,8 +151,7 @@ Snapshot* Snapshot::canonical_snapshot(
     }
     map<task_id, vector<task_id>> predecessor_collection;
     for(auto it=counts.begin(); it!=counts.end(); ++it){
-        tmp.get_predecessors(it->first,
-                predecessor_collection[it->first]);
+        predecessor_collection[it->first] = tmp.get_predecessors(it->first);
         // remove non-leaf tasks from predecessors
         predecessor_collection[it->first].erase(
             remove_if(predecessor_collection[it->first].begin(),
@@ -163,8 +162,14 @@ Snapshot* Snapshot::canonical_snapshot(
             )
             , predecessor_collection[it->first].end()
         );
+#if USE_CANONICAL_SNAPSHOT
+        assert(is_sorted(predecessor_collection[it->first].begin(),
+               predecessor_collection[it->first].end()));
+#else
+        // TODO: is it necessary to sort here?
         sort(predecessor_collection[it->first].begin(),
              predecessor_collection[it->first].end());
+#endif
     }
     m.clear();
     for(auto it=counts.begin(); it!=counts.end(); ++it){
