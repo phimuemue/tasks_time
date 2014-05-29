@@ -57,21 +57,12 @@ class Snapshot {
         const vector<Snapshot*>& Successors() const {
             return successors;
         }
+        const vector<myfloat>& Probabilities() const {
+            return successor_probs;
+        }
 
         // Member spaces to offer nice iterators 
         // for probabilities and successors
-        struct Probabilities {
-            vector<myfloat>::const_iterator begin() const {
-                return my_Snapshot->successor_probs.begin();
-            }
-            vector<myfloat>::const_iterator end() const {
-                return my_Snapshot->successor_probs.end();
-            }
-            private:
-            friend class Snapshot;
-            Probabilities(Snapshot* s) : my_Snapshot(s) {}
-            Snapshot* my_Snapshot;
-        } Probabilities;
         struct SuccessorProbabilities {
             typedef boost::tuple<
                 vector<Snapshot*>::const_iterator,
