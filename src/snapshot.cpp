@@ -113,7 +113,6 @@ Snapshot* Snapshot::canonical_snapshot(
         vector<task_id> m,
         map<task_id, task_id>* _isomorphism,
         Snapshot::PoolKind representant){
-    vector<task_id> original_m(m);
 #if USE_SIMPLE_OPENMP
     cout << "Warning! Using openmp with canonical snapshots!" << endl;
 #endif
@@ -180,10 +179,7 @@ Snapshot* Snapshot::canonical_snapshot(
     }
 
     // construct newmarked
-    vector<task_id> newmarked;
-    for(auto it=m.begin(); it!=m.end(); ++it){
-        newmarked.push_back(*it);
-    }
+    vector<task_id> newmarked(m);
     sort(newmarked.begin(), newmarked.end());
     auto find_key = snapshot_id(tid, newmarked);
     auto correct_pool = 
@@ -461,15 +457,14 @@ Snapshot* Snapshot::optimize() const {
         // sum up probabilities for current intree structure
         myfloat orig_prob_sum = (myfloat)0;
         for(auto& s : it->second){
-                orig_prob_sum += s.probability;
+            orig_prob_sum += s.probability;
         }
         // get one best intree structure
         auto best_one = 
             *min_element(it->second.begin(), it->second.end(),
             [](const SuccessorInfo& a, const SuccessorInfo& b) -> bool {
-                    return a.snapshot->expected_runtime() <=    
-                           b.snapshot->expected_runtime();
-                }
+                return a.snapshot->expected_runtime() <= b.snapshot->expected_runtime();
+            }
         );
         // only leave the best element(s)!
         it->second.erase(
@@ -483,17 +478,13 @@ Snapshot* Snapshot::optimize() const {
         );
         // compute new sum of probabilities to normalize the old ones
         myfloat new_prob_sum = (myfloat)0;
-        for_each(it->second.begin(), it->second.end(),
-            [&](const SuccessorInfo& s) {
-                new_prob_sum += s.probability;
-            }
-        );
+        for(auto const & s : it->second){
+            new_prob_sum += s.probability;
+        }
         // normalize old probabilities so that total sum is still 1
-        transform(it->second.begin(), it->second.end(), it->second.begin(),
-            [&](const SuccessorInfo& s) -> SuccessorInfo {
-                return SuccessorInfo(s.task, (orig_prob_sum / new_prob_sum) * s.probability, s.snapshot);
-            }
-        );
+        for(auto& s : it->second){
+            s.probability *= (orig_prob_sum / new_prob_sum);
+        }
     }
     // put all new successors/probs into new vectors and return optimized
     // version of snapshot
