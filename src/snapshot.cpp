@@ -24,7 +24,6 @@ void Snapshot::clear_pool(){
 Snapshot::Snapshot() :
     cache_expected_runtime(0),
     finalized(false),
-    Successors(this),
     Probabilities(this),
     SuccessorProbabilities(this)
 {
@@ -36,7 +35,6 @@ Snapshot::Snapshot(const Snapshot& s) :
     finalized(false),
     marked(s.marked),
     intree(s.intree),
-    Successors(this),
     Probabilities(this),
     SuccessorProbabilities(this)
     {
@@ -46,7 +44,6 @@ Snapshot::Snapshot(const Intree& t) :
     cache_expected_runtime(0),
     finalized(false),
     intree(t),
-    Successors(this),
     Probabilities(this),
     SuccessorProbabilities(this)
 {
@@ -58,7 +55,6 @@ Snapshot::Snapshot(const Intree& t, vector<task_id> m) :
     finalized(false),
     marked(m),
     intree(t),
-    Successors(this),
     Probabilities(this),
     SuccessorProbabilities(this)
 {
@@ -90,7 +86,6 @@ Snapshot::Snapshot(const Intree& t,
     finished_task(ft),
     marked(m),
     intree(t),
-    Successors(this),
     Probabilities(this),
     SuccessorProbabilities(this)
 {
@@ -598,7 +593,7 @@ unsigned long Snapshot::count_snapshots_in_dag(map<const Snapshot*, bool>& tmp) 
     }
     tmp[this] = true;
     unsigned long sum = 1;
-    for(auto s : Successors){
+    for(auto s : Successors()){
         sum += s->count_snapshots_in_dag(tmp);
     }
     return sum;

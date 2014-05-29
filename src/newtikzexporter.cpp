@@ -21,7 +21,7 @@ void TikzExporter2::generate_tikz_nodes(const Snapshot* s,
     if(target.find(s) != target.end()){
         return;
     }
-    for(auto it : s->Successors){
+    for(auto it : s->Successors()){
         generate_tikz_nodes(it, orig, target);
     }
     TNSucs tikz_sucs;

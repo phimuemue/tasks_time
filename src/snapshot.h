@@ -54,21 +54,12 @@ class Snapshot {
     public:
         const vector<task_id> marked;
         const Intree intree;
+        const vector<Snapshot*>& Successors() const {
+            return successors;
+        }
 
         // Member spaces to offer nice iterators 
         // for probabilities and successors
-        struct Successors {
-            vector<Snapshot*>::const_iterator begin() const {
-                return my_Snapshot->successors.begin();
-            }
-            vector<Snapshot*>::const_iterator end() const {
-                return my_Snapshot->successors.end();
-            }
-            private:
-            friend class Snapshot;
-            Successors(Snapshot* s) : my_Snapshot(s) {}
-            Snapshot* my_Snapshot;
-        } Successors;
         struct Probabilities {
             vector<myfloat>::const_iterator begin() const {
                 return my_Snapshot->successor_probs.begin();

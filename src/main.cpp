@@ -551,7 +551,7 @@ void generate_stats(const po::variables_map& vm,
 }
 
 int main(int argc, char** argv){
-    // Currently just testing DAG stuff    
+#if 0 // Currently just testing DAG stuff    
 #define EDGES(x, ...) std::make_pair(x, vector<task_id>{__VA_ARGS__})
     std::map<task_id, vector<task_id>> edges {
         EDGES(8, 4),
@@ -574,6 +574,7 @@ int main(int argc, char** argv){
 
 
     return 0;
+#endif
 #if USE_SIMPLE_OPENMP // openmp settings - useful?
     omp_set_nested(1);
 #endif

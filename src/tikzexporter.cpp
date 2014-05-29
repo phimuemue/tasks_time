@@ -41,7 +41,7 @@ void TikzExporter::compute_level_widths(const Snapshot* s,
         done[const_cast<Snapshot*>(s)] = true;
         level_count[depth] = level_count[depth] + s->intree.get_max_width() * 1.5f + 2;
     }
-    for(auto it=s->Successors.begin(); it!=s->Successors.end(); ++it){
+    for(auto it=s->Successors().begin(); it!=s->Successors().end(); ++it){
         compute_level_widths(*it, level_count, done, depth+1);
     }
 }
@@ -60,7 +60,7 @@ void TikzExporter::tikz_dag_by_levels(const Snapshot* s,
             consec_num[s_tmp] = consec_num.size();
         }
     }
-    for_each(s->Successors.begin(), s->Successors.end(),
+    for_each(s->Successors().begin(), s->Successors().end(),
             [&](const Snapshot* x){
                 tikz_dag_by_levels(x, levels, depth+1, consec_num);
             }
@@ -134,7 +134,7 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
         // connect (we have to draw probabilities seperately!)
         for(unsigned int l=1; l<s->intree.count_tasks()+1-task_count_limit; ++l){
             for(auto it=levels[l].begin(); it!=levels[l].end(); ++it){
-                for(auto sit:(*it)->Successors){
+                for(auto sit:(*it)->Successors()){
                     output << "\\draw ("
                         << tikz_node_name(*it);
                     if(horizontal){
@@ -163,7 +163,7 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
         // draw current snapshot at proper position
         // connect (we have to draw probabilities seperately!)
         if(s->intree.count_tasks() > task_count_limit){
-            for(auto it : s->Successors){
+            for(Snapshot* it : s->Successors()){
                 output << "\\draw ("
                     << tikz_node_name(s)
                     << ".south) -- "
