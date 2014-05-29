@@ -129,6 +129,7 @@ class Intree {
         unsigned int get_max_width(task_id tid = 0) const;
 
         bool operator==(const Intree& t) const;
+        bool operator<(const Intree& t) const;
         friend ostream& operator<<(ostream& os, const Intree& t);
 };
 

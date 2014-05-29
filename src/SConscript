@@ -79,7 +79,7 @@ vars.Add(EnumVariable("USE_SIMPLE_OPENMP", "Simple multithreading for computing 
             allowed_values=("0", "1")))
 vars.Add(EnumVariable("USE_CANONICAL_SNAPSHOT", "Only consider non-isomorphic snapshots", 1, allowed_values=("0", "1")))
 vars.Add(EnumVariable("PYTHON_TESTS", "Enable support for tests written in Python 2.7.", 1, allowed_values=("0", "1")))
-vars.Add(EnumVariable("USE_MATULA", "Use matula numbers for canonical snapshots.", 0, allowed_values=("0", "1")))
+vars.Add(EnumVariable("TREE_ID_TYPE", "How are trees looked up in std::map? \n 0:raw trees\n 1:Some vector stuff\n 2:Matula numbers", 1, allowed_values=("0", "1", "2")))
 vars.Add(EnumVariable("USE_TASKMAP", "Set to 1 if tasks in one tree behave different.", 0,
             allowed_values=("0", "1")))
 vars.Add(EnumVariable("RELEASE_MODE", "Set to 1 if you want to disable assertions.", 0,
@@ -103,6 +103,7 @@ env = Environment(variables = vars,
                             "-DPYTHON_TESTS=${PYTHON_TESTS}",
                             "-DUSE_TASKMAP=${USE_TASKMAP}",
                             "-DRELEASE_MODE=${RELEASE_MODE}",
+                            "-DTREE_ID_TYPE=${TREE_ID_TYPE}",
                             ], 
                   CPPPATH=[
                             "/usr/include/python2.7/",

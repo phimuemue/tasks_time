@@ -411,14 +411,25 @@ Intree Intree::canonical_intree2(const Intree& _t,
         isomorphism[inner_iso_rev[*tit]] = consecutive_num;
         consecutive_num++;
     }
+#if USE_TASKMAP
     vector<pair<Task, Task>> edges;
     for(task_id it=1; it < _t.edges.size(); ++it){
-        edges.push_back(pair<Task,Task>(Task(isomorphism[it]),Task(isomorphism[_t.edges[it]])));
+        edges.push_back(make_pair(Task(isomorphism[it]),Task(isomorphism[_t.edges[it]])));
     }
+#else
+    vector<pair<task_id, task_id>> edges;
+    for(task_id it=1; it < _t.edges.size(); ++it){
+        edges.push_back(make_pair(isomorphism[it],isomorphism[_t.edges[it]]));
+    }
+#endif
+#if TREE_ID_TYPE==TREE_ID_DEFAULT
     out.clear();
     for(unsigned int i=0; i<canonical_names[0].size(); ++i){
         out.push_back(canonical_names[0][i] > 0 ? 1u : 0u);
     }
+#elif TREE_ID_TYPE==TREE_ID_NONE
+    out = Intree(edges);
+#endif
     return Intree(edges);
 }
 
@@ -800,14 +811,16 @@ void Intree::get_raw_tree_id(tree_id& target) const {
     // (I think) quite correct solution and a 
     // (I think) quite correct but more efficient solution
 #if 1
-#if USE_MATULA
+#if TREE_ID_TYPE==TREE_ID_MATULA
     cout << "Matula not implemented due to too much memory consumption." << endl;
     assert(false);
-#else
+#elif TREE_ID_TYPE==TREE_ID_DEFAULT
     target.push_back(NOTASK);
     for(task_id it = 1; it < edges.size(); ++it){
         target.push_back(edges[it]);
     }
+#elif TREE_ID_TYPE==TREE_ID_NONE
+    target = *this;
 #endif
 #else
     task_id max_id = 0;
@@ -883,6 +896,10 @@ ostream& operator<<(ostream& os, const Intree& t){
 
 bool Intree::operator==(const Intree& t) const {
     return edges==t.edges;
+}
+
+bool Intree::operator<(const Intree& t) const {
+    return edges<t.edges;
 }
 
 #if PYTHON_TESTS

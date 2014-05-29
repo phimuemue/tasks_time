@@ -41,10 +41,20 @@ typedef mpq_class myfloat;
 #endif 
 
 typedef unsigned int task_id;
-#if USE_MATULA
+
+#define TREE_ID_NONE 0
+#define TREE_ID_DEFAULT 1
+#define TREE_ID_MATULA 2
+
+#if TREE_ID_TYPE==TREE_ID_MATULA
 typedef unsigned int tree_id;
-#else
+#elif TREE_ID_TYPE==TREE_ID_DEFAULT
 typedef std::vector<unsigned char> tree_id;
+#elif TREE_ID_TYPE==TREE_ID_NONE
+class Intree;
+typedef Intree tree_id;
+#else
+#error "Disallowed TREE_ID_TYPE."
 #endif
 typedef std::pair<tree_id, std::vector<task_id>> snapshot_id;
 
