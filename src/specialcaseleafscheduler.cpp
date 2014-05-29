@@ -10,14 +10,13 @@ void SpecialCaseLeafscheduler::all_possible_combinations(
 }
 
 void SpecialCaseLeafscheduler::get_initial_schedule(const Intree& t, 
-        const unsigned int p, 
         vector<vector<task_id>>& target) const {
     if(t.is_degenerate_tree() || t.is_parallel_chain()){
         HLFDeterministicScheduler hlfds;
-        hlfds.get_initial_schedule(t, p, target);
+        hlfds.get_initial_schedule(t, target);
     }
     else {
-        Leafscheduler::get_initial_schedule(t, p, target);
+        Leafscheduler::get_initial_schedule(t, target);
     }
 #if 1 // use conjecture that as many toptask as possible shall be scheduled
     vector<task_id> leaves;
@@ -38,7 +37,7 @@ void SpecialCaseLeafscheduler::get_initial_schedule(const Intree& t,
         }
     }
     // more topmost tasks than processors -> only consider topmost-combinations
-    if(count >= p){
+    if(count >= processorcount){
         target.erase(remove_if(target.begin(), target.end(),
                     [&](const vector<task_id>& a) -> bool {
                         for(auto it : a){

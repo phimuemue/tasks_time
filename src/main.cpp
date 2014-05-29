@@ -301,7 +301,7 @@ vector<Intree> generate_tree(po::variables_map vm){
 
 void create_snapshot_dags(const po::variables_map& vm,
         Intree& t,
-        const Scheduler* sched,
+        Scheduler* sched,
         vector<vector<task_id>>& initial_settings,
         vector<map<task_id, task_id>>& isomorphisms,
         vector<Snapshot*>& s,
@@ -309,7 +309,8 @@ void create_snapshot_dags(const po::variables_map& vm,
         vector<myfloat>& expected_runtimes){
     // generate all possible initial markings
     vector<task_id> marked;
-    sched->get_initial_schedule(t, vm["processors"].as<int>(), initial_settings);
+    sched->set_processorcount(vm["processors"].as<int>());
+    sched->get_initial_schedule(t, initial_settings);
     if(vm["verbosity"].as<int>() < 2){
         cout << "Generating initial settings" << endl;
     }
@@ -621,14 +622,16 @@ int main(int argc, char** argv){
                 cout << "Scheduler " << vm["scheduler"].as<string>() << " not found." << endl;
                 return 1;
             }
-            create_snapshot_dags(vm,
-                    t,
-                    schedulers[vm["scheduler"].as<string>()],
-                    initial_settings,
-                    isomorphisms,
-                    s,
-                    probs,
-                    expected_runtimes);
+            create_snapshot_dags(
+                vm,
+                t,
+                schedulers[vm["scheduler"].as<string>()],
+                initial_settings,
+                isomorphisms,
+                s,
+                probs,
+                expected_runtimes
+            );
 
             // optimize current snapshot
             if(vm["optimize"].as<bool>()){

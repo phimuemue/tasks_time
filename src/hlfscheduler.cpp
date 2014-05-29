@@ -33,7 +33,6 @@ void HLFscheduler::all_combinations(vector<task_id> nums,
 }
 
 void HLFscheduler::get_initial_schedule(const Intree& t,
-        const unsigned int procs,
         vector<vector<task_id>>& target) const {
     // fetch all tasks, and sort them according to their level
     set<task_id> tasks;
@@ -53,7 +52,7 @@ void HLFscheduler::get_initial_schedule(const Intree& t,
     vector<task_id> dummy;
     vector<unsigned int> referencelevels;
     unsigned int numtasks = tmp.size();
-    unsigned int actualprocs = min(procs, numtasks);
+    unsigned int actualprocs = min(processorcount, numtasks);
     for(unsigned int i=0; i<actualprocs; ++i){
         referencelevels.push_back(t.get_level(tmp[i]));
     }

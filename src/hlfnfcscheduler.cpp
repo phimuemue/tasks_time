@@ -41,9 +41,8 @@ unsigned int HLFNFCscheduler::count_free_chains(const Intree& t, const vector<ta
 }
 
 void HLFNFCscheduler::get_initial_schedule(const Intree& t,
-        const unsigned int procs,
         vector<vector<task_id>>& target) const {
-    HLFscheduler::get_initial_schedule(t, procs, target);
+    HLFscheduler::get_initial_schedule(t, target);
 }
 
 void HLFNFCscheduler::get_next_tasks(const Intree& t, 
