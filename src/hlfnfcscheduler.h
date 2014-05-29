@@ -17,14 +17,14 @@ class HLFNFCscheduler : public HLFscheduler {
                 vector<vector<task_id>>& target) const;
         unsigned int count_free_chains(const Intree& t,
                 const vector<task_id>& newmarked,
-                const task_id& target_task) const;
+                const vector<task_id>& target_tasks) const;
     public:
         void get_initial_schedule(const Intree& t, 
                 const unsigned int, 
                 vector<vector<task_id>>&) const;
         void get_next_tasks(const Intree& t, 
                 const vector<task_id>& marked,
-                vector<pair<task_id,myfloat>>& target) const;
+                vector<pair<vector<task_id>,myfloat>>& target) const;
 };
 
 #endif

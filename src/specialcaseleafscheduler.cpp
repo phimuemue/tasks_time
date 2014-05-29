@@ -70,7 +70,7 @@ void SpecialCaseLeafscheduler::get_initial_schedule(const Intree& t,
 void SpecialCaseLeafscheduler::get_next_tasks(const Intree& t, 
 //#define CHECK_TARGET_VALIDITY
         const vector<task_id>& marked,
-        vector<pair<task_id,myfloat>>& target) const {
+        vector<pair<vector<task_id>,myfloat>>& target) const {
     // cout << t << endl;
     // cout << t.is_degenerate_tree() << " " << t.is_parallel_chain() << endl;
     if(t.is_degenerate_tree() || t.is_parallel_chain()){
@@ -111,22 +111,22 @@ void SpecialCaseLeafscheduler::get_next_tasks(const Intree& t,
         // more topmost than marked -> only topmost-combinations
         if(count >= marked.size()){
             target.erase(remove_if(target.begin(), target.end(),
-                [&](const pair<task_id, myfloat>& a) -> bool {
-                    return t.get_level(a.first) < max_level;
+                [&](const pair<vector<task_id>, myfloat>& a) -> bool {
+                    return t.get_level(a.first[0]) < max_level;
                 }
             ), target.end());
         }
         // less topmost than marked -> all topmost must be scheduled
         else{
             target.erase(remove_if(target.begin(), target.end(),
-                [&](const pair<task_id, myfloat>& a) -> bool {
+                [&](const pair<vector<task_id>, myfloat>& a) -> bool {
                     unsigned int newcount = 0;
                     for (auto tsk : marked){
                         if(t.get_level(tsk) == max_level){
                             newcount++;
                         }
                     }
-                    if(t.get_level(a.first) == max_level){
+                    if(t.get_level(a.first[0]) == max_level){
                         newcount++;
                     }
                     return newcount < count;

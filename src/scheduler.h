@@ -18,7 +18,7 @@ class Scheduler {
                 vector<vector<task_id>>&) const = 0;
         virtual void get_next_tasks(const Intree& t, 
                                     const vector<task_id>& marked,
-                                    vector<pair<task_id,myfloat>>& target) const = 0;
+                                    vector<pair<vector<task_id>,myfloat>>& target) const = 0;
 };
 
 #endif

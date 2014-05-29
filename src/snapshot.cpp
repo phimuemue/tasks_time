@@ -278,20 +278,24 @@ void Snapshot::get_successors(const Scheduler& scheduler,
 #endif
         Intree tmp(intree);
         tmp.remove_task(*it);
-        vector<pair<task_id,myfloat>> raw_sucs;
+        vector<pair<vector<task_id>,myfloat>> raw_sucs;
         scheduler.get_next_tasks(tmp, marked, raw_sucs);
         // we have to check if the scheduler even found 
         // a new task to schedule
         if(raw_sucs.size() > 0){
             for(unsigned int i=0; i<raw_sucs.size(); ++i){
                 vector<task_id> newmarked(marked);
-                newmarked.erase(remove_if(
-                            newmarked.begin(), newmarked.end(),
-                            [it](const task_id& a){
-                            return a==*it;
-                            }), newmarked.end());
-                if(raw_sucs[i].first != NOTASK)
-                    newmarked.push_back(raw_sucs[i].first);
+                newmarked.erase(remove_if( newmarked.begin(), newmarked.end(),
+                    [it](const task_id& a){
+                        return a==*it;
+                    }
+                ), newmarked.end());
+                assert(raw_sucs[i].first[0] != NOTASK);
+                // TODO: remove the following if if the above assert
+                // has been in for some time and never kicked in
+                if(raw_sucs[i].first[0] != NOTASK){
+                    newmarked.insert(newmarked.end(), raw_sucs[i].first.begin(), raw_sucs[i].first.end());
+                }
                 sort(newmarked.begin(), newmarked.end());
 #if USE_CANONICAL_SNAPSHOT
                 Snapshot* news = Snapshot::canonical_snapshot(tmp, 

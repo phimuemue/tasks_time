@@ -10,7 +10,9 @@ void HLFNFCscheduler::all_combinations(vector<task_id> nums,
     HLFscheduler::all_combinations(nums, n, minindex, t, referencelevels, current, target);
 }
 
-unsigned int HLFNFCscheduler::count_free_chains(const Intree& t, const vector<task_id>& newmarked, const task_id& target_task) const {
+unsigned int HLFNFCscheduler::count_free_chains(const Intree& t, const vector<task_id>& newmarked, const vector<task_id>& target_tasks) const {
+        assert(0<=target_tasks.size()); // chains are only useful for intrees, and intrees can have at most one target_task
+        auto target_task=target_tasks[0];
         vector<vector<task_id>> allchains;
         t.get_chains(allchains);
         vector<vector<task_id>> marked_chains(newmarked.size());
@@ -46,7 +48,7 @@ void HLFNFCscheduler::get_initial_schedule(const Intree& t,
 
 void HLFNFCscheduler::get_next_tasks(const Intree& t, 
         const vector<task_id>& marked,
-        vector<pair<task_id,myfloat>>& target) const {
+        vector<pair<vector<task_id>,myfloat>>& target) const {
     vector<task_id> newmarked(marked);
     newmarked.erase(
         remove_if(newmarked.begin(), newmarked.end(),

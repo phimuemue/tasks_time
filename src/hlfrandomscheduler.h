@@ -13,7 +13,7 @@ class HLFRandomScheduler : public HLFscheduler {
         HLFRandomScheduler();
         void get_next_tasks(const Intree& t, 
                 const vector<task_id>& marked,
-                vector<pair<task_id,myfloat>>& target) const;
+                vector<pair<vector<task_id>,myfloat>>& target) const;
 };
 
 #endif

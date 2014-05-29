@@ -65,7 +65,7 @@ void HLFscheduler::get_initial_schedule(const Intree& t,
 
 void HLFscheduler::get_next_tasks(const Intree& t, 
         const vector<task_id>& _marked,
-        vector<pair<task_id,myfloat>>& target) const {
+        vector<pair<vector<task_id>,myfloat>>& target) const {
     vector<task_id> marked(_marked);
     marked.erase(remove_if(marked.begin(), marked.end(),
         [&t](const task_id a) -> bool {
@@ -73,17 +73,17 @@ void HLFscheduler::get_next_tasks(const Intree& t,
         }), 
         marked.end()
     );
-    vector<pair<task_id, myfloat>> tmp;
+    vector<pair<vector<task_id>,myfloat>> tmp;
     Leafscheduler::get_next_tasks(t, marked, tmp);
     unsigned int maxlevel = 0; 
     for(auto it=tmp.begin(); it!=tmp.end(); ++it){
-        maxlevel = t.get_level(it->first) > maxlevel ? t.get_level(it->first) : maxlevel;
+        maxlevel = t.get_level(it->first[0]) > maxlevel ? t.get_level(it->first[0]) : maxlevel;
     }
     tmp.erase(remove_if(tmp.begin(), tmp.end(),
-                [maxlevel, t](const pair<task_id, myfloat>& a) -> bool {
-                    if(a.first==NOTASK)
+                [maxlevel, t](const pair<vector<task_id>, myfloat>& a) -> bool {
+                    if(a.first[0]==NOTASK)
                         return false;
-                    return t.get_level(a.first)!=maxlevel;
+                    return t.get_level(a.first[0])!=maxlevel;
                 }), tmp.end());
     // normalize probability values
     myfloat sum = 0;

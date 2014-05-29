@@ -64,15 +64,16 @@ map<string, Scheduler*> schedulers =
 {
     // "all possibilities" scheduler
     {"leaf", new Leafscheduler()}, 
-    // leaf scheduler that schedules as many topmost tasks as possible
-    {"tms", new TopMostSureScheduler()},
-    // leaf scheduler with known special cases
-    {"scleaf", new SpecialCaseLeafscheduler()}, 
-    // HLF schedulers (variants)
-    {"hlf", new HLFscheduler()},
-    {"hlfnfc", new HLFNFCscheduler()},
-    {"hlfdet", new HLFDeterministicScheduler()},
-    {"hlfrand", new HLFRandomScheduler()},
+    // // for now, we disable all other schedulers
+    // // leaf scheduler that schedules as many topmost tasks as possible
+    // {"tms", new TopMostSureScheduler()},
+    // // leaf scheduler with known special cases
+    // {"scleaf", new SpecialCaseLeafscheduler()}, 
+    // // HLF schedulers (variants)
+    // {"hlf", new HLFscheduler()},
+    // {"hlfnfc", new HLFNFCscheduler()},
+    // {"hlfdet", new HLFDeterministicScheduler()},
+    // {"hlfrand", new HLFRandomScheduler()},
 };
 
 void randomEdges(int n, vector<pair<Task,Task>>& target){
@@ -239,7 +240,7 @@ int read_variables_map_from_args(int argc,
     config_options.add_options()
         ("processors,p", po::value<int>()->default_value(2), 
          "Number of processors to use.")
-        ("scheduler,s", po::value<string>()->default_value("hlf"), 
+        ("scheduler,s", po::value<string>()->default_value("leaf"), 
          schedulers_available.c_str())
         ("optimize", po::value<bool>()->default_value(false)->zero_tokens(), 
          "Generate optimal schedule out of computed schedule by picking best successors.");
