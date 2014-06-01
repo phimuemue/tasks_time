@@ -93,32 +93,11 @@ void Leafscheduler::get_initial_schedule(const Intree& t,
 }
 
 void Leafscheduler::get_next_tasks(const Intree& t, 
-        const vector<task_id>& _marked,
+        const vector<task_id>& marked,
         vector<pair<vector<task_id>,myfloat>>& target) const {
-    vector<task_id> marked(_marked);
-    marked.erase(remove_if(marked.begin(), marked.end(),
-        [&t](const task_id a) -> bool {
-            return !t.contains_task(a);
-        }), 
-        marked.end()
-    );
-    vector<task_id> const tasks = t.get_leaves();
-#if 0
-    vector<pair<task_id,myfloat>> tasks_probs;
-    for(auto it = tasks.begin(); it != tasks.end(); ++it){
-        tasks_probs.push_back(pair<task_id,myfloat>(
-            *it,
-            ((myfloat)1)/(myfloat)tasks.size()
-            )
-        );
-    }
-    assert(tasks_probs.size()==tasks.size());
-    for(unsigned int i=0; i<tasks_probs.size(); ++i){
-        target.push_back(pair<task_id,myfloat>(tasks_probs[i]));
-    }
-#else
+    vector<task_id> const leaves = t.get_leaves();
     unsigned int count = 0;
-    for(auto it : tasks) {
+    for(auto it : leaves) {
         if(find(marked.begin(), marked.end(), it)==marked.end()) {
             count++;
             target.push_back(
@@ -132,7 +111,6 @@ void Leafscheduler::get_next_tasks(const Intree& t,
     for (auto& it : target) {
         it.second = myfloat(1)/myfloat(count);
     }
-#endif
 }
 
 
