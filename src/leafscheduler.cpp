@@ -102,9 +102,7 @@ void Leafscheduler::get_next_tasks(const Intree& t,
         }), 
         marked.end()
     );
-    set<task_id> tasks;
-    t.get_leaves(tasks);
-    // vector<task_id> const tasks = t.get_leaves();
+    vector<task_id> const tasks = t.get_leaves();
 #if 0
     vector<pair<task_id,myfloat>> tasks_probs;
     for(auto it = tasks.begin(); it != tasks.end(); ++it){

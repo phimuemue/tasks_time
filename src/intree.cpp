@@ -557,18 +557,6 @@ vector<task_id> Intree::get_siblings(const task_id t) const {
     return result;
 }
 
-
-void Intree::get_leaves(set<task_id>& target) const{
-    for(task_id it = 1; it < edges.size(); ++it){
-        if (get_in_degree(it) == 0 && edges[it] != NOTASK){
-            target.insert(it);
-        }
-    }
-    if(count_tasks()==1){
-        target.insert(0);
-    }
-}
-
 vector<task_id> Intree::get_leaves() const{
     vector<task_id> result;
 #if !USE_CANONICAL_SNAPSHOT
@@ -586,7 +574,7 @@ vector<task_id> Intree::get_leaves() const{
     }
     leaf_candidates[0] = false;
     for(task_id it = 0; it < leaf_candidates.size(); ++it){
-        if(leaf_candidates[it]){
+        if(leaf_candidates[it] && edges[it]!=NOTASK){
             result.push_back(it);
         }
     }

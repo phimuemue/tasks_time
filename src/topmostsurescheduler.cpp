@@ -17,9 +17,8 @@ void TopMostSureScheduler::get_next_tasks(const Intree& t,
         }), 
         marked.end()
     );
-    set<task_id> tasks;
 #if 0
-    t.get_tasks(tasks);
+    auto tasks = t.get_tasks();
     for(auto it = tasks.begin(); it != tasks.end();){
         if(find(marked.begin(), marked.end(), *it)!=marked.end() ||
            t.get_in_degree(*it) > 0
@@ -30,10 +29,10 @@ void TopMostSureScheduler::get_next_tasks(const Intree& t,
     }
 #else
     // just to see if another method would behave the same
-    t.get_leaves(tasks);
+    auto tasks = t.get_leaves();
     for(auto it = tasks.begin(); it != tasks.end();){
         if(find(marked.begin(), marked.end(), *it)!=marked.end())
-            tasks.erase(it++);
+            it = tasks.erase(it);
         else
             ++it;
     }

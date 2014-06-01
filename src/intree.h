@@ -100,7 +100,6 @@ class Intree {
         vector<task_id> get_predecessors(const task_id t) const;
         void get_siblings(const task_id t, vector<task_id>& target) const;
         vector<task_id> get_siblings(const task_id t) const;
-        void get_leaves(set<task_id>& target) const;
         vector<task_id> get_leaves() const;
         bool is_leaf(const task_id t) const;
 
