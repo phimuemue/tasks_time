@@ -9,8 +9,7 @@ string UnscheduledHlf1Tester::test_string(const Snapshot* s){
 // Tests whether the snapshot has 1 HLF-task and
 // 2 non-HLF tasks scheduled.
 bool UnscheduledHlf1Tester::test(const Snapshot* s){
-    vector<task_id> leaves;
-    s->intree.get_leaves(leaves);
+    vector<task_id> const leaves = s->intree.get_leaves();
     unsigned int max_s=0, min_s=s->intree.count_tasks();
     for(auto t : s->marked){
         min_s = min(s->intree.get_level(t), min_s);

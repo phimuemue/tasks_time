@@ -22,8 +22,7 @@ bool SingleSuccessorTester::test(const Snapshot* s){
     if(marked_have_siblings == false){
         return true;
     }
-    vector<task_id> leaves;
-    s->intree.get_leaves(leaves);
+    vector<task_id> const leaves = s->intree.get_leaves();
     bool has_single_predecessor = false;
     for(auto it : leaves){
         vector<task_id> sibs;

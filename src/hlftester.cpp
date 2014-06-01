@@ -11,8 +11,7 @@ bool HLFTester::test(const Snapshot* s){
     if(s->intree.count_tasks()==1){
         return true;
     }
-    vector<task_id> leaves;
-    s->intree.get_leaves(leaves);
+    vector<task_id> const leaves = s->intree.get_leaves();
     vector<unsigned int> leaf_levels;
     for(auto t : leaves){
         leaf_levels.push_back(s->intree.get_level(t));

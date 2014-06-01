@@ -19,8 +19,8 @@ void SpecialCaseLeafscheduler::get_initial_schedule(const Intree& t,
         Leafscheduler::get_initial_schedule(t, target);
     }
 #if 1 // use conjecture that as many toptask as possible shall be scheduled
-    vector<task_id> leaves;
-    t.get_leaves(leaves);
+    vector<task_id> leaves = t.get_leaves();
+    // TODO: Are leaves possibly already sorted?
     sort(leaves.begin(), leaves.end(),
             [&](const task_id a, const task_id b) -> bool {
             return t.get_level(a) > t.get_level(b);
@@ -83,8 +83,8 @@ void SpecialCaseLeafscheduler::get_next_tasks(const Intree& t,
         bool more_than_zero_in_target = target.size() > 0;
 #endif
 #if 1 // use conjecture that as many toptask as possible shall be scheduled
-        vector<task_id> leaves;
-        t.get_leaves(leaves);
+        vector<task_id> leaves = t.get_leaves();
+        // TODO: are leaves already sorted?
         sort(leaves.begin(), leaves.end(),
                 [&](const task_id a, const task_id b) -> bool {
                     return t.get_level(a) > t.get_level(b);

@@ -87,8 +87,7 @@ void Leafscheduler::all_possible_combinations(
 
 void Leafscheduler::get_initial_schedule(const Intree& t, 
         vector<vector<task_id>>& target) const {
-    vector<task_id> leaves;
-    t.get_leaves(leaves);
+    vector<task_id> const leaves = t.get_leaves();
     vector<vector<task_id>> combis;
     all_possible_combinations(leaves, processorcount, 0, target);
 }

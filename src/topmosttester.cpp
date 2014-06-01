@@ -8,8 +8,7 @@ string TopmostTester::test_string(const Snapshot* s){
 }
 
 bool TopmostTester::test(const Snapshot* s){
-    vector<task_id> leaves;
-    s->intree.get_leaves(leaves);
+    vector<task_id> const leaves = s->intree.get_leaves();
     unsigned int max_level = s->intree.longest_chain_length() - 1;
     vector<task_id> topmosttasks;
     for(auto it : leaves){

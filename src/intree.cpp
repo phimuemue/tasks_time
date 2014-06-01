@@ -193,8 +193,7 @@ Intree Intree::canonical_intree3(const Intree& _t,
     }
     map<task_id, int> labels;
     // assign labels to leaves
-    vector<task_id> leaves;
-    _t.get_leaves(leaves);
+    vector<task_id> const leaves = _t.get_leaves();
     for(task_id it : leaves){
         labels[it] = find(_preferred.begin(), _preferred.end(), it)==_preferred.end() ? 0 : -1;
     }
@@ -270,8 +269,7 @@ Intree Intree::canonical_intree2(const Intree& _t,
         inner_iso_rev[it] = it;
     }
     // make leaves minimal
-    vector<task_id> leaves;
-    t.get_leaves(leaves);
+    vector<task_id> leaves = t.get_leaves();
     sort(leaves.begin(), leaves.end(),
         [&](const task_id a, const task_id b) -> bool {
 #if 0
@@ -559,28 +557,6 @@ vector<task_id> Intree::get_siblings(const task_id t) const {
     return result;
 }
 
-void Intree::get_leaves(vector<task_id>& target) const{
-#if !USE_CANONICAL_SNAPSHOT
-    for(task_id it = 1; it < edges.size(); ++it){
-        if (get_in_degree(it) == 0){
-            target.push_back(it);
-        }
-    }
-#else
-    vector<bool> leaf_candidates(edges.size(), true);
-    for(task_id it = edges.size()-1; it > 0; --it){
-        if(edges[it] != NOTASK){
-            leaf_candidates[edges[it]] = false;
-        }
-    }
-    leaf_candidates[0] = false;
-    for(task_id it = 0; it < leaf_candidates.size(); ++it){
-        if(leaf_candidates[it]){
-            target.push_back(it);
-        }
-    }
-#endif
-}
 
 void Intree::get_leaves(set<task_id>& target) const{
     for(task_id it = 1; it < edges.size(); ++it){
@@ -595,7 +571,26 @@ void Intree::get_leaves(set<task_id>& target) const{
 
 vector<task_id> Intree::get_leaves() const{
     vector<task_id> result;
-    get_leaves(result);
+#if !USE_CANONICAL_SNAPSHOT
+    for(task_id it = 1; it < edges.size(); ++it){
+        if (get_in_degree(it) == 0){
+            result.push_back(it);
+        }
+    }
+#else
+    vector<bool> leaf_candidates(edges.size(), true);
+    for(task_id it = edges.size()-1; it > 0; --it){
+        if(edges[it] != NOTASK){
+            leaf_candidates[edges[it]] = false;
+        }
+    }
+    leaf_candidates[0] = false;
+    for(task_id it = 0; it < leaf_candidates.size(); ++it){
+        if(leaf_candidates[it]){
+            result.push_back(it);
+        }
+    }
+#endif
     return result;
 }
 
@@ -717,8 +712,7 @@ bool Intree::same_chain(const task_id t1, const task_id t2) const {
 
 unsigned int Intree::count_free_chains(vector<task_id>& target) const{
     unsigned int result = 0;
-    vector<task_id> leaves;
-    get_leaves(leaves);
+    vector<task_id> const leaves = get_leaves();
     for(auto it=leaves.begin(); it!=leaves.end(); ++it){
         if(get_in_degree(*it)==0){
             target.push_back(*it);
