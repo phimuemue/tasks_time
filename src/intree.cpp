@@ -579,9 +579,9 @@ vector<task_id> Intree::get_leaves() const{
     }
 #else
     vector<bool> leaf_candidates(edges.size(), true);
-    for(task_id it = edges.size()-1; it > 0; --it){
-        if(edges[it] != NOTASK){
-            leaf_candidates[edges[it]] = false;
+    for(task_id it : edges){
+        if(it != NOTASK){
+            leaf_candidates[it] = false;
         }
     }
     leaf_candidates[0] = false;
@@ -727,9 +727,11 @@ void Intree::get_chain(const Task& t, vector<task_id>& target) const {
 }
 
 void Intree::get_chain(const task_id t, vector<task_id>& target) const {
+    assert(t!=NOTASK);
     task_id current = t;
     target.push_back(current);
     while(current > 0u){
+        assert(current!=NOTASK);
 #if 0
         auto edge = get_edge_from(current);
         current = edge.second.get_id();
