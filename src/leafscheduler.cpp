@@ -122,17 +122,16 @@ void Leafscheduler::get_next_tasks(const Intree& t,
     for(auto it = tasks.begin(); it != tasks.end(); ++it){
         if(find(marked.begin(), marked.end(), *it)==marked.end()) {
             count++;
-        }
-    }
-    for(auto it = tasks.begin(); it != tasks.end(); ++it){
-        if(find(marked.begin(), marked.end(), *it)==marked.end()){
             target.push_back(
                 make_pair(
                     vector<task_id>{*it},
-                    ((myfloat)1)/myfloat(count)
+                    0
                 )
             );
         }
+    }
+    for (auto& it : target) {
+        it.second = myfloat(1)/myfloat(count);
     }
 #endif
 }
