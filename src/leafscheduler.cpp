@@ -103,26 +103,7 @@ void Leafscheduler::get_next_tasks(const Intree& t,
         marked.end()
     );
     set<task_id> tasks;
-#if 0
-    t.get_tasks(tasks);
-    for(auto it = tasks.begin(); it != tasks.end();){
-        if(find(marked.begin(), marked.end(), *it)!=marked.end() ||
-           t.get_in_degree(*it) > 0
-          )    
-            tasks.erase(it++);
-        else
-            ++it;
-    }
-#else
-    // just to see if another method would behave the same
     t.get_leaves(tasks);
-    for(auto it = tasks.begin(); it != tasks.end();){
-        if(find(marked.begin(), marked.end(), *it)!=marked.end())
-            tasks.erase(it++);
-        else
-            ++it;
-    }
-#endif
 #if 0
     vector<pair<task_id,myfloat>> tasks_probs;
     for(auto it = tasks.begin(); it != tasks.end(); ++it){
@@ -137,13 +118,21 @@ void Leafscheduler::get_next_tasks(const Intree& t,
         target.push_back(pair<task_id,myfloat>(tasks_probs[i]));
     }
 #else
+    unsigned int count = 0;
     for(auto it = tasks.begin(); it != tasks.end(); ++it){
-        target.push_back(
-            make_pair(
-                vector<task_id>{*it},
-                ((myfloat)1)/(myfloat)tasks.size()
-            )
-        );
+        if(find(marked.begin(), marked.end(), *it)==marked.end()) {
+            count++;
+        }
+    }
+    for(auto it = tasks.begin(); it != tasks.end(); ++it){
+        if(find(marked.begin(), marked.end(), *it)==marked.end()){
+            target.push_back(
+                make_pair(
+                    vector<task_id>{*it},
+                    ((myfloat)1)/myfloat(count)
+                )
+            );
+        }
     }
 #endif
 }
