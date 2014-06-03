@@ -318,8 +318,7 @@ Intree Intree::canonical_intree2(const Intree& _t,
     for(auto rit = tasks_by_level.rbegin(); rit!=tasks_by_level.rend(); ++rit){
         for(auto it=rit->begin(); it!=rit->end(); ++it){
             vector<unsigned short> canonical_name;
-            vector<task_id> predecessors;
-            t.get_predecessors(*it, predecessors);
+            vector<task_id> predecessors = t.get_predecessors(*it);
             for(auto pit : predecessors){
                 marked_count[*it] += marked_count[pit];
             }
@@ -511,21 +510,17 @@ task_id Intree::get_successor(const task_id t) const{
     return edges[t];
 }
 
-void Intree::get_predecessors(const Task& t, vector<task_id>& target) const{
-    get_predecessors(t.get_id(), target);
+vector<task_id> Intree::get_predecessors(const Task& t) const{
+    return get_predecessors(t.get_id());
 }
 
-void Intree::get_predecessors(const task_id t, vector<task_id>& target) const{
+vector<task_id> Intree::get_predecessors(const task_id t) const{
+    vector<task_id> result;
     for(task_id it = 1; it < edges.size(); ++it){
         if(edges[it]==t){
-            target.push_back(it);
+            result.push_back(it);
         }
     }
-}
-
-vector<task_id> Intree::get_predecessors(const task_id t) const {
-    vector<task_id> result;
-    get_predecessors(t, result);
     return result;
 }
 

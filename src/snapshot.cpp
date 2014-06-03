@@ -50,9 +50,7 @@ Snapshot::Snapshot(const Intree& t, vector<task_id> m) :
 {
     sort(m.begin(), m.end());
     for(auto it=m.begin(); it!=m.end(); ++it){
-        vector<task_id> tmp;
-        t.get_predecessors(*it, tmp);
-        if(tmp.size()!=0){
+        if(t.get_predecessors(*it).size()!=0){
             cout << "Trying to construct snapshot " 
                 << "with non-leaf marked tasks." << endl;
             cout << t << endl;
@@ -76,9 +74,7 @@ Snapshot::Snapshot(const Intree& t,
 {
     sort(m.begin(), m.end());
     for(auto it=m.begin(); it!=m.end(); ++it){
-        vector<task_id> tmp;
-        t.get_predecessors(*it, tmp);
-        if(tmp.size()!=0){
+        if(t.get_predecessors(*it).size()!=0){
             cout << "Trying to construct snapshot " 
                 << "with non-leaf marked tasks." << endl;
             cout << t << endl;

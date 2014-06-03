@@ -19,9 +19,7 @@ bool OnlyOneNonScheduledSiblingTester::test(const Snapshot* s){
     }
     bool threechildren = false;
     for(auto it : marked_successors){
-        vector<task_id> preds;
-        s->intree.get_predecessors(it, preds);
-        if(preds.size() >= 3){
+        if(s->intree.get_predecessors(it).size() >= 3){
             threechildren = true;
         }
     }
@@ -29,13 +27,11 @@ bool OnlyOneNonScheduledSiblingTester::test(const Snapshot* s){
         return true;
     }
     for(task_id suc : marked_successors){
-        vector<task_id> preds;
-        s->intree.get_predecessors(suc, preds);
+        vector<task_id> preds = s->intree.get_predecessors(suc);
         preds.erase(
                 remove_if(preds.begin(), preds.end(),
                     [&](const task_id x) -> bool{
-                        vector<task_id> new_preds;
-                        s->intree.get_predecessors(x, new_preds);
+                        vector<task_id> new_preds = s->intree.get_predecessors(x);
                         return new_preds.size() > 0;
                     }
                     ), 
