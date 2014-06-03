@@ -747,21 +747,22 @@ unsigned int Intree::longest_chain_length() const{
     return result;
 }
 
-void Intree::get_profile(vector<unsigned int>& target) const {
-    assert(target.size()==0);
+vector<unsigned int> Intree::get_profile() const {
+    vector<unsigned int> result;
     for(unsigned int i=0; i<longest_chain_length(); ++i){
-        target.push_back(0);
+        result.push_back(0);
     }
     for(task_id it = 1; it < edges.size(); ++it){
-        target[get_level(it)]++;
+        result[get_level(it)]++;
     }
-    if(target.size() > 0){
-        assert(target[0]==0);
-        target[0] = 1;
+    if(result.size() > 0){
+        assert(result[0]==0);
+        result[0] = 1;
     }
     else{
-        target.push_back(1);
+        result.push_back(1);
     }
+    return result;
 }
 
 void Intree::get_raw_tree_id(tree_id& target) const {

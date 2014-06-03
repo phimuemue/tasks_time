@@ -7,8 +7,7 @@ void ProfileExporter::export_single_snapshot_internal(ostream& output,
         const unsigned int depth,
         const float leftoffset) const {
     output << "\\node[rectangle, scale=0.75] at (0, 0) {";
-    vector<unsigned int> profile;
-    s.intree.get_profile(profile);
+    vector<unsigned int> const profile = s.intree.get_profile();
     output << "$";
     output << "\\profile{";
     // Tricky condition because of unsignedness!
@@ -27,11 +26,7 @@ bool ProfileExporter::same_profile(
         const TikzExporter2::TikzNode* a,
         const TikzExporter2::TikzNode *b)
     const{
-    vector<unsigned int> profile1;
-    vector<unsigned int> profile2;
-    a->snapshot->intree.get_profile(profile1);
-    b->snapshot->intree.get_profile(profile2);
-    return profile1==profile2;
+    return a->snapshot->intree.get_profile()==b->snapshot->intree.get_profile();
 }
 
 void ProfileExporter::consolidate_levels(map<unsigned int, vector<const TikzNode*>>& levels) const {
