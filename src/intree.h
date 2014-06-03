@@ -113,7 +113,7 @@ class Intree {
         unsigned int count_free_chains(vector<task_id>& marked) const;
         vector<task_id> get_chain(const Task& t) const;
         vector<task_id> get_chain(const task_id t) const;
-        void get_chains(vector<vector<task_id>>& target) const;
+        vector<vector<task_id>> get_chains() const;
         unsigned int longest_chain_length() const;
         void get_profile(vector<unsigned int>& target) const;
 

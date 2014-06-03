@@ -631,9 +631,8 @@ pair<Task, Task> Intree::get_edge_from(const task_id t) const {
 }
 
 bool Intree::is_chain() const {
-    vector<vector<task_id>> chains;
     // TODO: this can be made more efficient, but it is not needed very often
-    get_chains(chains);
+    vector<vector<task_id>> chains = get_chains();
     return chains.size() == 1;
 }
 
@@ -709,17 +708,19 @@ vector<task_id> Intree::get_chain(const task_id t) const {
     return result;
 }
 
-void Intree::get_chains(vector<vector<task_id>>& target) const {
+vector<vector<task_id>> Intree::get_chains() const {
+    vector<vector<task_id>> result;
     for(task_id it = 1; it < edges.size(); ++it){
 #if !USE_CANONICAL_SNAPSHOT
         if(edges[it] != NOTASK)
 #endif
         {
             if(get_in_degree(it) == 0){
-                target.push_back(get_chain(it));
+                result.push_back(get_chain(it));
             }
         }
     }
+    return result;
 }
 
 unsigned int Intree::longest_chain_length() const{
@@ -728,14 +729,13 @@ unsigned int Intree::longest_chain_length() const{
     }
 #if 1
     // NOTE: use the other variant if working with a huge set of intrees!
-    vector<vector<task_id>> chains;
-    get_chains(chains);
+    vector<vector<task_id>> const chains = get_chains();
     unsigned int result = 0;
     for_each(chains.begin(), chains.end(),
-            [&result](const vector<task_id> c){
-                result = max(result, (unsigned int)c.size());
-            }
-            );
+        [&result](const vector<task_id> c){
+            result = max(result, (unsigned int)c.size());
+        }
+    );
 #else
     // this can only be used if the input is given in a strictly increasing order
     unsigned int result = 1;
@@ -836,17 +836,16 @@ ostream& operator<<(ostream& os, const Intree& t){
         os << "[0]";
         return os;
     }
-    vector<vector<task_id>> chains;
-    t.get_chains(chains);
-    for(auto i1 = chains.begin(); i1 != chains.end(); ++i1){
+    vector<vector<task_id>> chains = t.get_chains();
+    for(auto chain = chains.begin(); chain != chains.end(); ++chain){
         os << "[";
-        for(auto it = i1->begin(); it != i1->end(); ++it){
+        for(auto it = chain->begin(); it != chain->end(); ++it){
             os << *it;
-            if(it + 1 != i1->end())
+            if(it + 1 != chain->end())
                 os << ", ";
         }
         os << "]";
-        if(i1 + 1 != chains.end())
+        if(chain + 1 != chains.end())
             os << " ";
     }
     return os;
