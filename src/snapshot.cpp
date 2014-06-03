@@ -272,8 +272,7 @@ void Snapshot::get_successors(const Scheduler& scheduler,
         if(*finish_prob_it == 0)
             continue;
 #endif
-        Intree tmp(intree);
-        tmp.remove_task(*it);
+        Intree tmp = intree.remove_task(*it);
         vector<pair<vector<task_id>,myfloat>> raw_sucs;
         scheduler.get_next_tasks(tmp, marked, raw_sucs);
         // we have to check if the scheduler even found 
