@@ -95,7 +95,6 @@ class Intree {
         task_id get_successor(const task_id t) const;
         vector<task_id> get_predecessors(const Task& t) const;
         vector<task_id> get_predecessors(const task_id t) const;
-        void get_siblings(const task_id t, vector<task_id>& target) const;
         vector<task_id> get_siblings(const task_id t) const;
         vector<task_id> get_leaves() const;
         bool is_leaf(const task_id t) const;
