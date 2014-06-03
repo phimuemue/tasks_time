@@ -669,11 +669,7 @@ bool Intree::is_parallel_chain() const {
 }
 
 bool Intree::same_chain(const task_id t1, const task_id t2) const {
-    vector<task_id> ch1;
-    vector<task_id> ch2;
-    get_chain(t1, ch1);
-    get_chain(t2, ch2);
-    return ch1 == ch2;
+    return get_chain(t1) == get_chain(t2);
 }
 
 unsigned int Intree::count_free_chains(vector<task_id>& target) const{
@@ -688,14 +684,15 @@ unsigned int Intree::count_free_chains(vector<task_id>& target) const{
     return result;
 }
 
-void Intree::get_chain(const Task& t, vector<task_id>& target) const {
-    get_chain(t.get_id(), target);
+vector<task_id> Intree::get_chain(const Task& t) const {
+    return get_chain(t.get_id());
 }
 
-void Intree::get_chain(const task_id t, vector<task_id>& target) const {
+vector<task_id> Intree::get_chain(const task_id t) const {
+    vector<task_id> result;
     assert(t!=NOTASK);
     task_id current = t;
-    target.push_back(current);
+    result.push_back(current);
     while(current > 0u){
         assert(current!=NOTASK);
 #if 0
@@ -704,11 +701,12 @@ void Intree::get_chain(const task_id t, vector<task_id>& target) const {
 #else
         current = get_successor(current);
 #endif
-        target.push_back(current);
+        result.push_back(current);
         if(current == NOTASK){
-            target.clear();
+            result.clear();
         }
     }
+    return result;
 }
 
 void Intree::get_chains(vector<vector<task_id>>& target) const {
@@ -718,9 +716,7 @@ void Intree::get_chains(vector<vector<task_id>>& target) const {
 #endif
         {
             if(get_in_degree(it) == 0){
-                vector<task_id> nv;
-                get_chain(it, nv);
-                target.push_back(nv);
+                target.push_back(get_chain(it));
             }
         }
     }

@@ -17,10 +17,9 @@ unsigned int HLFNFCscheduler::count_free_chains(const Intree& t, const vector<ta
         t.get_chains(allchains);
         vector<vector<task_id>> marked_chains(newmarked.size());
         for(unsigned int i = 0; i<newmarked.size(); ++i){
-            t.get_chain(newmarked[i], marked_chains[i]);
+            marked_chains[i] = t.get_chain(newmarked[i]);
         }
-        marked_chains.push_back(vector<task_id>());
-        t.get_chain(target_task, marked_chains.back());
+        marked_chains.push_back(t.get_chain(target_task));
         allchains.erase(
             remove_if(
                 allchains.begin(), allchains.end(),
