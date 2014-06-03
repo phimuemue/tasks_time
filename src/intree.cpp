@@ -431,6 +431,7 @@ Intree Intree::canonical_intree2(const Intree& _t,
 }
 
 unsigned int Intree::count_tasks() const{
+    // TODO: This is extremely expensive given that it only should count the tasks
     unsigned int result = 1;
     for(task_id it = 1; it < edges.size(); ++it){
         if (edges[it]!=NOTASK){
@@ -601,18 +602,6 @@ void Intree::remove_task(task_id t){
     taskmap.erase(todel);
 #endif
     edges[t] = NOTASK;
-    // vector<pair<task_id, task_id>> tmp;
-    // for(task_id it = 1; it < edges.size(); ++it){
-    //     if(!((it == t) || (edges[it] == t))){
-    //         cout << "Adding " << it << " - " << edges[it] << endl;
-    //         tmp.push_back(pair<task_id, task_id>(it, edges[it]));
-    //     }
-    // }
-    // edges.clear();
-    // for(auto it = tmp.begin(); it != tmp.end(); ++it){
-    //     edges[it->first] = it->second;
-    // }
-    // edges[0] = NOTASK;
 }
 
 pair<Task, Task> Intree::get_edge_from(const Task& t) const {
