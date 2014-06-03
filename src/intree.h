@@ -86,8 +86,6 @@ class Intree {
 
         bool contains_task(task_id tid) const;
         const Task& get_task_by_id(task_id tid) const;
-        void get_tasks(set<task_id>& result) const;
-        void get_tasks(vector<task_id>& result) const;
         vector<task_id> get_tasks() const;
         void rename_leaf(task_id original, task_id now);
 

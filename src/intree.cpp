@@ -471,27 +471,14 @@ const Task& Intree::get_task_by_id(const task_id tid) const {
 }
 #endif
 
-void Intree::get_tasks(set<task_id>& result) const {
-    result.insert(0);
-    for(task_id it = 1; it<edges.size(); ++it){
-        if(edges[it]!=NOTASK){
-            result.insert(it);
-        }
-    }
-}
-
-void Intree::get_tasks(vector<task_id>& result) const{
+vector<task_id> Intree::get_tasks() const{
+    vector<task_id> result;
     result.push_back(0);
     for(task_id it = 1; it<edges.size(); ++it){
         if(edges[it]!=NOTASK){
             result.push_back(it);
         }
     }
-}
-
-vector<task_id> Intree::get_tasks() const{
-    vector<task_id> result;
-    get_tasks(result);
     return result;
 }
 
