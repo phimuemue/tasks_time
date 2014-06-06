@@ -100,8 +100,8 @@ class Intree {
         bool is_leaf(const task_id t) const;
 
         Distribution get_task_distribution(const task_id t) const;
-        void remove_task(Task& t);
-        void remove_task(task_id t);
+        task_id remove_task(Task& t);
+        task_id remove_task(task_id t);
 
         pair<Task, Task> get_edge_from(const Task& t) const;
         pair<Task, Task> get_edge_from(const task_id t) const;

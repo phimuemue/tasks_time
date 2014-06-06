@@ -585,12 +585,13 @@ unsigned int Intree::get_level(const task_id t) const{
 }
 
 
-void Intree::remove_task(Task& t){
-    remove_task(t.get_id());
+task_id Intree::remove_task(Task& t){
+    return remove_task(t.get_id());
 }
 
-void Intree::remove_task(task_id t){
+task_id Intree::remove_task(task_id t){
     // only tasks with no predecessor can be removed
+    // TODO: this should be an assert
     if(get_in_degree(t) != 0){
         cout << "Attempted to remove task with predecessor." << endl;
         cout << *this << " - " << t << endl;
@@ -601,7 +602,9 @@ void Intree::remove_task(task_id t){
     auto todel = taskmap.find(t);
     taskmap.erase(todel);
 #endif
+    auto const result = edges[t];
     edges[t] = NOTASK;
+    return result;
 }
 
 pair<Task, Task> Intree::get_edge_from(const Task& t) const {
