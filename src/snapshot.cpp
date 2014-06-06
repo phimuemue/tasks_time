@@ -128,21 +128,11 @@ Snapshot* Snapshot::canonical_snapshot(
     Intree tmp = Intree::canonical_intree(t, m, isomorphism, tid);
 
     // adjust m properly (i.e. always "lowest possible task" for 'iso-snap')
-    transform(m.begin(), m.end(), m.begin(),
-        [&](const task_id a) -> task_id {
-            return isomorphism[a];
-        }
-    );
-    m.erase(remove_if(m.begin(), m.end(),
-        [&tmp](const task_id a) -> bool {
-            return !tmp.contains_task(a);
-        }), 
-        m.end()
-    );
     map<task_id, unsigned int> counts;
-    for(auto it=m.begin(); it!=m.end(); ++it){
-        if(*it!=0){
-            counts[tmp.get_successor(*it)]++;
+    for (task_id tid : m) {
+        auto a = isomorphism[tid];
+        if (tmp.contains_task(a) && tid!=0) {
+            counts[tmp.get_successor(a)]++;
         }
     }
     map<task_id, vector<task_id>> predecessor_collection;
