@@ -92,9 +92,11 @@ void Leafscheduler::get_initial_schedule(const Intree& t,
     all_possible_combinations(leaves, processorcount, 0, target);
 }
 
-void Leafscheduler::get_next_tasks(const Intree& t, 
-        const vector<task_id>& marked,
-        vector<pair<vector<task_id>,myfloat>>& target) const {
+Scheduler::schedulerchoice Leafscheduler::get_next_tasks(
+    const Intree& t, 
+    const vector<task_id>& marked
+) const {
+    schedulerchoice target;
     vector<task_id> const leaves = t.get_leaves();
     unsigned int count = 0;
     for(auto it : leaves) {
@@ -111,6 +113,7 @@ void Leafscheduler::get_next_tasks(const Intree& t,
     for (auto& it : target) {
         it.second = myfloat(1)/myfloat(count);
     }
+    return target;
 }
 
 

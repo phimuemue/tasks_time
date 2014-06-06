@@ -11,9 +11,10 @@ class HLFRandomScheduler : public HLFscheduler {
         mutable mt19937 rng;
     public:
         HLFRandomScheduler();
-        void get_next_tasks(const Intree& t, 
-                const vector<task_id>& marked,
-                vector<pair<vector<task_id>,myfloat>>& target) const;
+        schedulerchoice get_next_tasks (
+            const Intree& t, 
+            const vector<task_id>& marked
+        ) const override;
 };
 
 #endif

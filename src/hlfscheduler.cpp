@@ -61,9 +61,10 @@ void HLFscheduler::get_initial_schedule(const Intree& t,
     }
 }
 
-void HLFscheduler::get_next_tasks(const Intree& t, 
-        const vector<task_id>& _marked,
-        vector<pair<vector<task_id>,myfloat>>& target) const {
+Scheduler::schedulerchoice HLFscheduler::get_next_tasks(
+    const Intree& t, 
+    const vector<task_id>& _marked
+) const {
     vector<task_id> marked(_marked);
     marked.erase(remove_if(marked.begin(), marked.end(),
         [&t](const task_id a) -> bool {
@@ -71,8 +72,7 @@ void HLFscheduler::get_next_tasks(const Intree& t,
         }), 
         marked.end()
     );
-    vector<pair<vector<task_id>,myfloat>> tmp;
-    Leafscheduler::get_next_tasks(t, marked, tmp);
+    auto tmp = Leafscheduler::get_next_tasks(t, marked);
     unsigned int maxlevel = 0; 
     for(auto it=tmp.begin(); it!=tmp.end(); ++it){
         maxlevel = t.get_level(it->first[0]) > maxlevel ? t.get_level(it->first[0]) : maxlevel;
@@ -91,7 +91,5 @@ void HLFscheduler::get_next_tasks(const Intree& t,
     for(unsigned int i=0; i<tmp.size(); ++i){
         tmp[i].second = tmp[i].second / sum;
     }
-    for(auto it=tmp.begin(); it!=tmp.end(); ++it){
-        target.push_back(*it);
-    }
+    return tmp;
 }

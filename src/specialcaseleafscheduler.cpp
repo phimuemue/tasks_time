@@ -66,19 +66,19 @@ void SpecialCaseLeafscheduler::get_initial_schedule(const Intree& t,
 #endif
 }
 
-void SpecialCaseLeafscheduler::get_next_tasks(const Intree& t, 
+Scheduler::schedulerchoice SpecialCaseLeafscheduler::get_next_tasks(
+    const Intree& t, 
 //#define CHECK_TARGET_VALIDITY
-        const vector<task_id>& marked,
-        vector<pair<vector<task_id>,myfloat>>& target) const {
-    // cout << t << endl;
-    // cout << t.is_degenerate_tree() << " " << t.is_parallel_chain() << endl;
+    const vector<task_id>& marked
+) const {
+    schedulerchoice target;
     if(t.is_degenerate_tree() || t.is_parallel_chain()){
         HLFDeterministicScheduler hlfds;
-        hlfds.get_next_tasks(t, marked, target);
+        target = hlfds.get_next_tasks(t, marked);
     }
     else
     {
-        Leafscheduler::get_next_tasks(t, marked, target);
+        target = Leafscheduler::get_next_tasks(t, marked);
 #ifdef CHECK_TARGET_VALIDITY
         bool more_than_zero_in_target = target.size() > 0;
 #endif
@@ -157,4 +157,5 @@ void SpecialCaseLeafscheduler::get_next_tasks(const Intree& t,
     // }
     // cout << t << endl;
 #undef CHECK_TARGET_VALIDITY
+    return target;
 }

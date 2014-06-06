@@ -43,9 +43,10 @@ void HLFNFCscheduler::get_initial_schedule(const Intree& t,
     HLFscheduler::get_initial_schedule(t, target);
 }
 
-void HLFNFCscheduler::get_next_tasks(const Intree& t, 
-        const vector<task_id>& marked,
-        vector<pair<vector<task_id>,myfloat>>& target) const {
+Scheduler::schedulerchoice HLFNFCscheduler::get_next_tasks(
+    const Intree& t, 
+    const vector<task_id>& marked
+) const {
     vector<task_id> newmarked(marked);
     newmarked.erase(
         remove_if(newmarked.begin(), newmarked.end(),
@@ -55,7 +56,7 @@ void HLFNFCscheduler::get_next_tasks(const Intree& t,
         )
         , newmarked.end()
     );
-    HLFscheduler::get_next_tasks(t, newmarked, target);
+    auto target = HLFscheduler::get_next_tasks(t, newmarked);
     vector<unsigned int> num_free_chains;
     for(auto target_task=target.begin(); target_task!=target.end(); ++target_task){
         num_free_chains.push_back(count_free_chains(t, newmarked, target_task->first));
@@ -83,4 +84,5 @@ void HLFNFCscheduler::get_next_tasks(const Intree& t,
     for(unsigned int i=0; i<target.size(); ++i){
         target[i].second = target[i].second / sum;
     }
+    return target;
 }
