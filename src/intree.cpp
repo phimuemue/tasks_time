@@ -592,12 +592,7 @@ task_id Intree::remove_task(Task& t){
 task_id Intree::remove_task(task_id t){
     // only tasks with no predecessor can be removed
     // TODO: this should be an assert
-    assert(get_in_degree(t) != 0);
-    if(get_in_degree(t) != 0){
-        cout << "Attempted to remove task with predecessor." << endl;
-        cout << *this << " - " << t << endl;
-        throw 1;
-    }
+    assert(get_in_degree(t) == 0);
 #if USE_TASKMAP
     // remove from taskmap
     auto todel = taskmap.find(t);
