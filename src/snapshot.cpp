@@ -169,7 +169,11 @@ Snapshot* Snapshot::canonical_snapshot(
         }
     }
 
+#if USE_CANONICAL_SNAPSHOT
+    assert(is_sorted(newmarked.begin(), newmarked.end()));
+#else
     sort(newmarked.begin(), newmarked.end());
+#endif
     auto find_key = snapshot_id(tid, newmarked);
     auto correct_pool = 
         Snapshot::pool[representant].find(find_key);
