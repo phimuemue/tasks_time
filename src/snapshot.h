@@ -60,7 +60,7 @@ class Snapshot {
 
     public:
         const vector<task_id> marked;
-        const Intree intree;
+        Intree intree;
 
         const vector<SuccessorInfo>& Successors() const {
             return successors;

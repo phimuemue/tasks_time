@@ -585,26 +585,26 @@ unsigned int Intree::get_level(const task_id t) const{
 }
 
 
-Intree Intree::remove_task(Task& t) const {
+task_id Intree::remove_task(Task& t){
     return remove_task(t.get_id());
 }
 
-Intree Intree::remove_task(task_id t) const {
+task_id Intree::remove_task(task_id t){
     // only tasks with no predecessor can be removed
+    // TODO: this should be an assert
+    assert(get_in_degree(t) != 0);
     if(get_in_degree(t) != 0){
         cout << "Attempted to remove task with predecessor." << endl;
         cout << *this << " - " << t << endl;
         throw 1;
     }
-    // TODO: don't construct result "by hard" - 
-    // maybe it is possible to get along without a NOTASK in result
-    Intree result(*this);
 #if USE_TASKMAP
     // remove from taskmap
-    auto todel = result.taskmap.find(t);
-    result.taskmap.erase(todel);
+    auto todel = taskmap.find(t);
+    taskmap.erase(todel);
 #endif
-    result.edges[t] = NOTASK;
+    auto const result = edges[t];
+    edges[t] = NOTASK;
     return result;
 }
 

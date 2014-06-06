@@ -272,17 +272,17 @@ void Snapshot::get_successors(const Scheduler& scheduler,
         if(*finish_prob_it == 0)
             continue;
 #endif
-        Intree tmp = intree.remove_task(*it);
+        task_id originalsuccessor = intree.remove_task(current_finished_task);
         vector<pair<vector<task_id>,myfloat>> raw_sucs;
-        scheduler.get_next_tasks(tmp, marked, raw_sucs);
+        scheduler.get_next_tasks(intree, marked, raw_sucs);
         // we have to check if the scheduler even found 
         // a new task to schedule
         if(raw_sucs.size() > 0){
             for(unsigned int i=0; i<raw_sucs.size(); ++i){
                 vector<task_id> newmarked(marked);
                 newmarked.erase(remove_if( newmarked.begin(), newmarked.end(),
-                    [it](const task_id& a){
-                        return a==*it;
+                    [current_finished_task](const task_id& a){
+                        return a==current_finished_task;
                     }
                 ), newmarked.end());
                 assert(raw_sucs[i].first[0] != NOTASK);
@@ -293,12 +293,12 @@ void Snapshot::get_successors(const Scheduler& scheduler,
                 }
                 sort(newmarked.begin(), newmarked.end());
 #if USE_CANONICAL_SNAPSHOT
-                Snapshot* news = Snapshot::canonical_snapshot(tmp, 
+                Snapshot* news = Snapshot::canonical_snapshot(intree, 
                         newmarked,
                         NULL, 
                         representant);
 #else
-                Snapshot* news = Snapshot::find_snapshot_in_pool(tmp,
+                Snapshot* news = Snapshot::find_snapshot_in_pool(intree,
                         newmarked,
                         representant);
 #endif
@@ -310,22 +310,24 @@ void Snapshot::get_successors(const Scheduler& scheduler,
             vector<task_id> newmarked(marked);
             sort(newmarked.begin(), newmarked.end());
             newmarked.erase(remove_if(newmarked.begin(), newmarked.end(),
-                        [it](const task_id& a){
-                        return a==*it;
+                        [current_finished_task](const task_id& a){
+                        return a==current_finished_task;
                         }), newmarked.end());
 #if USE_CANONICAL_SNAPSHOT
-            Snapshot* news = Snapshot::canonical_snapshot(tmp, 
+            Snapshot* news = Snapshot::canonical_snapshot(intree, 
                     newmarked,
                     NULL,
                     representant);
 #else
-            Snapshot* news = Snapshot::find_snapshot_in_pool(tmp,
+            Snapshot* news = Snapshot::find_snapshot_in_pool(intree,
                     newmarked,
                     representant);
 #endif
             assert(current_finished_task != NOTASK);
             successors.emplace_back(current_finished_task, *finish_prob_it, news);
         }
+        // restore task
+        intree.edges[current_finished_task] = originalsuccessor;
     }
     // remove duplicate successors
     consolidate();
