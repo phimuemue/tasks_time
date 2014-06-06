@@ -142,7 +142,7 @@ Snapshot* Snapshot::canonical_snapshot(
     map<task_id, unsigned int> counts;
     for(auto it=m.begin(); it!=m.end(); ++it){
         if(*it!=0){
-            counts[tmp.get_edge_from(*it).second.get_id()]++;
+            counts[tmp.get_successor(*it)]++;
         }
     }
     map<task_id, vector<task_id>> predecessor_collection;
