@@ -157,7 +157,7 @@ Snapshot* Snapshot::canonical_snapshot(
              predecessor_collection[it->first].end());
 #endif
     }
-    m.clear();
+    vector<task_id> newmarked;
     for(auto it=counts.begin(); it!=counts.end(); ++it){
         for(auto ii=predecessor_collection[it->first].begin();
             ii != predecessor_collection[it->first].end();
@@ -165,12 +165,10 @@ Snapshot* Snapshot::canonical_snapshot(
         }
         assert(predecessor_collection[it->first].size() >= it->second);
         for(unsigned int i=0; i<it->second; ++i){
-            m.push_back(predecessor_collection[it->first][i]);
+            newmarked.push_back(predecessor_collection[it->first][i]);
         }
     }
 
-    // construct newmarked
-    vector<task_id> newmarked(m);
     sort(newmarked.begin(), newmarked.end());
     auto find_key = snapshot_id(tid, newmarked);
     auto correct_pool = 
