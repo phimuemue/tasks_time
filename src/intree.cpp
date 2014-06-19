@@ -467,7 +467,7 @@ const Task& Intree::get_task_by_id(const task_id tid) const {
         cout << "Attempted to get_task_by_id of non-existent task." << endl;
         throw 1;
     }
-    return taskmap.find(tid)->second;
+    return taskmap.at(tid);
 }
 #endif
 
@@ -499,7 +499,7 @@ void Intree::rename_leaf(task_id original, task_id now){
 
 #if USE_TASKMAP
 Distribution Intree::get_task_distribution(const task_id t) const {
-    return taskmap.find(t)->second.get_distribution();
+    return taskmap.at(t).get_distribution();
 }
 #endif
 

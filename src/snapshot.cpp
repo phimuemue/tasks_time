@@ -185,7 +185,7 @@ Snapshot* Snapshot::canonical_snapshot(
     if(_isomorphism == NULL){
         delete tmp_iso;
     }
-    return Snapshot::pool[representant].find(find_key)->second;
+    return Snapshot::pool[representant].at(find_key);
 }
 
 
