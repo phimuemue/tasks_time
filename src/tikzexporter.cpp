@@ -15,7 +15,7 @@ TikzExporter::~TikzExporter(){
 unsigned int TikzExporter::get_subtree_width(const task_id tid,
         const map<task_id,vector<task_id>>& rt) const {
     unsigned int result = 0;
-    for(auto it=rt.find(tid)->second.begin(); it!=rt.find(tid)->second.end(); ++it){
+    for(auto it=rt.at(tid).begin(); it!=rt.find(tid)->second.end(); ++it){
         result = result + get_subtree_width(*it, rt);
     }
     result = max(result, 1u);
