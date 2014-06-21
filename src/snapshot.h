@@ -39,7 +39,7 @@ class Snapshot {
     private:
         // private constructor which sets *everything*
         Snapshot(const Intree& t, 
-            vector<task_id>& m, 
+            vector<task_id> const& m, 
             vector<SuccessorInfo>& s
         );
 

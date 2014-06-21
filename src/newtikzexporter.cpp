@@ -176,7 +176,7 @@ void TikzExporter2::tikz_draw_node(const TikzNode* s,
                 output << "100";
             }
             //output << ((pit->second < 1) ? (pit->second)*100 : "100");
-            if(next(pit) != successor_probs_in_order.end()){
+            if(std::next(pit) != successor_probs_in_order.end()){
                 output << "\\:";
             }
         }

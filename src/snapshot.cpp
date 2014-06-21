@@ -63,7 +63,7 @@ Snapshot::Snapshot(const Intree& t, vector<task_id> m) :
 }
 
 Snapshot::Snapshot(const Intree& t, 
-        vector<task_id>& m, 
+        vector<task_id> const& m, 
         vector<SuccessorInfo>& s
     ) :
     cache_expected_runtime(0),
@@ -72,13 +72,12 @@ Snapshot::Snapshot(const Intree& t,
     marked(m),
     intree(t)
 {
-    sort(m.begin(), m.end());
-    for(auto const& it : m){
+    for(auto const& it : marked){
         if(t.get_predecessors(it).size()!=0){
             cout << "Trying to construct snapshot " 
                 << "with non-leaf marked tasks." << endl;
             cout << t << endl;
-            for(auto const& it : m){
+            for(auto const& it : marked){
                 cout << it << endl;
             }
             throw 1;
@@ -405,82 +404,57 @@ myfloat Snapshot::get_reaching_probability(const Snapshot* t) const {
     return result;
 }
 
-// TODO: Maybe we can speed up things by not iterating over boost::tuples,
-// but instead use the proper vectors directly.
 Snapshot* Snapshot::optimize() const {
     tree_id tid;
-    const Intree& new_intree = intree;
-    vector<task_id> new_marked(marked);
-    new_intree.get_raw_tree_id(tid);
+    intree.get_raw_tree_id(tid);
     
-    pair<tree_id, vector<task_id>> opt_finder(tid, new_marked);
+    auto opt_finder = std::make_pair(tid, marked);
     auto cached_result = Snapshot::pool[PoolOptimized].find(opt_finder);
     if(cached_result != Snapshot::pool[PoolOptimized].end()) {
         return cached_result->second;
     }
 
-    vector<SuccessorInfo> new_sucs;
-    for(unsigned int i = 0; i < successors.size(); ++i){
-        auto optimized_suc = successors[i].snapshot->optimize();
-        new_sucs.emplace_back(successors[i].task, successors[i].probability, optimized_suc);
-    }
+    std::map<task_id, std::vector<SuccessorInfo>> sucs_by_finished_task;
+    std::map<task_id, myfloat> prob_by_finished_task;
     // sort successors into different vectors, 
     // each one only containing successors with
-    // same intree structure.
-    map<task_id, decltype(new_sucs)> sucs_by_finished_task;
-    for(auto& s : new_sucs){
-        sucs_by_finished_task[s.task].push_back(s);
+    // same intree structure. Thereby, only keep best ones
+    for(auto suc : successors){
+        auto optimized_suc = suc.snapshot->optimize();
+        auto& sbf2 = sucs_by_finished_task[suc.task];
+        // clear if newly found optimized snapshot is better than all current ones
+        if (!sbf2.empty() && sbf2[0].snapshot->expected_runtime() > optimized_suc->expected_runtime()) {
+            sbf2.clear();
+        }
+        // add new snapshot if at least as good as other ones collected so far
+        if (sbf2.empty() || sbf2[0].snapshot->expected_runtime() == optimized_suc->expected_runtime()) {
+            sbf2.emplace_back(suc.task, suc.probability, optimized_suc);
+        }
+        prob_by_finished_task[suc.task] += suc.probability;
     }
-    // traverse all sucs with same intree structure,
-    // and only leave the best!
-    for(auto& it : sucs_by_finished_task){
-        // sum up probabilities for current intree structure
-        myfloat orig_prob_sum = myfloat(0);
-        for(auto& s : it.second){
-            orig_prob_sum += s.probability;
+    
+    // normalize probabilities so that they sum to 1 again
+    for(auto& sbyt : sucs_by_finished_task) {
+        myfloat new_prob_sum(0);
+        for(auto const& sinfo : sbyt.second) {
+            new_prob_sum += sinfo.probability;
         }
-        // get one best intree structure
-        auto best_one = 
-            *min_element(it.second.begin(), it.second.end(),
-            [](const SuccessorInfo& a, const SuccessorInfo& b) -> bool {
-                return a.snapshot->expected_runtime() <= b.snapshot->expected_runtime();
-            }
-        );
-        // only leave the best element(s)!
-        it.second.erase(
-            remove_if(it.second.begin(), it.second.end(),
-                [&best_one](const SuccessorInfo& a) -> bool {
-                    return a.snapshot->expected_runtime() > 
-                           best_one.snapshot->expected_runtime();
-                }
-            ),
-            it.second.end()
-        );
-        // compute new sum of probabilities to normalize the old ones
-        myfloat new_prob_sum = (myfloat)0;
-        for(auto const& s : it.second){
-            new_prob_sum += s.probability;
-        }
-        // normalize old probabilities so that total sum is still 1
-        for(auto& s : it.second){
-            s.probability *= (orig_prob_sum / new_prob_sum);
+        for(auto& sinfo : sbyt.second) {
+            sinfo.probability *= (prob_by_finished_task[sinfo.task] / new_prob_sum);
         }
     }
+
     // put all new successors/probs into new vectors and return optimized
     // version of snapshot
     vector<SuccessorInfo> new_successors;
     for(auto const& it : sucs_by_finished_task){
-        for(auto s : it.second){
+        for(auto& s : it.second){
             new_successors.push_back(s);
         }
     }
-    Snapshot* result = new Snapshot(
-        new_intree, 
-        new_marked,
-        new_successors
-    );
+    Snapshot* result = new Snapshot(intree, marked, new_successors);
     Snapshot::pool[Snapshot::PoolKind::PoolOptimized]
-                  [pair<tree_id, vector<task_id>>(tid, new_marked)] 
+                  [make_pair(tid, marked)] 
                   = (result);
     return result;
 }

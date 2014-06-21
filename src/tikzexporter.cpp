@@ -234,7 +234,7 @@ void TikzExporter::tikz_draw_node(const Snapshot* s,
         output << setprecision(2);
         for(auto pit=successor_probs_in_order.begin(); pit!=successor_probs_in_order.end(); ++pit){
             output << (pit->second < 1 ? (pit->second)*100 : pit->second);
-            if(next(pit) != successor_probs_in_order.end()){
+            if(std::next(pit) != successor_probs_in_order.end()){
                 output << "\\:";
             }
         }
