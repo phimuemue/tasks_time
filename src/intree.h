@@ -19,6 +19,7 @@
 #include<boost/dynamic_bitset.hpp>
 
 #include "task.h"
+#include "stringhelper.h"
 
 using namespace std;
 

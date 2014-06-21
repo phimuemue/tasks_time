@@ -322,15 +322,7 @@ myfloat Snapshot::expected_runtime() const {
 }
 
 ostream& operator<<(ostream& os, const Snapshot& s){
-    os << "<" << s.intree << " | [";
-    
-    for(auto it = s.marked.begin(); it != s.marked.end(); ++it){
-        os << *it;
-        if (it+1!=s.marked.end()){
-            os << ", ";
-        }
-    }
-    os << "]>";
+    os << "<" << s.intree << " | [" << stringhelper::join(s.marked, ", ") << "]>";
     return os;
 }
 
@@ -424,15 +416,7 @@ Snapshot* Snapshot::optimize() const {
 
 string Snapshot::markedstring(){
     stringstream os;
-    os << "[";
-    
-    for(auto it = marked.begin(); it != marked.end(); ++it){
-        os << *it;
-        if (it+1!=marked.end()){
-            os << ", ";
-        }
-    }
-    os << "]";
+    os << "[" << stringhelper::join(marked, ", ") << "]";
     return os.str();
 }
 

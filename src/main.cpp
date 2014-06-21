@@ -7,6 +7,8 @@
 #include "snapshot.h"
 #include "treegenerator.h"
 
+#include "stringhelper.h"
+
 // schedulers
 #include "hlfscheduler.h"
 #include "hlfnfcscheduler.h"
@@ -226,16 +228,13 @@ int read_variables_map_from_args(int argc,
         ("randp", po::value<string>(), 
          "Specify the number of tasks level wise. Bottom level is implicitly 0.");
     // configurational things
-    string schedulers_available("");
-    for(auto it = schedulers.begin(); it!=schedulers.end(); ++it){
-        schedulers_available += it->first;
-        auto tmp = it;
-        tmp++;
-        if (tmp != schedulers.end()){
-            schedulers_available += ", ";
-        }
-    }
-    schedulers_available = "Scheduler type to use (" + schedulers_available + ").";
+    string schedulers_available = stringhelper::join(schedulers, ", ", [](decltype(*schedulers.begin()) s){return s.first;});
+    schedulers_available = 
+        "Scheduler type to use (" + 
+        stringhelper::join(schedulers, ", ", 
+            [](decltype(*schedulers.begin()) s){return s.first;}
+        ) + 
+        ")";
     po::options_description config_options("Config", LINE_LENGTH);
     config_options.add_options()
         ("processors,p", po::value<int>()->default_value(2), 
@@ -497,28 +496,22 @@ void generate_stats(const po::variables_map& vm,
         stringstream markedstring("");
         tree_id tid;
         // we need this to compute the isomorphism
-        // map<task_id, task_id> isomorphism;
-        // Intree::canonical_intree(s[i]->intree, initial_settings[i], isomorphism, tid);
-        markedstring << "[";
-        for(unsigned int midx = 0; midx < s[i]->marked.size(); ++midx){
+        markedstring << "[" << stringhelper::join(s[i]->marked, ", ",
+            [&](task_id m) {
 #if USE_CANONICAL_SNAPSHOT
-            task_id nexttask = NOTASK;
-            for(auto it : isomorphisms[i]){
-                if(it.second == s[i]->marked[midx]){
-                    nexttask = it.first;
-                    break;
+                task_id nexttask = NOTASK;
+                for(auto it : isomorphisms[i]){
+                    if(it.second == m){
+                        nexttask = it.first;
+                        break;
+                    }
                 }
-            }
-            markedstring << nexttask;
+                return nexttask;
 #else
-            markedstring << s[i]->marked[midx];
+                return m;
 #endif
-            // markedstring << isomorphisms[i].at(initial_settings[i][midx]);
-            if(midx < s[i]->marked.size() - 1){
-                markedstring << ", ";
             }
-        }
-        markedstring << "]";
+        ) << "]";
         line.push_back(markedstring.str());
         line.push_back("  ");
         line.push_back(get_expected_runtime_string(s[i]));

@@ -19,6 +19,7 @@
 #include "scheduler.h"
 #include "leafscheduler.h"
 #include "probability.h"
+#include "stringhelper.h"
 
 using namespace std;
 

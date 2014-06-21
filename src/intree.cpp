@@ -826,17 +826,11 @@ ostream& operator<<(ostream& os, const Intree& t){
         return os;
     }
     vector<vector<task_id>> chains = t.get_chains();
-    for(auto chain = chains.begin(); chain != chains.end(); ++chain){
-        os << "[";
-        for(auto it = chain->begin(); it != chain->end(); ++it){
-            os << *it;
-            if(it + 1 != chain->end())
-                os << ", ";
+    os << "[" << stringhelper::join(chains, "] [",
+        [](vector<task_id> const& chain){
+            return stringhelper::join(chain, ", ");
         }
-        os << "]";
-        if(chain + 1 != chains.end())
-            os << " ";
-    }
+    ) << "]";
     return os;
 }
 
