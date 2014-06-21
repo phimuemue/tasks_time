@@ -411,13 +411,7 @@ Snapshot* Snapshot::optimize() const {
     tree_id tid;
     const Intree& new_intree = intree;
     vector<task_id> new_marked(marked);
-#if USE_CANONICAL_SNAPSHOT
-    // map<task_id, task_id> iso;
-    // Intree::canonical_intree(new_intree, new_marked, iso, tid);
     new_intree.get_raw_tree_id(tid);
-#else
-    new_intree.get_raw_tree_id(tid);
-#endif
     
     pair<tree_id, vector<task_id>> opt_finder(tid, new_marked);
     auto cached_result = Snapshot::pool[PoolOptimized].find(opt_finder);
@@ -435,21 +429,13 @@ Snapshot* Snapshot::optimize() const {
     // same intree structure.
     map<task_id, decltype(new_sucs)> sucs_by_finished_task;
     for(auto& s : new_sucs){
-        // tree_id tid;
-        // map<task_id, task_id> iso;
-        // vector<task_id> none_marked;
-        // Intree::canonical_intree(
-        //     s.get<0>()->intree,
-        //     none_marked,
-        //     iso,
-        //     tid);
         sucs_by_finished_task[s.task].push_back(s);
     }
     // traverse all sucs with same intree structure,
     // and only leave the best!
     for(auto& it : sucs_by_finished_task){
         // sum up probabilities for current intree structure
-        myfloat orig_prob_sum = (myfloat)0;
+        myfloat orig_prob_sum = myfloat(0);
         for(auto& s : it.second){
             orig_prob_sum += s.probability;
         }
