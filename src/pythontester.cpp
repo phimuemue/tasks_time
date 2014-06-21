@@ -14,7 +14,8 @@ PythonTester::PythonTester() :
         // adjust working directory and search paths -- taken from
         // http://stackoverflow.com/questions/9285384/
         boost::filesystem::path workingDir = boost::filesystem::absolute("./").normalize();
-        PyObject* sysPath = PySys_GetObject("path");
+        char path[] = "path";
+        PyObject* sysPath = PySys_GetObject(path);
         PyList_Insert( sysPath, 0, PyString_FromString(workingDir.string().c_str()));
         boost::python::api::object main_module = import("__main__");
 
