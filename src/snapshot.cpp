@@ -73,19 +73,15 @@ Snapshot::~Snapshot(){
 #endif
 }
 
-Snapshot* Snapshot::canonical_snapshot(
+std::pair<Snapshot*, std::map<task_id, task_id>> Snapshot::canonical_snapshot(
         const Snapshot& s,
-        map<task_id, task_id>* isomorphism,
         Snapshot::PoolKind representant){
-    Intree intreecopy(s.intree);
-    vector<task_id> mcopy(s.marked);
-    return canonical_snapshot(intreecopy, mcopy, isomorphism, representant);
+    return canonical_snapshot(s.intree, s.marked, representant);
 }
 
-Snapshot* Snapshot::canonical_snapshot(
+std::pair<Snapshot*, std::map<task_id, task_id>> Snapshot::canonical_snapshot(
         const Intree& t, 
         vector<task_id> const& m,
-        map<task_id, task_id>* _isomorphism,
         Snapshot::PoolKind representant){
 #if USE_SIMPLE_OPENMP
     cout << "Warning! Using openmp with canonical snapshots!" << endl;
@@ -93,14 +89,7 @@ Snapshot* Snapshot::canonical_snapshot(
 
     // do not use unique_ptr, because the result must possibly exist
     // after the function has terminated
-    map<task_id, task_id>* tmp_iso;
-    if(_isomorphism == NULL){
-        tmp_iso = new map<task_id, task_id>();
-    }
-    else{
-        tmp_iso = _isomorphism;
-    }
-    map<task_id, task_id>& isomorphism = *tmp_iso;
+    map<task_id, task_id> isomorphism;
     tree_id tid;
     Intree tmp = Intree::canonical_intree(t, m, isomorphism, tid);
 
@@ -154,10 +143,7 @@ Snapshot* Snapshot::canonical_snapshot(
         ? snappool.emplace_hint(snaphint, find_key, new Snapshot(tmp, newmarked))->second
         : snaphint->second;
     assert(snappool.find(find_key) != snappool.end());
-    if(_isomorphism == NULL){
-        delete tmp_iso;
-    }
-    return result;
+    return std::make_pair(result, isomorphism);
 }
 
 
@@ -259,10 +245,11 @@ void Snapshot::get_successors(const Scheduler& scheduler,
                 sort(newmarked.begin(), newmarked.end());
 #endif
 #if USE_CANONICAL_SNAPSHOT
-                Snapshot* news = Snapshot::canonical_snapshot(intree, 
-                        newmarked,
-                        NULL, 
-                        representant);
+                Snapshot* news = Snapshot::canonical_snapshot(
+                    intree, 
+                    newmarked,
+                    representant
+                ).first;
 #else
                 Snapshot* news = Snapshot::find_snapshot_in_pool(intree,
                         newmarked,
@@ -280,10 +267,11 @@ void Snapshot::get_successors(const Scheduler& scheduler,
                         return a==current_finished_task;
                         }), newmarked.end());
 #if USE_CANONICAL_SNAPSHOT
-            Snapshot* news = Snapshot::canonical_snapshot(intree, 
-                    newmarked,
-                    NULL,
-                    representant);
+            Snapshot* news = Snapshot::canonical_snapshot(
+                intree, 
+                newmarked,
+                representant
+            ).first;
 #else
             Snapshot* news = Snapshot::find_snapshot_in_pool(intree,
                     newmarked,

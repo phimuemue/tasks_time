@@ -318,8 +318,7 @@ void create_snapshot_dags(const po::variables_map& vm,
     isomorphisms = vector<map<task_id, task_id>>(initial_settings.size());
 #if USE_CANONICAL_SNAPSHOT
     for(unsigned int i= 0; i<initial_settings.size(); ++i){
-        // s[i] = Snapshot::canonical_snapshot(Snapshot(t, initial_settings[i]), NULL);
-        s[i] = Snapshot::canonical_snapshot(Snapshot(t, initial_settings[i]), &(isomorphisms[i]));
+        std::tie(s[i], isomorphisms[i]) = Snapshot::canonical_snapshot(t, initial_settings[i]);
     }
 #else
     for(unsigned int i= 0; i<initial_settings.size(); ++i){

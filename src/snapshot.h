@@ -73,14 +73,15 @@ class Snapshot {
         ~Snapshot();
 
         // canonical snapshot stuff
-        static Snapshot* canonical_snapshot(const Snapshot& s,
-                map<task_id, task_id>* isomorphism=NULL,
-                Snapshot::PoolKind representant = PoolDefault);
-        // TODO: is it necessary to pass m by val?
-        static Snapshot* canonical_snapshot(const Intree& t, 
-                vector<task_id> const& m,
-                map<task_id, task_id>* isomorphism=NULL,
-                Snapshot::PoolKind representant = PoolDefault);
+        static std::pair<Snapshot*, map<task_id,task_id>> canonical_snapshot(
+            const Snapshot& s,
+            Snapshot::PoolKind representant = PoolDefault
+        );
+        static std::pair<Snapshot*, map<task_id,task_id>> canonical_snapshot(
+            const Intree& t, 
+            vector<task_id> const& m,
+            Snapshot::PoolKind representant = PoolDefault
+        );
 
         static Snapshot* find_snapshot_in_pool(const Snapshot& s,
                 Snapshot::PoolKind representant = PoolDefault);
