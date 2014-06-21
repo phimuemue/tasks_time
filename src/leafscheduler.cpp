@@ -71,14 +71,14 @@ void Leafscheduler::all_possible_combinations(
         all_possible_combinations(
             t, n, i+1, sub_combis_without
         );
-        for(auto const it : sub_combis_with){
+        for(auto const& it : sub_combis_with){
             vector<task_id> newcombo;
             newcombo.push_back(t[minindex]);
             newcombo.insert(newcombo.end(), it.begin(), it.end());
             assert(newcombo.size()==n);
             target.push_back(newcombo);
         }
-        for(auto const it : sub_combis_without){
+        for(auto const& it : sub_combis_without){
             assert(it.size()==n);
             target.push_back(it);
         }

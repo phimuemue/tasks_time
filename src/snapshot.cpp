@@ -11,7 +11,7 @@ void Snapshot::clear_pool(){
     map<Snapshot*, bool> done;
     for_each(Snapshot::pool.begin(), Snapshot::pool.end(),
         [&](const pair<Snapshot::PoolKind, map<snapshot_id, Snapshot*>>& p){
-            for(auto const it : p.second){
+            for(auto const& it : p.second){
                 if(done.find(it.second)!=done.end()){
                     delete(it.second);
                     done[it.second] = true;
@@ -54,7 +54,7 @@ Snapshot::Snapshot(const Intree& t, vector<task_id> m) :
             cout << "Trying to construct snapshot " 
                 << "with non-leaf marked tasks." << endl;
             cout << t << endl;
-            for(auto const inner_it : m){
+            for(auto const& inner_it : m){
                 cout << inner_it << endl;
             }
             throw 1;
@@ -73,12 +73,12 @@ Snapshot::Snapshot(const Intree& t,
     intree(t)
 {
     sort(m.begin(), m.end());
-    for(auto const it : m){
+    for(auto const& it : m){
         if(t.get_predecessors(it).size()!=0){
             cout << "Trying to construct snapshot " 
                 << "with non-leaf marked tasks." << endl;
             cout << t << endl;
-            for(auto const it : m){
+            for(auto const& it : m){
                 cout << it << endl;
             }
             throw 1;
@@ -136,7 +136,7 @@ Snapshot* Snapshot::canonical_snapshot(
         }
     }
     map<task_id, vector<task_id>> predecessor_collection;
-    for(auto const it : counts){
+    for(auto const& it : counts){
         predecessor_collection[it.first] = tmp.get_predecessors(it.first);
         // remove non-leaf tasks from predecessors
         predecessor_collection[it.first].erase(
@@ -158,7 +158,7 @@ Snapshot* Snapshot::canonical_snapshot(
 #endif
     }
     vector<task_id> newmarked;
-    for(auto const it : counts){
+    for(auto const& it : counts){
         assert(predecessor_collection[it.first].size() >= it.second);
         for(unsigned int i=0; i<it.second; ++i){
             newmarked.push_back(predecessor_collection[it.first][i]);
@@ -474,7 +474,7 @@ Snapshot* Snapshot::optimize() const {
         );
         // compute new sum of probabilities to normalize the old ones
         myfloat new_prob_sum = (myfloat)0;
-        for(auto const & s : it.second){
+        for(auto const& s : it.second){
             new_prob_sum += s.probability;
         }
         // normalize old probabilities so that total sum is still 1
@@ -485,7 +485,7 @@ Snapshot* Snapshot::optimize() const {
     // put all new successors/probs into new vectors and return optimized
     // version of snapshot
     vector<SuccessorInfo> new_successors;
-    for(auto const it : sucs_by_finished_task){
+    for(auto const& it : sucs_by_finished_task){
         for(auto s : it.second){
             new_successors.push_back(s);
         }

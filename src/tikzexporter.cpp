@@ -15,7 +15,7 @@ TikzExporter::~TikzExporter(){
 unsigned int TikzExporter::get_subtree_width(const task_id tid,
         const map<task_id,vector<task_id>>& rt) const {
     unsigned int result = 0;
-    for(auto const it : rt.at(tid)){
+    for(auto const& it : rt.at(tid)){
         result = result + get_subtree_width(it, rt);
     }
     result = max(result, 1u);
@@ -133,7 +133,7 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
         }
         // connect (we have to draw probabilities seperately!)
         for(unsigned int l=1; l<s->intree.count_tasks()+1-task_count_limit; ++l){
-            for(auto const it : levels[l]){
+            for(auto const& it : levels[l]){
                 for(auto sit : it->Successors()){
                     output << "\\draw ("
                         << tikz_node_name(it);

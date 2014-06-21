@@ -288,7 +288,7 @@ Intree Intree::canonical_intree2(const Intree& _t,
         max_tid = max(max_tid, it);
     }
     max_tid++;
-    for(auto const it : leaves){
+    for(auto const& it : leaves){
         ++max_tid;
         t.rename_leaf(it, max_tid);
         inner_iso_rev[max_tid] = it;
@@ -302,7 +302,7 @@ Intree Intree::canonical_intree2(const Intree& _t,
     }
     // initialize marked_count
     map<task_id, unsigned int> marked_count;
-    for(auto const it : preferred){
+    for(auto const& it : preferred){
         marked_count[it] = 1;
     }
     vector<vector<task_id>> tasks_by_level(t.edges.size() + 1);
@@ -315,7 +315,7 @@ Intree Intree::canonical_intree2(const Intree& _t,
     map<task_id, vector<task_id>> all_predecessors;
     map<task_id, vector<unsigned short>> canonical_names;
     for(auto rit = tasks_by_level.rbegin(); rit!=tasks_by_level.rend(); ++rit){
-        for(auto const it : *rit){
+        for(auto const& it : *rit){
             vector<unsigned short> canonical_name;
             vector<task_id> predecessors = t.get_predecessors(it);
             for(auto pit : predecessors){
@@ -661,7 +661,7 @@ bool Intree::same_chain(const task_id t1, const task_id t2) const {
 unsigned int Intree::count_free_chains(vector<task_id>& target) const{
     unsigned int result = 0;
     vector<task_id> const leaves = get_leaves();
-    for(auto const it : leaves){
+    for(auto const& it : leaves){
         if(get_in_degree(it)==0){
             target.push_back(it);
             result++;

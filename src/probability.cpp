@@ -18,7 +18,7 @@ Probability_Computer::Distribution_Setting Probability_Computer::distros_same(co
 #else
     bool all_distros_same = true;
     Distribution first = intree.get_task_distribution(marked[0]);
-    for(auto const it : marked){
+    for(auto const& it : marked){
         if(intree.get_task_distribution(it) != first){
             all_distros_same = false;
         }
@@ -29,7 +29,7 @@ Probability_Computer::Distribution_Setting Probability_Computer::distros_same(co
     auto u_b = intree.get_task_by_id(0).uniform_b;
     switch(first){
         case(Exponential):
-            for(auto const it : marked){
+            for(auto const& it : marked){
                 if(intree.get_task_by_id(it).exponential_lambda !=
                         intree.get_task_by_id(marked[0]).exponential_lambda){
                     return Same_Distributions_Different_Parameters;
@@ -37,7 +37,7 @@ Probability_Computer::Distribution_Setting Probability_Computer::distros_same(co
             }
             break;
         case(Uniform):
-            for(auto const it = marked){
+            for(auto const& it = marked){
                 if(intree.get_task_by_id(it).uniform_a != u_a ||
                         intree.get_task_by_id(it).uniform_b != u_b){
                     return Same_Distributions_Different_Parameters;
@@ -88,14 +88,14 @@ void Probability_Computer::compute_finish_probs(const Intree& intree, const vect
         myfloat u_b = intree.get_task_by_id(marked[0]).uniform_b;
         switch(first){
         case(Exponential):
-            for(auto const it : marked){
+            for(auto const& it : marked){
                 Task tmp = intree.get_task_by_id(it);
                 prod_of_lambdas *= tmp.exponential_lambda;
             }
-            for(auto const it : marked){
+            for(auto const& it : marked){
                 denom += prod_of_lambdas / intree.get_task_by_id(it).exponential_lambda;
             }
-            for(auto const it : marked){
+            for(auto const& it : marked){
                 numer = prod_of_lambdas / intree.get_task_by_id(it).exponential_lambda;
                 target.push_back(
                     numer / denom
@@ -103,14 +103,14 @@ void Probability_Computer::compute_finish_probs(const Intree& intree, const vect
             }
             break;
         case(Uniform):
-            for(auto const it : marked){
+            for(auto const& it : marked){
                 if(intree.get_task_by_id(it).uniform_a != u_a ||
                         intree.get_task_by_id(it).uniform_b != u_b){
                     throw "Cannot compute finish probabilities if not all "
                           "rv's are uniformly distributed with same parameters";
                 }
                 // TODO: make this nicer!
-                for(auto const it : marked){
+                for(auto const& it : marked){
                     target.push_back(((myfloat)1)/(myfloat)marked.size());
                 }
             }

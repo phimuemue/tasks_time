@@ -210,12 +210,12 @@ void TikzExporter2::export_single_snapshot_internal(ostream& output,
     output << "};" << endl;
     float cur_leftoffset = leftoffset;
     // draw "children"
-    for(auto const it : rt.at(t)){
+    for(auto const& it : rt.at(t)){
         export_single_snapshot_internal(output, s, it, rt, depth + 1, cur_leftoffset);
         cur_leftoffset += get_subtree_width(it, rt);
     }
     // draw arrows from children
-    for(auto const it : rt.at(t)){
+    for(auto const& it : rt.at(t)){
         output << "\\draw[](tid" << t << ") -- (tid" << it << ");" << endl;
     }
 }

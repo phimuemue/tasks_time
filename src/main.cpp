@@ -327,7 +327,7 @@ void create_snapshot_dags(const po::variables_map& vm,
     }
 #endif
     vector<pair<Snapshot*, myfloat>> p_s;
-    for(auto const it : s){
+    for(auto const& it : s){
         p_s.push_back(pair<Snapshot*, myfloat>(it,(myfloat)1/(myfloat)s.size()));
     }
 #if USE_CANONICAL_SNAPSHOT

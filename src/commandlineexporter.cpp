@@ -16,7 +16,7 @@ void CommandLineExporter::export_tree(ostream& output, const Intree& t) const {
 
     export_helper(tasks_by_level, lines, 0, 0, t, stack[0].first);
     
-    for(auto const l : lines){
+    for(auto const& l : lines){
         cout << l << endl;
     }
 }
