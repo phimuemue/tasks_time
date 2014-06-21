@@ -123,7 +123,6 @@ Snapshot* Snapshot::canonical_snapshot(
         tmp_iso = _isomorphism;
     }
     map<task_id, task_id>& isomorphism = *tmp_iso;
-    //map<task_id, task_id> isomorphism;
     tree_id tid;
     Intree tmp = Intree::canonical_intree(t, m, isomorphism, tid);
 
@@ -215,7 +214,7 @@ void Snapshot::consolidate(bool strict){
                     successors[i].probability += successors[j].probability;
                     // nulling out position j
                     successors[j].snapshot = nullptr;
-                    successors[j].probability = (myfloat)0;
+                    successors[j].probability = myfloat(0);
                     successors[j].task = NOTASK;
                 }
             }
