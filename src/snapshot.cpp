@@ -173,14 +173,14 @@ Snapshot* Snapshot::canonical_snapshot(
     auto const find_key = snapshot_id(tid, newmarked);
     auto& snappool = Snapshot::pool[representant];
     auto const snaphint = snappool.lower_bound(find_key);
-    if(/* not found in pool */ snaphint == snappool.end() || (snappool.key_comp()(find_key, snaphint->first)) ) {
-        snappool.insert(snaphint, map<snapshot_id, Snapshot*>::value_type(find_key, new Snapshot(tmp, newmarked)));
-    }
+    auto const result = (snaphint == snappool.end() || (snappool.key_comp()(find_key, snaphint->first))) // not found in pool
+        ? snappool.emplace_hint(snaphint, find_key, new Snapshot(tmp, newmarked))->second
+        : snaphint->second;
     assert(snappool.find(find_key) != snappool.end());
     if(_isomorphism == NULL){
         delete tmp_iso;
     }
-    return snappool.at(find_key);
+    return result;
 }
 
 
@@ -198,11 +198,11 @@ Snapshot* Snapshot::find_snapshot_in_pool(const Intree& t,
     tree_id tid;
     t.get_raw_tree_id(tid);
     snapshot_id find_key = snapshot_id(tid, m);
-    Snapshot* result;
-    if(Snapshot::pool[representant].find(find_key) == Snapshot::pool[representant].end()){
-        Snapshot::pool[representant][find_key] = new Snapshot(t, m);
-    }
-    result = Snapshot::pool[representant][find_key];
+    auto& snappool = Snapshot::pool[representant];
+    auto const snaphint = snappool.lower_bound(find_key);
+    Snapshot* const result = (snaphint == snappool.end() || (snappool.key_comp()(find_key, snaphint->first))) // not found in pool
+        ? snappool.emplace_hint(snaphint, find_key, new Snapshot(t, m))->second
+        : snaphint->second;
     assert(result->intree == t);
     return result;
 }
