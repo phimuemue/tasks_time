@@ -91,7 +91,7 @@ std::pair<Snapshot*, std::map<task_id, task_id>> Snapshot::canonical_snapshot(
     // after the function has terminated
 	tree_id tid;
     auto pairIntreeIso = Intree::canonical_intree(t, m, tid);
-    Intree tmp (std::move(pairIntreeIso.first));
+    Intree tmp(std::move(pairIntreeIso.first));
     auto isomorphism(std::move(pairIntreeIso.second));
 
     // adjust m properly (i.e. always "lowest possible task" for 'iso-snap')
@@ -141,7 +141,7 @@ std::pair<Snapshot*, std::map<task_id, task_id>> Snapshot::canonical_snapshot(
     auto& snappool = Snapshot::pool[representant];
     auto const snaphint = snappool.lower_bound(find_key);
     auto const result = (snaphint == snappool.end() || (snappool.key_comp()(find_key, snaphint->first))) // not found in pool
-        ? snappool.emplace_hint(snaphint, find_key, new Snapshot(tmp, newmarked))->second
+        ? snappool.emplace_hint(snaphint, find_key, new Snapshot(std::move(tmp), newmarked))->second
         : snaphint->second;
     assert(snappool.find(find_key) != snappool.end());
     return std::make_pair(std::move(result), std::move(isomorphism));
