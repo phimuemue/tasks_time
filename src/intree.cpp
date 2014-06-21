@@ -202,7 +202,7 @@ Intree Intree::canonical_intree3(const Intree& _t,
         map<task_id, vector<int>> intermediate_labels;
         // construct new labels
         for(task_id it : levels[lev + 1]){
-            if(intermediate_labels.find(_t.get_successor(it)) == intermediate_labels.end()){
+            if(intermediate_labels.count(_t.get_successor(it)) == 0){
                 // TODO: why is inserted 4096 at the beginning of intermediate label? Necessary?
                 intermediate_labels[_t.get_successor(it)].push_back(4096);
             }
@@ -229,7 +229,7 @@ Intree Intree::canonical_intree3(const Intree& _t,
             );
         // ... compute (short) labels
         assert(currentLevel.size() > 0);
-        if(labels.find(currentLevel[0]) == labels.end()){
+        if(labels.count(currentLevel[0]) == 0){
             labels[currentLevel[0]] = 2;
         }
         int counter = 3;
@@ -463,7 +463,7 @@ bool Intree::contains_task(task_id tid) const{
 
 #if USE_TASKMAP
 const Task& Intree::get_task_by_id(const task_id tid) const {
-    if(edges.find(tid) == edges.end()){
+    if(edges.count(tid) == 0){
         cout << "Attempted to get_task_by_id of non-existent task." << endl;
         throw 1;
     }
@@ -631,7 +631,7 @@ bool Intree::is_degenerate_tree() const {
         if(edges[it] == NOTASK){
             continue;
         }
-        if(cont.find(get_level(edges[it])) != cont.end() && cont[get_level(edges[it])] != edges[it]){
+        if(cont.count(get_level(edges[it])) != 0 && cont[get_level(edges[it])] != edges[it]){
             return false;
         }
         cont[get_level(edges[it])] = edges[it];
@@ -797,7 +797,7 @@ void Intree::get_reverse_tree(map<task_id, vector<task_id>>& rt) const{
             if(edges[it] == current){
                 q.push(it);
                 rt[edges[it]].push_back(it);
-                if(rt.find(it) == rt.end()){
+                if(rt.count(it) == 0){
                     rt[it] = vector<task_id>();
                 }
             }

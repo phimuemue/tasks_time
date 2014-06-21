@@ -8,13 +8,13 @@ void Snapshot::clear_pool(){
         cout << pp.second.size() << ", ";
     }
     cout << endl;
-    map<Snapshot*, bool> done;
+    std::set<Snapshot*> done;
     for_each(Snapshot::pool.begin(), Snapshot::pool.end(),
         [&](const pair<Snapshot::PoolKind, map<snapshot_id, Snapshot*>>& p){
             for(auto const& it : p.second){
-                if(done.find(it.second)!=done.end()){
+                if(done.find(it.second)==done.end()){
                     delete(it.second);
-                    done[it.second] = true;
+                    done.insert(it.second);
                 }
             }
         }
@@ -170,18 +170,17 @@ Snapshot* Snapshot::canonical_snapshot(
 #else
     sort(newmarked.begin(), newmarked.end());
 #endif
-    auto find_key = snapshot_id(tid, newmarked);
-    auto correct_pool = 
-        Snapshot::pool[representant].find(find_key);
-    if(correct_pool == Snapshot::pool[representant].end()){
-        Snapshot::pool[representant][find_key] 
-            = new Snapshot(tmp, newmarked);
+    auto const find_key = snapshot_id(tid, newmarked);
+    auto& snappool = Snapshot::pool[representant];
+    auto const snaphint = snappool.lower_bound(find_key);
+    if(/* not found in pool */ snaphint == snappool.end() || (snappool.key_comp()(find_key, snaphint->first)) ) {
+        snappool.insert(snaphint, map<snapshot_id, Snapshot*>::value_type(find_key, new Snapshot(tmp, newmarked)));
     }
-    assert(Snapshot::pool[representant].find(find_key) != Snapshot::pool[representant].end());
+    assert(snappool.find(find_key) != snappool.end());
     if(_isomorphism == NULL){
         delete tmp_iso;
     }
-    return Snapshot::pool[representant].at(find_key);
+    return snappool.at(find_key);
 }
 
 
