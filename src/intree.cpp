@@ -185,7 +185,7 @@ std::pair<Intree, std::map<task_id, task_id>> Intree::canonical_intree(
     Outtree ot(_t, _preferred);
     ot.canonicalize();
     Intree result = ot.toIntree(isomorphism);
-    result.get_raw_tree_id(out);
+    out = result.get_raw_tree_id();
     return std::make_pair(std::move(result), std::move(isomorphism));
 }
 
@@ -267,7 +267,7 @@ std::pair<Intree, std::map<task_id, task_id>> Intree::canonical_intree3(
         }
     }
     Intree result = Intree(std::move(edges));
-    result.get_raw_tree_id(out);
+    out = result.get_raw_tree_id();
     return std::make_pair(result, isomorphism);
 }
 
@@ -768,15 +768,13 @@ vector<unsigned int> Intree::get_profile() const {
     return result;
 }
 
-void Intree::get_raw_tree_id(tree_id& target) const {
+tree_id Intree::get_raw_tree_id() const {
     // the following can be used to swith between one
     // (I think) quite correct solution and a 
     // (I think) quite correct but more efficient solution
+    tree_id target;
 #if 1
-#if TREE_ID_TYPE==TREE_ID_MATULA
-    cout << "Matula not implemented due to too much memory consumption." << endl;
-    assert(false);
-#elif TREE_ID_TYPE==TREE_ID_DEFAULT
+#if TREE_ID_TYPE==TREE_ID_DEFAULT
     target.push_back(NOTASK);
     for(task_id it = 1; it < edges.size(); ++it){
         target.push_back(edges[it]);
@@ -799,6 +797,7 @@ void Intree::get_raw_tree_id(tree_id& target) const {
         target[it] = edges[it];
     }
 #endif
+    return target;
 }
     
 void Intree::get_reverse_tree(map<task_id, vector<task_id>>& rt) const{

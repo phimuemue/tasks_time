@@ -159,9 +159,7 @@ Snapshot* Snapshot::find_snapshot_in_pool(const Snapshot& s,
 Snapshot* Snapshot::find_snapshot_in_pool(const Intree& t,
         vector<task_id> m,
         Snapshot::PoolKind representant){
-    tree_id tid;
-    t.get_raw_tree_id(tid);
-    snapshot_id find_key = snapshot_id(tid, m);
+    snapshot_id find_key = snapshot_id(t.get_raw_tree_id(), m);
     auto& snappool = Snapshot::pool[representant];
     auto const snaphint = snappool.lower_bound(find_key);
     Snapshot* const result = (snaphint == snappool.end() || (snappool.key_comp()(find_key, snaphint->first))) // not found in pool
@@ -373,10 +371,7 @@ myfloat Snapshot::get_reaching_probability(const Snapshot* t) const {
 }
 
 Snapshot* Snapshot::optimize() const {
-    tree_id tid;
-    intree.get_raw_tree_id(tid);
-    
-    auto opt_finder = std::make_pair(std::move(tid), marked);
+    auto opt_finder = std::make_pair((intree.get_raw_tree_id()), marked);
     auto cached_result = Snapshot::pool[PoolOptimized].find(opt_finder);
     if(cached_result != Snapshot::pool[PoolOptimized].end()) {
         return cached_result->second;
