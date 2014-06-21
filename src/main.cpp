@@ -327,8 +327,8 @@ void create_snapshot_dags(const po::variables_map& vm,
     }
 #endif
     vector<pair<Snapshot*, myfloat>> p_s;
-    for(auto it=s.begin(); it!=s.end(); ++it){
-        p_s.push_back(pair<Snapshot*, myfloat>(*it,(myfloat)1/(myfloat)s.size()));
+    for(auto const it : s){
+        p_s.push_back(pair<Snapshot*, myfloat>(it,(myfloat)1/(myfloat)s.size()));
     }
 #if USE_CANONICAL_SNAPSHOT
     for(unsigned int i=0; i<p_s.size(); ++i){
@@ -344,9 +344,9 @@ void create_snapshot_dags(const po::variables_map& vm,
 #endif
     s.clear();
     probs.clear();
-    for(auto it=p_s.begin(); it!=p_s.end(); ++it){
-        s.push_back(it->first);
-        probs.push_back(it->second);
+    for(auto it : p_s){
+        s.push_back(it.first);
+        probs.push_back(it.second);
     }
 #if USE_SIMPLE_OPENMP
 #pragma omp parallel for num_threads(initial_settings.size())

@@ -288,23 +288,22 @@ Intree Intree::canonical_intree2(const Intree& _t,
         max_tid = max(max_tid, it);
     }
     max_tid++;
-    for(auto it=leaves.begin(); it!=leaves.end(); ++it){
-        // cout << "Leaf: " << *it << ", ";
+    for(auto const it : leaves){
         ++max_tid;
-        t.rename_leaf(*it, max_tid);
-        inner_iso_rev[max_tid] = *it;
+        t.rename_leaf(it, max_tid);
+        inner_iso_rev[max_tid] = it;
         for_each(preferred.begin(), preferred.end(),
-                [&](task_id& a){
-                    if(a==*it){
-                        a = max_tid;
-                    }
+            [&](task_id& a){
+                if(a==it){
+                    a = max_tid;
                 }
-                );
+            }
+        );
     }
     // initialize marked_count
     map<task_id, unsigned int> marked_count;
-    for(auto it=preferred.begin(); it!=preferred.end(); ++it){
-        marked_count[*it] = 1;
+    for(auto const it : preferred){
+        marked_count[it] = 1;
     }
     vector<vector<task_id>> tasks_by_level(t.edges.size() + 1);
     // store tasks grouped by level
@@ -316,11 +315,11 @@ Intree Intree::canonical_intree2(const Intree& _t,
     map<task_id, vector<task_id>> all_predecessors;
     map<task_id, vector<unsigned short>> canonical_names;
     for(auto rit = tasks_by_level.rbegin(); rit!=tasks_by_level.rend(); ++rit){
-        for(auto it=rit->begin(); it!=rit->end(); ++it){
+        for(auto const it : *rit){
             vector<unsigned short> canonical_name;
-            vector<task_id> predecessors = t.get_predecessors(*it);
+            vector<task_id> predecessors = t.get_predecessors(it);
             for(auto pit : predecessors){
-                marked_count[*it] += marked_count[pit];
+                marked_count[it] += marked_count[pit];
             }
             sort(predecessors.begin(), predecessors.end(),
                     [&](const task_id& a, const task_id& b) -> bool {
@@ -346,7 +345,7 @@ Intree Intree::canonical_intree2(const Intree& _t,
                     return canonical_names[a] > canonical_names[b];
                     }
                 );
-            all_predecessors[*it] = predecessors;
+            all_predecessors[it] = predecessors;
             vector<vector<unsigned short>> canonical_names_predecessors;
             canonical_name.push_back(0);
             for(auto pit : predecessors){
@@ -357,13 +356,13 @@ Intree Intree::canonical_intree2(const Intree& _t,
                     canonical_name.push_back(tmp);
                 }
             }
-            if(find(preferred.begin(), preferred.end(), *it) != preferred.end()){
+            if(find(preferred.begin(), preferred.end(), it) != preferred.end()){
                 canonical_name.push_back(2);
             }
             else{
                 canonical_name.push_back(1);
             }
-            canonical_names[*it] = canonical_name;
+            canonical_names[it] = canonical_name;
         }
         // sort tasks according to their canonical name
         sort(rit->begin(), rit->end(),
@@ -662,9 +661,9 @@ bool Intree::same_chain(const task_id t1, const task_id t2) const {
 unsigned int Intree::count_free_chains(vector<task_id>& target) const{
     unsigned int result = 0;
     vector<task_id> const leaves = get_leaves();
-    for(auto it=leaves.begin(); it!=leaves.end(); ++it){
-        if(get_in_degree(*it)==0){
-            target.push_back(*it);
+    for(auto const it : leaves){
+        if(get_in_degree(it)==0){
+            target.push_back(it);
             result++;
         }
     }
@@ -810,8 +809,8 @@ unsigned int Intree::get_max_width(task_id tid) const{
     // unsigned result = 0;
     // map<task_id, vector<task_id>> rt;
     // get_reverse_tree(rt);
-    // for(auto it=rt[tid].begin(); it!=rt[tid].end(); it++){
-    //     result += get_max_width(*it);
+    // for(auto it : rt[tid]){
+    //     result += get_max_width(it);
     // }
     map<task_id, unsigned int> width;
     for(unsigned int idx = edges.size() - 1; idx < edges.size() && idx>=tid; --idx){

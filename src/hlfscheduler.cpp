@@ -37,9 +37,9 @@ void HLFscheduler::get_initial_schedule(const Intree& t,
     // fetch all tasks, and sort them according to their level
     vector<task_id> tasks = t.get_tasks();
     vector<task_id> tmp;
-    for(auto it=tasks.begin(); it!=tasks.end(); ++it){
-        if(t.get_in_degree(*it) == 0)
-            tmp.push_back(*it);
+    for(auto const it : tasks){
+        if(t.get_in_degree(it) == 0)
+            tmp.push_back(it);
     }
     sort(tmp.begin(), tmp.end(),
         [&t](const task_id& a, const task_id& b) -> bool {
@@ -56,8 +56,8 @@ void HLFscheduler::get_initial_schedule(const Intree& t,
         referencelevels.push_back(t.get_level(tmp[i]));
     }
     all_combinations(tmp, actualprocs, -1, t, referencelevels, dummy, combos);
-    for(auto it = combos.begin(); it!=combos.end(); ++it){
-        target.push_back(*it);
+    for(auto const it : combos){
+        target.push_back(it);
     }
 }
 
@@ -74,8 +74,8 @@ Scheduler::schedulerchoice HLFscheduler::get_next_tasks(
     );
     auto tmp = Leafscheduler::get_next_tasks(t, marked);
     unsigned int maxlevel = 0; 
-    for(auto it=tmp.begin(); it!=tmp.end(); ++it){
-        maxlevel = t.get_level(it->first[0]) > maxlevel ? t.get_level(it->first[0]) : maxlevel;
+    for(auto const it : tmp){
+        maxlevel = t.get_level(it.first[0]) > maxlevel ? t.get_level(it.first[0]) : maxlevel;
     }
     tmp.erase(remove_if(tmp.begin(), tmp.end(),
                 [maxlevel, t](const pair<vector<task_id>, myfloat>& a) -> bool {
@@ -85,8 +85,8 @@ Scheduler::schedulerchoice HLFscheduler::get_next_tasks(
                 }), tmp.end());
     // normalize probability values
     myfloat sum = 0;
-    for(auto it=tmp.begin(); it!=tmp.end(); ++it){
-        sum += it->second;
+    for(auto const it : tmp){
+        sum += it.second;
     }
     for(unsigned int i=0; i<tmp.size(); ++i){
         tmp[i].second = tmp[i].second / sum;

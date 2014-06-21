@@ -23,9 +23,9 @@ unsigned int HLFNFCscheduler::count_free_chains(const Intree& t, const vector<ta
             remove_if(
                 allchains.begin(), allchains.end(),
                 [&](const vector<task_id>& c) -> bool {
-                    for(auto task = c.begin(); task!=c.end(); ++task){
-                        for(auto mc = marked_chains.begin(); mc!=marked_chains.end(); ++mc){
-                            if(find(mc->begin(), mc->end(), *task) != mc->end() && *task!=0){
+                    for(auto const task : c){
+                        for(auto const mc : marked_chains){
+                            if(find(mc.begin(), mc.end(), task) != mc.end() && task!=0){
                                 return true;
                             }
                         }
@@ -58,8 +58,8 @@ Scheduler::schedulerchoice HLFNFCscheduler::get_next_tasks(
     );
     auto target = HLFscheduler::get_next_tasks(t, newmarked);
     vector<unsigned int> num_free_chains;
-    for(auto target_task=target.begin(); target_task!=target.end(); ++target_task){
-        num_free_chains.push_back(count_free_chains(t, newmarked, target_task->first));
+    for(auto const target_task : target){
+        num_free_chains.push_back(count_free_chains(t, newmarked, target_task.first));
     }
     unsigned int max_free_chains = num_free_chains.size() == 0 ? 0 :
         *max_element(num_free_chains.begin(), num_free_chains.end());
@@ -78,8 +78,8 @@ Scheduler::schedulerchoice HLFNFCscheduler::get_next_tasks(
     }
     // normalize probabilities
     myfloat sum = 0;
-    for(auto it=target.begin(); it!=target.end(); ++it){
-        sum += it->second;
+    for(auto const it : target){
+        sum += it.second;
     }
     for(unsigned int i=0; i<target.size(); ++i){
         target[i].second = target[i].second / sum;

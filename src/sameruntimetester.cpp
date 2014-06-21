@@ -14,10 +14,10 @@ bool SameRunTimeTester::test(const Snapshot* s){
             {
                 vector<const Snapshot*> s1;
                 vector<const Snapshot*> s2;
-                for(auto it : (*suc1).snapshot->Successors()){
+                for(auto it : suc1->snapshot->Successors()){
                     s1.push_back(it.snapshot);
                 }
-                for(auto it : (*suc2).snapshot->Successors()){
+                for(auto it : suc2->snapshot->Successors()){
                     s2.push_back(it.snapshot);
                 }
                 sort(s1.begin(), s1.end());

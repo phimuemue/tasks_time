@@ -15,8 +15,8 @@ TikzExporter::~TikzExporter(){
 unsigned int TikzExporter::get_subtree_width(const task_id tid,
         const map<task_id,vector<task_id>>& rt) const {
     unsigned int result = 0;
-    for(auto it=rt.at(tid).begin(); it!=rt.find(tid)->second.end(); ++it){
-        result = result + get_subtree_width(*it, rt);
+    for(auto const it : rt.at(tid)){
+        result = result + get_subtree_width(it, rt);
     }
     result = max(result, 1u);
     return result;
@@ -41,8 +41,8 @@ void TikzExporter::compute_level_widths(const Snapshot* s,
         done[const_cast<Snapshot*>(s)] = true;
         level_count[depth] = level_count[depth] + s->intree.get_max_width() * 1.5f + 2;
     }
-    for(auto it=s->Successors().begin(); it!=s->Successors().end(); ++it){
-        compute_level_widths(it->snapshot, level_count, done, depth+1);
+    for(auto it : s->Successors()){
+        compute_level_widths(it.snapshot, level_count, done, depth+1);
     }
 }
 
@@ -133,10 +133,10 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
         }
         // connect (we have to draw probabilities seperately!)
         for(unsigned int l=1; l<s->intree.count_tasks()+1-task_count_limit; ++l){
-            for(auto it=levels[l].begin(); it!=levels[l].end(); ++it){
-                for(auto sit:(*it)->Successors()){
+            for(auto const it : levels[l]){
+                for(auto sit : it->Successors()){
                     output << "\\draw ("
-                        << tikz_node_name(*it);
+                        << tikz_node_name(it);
                     if(horizontal){
                         output << ".east) -- ";
                     }

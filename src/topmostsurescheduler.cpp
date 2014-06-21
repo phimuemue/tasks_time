@@ -39,9 +39,9 @@ void TopMostSureScheduler::get_next_tasks(const Intree& t,
 #endif
 #if 0
     vector<pair<vector<task_id>,myfloat>> tasks_probs;
-    for(auto it = tasks.begin(); it != tasks.end(); ++it){
+    for(auto const it : tasks){
         tasks_probs.push_back(pair<vector<task_id>,myfloat>(
-            vector<task_id>{*it},
+            vector<task_id>{it},
             ((myfloat)1)/(myfloat)tasks.size()
             )
         );
@@ -51,13 +51,11 @@ void TopMostSureScheduler::get_next_tasks(const Intree& t,
         target.push_back(pair<vector<task_id>,myfloat>(tasks_probs[i]));
     }
 #else
-    vector<pair<task_id,myfloat>> tasks_probs;
-    for(auto it = tasks.begin(); it != tasks.end(); ++it){
+    for(auto const it : tasks){
         target.push_back(make_pair(
-            vector<task_id>{*it},
+            vector<task_id>{it},
             ((myfloat)1)/(myfloat)tasks.size()
-            )
-        );
+        ) );
     }
 #endif
 }

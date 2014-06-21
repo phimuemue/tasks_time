@@ -142,7 +142,6 @@ void TikzExporter2::tikz_draw_node(const TikzNode* s,
     // draw probabilities
     if(show_probabilities){
         vector<pair<TikzNode*,myfloat>> successor_probs_in_order;
-        //for(auto sit : s->snapshot->SuccessorProbabilities)
         for(auto sit : s->successors)
         {
             successor_probs_in_order.push_back(
@@ -211,13 +210,13 @@ void TikzExporter2::export_single_snapshot_internal(ostream& output,
     output << "};" << endl;
     float cur_leftoffset = leftoffset;
     // draw "children"
-    for(auto it = rt.at(t).begin(); it!=rt.at(t).end(); ++it){
-        export_single_snapshot_internal(output, s, *it, rt, depth + 1, cur_leftoffset);
-        cur_leftoffset += get_subtree_width(*it, rt);
+    for(auto const it : rt.at(t)){
+        export_single_snapshot_internal(output, s, it, rt, depth + 1, cur_leftoffset);
+        cur_leftoffset += get_subtree_width(it, rt);
     }
     // draw arrows from children
-    for(auto it = rt.at(t).begin(); it!=rt.at(t).end(); ++it){
-        output << "\\draw[](tid" << t << ") -- (tid" << *it << ");" << endl;
+    for(auto const it : rt.at(t)){
+        output << "\\draw[](tid" << t << ") -- (tid" << it << ");" << endl;
     }
 }
 
