@@ -89,9 +89,10 @@ std::pair<Snapshot*, std::map<task_id, task_id>> Snapshot::canonical_snapshot(
 
     // do not use unique_ptr, because the result must possibly exist
     // after the function has terminated
-    map<task_id, task_id> isomorphism;
-    tree_id tid;
-    Intree tmp = Intree::canonical_intree(t, m, isomorphism, tid);
+	tree_id tid;
+    auto pairIntreeIso = Intree::canonical_intree(t, m, tid);
+    Intree tmp (std::move(pairIntreeIso.first));
+    auto isomorphism(std::move(pairIntreeIso.second));
 
     // adjust m properly (i.e. always "lowest possible task" for 'iso-snap')
     map<task_id, unsigned int> counts;
@@ -143,7 +144,7 @@ std::pair<Snapshot*, std::map<task_id, task_id>> Snapshot::canonical_snapshot(
         ? snappool.emplace_hint(snaphint, find_key, new Snapshot(tmp, newmarked))->second
         : snaphint->second;
     assert(snappool.find(find_key) != snappool.end());
-    return std::make_pair(result, isomorphism);
+    return std::make_pair(std::move(result), std::move(isomorphism));
 }
 
 

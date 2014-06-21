@@ -167,21 +167,25 @@ Intree Intree::Outtree::toIntree(map<task_id, task_id>& isomorphism) const {
 // For some reason, the detour via outtrees works
 // faster than canonical_intree3, which is a "1-to-1" translation
 // of the AHU algorithm
-Intree Intree::canonical_intree(const Intree& _t, 
-        const vector<task_id>& _preferred,
-        map<task_id, task_id>& isomorphism,
-        tree_id& out){
+std::pair<Intree, std::map<task_id, task_id>> Intree::canonical_intree(
+    const Intree& _t, 
+    const vector<task_id>& _preferred,
+    tree_id& out
+){
+    map<task_id, task_id> isomorphism;
     Outtree ot(_t, _preferred);
     ot.canonicalize();
     Intree result = ot.toIntree(isomorphism);
     result.get_raw_tree_id(out);
-    return result;
+    return std::make_pair(std::move(result), std::move(isomorphism));
 }
 
-Intree Intree::canonical_intree3(const Intree& _t,
-        const vector<task_id>& _preferred,
-        map<task_id, task_id>& isomorphism,
-        tree_id& out){
+std::pair<Intree, std::map<task_id, task_id>> Intree::canonical_intree3(
+    const Intree& _t,
+    const vector<task_id>& _preferred,
+    tree_id& out
+){
+    map<task_id, task_id> isomorphism;
     // distribute tasks into levels
     map<unsigned int, vector<task_id>> levels;
     levels[0].push_back(0);
@@ -255,13 +259,15 @@ Intree Intree::canonical_intree3(const Intree& _t,
     }
     Intree result = Intree(edges);
     result.get_raw_tree_id(out);
-    return result;
+    return std::make_pair(result, isomorphism);
 }
 
-Intree Intree::canonical_intree2(const Intree& _t, 
-        const vector<task_id>& _preferred,
-        map<task_id, task_id>& isomorphism,
-        tree_id& out){
+std::pair<Intree, std::map<task_id, task_id>> Intree::canonical_intree2(
+    const Intree& _t, 
+    const vector<task_id>& _preferred,
+    tree_id& out
+){
+    map<task_id, task_id> isomorphism;
     Intree t(_t);
     vector<task_id> preferred(_preferred);
     map<task_id, task_id> inner_iso_rev;
@@ -427,7 +433,7 @@ Intree Intree::canonical_intree2(const Intree& _t,
 #elif TREE_ID_TYPE==TREE_ID_NONE
     out = Intree(edges);
 #endif
-    return Intree(edges);
+    return std::make_pair(Intree(edges), isomorphism);
 }
 
 unsigned int Intree::count_tasks() const{

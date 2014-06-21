@@ -85,10 +85,8 @@ void TikzExporter::tikz_string_dag_compact_internal(const Snapshot* s,
                 [](const Snapshot* a, const Snapshot* b) -> bool {
                     map<task_id, task_id> iso;
                     tree_id ta, tb;
-                    Intree::canonical_intree(
-                        a->intree, a->marked, iso, ta);
-                    Intree::canonical_intree(
-                        b->intree, b->marked, iso, tb);
+                    Intree::canonical_intree(a->intree, a->marked, ta);
+                    Intree::canonical_intree(b->intree, b->marked, tb);
                     return ta < tb;
                 }
             );
@@ -215,12 +213,9 @@ void TikzExporter::tikz_draw_node(const Snapshot* s,
         }
         sort(successor_probs_in_order.begin(), successor_probs_in_order.end(),
                 [](const pair<Snapshot*,myfloat>& a, const pair<Snapshot*,myfloat>& b) -> bool {
-                map<task_id, task_id> iso;
                 tree_id ta, tb;
-                Intree::canonical_intree(
-                    a.first->intree, a.first->marked, iso, ta);
-                Intree::canonical_intree(
-                    b.first->intree, b.first->marked, iso, tb);
+                Intree::canonical_intree(a.first->intree, a.first->marked, ta);
+                Intree::canonical_intree(b.first->intree, b.first->marked, tb);
                 return ta < tb;
                 }
                 // The following does not coincide with the sorting in levels!
