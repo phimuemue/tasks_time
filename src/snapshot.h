@@ -115,7 +115,7 @@ class Snapshot {
         static void clear_pool();
 
         unsigned long count_snapshots_in_dag() const ;
-        unsigned long count_snapshots_in_dag(map<const Snapshot*, bool>&) const;
+        unsigned long count_snapshots_in_dag(std::set<const Snapshot*>&) const;
 };
 
 #if PYTHON_TESTS

@@ -678,13 +678,12 @@ int main(int argc, char** argv){
                 cout << "Total expected run time: " << expected_runtime << endl;
             }
 
-            map<const Snapshot*, bool> map_for_total_count;
-            unsigned int snap_count;
+            std::set<const Snapshot*> total_snapshot_set;
             for(Snapshot* it : s){
-                it->count_snapshots_in_dag(map_for_total_count);
+                it->count_snapshots_in_dag(total_snapshot_set);
             }
-            snap_count = map_for_total_count.size();
-            cout << "Total number of snaps:   " << snap_count
+            cout << "Total number of snaps:   " 
+                << total_snapshot_set.size()
                 << endl;
 
             // output stuff to files

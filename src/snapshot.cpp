@@ -516,15 +516,15 @@ string Snapshot::markedstring(){
 }
 
 unsigned long Snapshot::count_snapshots_in_dag() const {
-    map<const Snapshot*, bool> tmp;
+    std::set<const Snapshot*> tmp;
     return count_snapshots_in_dag(tmp);
 }
 
-unsigned long Snapshot::count_snapshots_in_dag(map<const Snapshot*, bool>& tmp) const {
+unsigned long Snapshot::count_snapshots_in_dag(std::set<const Snapshot*>& tmp) const {
     if(tmp.find(this)!=tmp.end()){
         return 0;
     }
-    tmp[this] = true;
+    tmp.insert(this);
     unsigned long sum = 1;
     for(auto s : Successors()){
         sum += s.snapshot->count_snapshots_in_dag(tmp);
