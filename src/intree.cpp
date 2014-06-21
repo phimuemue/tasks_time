@@ -762,7 +762,6 @@ tree_id Intree::get_raw_tree_id() const {
     tree_id target;
 #if 1
 #if TREE_ID_TYPE==TREE_ID_DEFAULT
-    target.push_back(NOTASK);
     for(task_id it = 1; it < edges.size(); ++it){
         target.push_back(edges[it]);
     }
