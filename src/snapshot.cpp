@@ -422,9 +422,9 @@ Snapshot* Snapshot::optimize() const {
 #endif
     
     pair<tree_id, vector<task_id>> opt_finder(tid, new_marked);
-    if(Snapshot::pool[PoolOptimized].find(opt_finder) != 
-            Snapshot::pool[PoolOptimized].end()) {
-        return Snapshot::pool[PoolOptimized][opt_finder];
+    auto cached_result = Snapshot::pool[PoolOptimized].find(opt_finder);
+    if(cached_result != Snapshot::pool[PoolOptimized].end()) {
+        return cached_result->second;
     }
 
     vector<SuccessorInfo> new_sucs;
