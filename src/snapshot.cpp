@@ -43,7 +43,7 @@ Snapshot::Snapshot(const Intree& t, vector<task_id> m) :
 
 Snapshot::Snapshot(const Intree& t, 
         vector<task_id> const& m, 
-        vector<SuccessorInfo> const& s
+        vector<SuccessorInfo> && s
     ) :
     cache_expected_runtime(0),
     finalized(false),
@@ -84,7 +84,7 @@ Snapshot* Snapshot::canonical_snapshot(
 
 Snapshot* Snapshot::canonical_snapshot(
         const Intree& t, 
-        vector<task_id> m,
+        vector<task_id> const& m,
         map<task_id, task_id>* _isomorphism,
         Snapshot::PoolKind representant){
 #if USE_SIMPLE_OPENMP
@@ -431,7 +431,7 @@ Snapshot* Snapshot::optimize() const {
             new_successors.push_back(s);
         }
     }
-    Snapshot* result = new Snapshot(intree, marked, new_successors);
+    Snapshot* result = new Snapshot(intree, marked, std::move(new_successors));
     Snapshot::pool[Snapshot::PoolKind::PoolOptimized]
                   [make_pair(tid, marked)] 
                   = (result);

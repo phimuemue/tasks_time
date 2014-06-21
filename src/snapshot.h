@@ -40,7 +40,7 @@ class Snapshot {
         // private constructor which sets *everything*
         Snapshot(const Intree& t, 
             vector<task_id> const& m, 
-            vector<SuccessorInfo> const& s
+            vector<SuccessorInfo> && s
         );
 
         // snapshots are organized in a set of pools (no duplicates)
@@ -78,7 +78,7 @@ class Snapshot {
                 Snapshot::PoolKind representant = PoolDefault);
         // TODO: is it necessary to pass m by val?
         static Snapshot* canonical_snapshot(const Intree& t, 
-                vector<task_id> m,
+                vector<task_id> const& m,
                 map<task_id, task_id>* isomorphism=NULL,
                 Snapshot::PoolKind representant = PoolDefault);
 
