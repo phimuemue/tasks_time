@@ -22,49 +22,28 @@ void Snapshot::clear_pool(){
 }
 
 Snapshot::Snapshot() :
-    cache_expected_runtime(0),
-    finalized(false)
+    Snapshot(Intree())
 {
 }
 
 Snapshot::Snapshot(const Snapshot& s) :
-    cache_expected_runtime(0),
-    finalized(false),
-    marked(s.marked),
-    intree(s.intree)
+    Snapshot(s.intree, s.marked)
 {
 }
 
 Snapshot::Snapshot(const Intree& t) :
-    cache_expected_runtime(0),
-    finalized(false),
-    intree(t)
+    Snapshot(t, {})
 {
 }
 
 Snapshot::Snapshot(const Intree& t, vector<task_id> m) :
-    cache_expected_runtime(0),
-    finalized(false),
-    marked(m),
-    intree(t)
+    Snapshot(t, m, {})
 {
-    sort(m.begin(), m.end());
-    for(auto it : m){
-        if(t.get_predecessors(it).size()!=0){
-            cout << "Trying to construct snapshot " 
-                << "with non-leaf marked tasks." << endl;
-            cout << t << endl;
-            for(auto const& inner_it : m){
-                cout << inner_it << endl;
-            }
-            throw 1;
-        }
-    }
 }
 
 Snapshot::Snapshot(const Intree& t, 
         vector<task_id> const& m, 
-        vector<SuccessorInfo>& s
+        vector<SuccessorInfo> const& s
     ) :
     cache_expected_runtime(0),
     finalized(false),

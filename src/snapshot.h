@@ -40,7 +40,7 @@ class Snapshot {
         // private constructor which sets *everything*
         Snapshot(const Intree& t, 
             vector<task_id> const& m, 
-            vector<SuccessorInfo>& s
+            vector<SuccessorInfo> const& s
         );
 
         // snapshots are organized in a set of pools (no duplicates)
@@ -66,7 +66,7 @@ class Snapshot {
             return successors;
         }
         // constructors and destructors 
-        Snapshot();
+        Snapshot(); // needed for Python stuff
         Snapshot(const Snapshot& s);
         Snapshot(const Intree& t);
         Snapshot(const Intree& t, vector<task_id> m);
