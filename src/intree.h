@@ -63,9 +63,10 @@ class Intree {
     public:
         Intree();
         Intree(const Intree& t);
+        Intree(Intree&& t);
         Intree(const vector<pair<task_id, task_id>>& edges);
         Intree(const vector<pair<Task, Task>>& edges);
-        Intree(const vector<task_id>& edges);
+        Intree(const vector<task_id>&& edges);
         static std::pair<Intree, map<task_id, task_id>> canonical_intree3(
             const Intree& _t, 
             const vector<task_id>& _preferred,

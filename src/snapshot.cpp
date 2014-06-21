@@ -376,7 +376,7 @@ Snapshot* Snapshot::optimize() const {
     tree_id tid;
     intree.get_raw_tree_id(tid);
     
-    auto opt_finder = std::make_pair(tid, marked);
+    auto opt_finder = std::make_pair(std::move(tid), marked);
     auto cached_result = Snapshot::pool[PoolOptimized].find(opt_finder);
     if(cached_result != Snapshot::pool[PoolOptimized].end()) {
         return cached_result->second;
@@ -422,7 +422,7 @@ Snapshot* Snapshot::optimize() const {
     }
     Snapshot* result = new Snapshot(intree, marked, std::move(new_successors));
     Snapshot::pool[Snapshot::PoolKind::PoolOptimized]
-                  [make_pair(tid, marked)] 
+                  [opt_finder] 
                   = (result);
     return result;
 }

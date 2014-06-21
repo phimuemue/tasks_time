@@ -12,6 +12,15 @@ Intree::Intree(const Intree& t) :
 {
 }
 
+Intree::Intree(Intree&& t) :
+    edges(std::move(t.edges))
+#if USE_TASKMAP
+    ,
+    taskmap(std::move(t.taskmap))
+#endif
+{
+}
+
 Intree::Intree(const vector<pair<task_id, task_id>>& edges):
     edges(edges.size() + 1, NOTASK)
 {
@@ -42,7 +51,7 @@ Intree::Intree(const vector<pair<Task, Task>>& edges) :
 #endif
 }
 
-Intree::Intree(const vector<task_id>& arg_edges) :
+Intree::Intree(const vector<task_id>&& arg_edges) :
     edges(arg_edges)
 {
 #if USE_TASKMAP
@@ -257,7 +266,7 @@ std::pair<Intree, std::map<task_id, task_id>> Intree::canonical_intree3(
             counter++;
         }
     }
-    Intree result = Intree(edges);
+    Intree result = Intree(std::move(edges));
     result.get_raw_tree_id(out);
     return std::make_pair(result, isomorphism);
 }
