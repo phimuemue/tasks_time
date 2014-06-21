@@ -210,8 +210,9 @@ Intree Intree::canonical_intree3(const Intree& _t,
         }
         for(task_id it : currentLevel){
             // check if it is leaf
-            if(labels.find(it) != labels.end()){
-                intermediate_labels[it].push_back(labels[it]);
+            auto const labels_it = labels.find(it);
+            if(labels_it != labels.end()){
+                intermediate_labels[it].push_back(labels_it->second);
             }
         }
 #if 1
