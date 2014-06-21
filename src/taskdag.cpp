@@ -97,7 +97,7 @@ unsigned int TaskDAG::get_level(const task_id t) const{
 
 
 vector<task_id> TaskDAG::get_successors(const task_id t) const{
-    return edges.find(t)->second;
+    return edges.at(t);
 }
 
 void TaskDAG::get_predecessors(const task_id t, vector<task_id>& target) const{
