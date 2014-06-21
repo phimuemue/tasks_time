@@ -282,7 +282,10 @@ void Snapshot::get_successors(const Scheduler& scheduler,
                 if(raw_sucs[i].first[0] != NOTASK){
                     newmarked.insert(newmarked.end(), raw_sucs[i].first.begin(), raw_sucs[i].first.end());
                 }
+#if USE_CANONICAL_SNAPSHOT
+#else
                 sort(newmarked.begin(), newmarked.end());
+#endif
 #if USE_CANONICAL_SNAPSHOT
                 Snapshot* news = Snapshot::canonical_snapshot(intree, 
                         newmarked,
