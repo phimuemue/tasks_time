@@ -178,21 +178,18 @@ Intree Intree::Outtree::toIntree(map<task_id, task_id>& isomorphism) const {
 // of the AHU algorithm
 std::pair<Intree, std::map<task_id, task_id>> Intree::canonical_intree(
     const Intree& _t, 
-    const vector<task_id>& _preferred,
-    tree_id& out
+    const vector<task_id>& _preferred
 ){
     map<task_id, task_id> isomorphism;
     Outtree ot(_t, _preferred);
     ot.canonicalize();
     Intree result = ot.toIntree(isomorphism);
-    out = result.get_raw_tree_id();
     return std::make_pair(std::move(result), std::move(isomorphism));
 }
 
 std::pair<Intree, std::map<task_id, task_id>> Intree::canonical_intree3(
     const Intree& _t,
-    const vector<task_id>& _preferred,
-    tree_id& out
+    const vector<task_id>& _preferred
 ){
     map<task_id, task_id> isomorphism;
     // distribute tasks into levels
@@ -267,14 +264,12 @@ std::pair<Intree, std::map<task_id, task_id>> Intree::canonical_intree3(
         }
     }
     Intree result = Intree(std::move(edges));
-    out = result.get_raw_tree_id();
     return std::make_pair(result, isomorphism);
 }
 
 std::pair<Intree, std::map<task_id, task_id>> Intree::canonical_intree2(
     const Intree& _t, 
-    const vector<task_id>& _preferred,
-    tree_id& out
+    const vector<task_id>& _preferred
 ){
     map<task_id, task_id> isomorphism;
     Intree t(_t);
@@ -433,14 +428,6 @@ std::pair<Intree, std::map<task_id, task_id>> Intree::canonical_intree2(
     for(task_id it=1; it < _t.edges.size(); ++it){
         edges.push_back(make_pair(isomorphism[it],isomorphism[_t.edges[it]]));
     }
-#endif
-#if TREE_ID_TYPE==TREE_ID_DEFAULT
-    out.clear();
-    for(unsigned int i=0; i<canonical_names[0].size(); ++i){
-        out.push_back(canonical_names[0][i] > 0 ? 1u : 0u);
-    }
-#elif TREE_ID_TYPE==TREE_ID_NONE
-    out = Intree(edges);
 #endif
     return std::make_pair(Intree(edges), isomorphism);
 }

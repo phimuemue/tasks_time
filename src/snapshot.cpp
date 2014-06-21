@@ -89,9 +89,9 @@ std::pair<Snapshot*, std::map<task_id, task_id>> Snapshot::canonical_snapshot(
 
     // do not use unique_ptr, because the result must possibly exist
     // after the function has terminated
-	tree_id tid;
-    auto pairIntreeIso = Intree::canonical_intree(t, m, tid);
+    auto pairIntreeIso = Intree::canonical_intree(t, m);
     Intree tmp(std::move(pairIntreeIso.first));
+	tree_id treeid = tmp.get_raw_tree_id();
     auto isomorphism(std::move(pairIntreeIso.second));
 
     // adjust m properly (i.e. always "lowest possible task" for 'iso-snap')
@@ -137,7 +137,7 @@ std::pair<Snapshot*, std::map<task_id, task_id>> Snapshot::canonical_snapshot(
 #else
     sort(newmarked.begin(), newmarked.end());
 #endif
-    auto const find_key = snapshot_id(tid, newmarked);
+    auto const find_key = snapshot_id(treeid, newmarked);
     auto& snappool = Snapshot::pool[representant];
     auto const snaphint = snappool.lower_bound(find_key);
     auto const result = (snaphint == snappool.end() || (snappool.key_comp()(find_key, snaphint->first))) // not found in pool

@@ -69,18 +69,15 @@ class Intree {
         Intree(const vector<task_id>&& edges);
         static std::pair<Intree, map<task_id, task_id>> canonical_intree3(
             const Intree& _t, 
-            const vector<task_id>& _preferred,
-            tree_id& out
+            const vector<task_id>& _preferred
         );
         static std::pair<Intree, map<task_id, task_id>> canonical_intree2(
             const Intree& _t, 
-            const vector<task_id>& _preferred,
-            tree_id& out
+            const vector<task_id>& _preferred
         );
         static std::pair<Intree, map<task_id, task_id>> canonical_intree(
             const Intree& t, 
-            const vector<task_id>& preferred,
-            tree_id& out
+            const vector<task_id>& preferred
         );
 
         unsigned int count_tasks() const;
