@@ -62,7 +62,7 @@ namespace po = boost::program_options;
 #define NUM_THREADS_DEFAULT 5
 #endif
 
-map<string, Scheduler*> schedulers = 
+const map<string, Scheduler*> schedulers = 
 {
     // "all possibilities" scheduler
     {"leaf", new Leafscheduler()}, 
@@ -269,7 +269,7 @@ int read_variables_map_from_args(int argc,
     return 0;
 }
 
-vector<Intree> generate_tree(po::variables_map vm){
+vector<Intree> generate_tree(po::variables_map const& vm){
     vector<pair<Task,Task>> edges;
     vector<Intree> result;
     if (vm.count("direct")){
@@ -617,7 +617,7 @@ int main(int argc, char** argv){
             create_snapshot_dags(
                 vm,
                 t,
-                schedulers[vm["scheduler"].as<string>()],
+                schedulers.at(vm["scheduler"].as<string>()),
                 initial_settings,
                 isomorphisms,
                 s,
