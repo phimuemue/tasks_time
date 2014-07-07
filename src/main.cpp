@@ -124,7 +124,8 @@ void randomEdgesPerLevel(string levelstring, vector<pair<Task,Task>>& target){
     }
 }
 
-void tree_from_string(string raw, vector<pair<Task,Task>>& target){
+vector<task_id> tree_from_string(string raw){
+    vector<task_id> target{NOTASK};
     istringstream iss(raw);
     vector<string> raw_tokens;
     copy(istream_iterator<string>(iss),
@@ -134,8 +135,9 @@ void tree_from_string(string raw, vector<pair<Task,Task>>& target){
         task_id tmp;
         stringstream tmps(raw_tokens[i]);
         tmps >> tmp;
-        target.push_back(pair<Task,Task>(Task((task_id)i+1), tmp));
+        target.push_back(tmp);
     }
+    return target;
 }
 
 vector<Intree> read_raw_tree_from_file(string path, vector<pair<Task,Task>>& target){
@@ -144,10 +146,8 @@ vector<Intree> read_raw_tree_from_file(string path, vector<pair<Task,Task>>& tar
     // read description from file
     string line;
     while(std::getline(a, line)){
-        tree_from_string(line, target);
-        Intree tmp(target);
+        Intree tmp(tree_from_string(line));
         result.push_back(tmp);
-        target.clear();
     }
     return result;
 }
@@ -273,8 +273,7 @@ vector<Intree> generate_tree(po::variables_map const& vm){
     vector<pair<Task,Task>> edges;
     vector<Intree> result;
     if (vm.count("direct")){
-        tree_from_string(vm["direct"].as<string>(), edges);
-        result.push_back(Intree(edges));
+        result.push_back(Intree(tree_from_string(vm["direct"].as<string>())));
     }
     else if(vm.count("randp")){
         randomEdgesPerLevel(vm["randp"].as<string>(), edges);
