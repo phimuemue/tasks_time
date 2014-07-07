@@ -4,13 +4,21 @@
 
 using namespace boost::python;
 
+/* static */ void PythonTester::register_types() {
+    static bool types_registered = false;
+    if (!types_registered) {
+        initintree();
+        initsnapshot();
+    }
+    types_registered = true;
+}
+
 PythonTester::PythonTester() :
     module_path("tester")
 {
     try {
         Py_Initialize();
-        initintree();
-        initsnapshot();
+        register_types();
         // adjust working directory and search paths -- taken from
         // http://stackoverflow.com/questions/9285384/
         boost::filesystem::path workingDir = boost::filesystem::absolute("./").normalize();

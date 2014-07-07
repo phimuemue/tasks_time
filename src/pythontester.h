@@ -15,6 +15,7 @@ class PythonTester : public Tester<bool> {
         ~PythonTester();
         string test_string(const Snapshot* s);
     private:
+        static void register_types();
         string module_path;
         boost::python::object test_module;
         bool test(const Snapshot* s);
