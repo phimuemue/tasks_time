@@ -54,6 +54,7 @@
 #include<memory>
 
 #include<boost/program_options.hpp>
+#include<boost/spirit/include/qi.hpp>
 
 using namespace std;
 namespace po = boost::program_options;
@@ -126,17 +127,13 @@ void randomEdgesPerLevel(string levelstring, vector<pair<Task,Task>>& target){
 
 vector<task_id> tree_from_string(string raw){
     vector<task_id> target{NOTASK};
-    istringstream iss(raw);
-    vector<string> raw_tokens;
-    copy(istream_iterator<string>(iss),
-            istream_iterator<string>(),
-            back_inserter<vector<string>>(raw_tokens));
-    for(unsigned int i=0; i<raw_tokens.size(); ++i){
-        task_id tmp;
-        stringstream tmps(raw_tokens[i]);
-        tmps >> tmp;
-        target.push_back(tmp);
-    }
+    boost::spirit::qi::phrase_parse(
+        raw.begin(),
+        raw.end(),
+        *boost::spirit::qi::uint_,
+        boost::spirit::ascii::space,
+        target
+    );
     return target;
 }
 

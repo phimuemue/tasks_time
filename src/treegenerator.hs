@@ -61,6 +61,9 @@ generateintrees n = let
 
 printlist :: (Show a) => [a] -> IO ()
 printlist [] = putStr "\n"
+printlist [x] = do
+    putStr $ show x
+    putStr "\n"
 printlist (x:xs) = do
     putStr $ show x
     putStr " "
