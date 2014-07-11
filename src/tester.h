@@ -16,8 +16,8 @@ using namespace std;
 template<typename RetVal, typename... Args>
 class Tester {
     public:
-        virtual RetVal test_first(const Snapshot* s, Args... args);
-        virtual RetVal test_all(const Snapshot* s, Args... args);
+        RetVal test_first(const Snapshot* s, Args... args);
+        RetVal test_all(const Snapshot* s, Args... args);
         virtual string test_string(const Snapshot* s, Args... args) = 0;
     private:
         map<boost::tuple<const Snapshot*, Args...>, RetVal> cache_first;
