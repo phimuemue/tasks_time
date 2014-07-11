@@ -13,34 +13,34 @@
 
 using namespace std;
 
-template<typename RetVal, typename... Args>
+// Tester offers an interface that can be used to examine snapshots.
+// It is implemented using static polymorphism via the CRTP.
+// The "subclasses" must implement the following methods:
+//   string test_string(const Snapshot*, Args...)
+//   RetVal test(const Snapshot*, Args...)
+//   RetVal combine_function(const Snapshot*, RetVal, vector<RetVal>)
+template<class Derived, typename RetVal, typename... Args>
 class Tester {
     public:
         RetVal test_first(const Snapshot* s, Args... args);
         RetVal test_all(const Snapshot* s, Args... args);
-        virtual string test_string(const Snapshot* s, Args... args) = 0;
     private:
         map<boost::tuple<const Snapshot*, Args...>, RetVal> cache_first;
         map<boost::tuple<const Snapshot*, Args...>, RetVal> cache_all;
-        virtual RetVal test(const Snapshot* s, Args... args) = 0;
-        virtual RetVal combine_function(
-                const Snapshot* s,
-                RetVal result,
-                vector<RetVal> values) = 0;
 };
 
-template<typename RetVal, typename... Args>
-RetVal Tester<RetVal, Args...>::test_first(const Snapshot* s, Args... args){
+template<class Derived, typename RetVal, typename... Args>
+RetVal Tester<Derived, RetVal, Args...>::test_first(const Snapshot* s, Args... args){
     auto finder = boost::tuple<const Snapshot*, Args...>
         (s, args...);
     if (cache_first.find(finder) != cache_first.end()){
         return cache_first[finder];
     }
-    return cache_first[finder] = test(s, args...);
+    return cache_first[finder] = static_cast<Derived*>(this)->test(s, args...);
 }
 
-template<typename RetVal, typename... Args>
-RetVal Tester<RetVal, Args...>::test_all(const Snapshot* s, Args... args){
+template<class Derived, typename RetVal, typename... Args>
+RetVal Tester<Derived, RetVal, Args...>::test_all(const Snapshot* s, Args... args){
     auto finder = boost::tuple<const Snapshot*, Args...>
         (s, args...);
     if (cache_all.find(finder) != cache_all.end()){
@@ -50,7 +50,7 @@ RetVal Tester<RetVal, Args...>::test_all(const Snapshot* s, Args... args){
     for(auto suc : s->Successors()){
         values.push_back(test_all(suc.snapshot, args...));
     }
-    return cache_all[finder] = combine_function(s, test(s, args...), values);
+    return cache_all[finder] = static_cast<Derived*>(this)->combine_function(s, static_cast<Derived*>(this)->test(s, args...), values);
 }
 
 #endif

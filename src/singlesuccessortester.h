@@ -3,10 +3,9 @@
 
 #include "tester.h"
 
-class SingleSuccessorTester : public Tester<bool> {
+class SingleSuccessorTester : public Tester<SingleSuccessorTester, bool> {
     public:
         string test_string(const Snapshot* s);
-    private:
         bool test(const Snapshot* s);
         bool combine_function(const Snapshot* s, bool result, vector<bool> values);
 };
