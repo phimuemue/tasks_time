@@ -34,6 +34,7 @@ Optional
 
 * Boost::rational (only if built with `MYFLOAT=2` or `MYFLOAT=3`)
 * gmp library (only if built with `MYFLOAT=4`)
+* Boost::python (only if built with `PYTHON_TESTS=1`)
 
 Building
 --------
