@@ -27,6 +27,7 @@ Requirements
   compilation options.
 * gcc4.9 (might work with earlier versions and other compilers, though)
 * Boost::program_options
+* Boost::spirit (used to parse input descriptions of trees)
 
 Optional
 --------
