@@ -92,7 +92,7 @@ env = Environment()
 env = Environment(variables = vars,
                   ENV = {'PATH' : os.environ['PATH']},
                   CXX="${COMPILER}",
-                  CXXFLAGS=["-std=c++0x",
+                  CXXFLAGS=["-std=c++1y",
                             "-Wall",
                             "-fopenmp", 
                             "-O${OPT}", 
