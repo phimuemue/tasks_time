@@ -19,23 +19,19 @@ unsigned int HLFNFCscheduler::count_free_chains(const Intree& t, const vector<ta
             marked_chains[i] = t.get_chain(newmarked[i]);
         }
         marked_chains.push_back(t.get_chain(target_task));
-        allchains.erase(
-            remove_if(
-                allchains.begin(), allchains.end(),
-                [&](const vector<task_id>& c) -> bool {
-                    for(auto const& task : c){
-                        for(auto const& mc : marked_chains){
-                            if(find(mc.begin(), mc.end(), task) != mc.end() && task!=0){
-                                return true;
-                            }
+        return std::count_if(
+            allchains.begin(), allchains.end(),
+            [&](const vector<task_id>& c) -> bool {
+                for(auto const& task : c){
+                    for(auto const& mc : marked_chains){
+                        if(find(mc.begin(), mc.end(), task) != mc.end() && task!=0){
+                            return false;
                         }
                     }
-                    return false;
                 }
-            ), 
-            allchains.end()
+                return true;
+            }
         );
-        return allchains.size();
 }
 
 void HLFNFCscheduler::get_initial_schedule(const Intree& t,
