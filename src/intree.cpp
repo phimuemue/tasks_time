@@ -69,29 +69,16 @@ Intree::Outtree::Outtree(task_id i, bool m) :
 {
 }
 
-Intree::Outtree::Outtree(const Outtree& ot) :
-    id(ot.id),
-    marked(ot.marked),
-    predecessors(ot.predecessors)
-{
-}
-
 Intree::Outtree::Outtree(const Intree& i, const vector<task_id>& marked) :
     id(0)
 {
-    vector<Outtree*> outtrees(i.count_tasks() + 1);
+    vector<Outtree*> outtrees(i.count_tasks() + 1); // outtrees not managing lifetime of elements!
     outtrees[0] = this;
     for(task_id edge = 1; edge < i.edges.size(); ++edge){
         if(i.edges[edge] != NOTASK){
             outtrees[edge] = new Outtree(edge, find(marked.begin(), marked.end(), edge)!=marked.end());
-            outtrees[i.edges[edge]]->predecessors.push_back(outtrees[edge]);
+            outtrees[i.edges[edge]]->predecessors.push_back(std::unique_ptr<Outtree>(outtrees[edge]));
         }
-    }
-}
-
-Intree::Outtree::~Outtree(){
-    for(Outtree* o : predecessors){
-        delete o;
     }
 }
 
@@ -100,12 +87,12 @@ const vector<char>& Intree::Outtree::getCompressedString() const{
 }
 
 void Intree::Outtree::canonicalize(){
-    for(Outtree* neighbor : predecessors){
+    for(auto& neighbor : predecessors){
         neighbor->canonicalize();
     }
     sort(predecessors.begin(), predecessors.end(),
-            [](const Outtree* a, const Outtree* b) -> bool {
-                return *b < *a;
+            [](auto& outtreeA, auto& outtreeB) -> bool {
+                return *outtreeB < *outtreeA;
             }
         );
     if(compressedString.size() == 0){
@@ -119,7 +106,7 @@ void Intree::Outtree::canonicalize(){
         }
         else{
             compressedString.push_back('[');
-            for(auto a : predecessors){
+            for(auto& a : predecessors){
                 compressedString.insert(
                     compressedString.end(),
                     a->getCompressedString().begin(),
@@ -160,13 +147,13 @@ Intree Intree::Outtree::toIntree(map<task_id, task_id>& isomorphism) const {
     while(!q.empty()){
         const Outtree* current = q.front();
         q.pop();
-        for(Outtree* neighbor : current->predecessors){
+        for(auto& neighbor : current->predecessors){
             ++counter;
             isomorphism[neighbor->id] = counter;
             neighbor->id = counter;
             // cout << "Edge " << neighbor->id << " " << current->id << endl;
             result.edges.push_back(current->id);
-            q.push(neighbor);
+            q.push(neighbor.get());
         }
     }
     return result;

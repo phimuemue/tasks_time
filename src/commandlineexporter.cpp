@@ -62,8 +62,8 @@ void CommandLineExporter::export_helper(
         // }
 
         // recursion!
-        for(auto p : tmp->predecessors){
-            export_helper(tasks_by_level, lines, p->id, level+1, t, p);
+        for(auto& p : tmp->predecessors){
+            export_helper(tasks_by_level, lines, p->id, level+1, t, p.get());
         }
 
         if(l>0){

@@ -40,11 +40,9 @@ class Intree {
             public:
                 task_id id;
                 bool marked;
-                std::vector<Outtree*> predecessors;
+                std::vector<std::unique_ptr<Outtree>> predecessors;
                 Outtree(task_id i, bool m);
                 Outtree(const Intree& i, const vector<task_id>& marked);
-                Outtree(const Outtree& ot);
-                ~Outtree();
                 void canonicalize();
                 Intree toIntree(map<task_id, task_id>& isomorphism) const;
                 const vector<char>& getCompressedString() const;
