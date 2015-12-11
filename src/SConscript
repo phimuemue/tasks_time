@@ -52,6 +52,7 @@ def create_version_info(*a,**b):
             lines[i] = "char builtby[] = \"%s\";\n"%(builtby)
     f.writelines(lines)
     f.close()
+    print("Version information written")
 
 
 # variables
@@ -131,7 +132,7 @@ if env["MYFLOAT"] in ["4"]:
 Help(vars.GenerateHelpText(env))
 
 # main program
-env.Command("info.cpp", "", create_version_info)
+#env.Command("info.cpp", "", create_version_info)
 targetname = "tasks%s"%(
                             ["_cs0", "_cs1"][int(env["USE_CANONICAL_SNAPSHOT"])]
                         )
